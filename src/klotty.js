@@ -1,4 +1,5 @@
 import pkg from '../package.json'
+import { renderToStaticMarkup } from 'react-dom/server'
 
 export class Klotty {
   constructor(apiKey) {
@@ -16,6 +17,12 @@ export class Klotty {
   }
 
   async sendEmail(body = {}) {
+    let react = ''
+
+    if (body.react) {
+      react = renderToStaticMarkup(body.react)
+    }
+
     const req = await fetch(`${this.baseURL}/email`, {
       method: 'POST',
       headers: this.headers,
@@ -23,8 +30,8 @@ export class Klotty {
         from: body.from,
         to: body.to,
         subject: body.subject,
-        html: body.html,
         text: body.text,
+        html: react || body.html,
       })
     })
 

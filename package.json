@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/klotty/klotty-node/issues"
   },
-  "homepage": "https://github.com/klotty/klotty-node#readme"
+  "homepage": "https://github.com/klotty/klotty-node#readme",
+  "dependencies": {
+    "react-dom": "^18.2.0"
+  }
 }
