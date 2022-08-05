@@ -27,13 +27,11 @@
   },
   "homepage": "https://github.com/klotty/klotty-node#readme",
   "dependencies": {
-    "axios": "0.27.2",
-    "react-dom": "^18.2.0"
+    "axios": "0.27.2"
   },
   "devDependencies": {
     "@types/jest": "28.1.6",
     "@types/node": "18.6.4",
-    "@types/react-dom": "18.0.6",
     "axios-mock-adapter": "1.21.1",
     "jest": "28.1.3",
     "prettier": "2.7.1",
