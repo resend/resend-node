@@ -4,7 +4,7 @@ module.exports = {
   restoreMocks: true,
   verbose: true,
   testEnvironment: 'node',
-  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  testPathIgnorePatterns: ['/node_modules/', '/build/'],
   roots: ['<rootDir>/src'],
   transform: {
     '^.+\\.ts?$': 'ts-jest',
