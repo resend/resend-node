@@ -35,7 +35,7 @@ export class Klotty {
   async sendEmail(data: SendEmailData): Promise<AxiosResponse> {
     try {
       const path = `${this.baseUrl}/email`;
-      return this.request(path, { data });
+      return this.request(path, { method: 'POST', data });
     } catch (error) {
       throw error;
     }
