@@ -1,4 +1,4 @@
-import { Klotty } from './klotty';
+import Klotty from './klotty';
 
 describe('Klotty', () => {
   it('throws API key error', () => {
