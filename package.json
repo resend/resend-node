@@ -27,7 +27,8 @@
   },
   "homepage": "https://github.com/klotty/klotty-node#readme",
   "dependencies": {
-    "axios": "0.27.2"
+    "axios": "0.27.2",
+    "react-email": "^1.0.2"
   },
   "devDependencies": {
     "@types/jest": "28.1.6",

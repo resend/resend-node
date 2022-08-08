@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { SendEmailData } from './interfaces';
+import reactEmail from 'react-email';
 
 const VERSION = '0.2.1';
 
@@ -35,6 +36,11 @@ export default class Klotty {
   async sendEmail(data: SendEmailData): Promise<AxiosResponse> {
     try {
       const path = `${this.baseUrl}/email`;
+
+      if (data.data.react) {
+        data.data.html = reactEmail.render(data.data.react);
+      }
+
       return this.request(path, { method: 'POST', data });
     } catch (error) {
       throw error;

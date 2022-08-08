@@ -5,5 +5,6 @@ export interface SendEmailData {
     subject?: string;
     text?: string;
     html?: string;
+    react?: string;
   };
 }
