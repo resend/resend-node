@@ -2,7 +2,7 @@ export interface SendEmailData {
   data: {
     from: string;
     to: string;
-    subject: string;
+    subject?: string;
     text?: string;
     html?: string;
   };
