@@ -3,7 +3,7 @@ import { SendEmailData } from './interfaces';
 
 const VERSION = '0.2.1';
 
-export class Klotty {
+export default class Klotty {
   readonly baseUrl: string;
   private readonly headers: HeadersInit;
   private readonly request: AxiosInstance;

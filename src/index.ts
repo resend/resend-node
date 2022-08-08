@@ -1,3 +1,3 @@
-import { Klotty } from './klotty';
+import Klotty from './klotty';
 
-export { Klotty };
+export default Klotty;
