@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { SendEmailData } from './interfaces';
 
-const VERSION = '0.2.1';
+const VERSION = '0.3.1';
 
 export class Klotty {
   readonly baseUrl: string;
