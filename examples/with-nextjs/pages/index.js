@@ -1,9 +1,18 @@
+import { render } from 'klotty';
+import EmailTemplate from '../components/EmailTemplate';
+
 export default function Index() {
   const onSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const req = await fetch('/api/send');
+      const req = await fetch('/api/send', {
+        method: 'POST',
+        body: JSON.stringify({
+          template: render(<EmailTemplate name="John" product="MyApp" />),
+        }),
+      });
+
       const data = await req.json();
       console.log(data);
     }

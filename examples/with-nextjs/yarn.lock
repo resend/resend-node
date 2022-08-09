@@ -128,13 +128,13 @@ form-data@^4.0.0:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
-klotty@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/klotty/-/klotty-0.3.1.tgz#9ed221e62b79cde4bb0558a1259eca9668100085"
-  integrity sha512-kZV5XlasHtXO/BXZl/CGzQBOyqeGGzEHxwND7DOlqwhLFfeXkcIieVW3OKTnt3ff8D81q0Zpkrju9aWay3aIpw==
+klotty@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/klotty/-/klotty-0.4.0.tgz#bd3ec48cc82cbfc631f58c9474dab0ee0e17e389"
+  integrity sha512-XuxNyfBoifAlnXMeLbQll8j3hx8u8vB34tSFqPfOfRP86cyv8WKBXLQA4p8xXDFTqyNZRMTrCYmqXf2vNbvDbA==
   dependencies:
     axios "0.27.2"
-    react-email "1.0.2"
+    react-email "^1.0.2"
 
 loose-envify@^1.1.0:
   version "1.4.0"
@@ -208,7 +208,7 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
-react-email@1.0.2:
+react-email@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-email/-/react-email-1.0.2.tgz#7bef8234c8d5cee99e23c81413cebe0a0b539379"
   integrity sha512-hU7TeUEKM5cWtkvy3QdJu3hCuLftDRk9rKZKK9xanMLrHZZYbD9HKGVRL6PAgwpOlC9PlV7T/ogpPT4OPQNnNw==
