@@ -1,0 +1,12 @@
+{
+  "name": "with-express",
+  "private": true,
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "klotty": "^0.3.1"
+  }
+}
