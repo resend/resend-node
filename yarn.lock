@@ -2053,7 +2053,7 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
-react-email@1.0.2:
+react-email@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/react-email/-/react-email-1.0.2.tgz#7bef8234c8d5cee99e23c81413cebe0a0b539379"
   integrity sha512-hU7TeUEKM5cWtkvy3QdJu3hCuLftDRk9rKZKK9xanMLrHZZYbD9HKGVRL6PAgwpOlC9PlV7T/ogpPT4OPQNnNw==

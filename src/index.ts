@@ -1,3 +1,4 @@
 import { Klotty } from './klotty';
+import { render } from 'react-email';
 
-export { Klotty };
+export { Klotty, render };
