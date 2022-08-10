@@ -1,13 +1,14 @@
 require('dotenv').config()
 
 const { Klotty } = require('klotty');
+const klotty = new Klotty(process.env.KLOTTY_API_KEY);
+
 const express = require('express');
 const app = express();
 
 app.get('/', async (req, res) => {
   try {
-    const klotty = new Klotty(process.env.KLOTTY_API_KEY);
-    const { data } = await klotty.sendEmail({
+    const data = await klotty.sendEmail({
       from: process.env.EMAIL_FROM,
       to: process.env.EMAIL_TO,
       subject: "hello world",
