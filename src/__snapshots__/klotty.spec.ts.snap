@@ -2,12 +2,10 @@
 
 exports[`Klotty sends email 1`] = `
 Object {
-  "data": Object {
-    "created_at": "123",
-    "from": "bu@klotty.com",
-    "id": "1234",
-    "to": "zeno@klotty.com",
-  },
+  "created_at": "123",
+  "from": "bu@klotty.com",
+  "id": "1234",
+  "to": "zeno@klotty.com",
 }
 `;
 

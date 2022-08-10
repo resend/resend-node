@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { render } from 'react-email';
 import { SendEmailData } from './interfaces';
 import { version } from '../package.json';
@@ -32,7 +32,7 @@ export class Klotty {
     });
   }
 
-  async sendEmail(data: SendEmailData): Promise<AxiosResponse> {
+  async sendEmail(data: SendEmailData): Promise<object> {
     try {
       const path = `${this.baseUrl}/email`;
 
@@ -40,7 +40,8 @@ export class Klotty {
         data.html = render(data.react);
       }
 
-      return this.request(path, { method: 'POST', data });
+      const response = await this.request(path, { method: 'POST', data });
+      return response.data;
     } catch (error) {
       throw error;
     }
