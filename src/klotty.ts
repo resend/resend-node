@@ -1,8 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { render } from 'react-email';
 import { SendEmailData } from './interfaces';
-
-const VERSION = '0.3.1';
+import { version } from '../package.json';
 
 export class Klotty {
   readonly baseUrl: string;
@@ -24,7 +23,7 @@ export class Klotty {
     this.baseUrl = process.env.KLOTTY_BASE_URL || 'https://api.klotty.com';
     this.headers = {
       Authorization: `Bearer ${this.apiKey}`,
-      'User-Agent': `node:${VERSION}`,
+      'User-Agent': `node:${version}`,
       'Content-Type': 'application/json',
     };
     this.request = axios.create({
