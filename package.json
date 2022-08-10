@@ -1,6 +1,6 @@
 {
   "name": "klotty",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "",
   "main": "build/src/index.js",
   "typings": "build/src/index.d.ts",
