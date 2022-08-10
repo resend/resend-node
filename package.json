@@ -2,8 +2,8 @@
   "name": "klotty",
   "version": "0.5.0",
   "description": "",
-  "main": "build/index.js",
-  "typings": "build/index.d.ts",
+  "main": "build/src/index.js",
+  "typings": "build/src/index.d.ts",
   "files": [
     "build/"
   ],
