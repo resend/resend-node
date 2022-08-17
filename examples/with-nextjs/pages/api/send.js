@@ -9,7 +9,7 @@ export default async function send(req, res) {
       from: process.env.EMAIL_FROM,
       to: process.env.EMAIL_TO,
       subject: "hello world",
-      react: <EmailTemplate name="John" product="MyApp" />,
+      react: <EmailTemplate firstName="John" product="MyApp" />,
     });
 
     res.status(200).json(data);

@@ -53,11 +53,11 @@ Start by creating your email template as a React component.
 import React from 'react'
 
 export default function EmailTemplate(props) {
-  const { name, product } = props
+  const { firstName, product } = props
 
   return (
     <div>
-      <h1>Welcome, {name}!</h1>
+      <h1>Welcome, {firstName}!</h1>
       <p>Thanks for trying {product}. We’re thrilled to have you on board.</p>
     </div>
   )
@@ -73,7 +73,7 @@ await klotty.sendEmail({
   from: 'you@example.com',
   to: 'user@gmail.com',
   subject: 'hello world',
-  react: <EmailTemplate name="John" product="MyApp" />,
+  react: <EmailTemplate firstName="John" product="MyApp" />,
 });
 ```
 
