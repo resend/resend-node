@@ -1,9 +1,11 @@
+import React from 'react';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import EmailTemplate from '../../components/EmailTemplate';
 import { Klotty } from 'klotty';
+
 const klotty = new Klotty(process.env.KLOTTY_API_KEY);
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
+export default async(req: NextApiRequest, res: NextApiResponse) => {
   try {
     const data = await klotty.sendEmail({
       from: process.env.EMAIL_FROM || '',
