@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { ReactElement } from 'react';
 
 export interface SendEmailData {
   from: string;
@@ -6,5 +6,5 @@ export interface SendEmailData {
   subject?: string;
   text?: string;
   html?: string;
-  react?: React.ReactElement;
+  react?: ReactElement;
 }
