@@ -38,6 +38,7 @@ export class Klotty {
 
       if (data.react) {
         data.html = render(data.react);
+        delete data.react;
       }
 
       const response = await this.request(path, { method: 'POST', data });
