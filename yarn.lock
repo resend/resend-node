@@ -2077,10 +2077,10 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
-react-email@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/react-email/-/react-email-1.0.2.tgz"
-  integrity sha512-hU7TeUEKM5cWtkvy3QdJu3hCuLftDRk9rKZKK9xanMLrHZZYbD9HKGVRL6PAgwpOlC9PlV7T/ogpPT4OPQNnNw==
+react-email@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-email/-/react-email-1.0.3.tgz#50645d5d710d3d56975a278262c6b5401721aeb2"
+  integrity sha512-tvFrvG+9vr76WISCZnAuvPYKCX1TyLEBs47NrZxhhmpRvXFedL6gRewbzgrLmOEzkvWCw2c6MhNWnLJ/c5il7Q==
   dependencies:
     react "^18.2.0"
     react-dom "^18.2.0"
