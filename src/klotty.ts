@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { render } from 'react-email';
+import { render } from '@react-email/render';
 import { SendEmailData } from './interfaces';
 import { version } from '../package.json';
 

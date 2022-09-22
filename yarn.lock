@@ -539,6 +539,14 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@react-email/render@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@react-email/render/-/render-0.0.1.tgz#319bbd7f674467166168fdcc9d614e73408c78de"
+  integrity sha512-zog/2O0IWZDl10YfmLkgARzHgkX27ZwJhFaSib3hgxYwAdgWrCnfd3uT9ZuZqk9BXz1pk9jv9cl+UYS0nbCFdw==
+  dependencies:
+    react "^18.2.0"
+    react-dom "^18.2.0"
+
 "@sinclair/typebox@^0.24.1":
   version "0.24.27"
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.24.27.tgz"
@@ -2076,14 +2084,6 @@ react-dom@^18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
-
-react-email@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/react-email/-/react-email-1.0.3.tgz#50645d5d710d3d56975a278262c6b5401721aeb2"
-  integrity sha512-tvFrvG+9vr76WISCZnAuvPYKCX1TyLEBs47NrZxhhmpRvXFedL6gRewbzgrLmOEzkvWCw2c6MhNWnLJ/c5il7Q==
-  dependencies:
-    react "^18.2.0"
-    react-dom "^18.2.0"
 
 react-is@^18.0.0:
   version "18.2.0"
