@@ -1,11 +1,11 @@
 import EmailTemplate from '../../components/EmailTemplate';
-import { Klotty } from 'klotty';
+import { Resend } from 'resend';
 
-const klotty = new Klotty(process.env.KLOTTY_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function send(req, res) {
   try {
-    const data = await klotty.sendEmail({
+    const data = await resend.sendEmail({
       from: process.env.EMAIL_FROM,
       to: process.env.EMAIL_TO,
       subject: "hello world",

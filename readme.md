@@ -1,22 +1,22 @@
-# Klotty Node.js SDK
+# Resend Node.js SDK
 
-Node.js library for the Klotty API.
+Node.js library for the Resend API.
 
 ## Install
 
 ```bash
-npm install klotty
+npm install resend
 # or
-yarn add klotty
+yarn add resend
 ```
 
 ## Setup
 
-First, you need to get an API key, which is available in the [Klotty Dashboard](https://klotty.com).
+First, you need to get an API key, which is available in the [Resend Dashboard](https://resend.com).
 
 ```js
-import { Klotty } from 'klotty';
-const klotty = new Klotty('kl_123');
+import { Resend } from 'resend';
+const resend = new Resend('re_123');
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ const klotty = new Klotty('kl_123');
 Send your first email:
 
 ```js
-await klotty.sendEmail({
+await resend.sendEmail({
   from: 'you@example.com',
   to: 'user@gmail.com',
   subject: 'hello world',
@@ -37,7 +37,7 @@ await klotty.sendEmail({
 Send an email custom HTML content:
 
 ```js
-await klotty.sendEmail({
+await resend.sendEmail({
   from: 'you@example.com',
   to: 'user@gmail.com',
   subject: 'hello world',
@@ -69,7 +69,7 @@ Then import the template component and pass it to the `react` property.
 ```jsx
 import EmailTemplate from '../components/EmailTemplate'
 
-await klotty.sendEmail({
+await resend.sendEmail({
   from: 'you@example.com',
   to: 'user@gmail.com',
   subject: 'hello world',

@@ -128,9 +128,9 @@ form-data@^4.0.0:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
-klotty@^0.5.1:
+resend@^0.5.1:
   version "0.5.1"
-  resolved "https://registry.yarnpkg.com/klotty/-/klotty-0.5.1.tgz#b56c4f48315b77d55cde97c65f6771eae60a95db"
+  resolved "https://registry.yarnpkg.com/resend/-/resend-0.5.1.tgz#b56c4f48315b77d55cde97c65f6771eae60a95db"
   integrity sha512-7hCtyK/XvAurhJQ0mkYkL8YDdptRsmZMviZesuVzrcqJn8FqotG/btetQY+uSLX13b8Z29CMcqru0mf1bBm25A==
   dependencies:
     axios "0.27.2"

@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Resend sends email 1`] = `
+Object {
+  "created_at": "123",
+  "from": "bu@resend.com",
+  "id": "1234",
+  "to": "zeno@resend.com",
+}
+`;
+
+exports[`Resend sends email with multiple bcc recipients 1`] = `
+Object {
+  "bcc": Array [
+    "foo@resend.com",
+    "bar@resend.com",
+  ],
+  "created_at": "123",
+  "from": "admin@resend.com",
+  "id": "1234",
+  "to": "bu@resend.com",
+}
+`;
+
+exports[`Resend sends email with multiple cc recipients 1`] = `
+Object {
+  "cc": Array [
+    "foo@resend.com",
+    "bar@resend.com",
+  ],
+  "created_at": "123",
+  "from": "admin@resend.com",
+  "id": "1234",
+  "to": "bu@resend.com",
+}
+`;
+
+exports[`Resend sends email with multiple recipients 1`] = `
+Object {
+  "created_at": "123",
+  "from": "admin@resend.com",
+  "id": "1234",
+  "to": Array [
+    "bu@resend.com",
+    "zeno@resend.com",
+  ],
+}
+`;
+
+exports[`Resend throws API key error 1`] = `"Missing API key. Pass it to the constructor \`new Resend(\\"re_123\\")\`"`;

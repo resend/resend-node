@@ -3,24 +3,24 @@ import { render } from '@react-email/render';
 import { SendEmailData } from './interfaces';
 import { version } from '../package.json';
 
-export class Klotty {
+export class Resend {
   readonly baseUrl: string;
   private readonly headers: HeadersInit;
   private readonly request: AxiosInstance;
 
   constructor(readonly apiKey?: string) {
     if (!apiKey) {
-      this.apiKey = process.env.KLOTTY_API_KEY;
+      this.apiKey = process.env.RESEND_API_KEY;
 
       if (!this.apiKey) {
         throw new Error(
-          'Missing API key. Pass it to the constructor `new Klotty("kl_123")`',
+          'Missing API key. Pass it to the constructor `new Resend("re_123")`',
         );
       }
     }
 
     this.apiKey = apiKey;
-    this.baseUrl = process.env.KLOTTY_BASE_URL || 'https://api.klotty.com';
+    this.baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
     this.headers = {
       Authorization: `Bearer ${this.apiKey}`,
       'User-Agent': `node:${version}`,

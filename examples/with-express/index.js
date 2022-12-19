@@ -1,14 +1,14 @@
 require('dotenv').config()
 
-const { Klotty } = require('klotty');
-const klotty = new Klotty(process.env.KLOTTY_API_KEY);
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const express = require('express');
 const app = express();
 
 app.get('/', async (req, res) => {
   try {
-    const data = await klotty.sendEmail({
+    const data = await resend.sendEmail({
       from: process.env.EMAIL_FROM,
       to: process.env.EMAIL_TO,
       subject: "hello world",
@@ -23,7 +23,7 @@ app.get('/', async (req, res) => {
 })
 
 app.listen(3000, () => {
-  if (!process.env.KLOTTY_API_KEY) return throwError('KLOTTY_API_KEY');
+  if (!process.env.RESEND_API_KEY) return throwError('RESEND_API_KEY');
   if (!process.env.EMAIL_FROM) return throwError('EMAIL_FROM');
   if (!process.env.EMAIL_TO) return throwError('EMAIL_TO');
 

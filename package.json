@@ -1,5 +1,5 @@
 {
-  "name": "klotty",
+  "name": "resend",
   "version": "0.8.0",
   "description": "",
   "main": "build/src/index.js",
@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/klotty/klotty-node.git"
+    "url": "git+https://github.com/resend-inc/resend-node.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/klotty/klotty-node/issues"
+    "url": "https://github.com/resend-inc/resend-node/issues"
   },
-  "homepage": "https://github.com/klotty/klotty-node#readme",
+  "homepage": "https://github.com/resend-inc/resend-node#readme",
   "dependencies": {
     "@react-email/render": "^0.0.1",
     "axios": "0.27.2"

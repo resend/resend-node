@@ -1,6 +1,6 @@
-# Klotty with Express
+# Resend with Express
 
-This example shows how to use Klotty with [Express](https://expressjs.com).
+This example shows how to use Resend with [Express](https://expressjs.com).
 
 ## Instructions
 

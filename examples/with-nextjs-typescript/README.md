@@ -1,6 +1,6 @@
-# Klotty with Next.js
+# Resend with Next.js
 
-This example shows how to use Klotty with [Next.js](https://nextjs.org).
+This example shows how to use Resend with [Next.js](https://nextjs.org).
 
 ## Instructions
 

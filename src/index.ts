@@ -1,3 +1,3 @@
-import { Klotty } from './klotty';
+import { Resend } from './resend';
 
-export { Klotty };
+export { Resend };

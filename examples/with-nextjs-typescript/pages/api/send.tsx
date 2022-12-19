@@ -1,13 +1,13 @@
 import React from 'react';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import EmailTemplate from '../../components/EmailTemplate';
-import { Klotty } from 'klotty';
+import { Resend } from 'resend';
 
-const klotty = new Klotty(process.env.KLOTTY_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-export default async(req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const data = await klotty.sendEmail({
+    const data = await resend.sendEmail({
       from: process.env.EMAIL_FROM || '',
       to: process.env.EMAIL_TO || '',
       subject: "hello world",
@@ -16,7 +16,7 @@ export default async(req: NextApiRequest, res: NextApiResponse) => {
 
     res.status(200).json(data);
   }
-  catch(e) {
+  catch (e) {
     console.log(e);
     res.status(400).json(e);
   }

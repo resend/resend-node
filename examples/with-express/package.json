@@ -7,6 +7,6 @@
   "dependencies": {
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "klotty": "^0.5.1"
+    "resend": "^0.5.1"
   }
 }
