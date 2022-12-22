@@ -47,4 +47,17 @@ Object {
 }
 `;
 
+exports[`Resend sends email with multiple replyTo emails 1`] = `
+Object {
+  "created_at": "123",
+  "from": "admin@resend.com",
+  "id": "1234",
+  "replyTo": Array [
+    "foo@resend.com",
+    "bar@resend.com",
+  ],
+  "to": "bu@resend.com",
+}
+`;
+
 exports[`Resend throws API key error 1`] = `"Missing API key. Pass it to the constructor \`new Resend(\\"re_123\\")\`"`;
