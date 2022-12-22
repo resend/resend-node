@@ -10,7 +10,7 @@ export interface SendEmailData {
   /** Cc recipient email address. Max 50. */
   cc?: string | string[];
   /** Reply-to email address. Max 50. */
-  replyTo?: string | string[];
+  reply_to?: string | string[];
   /** Email subject. */
   subject?: string;
   /** The HTML version of the message. */

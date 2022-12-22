@@ -47,12 +47,12 @@ Object {
 }
 `;
 
-exports[`Resend sends email with multiple replyTo emails 1`] = `
+exports[`Resend sends email with multiple reply_to emails 1`] = `
 Object {
   "created_at": "123",
   "from": "admin@resend.com",
   "id": "1234",
-  "replyTo": Array [
+  "reply_to": Array [
     "foo@resend.com",
     "bar@resend.com",
   ],

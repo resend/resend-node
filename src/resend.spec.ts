@@ -84,18 +84,18 @@ describe('Resend', () => {
     expect(data).toMatchSnapshot();
   });
 
-  it('sends email with multiple replyTo emails', async () => {
+  it('sends email with multiple reply_to emails', async () => {
     const payload = {
       from: 'admin@resend.com',
       to: 'bu@resend.com',
-      replyTo: ['foo@resend.com', 'bar@resend.com'],
+      reply_to: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
     };
     mock.onPost('https://api.resend.com/email', payload).replyOnce(200, {
       id: '1234',
       from: 'admin@resend.com',
       to: 'bu@resend.com',
-      replyTo: ['foo@resend.com', 'bar@resend.com'],
+      reply_to: ['foo@resend.com', 'bar@resend.com'],
       created_at: '123',
     });
 
