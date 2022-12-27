@@ -47,7 +47,7 @@ Object {
 }
 `;
 
-exports[`Resend sends email with multiple reply_to emails 1`] = `
+exports[`Resend sends email with multiple replyTo emails 1`] = `
 Object {
   "created_at": "123",
   "from": "admin@resend.com",
