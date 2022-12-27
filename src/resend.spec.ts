@@ -85,14 +85,14 @@ describe('Resend', () => {
   });
 
   it('sends email with multiple replyTo emails', async () => {
-    const APIPayload = {
+    const apiPayload = {
       from: 'admin@resend.com',
       to: 'bu@resend.com',
       reply_to: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
     };
 
-    mock.onPost('https://api.resend.com/email', APIPayload).replyOnce(200, {
+    mock.onPost('https://api.resend.com/email', apiPayload).replyOnce(200, {
       id: '1234',
       from: 'admin@resend.com',
       to: 'bu@resend.com',
