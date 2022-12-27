@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { render } from '@react-email/render';
-import { SendEmailData } from './interfaces';
+import { SendEmailData, SendEmailRequest } from './interfaces';
 import { version } from '../package.json';
 
 export class Resend {
@@ -41,7 +41,21 @@ export class Resend {
         delete data.react;
       }
 
-      const response = await this.request(path, { method: 'POST', data });
+      const requestData: SendEmailRequest = {
+        from: data.from,
+        to: data.to,
+        bcc: data.bcc,
+        cc: data.cc,
+        reply_to: data.replyTo,
+        subject: data.subject,
+        text: data.text,
+        html: data.html,
+      };
+
+      const response = await this.request(path, {
+        method: 'POST',
+        data: requestData,
+      });
       return response.data;
     } catch (error) {
       throw error;
