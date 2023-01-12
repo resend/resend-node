@@ -50,6 +50,7 @@ export class Resend {
         subject: data.subject,
         text: data.text,
         html: data.html,
+        attachments: data.attachments,
       };
 
       const response = await this.request(path, {

@@ -19,6 +19,8 @@ export interface SendEmailData {
   html?: string;
   /** The React version of the message. */
   react?: ReactElement;
+  /** Attachments */
+  attachments?: any[];
 }
 
 export interface SendEmailRequest {
@@ -38,4 +40,6 @@ export interface SendEmailRequest {
   text?: string;
   /** The plain text version of the message. */
   html?: string;
+  /** Attachments */
+  attachments?: any[];
 }
