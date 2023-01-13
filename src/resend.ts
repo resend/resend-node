@@ -29,6 +29,8 @@ export class Resend {
     this.request = axios.create({
       baseURL: this.baseUrl,
       headers: this.headers,
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity,
     });
   }
 
