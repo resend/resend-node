@@ -539,13 +539,14 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@react-email/render@0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@react-email/render/-/render-0.0.4.tgz#d835b38c4a03b5880ac2323e893a36c85587060e"
-  integrity sha512-HPWjgw1TKcvYUPh74BjVC8Xq0ZU4nqb/tKsTa/VK/Ln4yXqnakBXNYl/UdHeJs57Ic9RMXSA9iOciQEHLgFWOg==
+"@react-email/render@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@react-email/render/-/render-0.0.5.tgz#c71abe472dad7658af34facbac138646d5579691"
+  integrity sha512-EE9mCvR3lXeZEJaldCEaEc4msCwPQwZfXbhuPVl3SpRsiHiMK0wNm2X39vVpqzCzxrm0wljCoLruT7Klp9DZAw==
   dependencies:
     html-to-text "9.0.3"
     pretty "2.0.0"
+    react "18.2.0"
     react-dom "18.2.0"
 
 "@selderee/plugin-htmlparser2@^0.10.0":
