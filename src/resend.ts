@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { render } from '@react-email/render';
-import { SendEmailData, SendEmailRequest } from './interfaces';
+import { SendEmailData, SendEmailRequest, SendEmailResponse } from './interfaces';
 import { version } from '../package.json';
 
 export class Resend {
@@ -34,7 +34,7 @@ export class Resend {
     });
   }
 
-  async sendEmail(data: SendEmailData): Promise<object> {
+  async sendEmail(data: SendEmailData): Promise<SendEmailResponse> {
     try {
       const path = `${this.baseUrl}/email`;
 

@@ -43,3 +43,14 @@ export interface SendEmailRequest {
   /** Attachments */
   attachments?: any[];
 }
+
+interface EmailResponse extends Pick<SendEmailRequest, 'to' | 'from'> {
+  id: string;
+  created_at: string;
+}
+
+interface ErrorResponse {
+  error: { message: string; status: number; type: string };
+}
+
+export type SendEmailResponse = EmailResponse | ErrorResponse;
