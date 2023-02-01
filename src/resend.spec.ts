@@ -103,7 +103,7 @@ describe('Resend', () => {
     const payload = {
       from: 'admin@resend.com',
       to: 'bu@resend.com',
-      replyTo: ['foo@resend.com', 'bar@resend.com'],
+      reply_to: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
     };
 
