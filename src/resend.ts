@@ -48,7 +48,7 @@ export class Resend {
         to: data.to,
         bcc: data.bcc,
         cc: data.cc,
-        reply_to: data.replyTo,
+        reply_to: data.reply_to,
         subject: data.subject,
         text: data.text,
         html: data.html,
