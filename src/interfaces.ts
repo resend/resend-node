@@ -20,7 +20,12 @@ export interface SendEmailData {
   /** The React version of the message. */
   react?: ReactElement;
   /** Attachments */
-  attachments?: any[];
+  attachments?: Attachment[];
+}
+
+interface Attachment {
+  content?: string | Buffer;
+  filename?: string | false | undefined;
 }
 
 export interface SendEmailRequest {
