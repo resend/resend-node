@@ -13,9 +13,9 @@ export interface SendEmailData {
   reply_to?: string | string[];
   /** Email subject. */
   subject?: string;
-  /** The HTML version of the message. */
-  text?: string;
   /** The plain text version of the message. */
+  text?: string;
+  /** The HTML version of the message. */
   html?: string;
   /** The React version of the message. */
   react?: ReactElement;
