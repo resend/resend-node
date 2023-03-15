@@ -12,7 +12,7 @@ export interface SendEmailData {
   /** Reply-to email address. Max 50. */
   reply_to?: string | string[];
   /** Email subject. */
-  subject?: string;
+  subject: string;
   /** The plain text version of the message. */
   text?: string;
   /** The HTML version of the message. */
@@ -40,7 +40,7 @@ export interface SendEmailRequest {
   /** Reply-to email address. Max 50. */
   reply_to?: string | string[];
   /** Email subject. */
-  subject?: string;
+  subject: string;
   /** The HTML version of the message. */
   text?: string;
   /** The plain text version of the message. */
