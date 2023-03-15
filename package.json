@@ -1,6 +1,6 @@
 {
   "name": "resend",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "",
   "main": "build/src/index.js",
   "typings": "build/src/index.d.ts",
