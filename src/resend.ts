@@ -1,6 +1,10 @@
 import axios, { AxiosInstance } from 'axios';
 import { render } from '@react-email/render';
-import { SendEmailData, SendEmailRequest, SendEmailResponse } from './interfaces';
+import {
+  SendEmailData,
+  SendEmailRequest,
+  SendEmailResponse,
+} from './interfaces';
 import { version } from '../package.json';
 
 export class Resend {
@@ -32,6 +36,22 @@ export class Resend {
       maxContentLength: Infinity,
       maxBodyLength: Infinity,
     });
+
+    this.request.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        if (error?.response?.data?.error) {
+          return Promise.reject(error.response.data.error);
+        }
+
+        if (error?.response?.data) {
+          return Promise.reject(error.response.data);
+        }
+        return Promise.reject(error);
+      },
+    );
   }
 
   async sendEmail(data: SendEmailData): Promise<SendEmailResponse> {
