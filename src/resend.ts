@@ -39,10 +39,6 @@ export class Resend {
 
     this.request.interceptors.response.use(
       (response) => {
-        if (response?.data) {
-          return response.data;
-        }
-
         return response;
       },
       (error) => {
