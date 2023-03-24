@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/resend-inc/resend-node#readme",
   "dependencies": {
-    "@react-email/render": "0.0.5",
+    "@react-email/render": "0.0.6",
     "axios": "0.27.2"
   },
   "devDependencies": {
