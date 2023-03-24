@@ -1,6 +1,10 @@
 import axios, { AxiosInstance } from 'axios';
 import { render } from '@react-email/render';
-import { SendEmailData, SendEmailRequest, SendEmailResponse } from './interfaces';
+import {
+  SendEmailData,
+  SendEmailRequest,
+  SendEmailResponse,
+} from './interfaces';
 import { version } from '../package.json';
 
 export class Resend {

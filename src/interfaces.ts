@@ -60,4 +60,4 @@ interface ErrorResponse {
 
 export type SendEmailResponse = EmailResponse | ErrorResponse;
 
-export {EmailResponse, ErrorResponse};
+export { EmailResponse, ErrorResponse };
