@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Resend sends email 1`] = `
-Object {
+{
   "created_at": "123",
   "from": "bu@resend.com",
   "id": "1234",
@@ -10,8 +10,8 @@ Object {
 `;
 
 exports[`Resend sends email with multiple bcc recipients 1`] = `
-Object {
-  "bcc": Array [
+{
+  "bcc": [
     "foo@resend.com",
     "bar@resend.com",
   ],
@@ -23,8 +23,8 @@ Object {
 `;
 
 exports[`Resend sends email with multiple cc recipients 1`] = `
-Object {
-  "cc": Array [
+{
+  "cc": [
     "foo@resend.com",
     "bar@resend.com",
   ],
@@ -36,11 +36,11 @@ Object {
 `;
 
 exports[`Resend sends email with multiple recipients 1`] = `
-Object {
+{
   "created_at": "123",
   "from": "admin@resend.com",
   "id": "1234",
-  "to": Array [
+  "to": [
     "bu@resend.com",
     "zeno@resend.com",
   ],
@@ -48,11 +48,11 @@ Object {
 `;
 
 exports[`Resend sends email with multiple replyTo emails 1`] = `
-Object {
+{
   "created_at": "123",
   "from": "admin@resend.com",
   "id": "1234",
-  "reply_to": Array [
+  "reply_to": [
     "foo@resend.com",
     "bar@resend.com",
   ],
@@ -60,4 +60,4 @@ Object {
 }
 `;
 
-exports[`Resend throws API key error 1`] = `"Missing API key. Pass it to the constructor \`new Resend(\\"re_123\\")\`"`;
+exports[`Resend throws API key error 1`] = `"Missing API key. Pass it to the constructor \`new Resend("re_123")\`"`;
