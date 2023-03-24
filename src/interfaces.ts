@@ -21,6 +21,8 @@ export interface SendEmailData {
   react?: ReactElement;
   /** Attachments */
   attachments?: Attachment[];
+  /** Email tags */
+  tags?: Tag[];
 }
 
 interface Attachment {
@@ -46,7 +48,9 @@ export interface SendEmailRequest {
   /** The plain text version of the message. */
   html?: string;
   /** Attachments */
-  attachments?: any[];
+  attachments?: Attachment[];
+  /** Email tags */
+  tags?: Tag[];
 }
 
 interface EmailResponse extends Pick<SendEmailRequest, 'to' | 'from'> {
@@ -61,3 +65,5 @@ interface ErrorResponse {
 export type SendEmailResponse = EmailResponse | ErrorResponse;
 
 export { EmailResponse, ErrorResponse };
+
+export type Tag = { name: string; value: string };
