@@ -12,6 +12,11 @@ export class ApiKeys {
     return data;
   }
 
+  async list(): Promise<void> {
+    const { data } = await this.resend.get('/api-keys');
+    return data;
+  }
+
   async remove(id: string) {
     await this.resend.delete(`/api-keys/${id}`);
   }

@@ -18,7 +18,7 @@ describe('Resend', () => {
       to: 'zeno@resend.com',
       subject: 'Hello World',
     };
-    mock.onPost('https://api.resend.com/email', payload).replyOnce(200, {
+    mock.onPost('/email', payload).replyOnce(200, {
       id: '1234',
       from: 'bu@resend.com',
       to: 'zeno@resend.com',
@@ -35,7 +35,7 @@ describe('Resend', () => {
       to: ['bu@resend.com', 'zeno@resend.com'],
       subject: 'Hello World',
     };
-    mock.onPost('https://api.resend.com/email', payload).replyOnce(200, {
+    mock.onPost('/email', payload).replyOnce(200, {
       id: '1234',
       from: 'admin@resend.com',
       to: ['bu@resend.com', 'zeno@resend.com'],
@@ -53,7 +53,7 @@ describe('Resend', () => {
       bcc: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
     };
-    mock.onPost('https://api.resend.com/email', payload).replyOnce(200, {
+    mock.onPost('/email', payload).replyOnce(200, {
       id: '1234',
       from: 'admin@resend.com',
       to: 'bu@resend.com',
@@ -72,7 +72,7 @@ describe('Resend', () => {
       cc: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
     };
-    mock.onPost('https://api.resend.com/email', payload).replyOnce(200, {
+    mock.onPost('/email', payload).replyOnce(200, {
       id: '1234',
       from: 'admin@resend.com',
       to: 'bu@resend.com',
@@ -92,7 +92,7 @@ describe('Resend', () => {
       subject: 'Hello World',
     };
 
-    mock.onPost('https://api.resend.com/email', apiPayload).replyOnce(200, {
+    mock.onPost('/email', apiPayload).replyOnce(200, {
       id: '1234',
       from: 'admin@resend.com',
       to: 'bu@resend.com',
