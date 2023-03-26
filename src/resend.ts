@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { render } from '@react-email/render';
 import {
   SendEmailData,
@@ -6,6 +6,7 @@ import {
   SendEmailResponse,
 } from './interfaces';
 import { version } from '../package.json';
+import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 
 export class Resend {
   readonly baseUrl: string;
@@ -52,6 +53,59 @@ export class Resend {
         return Promise.reject(error);
       },
     );
+  }
+
+  async post(
+    path: string,
+    entity?: any,
+    options?: PostOptions,
+  ): Promise<AxiosResponse> {
+    const requestHeaders: any = {};
+    try {
+      return await this.request.post(path, entity, {
+        params: options?.query,
+        headers: requestHeaders,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async get(path: string, options: GetOptions = {}): Promise<AxiosResponse> {
+    try {
+      return await this.request.get(path, {
+        params: options.query,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async put(
+    path: string,
+    entity: any,
+    options: PutOptions = {},
+  ): Promise<AxiosResponse> {
+    const requestHeaders: any = {};
+
+    try {
+      return await this.request.put(path, entity, {
+        params: options.query,
+        headers: requestHeaders,
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async delete(path: string, query?: any): Promise<AxiosResponse> {
+    try {
+      return await this.request.delete(path, {
+        params: query,
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   async sendEmail(data: SendEmailData): Promise<SendEmailResponse> {
