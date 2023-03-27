@@ -7,27 +7,29 @@ import {
 } from './interfaces';
 import { version } from '../package.json';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
+import { ApiKeys } from './api-keys/api-keys';
 
 export class Resend {
   readonly baseUrl: string;
   private readonly headers: HeadersInit;
   private readonly request: AxiosInstance;
 
-  constructor(readonly apiKey?: string) {
-    if (!apiKey) {
-      this.apiKey = process.env.RESEND_API_KEY;
+  readonly apiKeys = new ApiKeys(this);
 
-      if (!this.apiKey) {
+  constructor(readonly key?: string) {
+    if (!key) {
+      this.key = process.env.RESEND_API_KEY;
+
+      if (!this.key) {
         throw new Error(
           'Missing API key. Pass it to the constructor `new Resend("re_123")`',
         );
       }
     }
 
-    this.apiKey = apiKey;
     this.baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
     this.headers = {
-      Authorization: `Bearer ${this.apiKey}`,
+      Authorization: `Bearer ${this.key}`,
       'User-Agent': `node:${version}`,
       'Content-Type': 'application/json',
     };

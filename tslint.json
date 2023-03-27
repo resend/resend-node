@@ -17,7 +17,8 @@
     "variable-name": [true, "allow-leading-underscore"],
     "semicolon": [true, "always", "ignore-bound-class-methods"],
     "no-default-export": true,
-    "no-shadowed-variable": false
+    "no-shadowed-variable": false,
+    "no-empty-interface": false
   },
   "rulesDirectory": []
 }
