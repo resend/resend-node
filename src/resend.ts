@@ -8,6 +8,7 @@ import {
 import { version } from '../package.json';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 import { ApiKeys } from './api-keys/api-keys';
+import { Domains } from './domains/domains';
 
 export class Resend {
   readonly baseUrl: string;
@@ -15,6 +16,7 @@ export class Resend {
   private readonly request: AxiosInstance;
 
   readonly apiKeys = new ApiKeys(this);
+  readonly domains = new Domains(this);
 
   constructor(readonly key?: string) {
     if (!key) {
