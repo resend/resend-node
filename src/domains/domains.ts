@@ -1,5 +1,9 @@
 import { Resend } from '../resend';
-import { CreateDomainOptions, CreateDomainRequestOptions } from './interfaces';
+import {
+  CreateDomainOptions,
+  CreateDomainRequestOptions,
+  CreateDomainResponse,
+} from './interfaces';
 
 export class Domains {
   constructor(private readonly resend: Resend) {}
@@ -7,7 +11,7 @@ export class Domains {
   async create(
     payload: CreateDomainOptions,
     options: CreateDomainRequestOptions = {},
-  ): Promise<void> {
+  ): Promise<CreateDomainResponse> {
     const { data } = await this.resend.post('/domains', payload, options);
     return data;
   }
