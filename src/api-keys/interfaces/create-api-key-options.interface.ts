@@ -5,3 +5,7 @@ export interface CreateApiKeyOptions {
 }
 
 export interface CreateApiKeyRequestOptions extends PostOptions {}
+
+export interface CreateApiKeyResponse {
+  token: string;
+}

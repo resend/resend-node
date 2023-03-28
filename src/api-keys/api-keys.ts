@@ -1,5 +1,9 @@
 import { Resend } from '../resend';
-import { CreateApiKeyOptions, CreateApiKeyRequestOptions } from './interfaces';
+import {
+  CreateApiKeyOptions,
+  CreateApiKeyRequestOptions,
+  CreateApiKeyResponse,
+} from './interfaces';
 
 export class ApiKeys {
   constructor(private readonly resend: Resend) {}
@@ -7,9 +11,13 @@ export class ApiKeys {
   async create(
     payload: CreateApiKeyOptions,
     options: CreateApiKeyRequestOptions = {},
-  ): Promise<void> {
-    const { data } = await this.resend.post('/api-keys', payload, options);
-    return data;
+  ): Promise<CreateApiKeyResponse> {
+    const { data: apiKey } = await this.resend.post(
+      '/api-keys',
+      payload,
+      options,
+    );
+    return { token: apiKey.data };
   }
 
   async list(): Promise<void> {
