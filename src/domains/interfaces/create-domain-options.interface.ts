@@ -3,7 +3,7 @@ import { PostOptions } from '../../common/interfaces';
 export type DomainRegion = 'us-east-1' | 'eu-west-1' | 'sa-east-1';
 
 export interface CreateDomainOptions {
-  domain: string;
+  name: string;
   region?: DomainRegion;
 }
 
@@ -33,9 +33,9 @@ export interface DomainSpfRecord {
   type: 'MX' | 'TXT';
   ttl: string;
   status: DomainStatus;
-  routingPolicy?: string;
+  routing_policy?: string;
   priority?: number;
-  proxStatus?: 'enable' | 'disable';
+  proxy_status?: 'enable' | 'disable';
 }
 
 export interface DomainDkimRecord {
@@ -45,17 +45,16 @@ export interface DomainDkimRecord {
   type: 'CNAME';
   ttl: string;
   status: DomainStatus;
-  routingPolicy?: string;
+  routing_policy?: string;
   priority?: number;
-  proxStatus?: 'enable' | 'disable';
+  proxy_status?: 'enable' | 'disable';
 }
 
 export type CreateDomainResponse = {
   name: string;
   id: string;
-  dnsProvider: DomainNameservers;
   status: DomainStatus;
-  createdAt: string;
+  created_at: string;
   records: (DomainSpfRecord | DomainDkimRecord)[];
   region: DomainRegion;
 };
