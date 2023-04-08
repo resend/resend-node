@@ -29,7 +29,10 @@ export class Resend {
       }
     }
 
-    this.baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
+    this.baseUrl =
+      'http://localhost:3001/api' ||
+      process.env.RESEND_BASE_URL ||
+      'https://api.resend.com';
     this.headers = {
       Authorization: `Bearer ${this.key}`,
       'User-Agent': `node:${version}`,
@@ -44,6 +47,10 @@ export class Resend {
 
     this.request.interceptors.response.use(
       (response) => {
+        if (response.data) {
+          return response.data;
+        }
+
         return response;
       },
       (error) => {
@@ -59,11 +66,7 @@ export class Resend {
     );
   }
 
-  async post(
-    path: string,
-    entity?: any,
-    options?: PostOptions,
-  ): Promise<AxiosResponse> {
+  async post<T>(path: string, entity?: any, options?: PostOptions): Promise<T> {
     const requestHeaders: any = {};
     try {
       return await this.request.post(path, entity, {

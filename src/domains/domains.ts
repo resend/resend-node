@@ -12,7 +12,16 @@ export class Domains {
     payload: CreateDomainOptions,
     options: CreateDomainRequestOptions = {},
   ): Promise<CreateDomainResponse> {
-    const { data } = await this.resend.post('/domains', payload, options);
+    const data = await this.resend.post<CreateDomainResponse>(
+      '/domains',
+      payload,
+      options,
+    );
+    return data;
+  }
+
+  async list(): Promise<void> {
+    const { data } = await this.resend.get('/domains');
     return data;
   }
 
