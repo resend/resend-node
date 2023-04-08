@@ -29,10 +29,7 @@ export class Resend {
       }
     }
 
-    this.baseUrl =
-      'http://localhost:3001/api' ||
-      process.env.RESEND_BASE_URL ||
-      'https://api.resend.com';
+    this.baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
     this.headers = {
       Authorization: `Bearer ${this.key}`,
       'User-Agent': `node:${version}`,
