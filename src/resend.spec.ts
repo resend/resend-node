@@ -26,7 +26,14 @@ describe('Resend', () => {
     });
 
     const data = await resend.sendEmail(payload);
-    expect(data).toMatchSnapshot();
+    expect(data).toMatchInlineSnapshot(`
+      {
+        "created_at": "123",
+        "from": "bu@resend.com",
+        "id": "1234",
+        "to": "zeno@resend.com",
+      }
+    `);
   });
 
   it('sends email with multiple recipients', async () => {
@@ -43,7 +50,17 @@ describe('Resend', () => {
     });
 
     const data = await resend.sendEmail(payload);
-    expect(data).toMatchSnapshot();
+    expect(data).toMatchInlineSnapshot(`
+      {
+        "created_at": "123",
+        "from": "admin@resend.com",
+        "id": "1234",
+        "to": [
+          "bu@resend.com",
+          "zeno@resend.com",
+        ],
+      }
+    `);
   });
 
   it('sends email with multiple bcc recipients', async () => {
@@ -62,7 +79,18 @@ describe('Resend', () => {
     });
 
     const data = await resend.sendEmail(payload);
-    expect(data).toMatchSnapshot();
+    expect(data).toMatchInlineSnapshot(`
+      {
+        "bcc": [
+          "foo@resend.com",
+          "bar@resend.com",
+        ],
+        "created_at": "123",
+        "from": "admin@resend.com",
+        "id": "1234",
+        "to": "bu@resend.com",
+      }
+    `);
   });
 
   it('sends email with multiple cc recipients', async () => {
@@ -81,7 +109,18 @@ describe('Resend', () => {
     });
 
     const data = await resend.sendEmail(payload);
-    expect(data).toMatchSnapshot();
+    expect(data).toMatchInlineSnapshot(`
+      {
+        "cc": [
+          "foo@resend.com",
+          "bar@resend.com",
+        ],
+        "created_at": "123",
+        "from": "admin@resend.com",
+        "id": "1234",
+        "to": "bu@resend.com",
+      }
+    `);
   });
 
   it('sends email with multiple replyTo emails', async () => {
@@ -108,6 +147,17 @@ describe('Resend', () => {
     };
 
     const data = await resend.sendEmail(payload);
-    expect(data).toMatchSnapshot();
+    expect(data).toMatchInlineSnapshot(`
+      {
+        "created_at": "123",
+        "from": "admin@resend.com",
+        "id": "1234",
+        "reply_to": [
+          "foo@resend.com",
+          "bar@resend.com",
+        ],
+        "to": "bu@resend.com",
+      }
+    `);
   });
 });

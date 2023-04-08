@@ -1,10 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { render } from '@react-email/render';
-import {
-  SendEmailData,
-  SendEmailRequest,
-  SendEmailResponse,
-} from './interfaces';
+import { SendEmailData, SendEmailResponse } from './interfaces';
 import { version } from '../package.json';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 import { ApiKeys } from './api-keys/api-keys';
@@ -121,7 +117,7 @@ export class Resend {
         delete data.react;
       }
 
-      const requestData: SendEmailRequest = {
+      const response = await this.post<SendEmailResponse>(path, {
         from: data.from,
         to: data.to,
         bcc: data.bcc,
@@ -132,13 +128,9 @@ export class Resend {
         html: data.html,
         attachments: data.attachments,
         tags: data.tags,
-      };
-
-      const response = await this.request(path, {
-        method: 'POST',
-        data: requestData,
       });
-      return response.data;
+
+      return response;
     } catch (error) {
       throw error;
     }
