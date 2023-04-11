@@ -325,7 +325,7 @@ describe('Domains', () => {
   });
 
   describe('verify', () => {
-    it('verifys an domain', async () => {
+    it('verifies a domain', async () => {
       mock
         .onPost('/domains/5262504e-8ed7-4fac-bd16-0d4be94bc9f2/verify')
         .replyOnce(200);
