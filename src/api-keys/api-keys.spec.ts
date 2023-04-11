@@ -46,10 +46,10 @@ describe('API Keys', () => {
       expect(mock.history.post.length).toBe(1);
     });
 
-    describe('with scope', () => {
-      it('creates api key with scope `full_access`', async () => {
+    describe('with access', () => {
+      it('creates api key with access `full_access`', async () => {
         mock
-          .onPost('/api-keys', { name: 'Test', scope: 'full_access' })
+          .onPost('/api-keys', { name: 'Test', access: 'full_access' })
           .replyOnce(201, {
             token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
           });
@@ -57,7 +57,7 @@ describe('API Keys', () => {
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
         await expect(
-          resend.apiKeys.create({ name: 'Test', scope: 'full_access' }),
+          resend.apiKeys.create({ name: 'Test', access: 'full_access' }),
         ).resolves.toMatchInlineSnapshot(`
           {
             "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
@@ -66,32 +66,11 @@ describe('API Keys', () => {
         expect(mock.history.post.length).toBe(1);
       });
 
-      it('creates api key with scope `sending_only`', async () => {
+      it('creates api key with access `sending_only_access`', async () => {
         mock
-          .onPost('/api-keys', { name: 'Test', scope: 'sending_only' })
+          .onPost('/api-keys', { name: 'Test', access: 'sending_only_access' })
           .replyOnce(201, {
             token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
-          });
-
-        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-
-        await expect(
-          resend.apiKeys.create({ name: 'Test', scope: 'sending_only' }),
-        ).resolves.toMatchInlineSnapshot(`
-          {
-            "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
-          }
-        `);
-        expect(mock.history.post.length).toBe(1);
-      });
-
-      it('throws error with wrong scope', async () => {
-        mock
-          .onPost('/api-keys', { name: 'Test', scope: 'wrong_scope' })
-          .replyOnce(422, {
-            statusCode: 422,
-            name: 'invalid_scope',
-            message: 'Scope must be "full_access" | "sending_only"',
           });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -99,10 +78,34 @@ describe('API Keys', () => {
         await expect(
           resend.apiKeys.create({
             name: 'Test',
-            scope: 'wrong_scope' as 'sending_only' | 'full_access',
+            access: 'sending_only_access',
+          }),
+        ).resolves.toMatchInlineSnapshot(`
+          {
+            "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
+          }
+        `);
+        expect(mock.history.post.length).toBe(1);
+      });
+
+      it('throws error with wrong access', async () => {
+        mock
+          .onPost('/api-keys', { name: 'Test', access: 'wrong_access' })
+          .replyOnce(422, {
+            statusCode: 422,
+            name: 'invalid_access',
+            message: 'Access must be "full_access" | "sending_only_access"',
+          });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        await expect(
+          resend.apiKeys.create({
+            name: 'Test',
+            access: 'wrong_access' as 'sending_only_access' | 'full_access',
           }),
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"Scope must be "full_access" | "sending_only""`,
+          `"Access must be "full_access" | "sending_only_access""`,
         );
         expect(mock.history.post.length).toBe(1);
       });
@@ -113,7 +116,7 @@ describe('API Keys', () => {
         mock
           .onPost('/api-keys', {
             name: 'Test',
-            scope: 'sending_only',
+            access: 'sending_only_access',
             domain_id: '7dfcf219-9900-4169-86f3-801e6d9b935e',
           })
           .replyOnce(201, {
@@ -125,7 +128,7 @@ describe('API Keys', () => {
         await expect(
           resend.apiKeys.create({
             name: 'Test',
-            scope: 'sending_only',
+            access: 'sending_only_access',
             domain_id: '7dfcf219-9900-4169-86f3-801e6d9b935e',
           }),
         ).resolves.toMatchInlineSnapshot(`
@@ -136,11 +139,11 @@ describe('API Keys', () => {
         expect(mock.history.post.length).toBe(1);
       });
 
-      it('throws error with wrong scope', async () => {
+      it('throws error with wrong access', async () => {
         mock
           .onPost('/api-keys', {
             name: 'Test',
-            scope: 'sending_only',
+            access: 'sending_only_access',
             domain_id: '1234',
           })
           .replyOnce(500, {
@@ -154,7 +157,7 @@ describe('API Keys', () => {
         await expect(
           resend.apiKeys.create({
             name: 'Test',
-            scope: 'sending_only',
+            access: 'sending_only_access',
             domain_id: '1234',
           }),
         ).rejects.toThrowErrorMatchingInlineSnapshot(`"Something went wrong"`);
