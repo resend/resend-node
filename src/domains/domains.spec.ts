@@ -340,7 +340,7 @@ describe('Domains', () => {
   });
 
   describe('remove', () => {
-    it('removes an domain', async () => {
+    it('removes a domain', async () => {
       mock
         .onDelete('/domains/5262504e-8ed7-4fac-bd16-0d4be94bc9f2')
         .replyOnce(200);
