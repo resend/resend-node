@@ -49,7 +49,7 @@ describe('API Keys', () => {
     describe('with access', () => {
       it('creates api key with access `full_access`', async () => {
         mock
-          .onPost('/api-keys', { name: 'Test', access: 'full_access' })
+          .onPost('/api-keys', { name: 'Test', permission: 'full_access' })
           .replyOnce(201, {
             token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
           });
@@ -57,7 +57,7 @@ describe('API Keys', () => {
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
         await expect(
-          resend.apiKeys.create({ name: 'Test', access: 'full_access' }),
+          resend.apiKeys.create({ name: 'Test', permission: 'full_access' }),
         ).resolves.toMatchInlineSnapshot(`
           {
             "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
@@ -66,9 +66,12 @@ describe('API Keys', () => {
         expect(mock.history.post.length).toBe(1);
       });
 
-      it('creates api key with access `sending_only_access`', async () => {
+      it('creates api key with access `sending_access`', async () => {
         mock
-          .onPost('/api-keys', { name: 'Test', access: 'sending_only_access' })
+          .onPost('/api-keys', {
+            name: 'Test',
+            permission: 'sending_access',
+          })
           .replyOnce(201, {
             token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
           });
@@ -78,7 +81,7 @@ describe('API Keys', () => {
         await expect(
           resend.apiKeys.create({
             name: 'Test',
-            access: 'sending_only_access',
+            permission: 'sending_access',
           }),
         ).resolves.toMatchInlineSnapshot(`
           {
@@ -90,11 +93,11 @@ describe('API Keys', () => {
 
       it('throws error with wrong access', async () => {
         mock
-          .onPost('/api-keys', { name: 'Test', access: 'wrong_access' })
+          .onPost('/api-keys', { name: 'Test', permission: 'wrong_access' })
           .replyOnce(422, {
             statusCode: 422,
             name: 'invalid_access',
-            message: 'Access must be "full_access" | "sending_only_access"',
+            message: 'Access must be "full_access" | "sending_access"',
           });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -102,10 +105,10 @@ describe('API Keys', () => {
         await expect(
           resend.apiKeys.create({
             name: 'Test',
-            access: 'wrong_access' as 'sending_only_access' | 'full_access',
+            permission: 'wrong_access' as 'sending_access' | 'full_access',
           }),
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"Access must be "full_access" | "sending_only_access""`,
+          `"Access must be "full_access" | "sending_access""`,
         );
         expect(mock.history.post.length).toBe(1);
       });
@@ -116,7 +119,7 @@ describe('API Keys', () => {
         mock
           .onPost('/api-keys', {
             name: 'Test',
-            access: 'sending_only_access',
+            permission: 'sending_access',
             domain_id: '7dfcf219-9900-4169-86f3-801e6d9b935e',
           })
           .replyOnce(201, {
@@ -128,7 +131,7 @@ describe('API Keys', () => {
         await expect(
           resend.apiKeys.create({
             name: 'Test',
-            access: 'sending_only_access',
+            permission: 'sending_access',
             domain_id: '7dfcf219-9900-4169-86f3-801e6d9b935e',
           }),
         ).resolves.toMatchInlineSnapshot(`
@@ -143,7 +146,7 @@ describe('API Keys', () => {
         mock
           .onPost('/api-keys', {
             name: 'Test',
-            access: 'sending_only_access',
+            permission: 'sending_access',
             domain_id: '1234',
           })
           .replyOnce(500, {
@@ -157,7 +160,7 @@ describe('API Keys', () => {
         await expect(
           resend.apiKeys.create({
             name: 'Test',
-            access: 'sending_only_access',
+            permission: 'sending_access',
             domain_id: '1234',
           }),
         ).rejects.toThrowErrorMatchingInlineSnapshot(`"Something went wrong"`);

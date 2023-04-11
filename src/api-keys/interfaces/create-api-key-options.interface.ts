@@ -2,7 +2,7 @@ import { PostOptions } from '../../common/interfaces';
 
 export interface CreateApiKeyOptions {
   name: string;
-  access?: 'full_access' | 'sending_only_access';
+  permission?: 'full_access' | 'sending_access';
   domain_id?: string;
 }
 
