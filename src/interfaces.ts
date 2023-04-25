@@ -54,7 +54,7 @@ export interface SendEmailRequest {
 }
 
 export const RESEND_ERROR_CODES_BY_KEY = {
-  missing_required_fields: 400,
+  missing_required_fields: 422,
   missing_api_key: 401,
   invalid_api_Key: 403,
   invalid_from_address: 403,
