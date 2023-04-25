@@ -10,4 +10,5 @@ export interface CreateApiKeyRequestOptions extends PostOptions {}
 
 export interface CreateApiKeyResponse {
   token: string;
+  id: string;
 }
