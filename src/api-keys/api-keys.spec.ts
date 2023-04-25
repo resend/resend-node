@@ -13,6 +13,7 @@ describe('API Keys', () => {
     it('creates an api key', async () => {
       mock.onPost('/api-keys', { name: 'Test' }).replyOnce(201, {
         token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
+        id: '430eed87-632a-4ea6-90db-0aace67ec228',
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -20,6 +21,7 @@ describe('API Keys', () => {
       await expect(resend.apiKeys.create({ name: 'Test' })).resolves
         .toMatchInlineSnapshot(`
         {
+          "id": "430eed87-632a-4ea6-90db-0aace67ec228",
           "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
         }
       `);
@@ -52,6 +54,7 @@ describe('API Keys', () => {
           .onPost('/api-keys', { name: 'Test', permission: 'full_access' })
           .replyOnce(201, {
             token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
+            id: '430eed87-632a-4ea6-90db-0aace67ec228',
           });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -60,6 +63,7 @@ describe('API Keys', () => {
           resend.apiKeys.create({ name: 'Test', permission: 'full_access' }),
         ).resolves.toMatchInlineSnapshot(`
           {
+            "id": "430eed87-632a-4ea6-90db-0aace67ec228",
             "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
           }
         `);
@@ -74,6 +78,7 @@ describe('API Keys', () => {
           })
           .replyOnce(201, {
             token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
+            id: '430eed87-632a-4ea6-90db-0aace67ec228',
           });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -85,6 +90,7 @@ describe('API Keys', () => {
           }),
         ).resolves.toMatchInlineSnapshot(`
           {
+            "id": "430eed87-632a-4ea6-90db-0aace67ec228",
             "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
           }
         `);
@@ -124,6 +130,7 @@ describe('API Keys', () => {
           })
           .replyOnce(201, {
             token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
+            id: '430eed87-632a-4ea6-90db-0aace67ec228',
           });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -136,6 +143,7 @@ describe('API Keys', () => {
           }),
         ).resolves.toMatchInlineSnapshot(`
           {
+            "id": "430eed87-632a-4ea6-90db-0aace67ec228",
             "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
           }
         `);
