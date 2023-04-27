@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import { Resend } from '../resend';
 import {
   CreateApiKeyOptions,
@@ -21,7 +22,7 @@ export class ApiKeys {
   }
 
   async list(): Promise<void> {
-    const { data } = await this.resend.get('/api-keys');
+    const { data } = await this.resend.get<AxiosResponse>('/api-keys');
     return data;
   }
 
