@@ -5,6 +5,7 @@ import { version } from '../package.json';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 import { ApiKeys } from './api-keys/api-keys';
 import { Domains } from './domains/domains';
+import { Emails } from './emails/emails';
 
 export class Resend {
   readonly baseUrl: string;
@@ -13,6 +14,7 @@ export class Resend {
 
   readonly apiKeys = new ApiKeys(this);
   readonly domains = new Domains(this);
+  readonly emails = new Emails(this);
 
   constructor(readonly key?: string) {
     if (!key) {
@@ -71,7 +73,7 @@ export class Resend {
     }
   }
 
-  async get(path: string, options: GetOptions = {}): Promise<AxiosResponse> {
+  async get<T>(path: string, options: GetOptions = {}): Promise<T> {
     try {
       return await this.request.get(path, {
         params: options.query,
