@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import { Resend } from '../resend';
 import {
   CreateDomainOptions,
@@ -21,7 +22,7 @@ export class Domains {
   }
 
   async list(): Promise<void> {
-    const { data } = await this.resend.get('/domains');
+    const { data } = await this.resend.get<AxiosResponse>('/domains');
     return data;
   }
 
