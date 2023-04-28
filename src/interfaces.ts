@@ -60,13 +60,15 @@ export const RESEND_ERROR_CODES_BY_KEY = {
   invalid_from_address: 403,
   not_found: 404,
   method_not_allowed: 405,
-  internal_server_error: 500
+  internal_server_error: 500,
 } as const;
 
 type ValueOf<TObj> = TObj[keyof TObj];
 
-export type RESEND_ERROR_CODE_NUMBER = ValueOf<typeof RESEND_ERROR_CODES_BY_KEY>;
-export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES;
+export type RESEND_ERROR_CODE_NUMBER = ValueOf<
+  typeof RESEND_ERROR_CODES_BY_KEY
+>;
+export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
 interface EmailResponse extends Pick<SendEmailRequest, 'to' | 'from'> {
   id: string;
@@ -74,7 +76,11 @@ interface EmailResponse extends Pick<SendEmailRequest, 'to' | 'from'> {
 }
 
 interface ErrorResponse {
-  error: { message: string; status: RESEND_ERROR_CODE_NUMBER; type: RESEND_ERROR_CODE_KEY };
+  error: {
+    message: string;
+    status: RESEND_ERROR_CODE_NUMBER;
+    type: RESEND_ERROR_CODE_KEY;
+  };
 }
 
 export type SendEmailResponse = EmailResponse | ErrorResponse;
