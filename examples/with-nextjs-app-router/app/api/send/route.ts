@@ -13,10 +13,10 @@ export async function GET() {
       react: EmailTemplate({ firstName: "John", product: "Resend" }),
     });
 
-    return NextResponse.json({ data });
+    return NextResponse.json(data);
   }
   catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json({ error });
   }
 }
