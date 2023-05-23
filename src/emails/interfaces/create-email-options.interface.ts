@@ -1,14 +1,14 @@
 import { PostOptions } from '../../common/interfaces';
 
 export interface CreateEmailOptions {
-  id: string;
-  bcc?: string[];
-  cc?: string[];
+  bcc?: string | string[];
+  cc?: string | string[];
   from: string;
   html?: string;
-  text?: string;
-  to: string[];
+  reply_to?: string | string[];
   subject: string;
+  text?: string;
+  to: string | string[];
 }
 
 export interface CreateEmailRequestOptions extends PostOptions {}
