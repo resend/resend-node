@@ -18,14 +18,14 @@ describe('Resend', () => {
       to: 'zeno@resend.com',
       subject: 'Hello World',
     };
-    mock.onPost('/email', payload).replyOnce(200, {
+    mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
       from: 'bu@resend.com',
       to: 'zeno@resend.com',
       created_at: '123',
     });
 
-    const data = await resend.sendEmail(payload);
+    const data = await resend.emails.send(payload);
     expect(data).toMatchInlineSnapshot(`
       {
         "created_at": "123",
@@ -42,14 +42,14 @@ describe('Resend', () => {
       to: ['bu@resend.com', 'zeno@resend.com'],
       subject: 'Hello World',
     };
-    mock.onPost('/email', payload).replyOnce(200, {
+    mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
       from: 'admin@resend.com',
       to: ['bu@resend.com', 'zeno@resend.com'],
       created_at: '123',
     });
 
-    const data = await resend.sendEmail(payload);
+    const data = await resend.emails.send(payload);
     expect(data).toMatchInlineSnapshot(`
       {
         "created_at": "123",
@@ -70,7 +70,7 @@ describe('Resend', () => {
       bcc: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
     };
-    mock.onPost('/email', payload).replyOnce(200, {
+    mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
       from: 'admin@resend.com',
       to: 'bu@resend.com',
@@ -78,7 +78,7 @@ describe('Resend', () => {
       created_at: '123',
     });
 
-    const data = await resend.sendEmail(payload);
+    const data = await resend.emails.send(payload);
     expect(data).toMatchInlineSnapshot(`
       {
         "bcc": [
@@ -100,7 +100,7 @@ describe('Resend', () => {
       cc: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
     };
-    mock.onPost('/email', payload).replyOnce(200, {
+    mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
       from: 'admin@resend.com',
       to: 'bu@resend.com',
@@ -108,7 +108,7 @@ describe('Resend', () => {
       created_at: '123',
     });
 
-    const data = await resend.sendEmail(payload);
+    const data = await resend.emails.send(payload);
     expect(data).toMatchInlineSnapshot(`
       {
         "cc": [
@@ -131,7 +131,7 @@ describe('Resend', () => {
       subject: 'Hello World',
     };
 
-    mock.onPost('/email', apiPayload).replyOnce(200, {
+    mock.onPost('/emails', apiPayload).replyOnce(200, {
       id: '1234',
       from: 'admin@resend.com',
       to: 'bu@resend.com',
@@ -146,7 +146,7 @@ describe('Resend', () => {
       subject: 'Hello World',
     };
 
-    const data = await resend.sendEmail(payload);
+    const data = await resend.emails.send(payload);
     expect(data).toMatchInlineSnapshot(`
       {
         "created_at": "123",
