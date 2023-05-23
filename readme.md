@@ -24,7 +24,7 @@ const resend = new Resend('re_123');
 Send your first email:
 
 ```js
-await resend.sendEmail({
+await resend.emails.send({
   from: 'you@example.com',
   to: 'user@gmail.com',
   subject: 'hello world',
@@ -37,7 +37,7 @@ await resend.sendEmail({
 Send an email custom HTML content:
 
 ```js
-await resend.sendEmail({
+await resend.emails.send({
   from: 'you@example.com',
   to: 'user@gmail.com',
   subject: 'hello world',
@@ -69,7 +69,7 @@ Then import the template component and pass it to the `react` property.
 ```jsx
 import EmailTemplate from '../components/EmailTemplate'
 
-await resend.sendEmail({
+await resend.emails.send({
   from: 'you@example.com',
   to: 'user@gmail.com',
   subject: 'hello world',
