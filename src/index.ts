@@ -1,7 +1,2 @@
 export { Resend } from './resend';
-export {
-  SendEmailResponse,
-  EmailResponse,
-  ErrorResponse,
-  SendEmailData,
-} from './interfaces';
+export { ErrorResponse } from './interfaces';
