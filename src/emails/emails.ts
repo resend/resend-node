@@ -1,3 +1,4 @@
+import { render } from '@react-email/render';
 import { Resend } from '../resend';
 import {
   CreateEmailOptions,
@@ -20,6 +21,11 @@ export class Emails {
     payload: CreateEmailOptions,
     options: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
+    if (payload.react) {
+      payload.html = render(payload.react);
+      delete payload.react;
+    }
+
     const data = await this.resend.post<CreateEmailResponse>(
       '/emails',
       payload,
