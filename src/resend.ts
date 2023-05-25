@@ -1,11 +1,11 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { render } from '@react-email/render';
-import { SendEmailData, SendEmailResponse } from './interfaces';
 import { version } from '../package.json';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 import { ApiKeys } from './api-keys/api-keys';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
+import { CreateEmailOptions, CreateEmailResponse } from './emails/interfaces';
 
 export class Resend {
   readonly baseUrl: string;
@@ -110,7 +110,7 @@ export class Resend {
     }
   }
 
-  async sendEmail(data: SendEmailData): Promise<SendEmailResponse> {
+  async sendEmail(data: CreateEmailOptions): Promise<CreateEmailResponse> {
     try {
       const path = `${this.baseUrl}/email`;
 
@@ -119,7 +119,7 @@ export class Resend {
         delete data.react;
       }
 
-      const response = await this.post<SendEmailResponse>(path, {
+      const response = await this.post<CreateEmailResponse>(path, {
         from: data.from,
         to: data.to,
         bcc: data.bcc,
