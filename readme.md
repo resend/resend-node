@@ -10,6 +10,13 @@ npm install resend
 yarn add resend
 ```
 
+## Examples
+
+* [Node.js](https://github.com/resendlabs/resend-node-example)
+* [Next.js (App Router)](https://github.com/resendlabs/resend-nextjs-app-router-example)
+* [Next.js (Pages Router)](https://github.com/resendlabs/resend-nextjs-pages-router-example)
+* [Express](https://github.com/resendlabs/resend-express-example)
+
 ## Setup
 
 First, you need to get an API key, which is available in the [Resend Dashboard](https://resend.com).
