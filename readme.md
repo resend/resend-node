@@ -12,6 +12,8 @@ yarn add resend
 
 ## Examples
 
+Send email with:
+
 * [Node.js](https://github.com/resendlabs/resend-node-example)
 * [Next.js (App Router)](https://github.com/resendlabs/resend-nextjs-app-router-example)
 * [Next.js (Pages Router)](https://github.com/resendlabs/resend-nextjs-pages-router-example)
@@ -23,7 +25,7 @@ First, you need to get an API key, which is available in the [Resend Dashboard](
 
 ```js
 import { Resend } from 'resend';
-const resend = new Resend('re_123');
+const resend = new Resend('re_123456789');
 ```
 
 ## Usage
