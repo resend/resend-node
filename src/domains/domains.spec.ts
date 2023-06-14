@@ -1,7 +1,7 @@
 import axios from 'axios';
 import MockAdapater from 'axios-mock-adapter';
 import { Resend } from '../resend';
-import { DomainRegion } from './interfaces';
+import { DomainRegion } from './interfaces/domain';
 
 const mock = new MockAdapater(axios);
 

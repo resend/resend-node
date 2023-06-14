@@ -4,6 +4,7 @@ import {
   CreateDomainOptions,
   CreateDomainRequestOptions,
   CreateDomainResponse,
+  ListDomainsResponse,
 } from './interfaces';
 
 export class Domains {
@@ -21,7 +22,7 @@ export class Domains {
     return data;
   }
 
-  async list(): Promise<void> {
+  async list(): Promise<ListDomainsResponse> {
     const { data } = await this.resend.get<AxiosResponse>('/domains');
     return data;
   }
