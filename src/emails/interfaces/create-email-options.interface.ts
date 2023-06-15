@@ -7,7 +7,7 @@ export interface CreateEmailOptions {
   cc?: string | string[];
   from: string;
   html?: string;
-  react?: ReactElement;
+  react?: ReactElement | null;
   reply_to?: string | string[];
   subject: string;
   tags?: Tag[];
