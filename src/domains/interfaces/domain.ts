@@ -16,3 +16,29 @@ export type DomainStatus =
   | 'failed'
   | 'temporary_failure'
   | 'not_started';
+
+export type DomainRecords = DomainSpfRecord | DomainDkimRecord;
+
+export interface DomainSpfRecord {
+  record: 'SPF';
+  name: string;
+  value: string;
+  type: 'MX' | 'TXT';
+  ttl: string;
+  status: DomainStatus;
+  routing_policy?: string;
+  priority?: number;
+  proxy_status?: 'enable' | 'disable';
+}
+
+export interface DomainDkimRecord {
+  record: 'DKIM';
+  name: string;
+  value: string;
+  type: 'CNAME' | 'TXT';
+  ttl: string;
+  status: DomainStatus;
+  routing_policy?: string;
+  priority?: number;
+  proxy_status?: 'enable' | 'disable';
+}
