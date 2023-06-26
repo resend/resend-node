@@ -2,6 +2,7 @@ import axios from 'axios';
 import MockAdapater from 'axios-mock-adapter';
 import { Resend } from '../resend';
 import { DomainRegion } from './interfaces/domain';
+import { GetDomainResponse } from './interfaces';
 
 const mock = new MockAdapater(axios);
 
@@ -321,6 +322,110 @@ describe('Domains', () => {
         ]
       `);
       expect(mock.history.get.length).toBe(1);
+    });
+  });
+
+  describe('get', () => {
+    describe('when domain not found', () => {
+      it('returns error', async () => {
+        mock.onGet('/domains/1234').replyOnce(200, {
+          name: 'not_found',
+          message: 'Domain not found',
+          statusCode: 404,
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        await expect(resend.domains.get('1234')).resolves
+          .toMatchInlineSnapshot(`
+          {
+            "message": "Domain not found",
+            "name": "not_found",
+            "statusCode": 404,
+          }
+        `);
+      });
+    });
+
+    it('get domain', async () => {
+      const domain: GetDomainResponse = {
+        object: 'domain',
+        id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+        name: 'resend.com',
+        status: 'not_started',
+        created_at: '2023-06-21T06:10:36.144Z',
+        region: 'us-east-1',
+        records: [
+          {
+            record: 'SPF',
+            name: 'bounces.resend.com',
+            type: 'MX',
+            ttl: 'Auto',
+            status: 'not_started',
+            value: 'feedback-smtp.us-east-1.amazonses.com',
+            priority: 10,
+          },
+          {
+            record: 'SPF',
+            name: 'bounces.resend.com',
+            value: '"v=spf1 include:amazonses.com ~all"',
+            type: 'TXT',
+            ttl: 'Auto',
+            status: 'not_started',
+          },
+          {
+            record: 'DKIM',
+            name: 'resend._domainkey',
+            value:
+              'p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDZDhdsAKs5xdSj7h3v22wjx3WMWWADCHwxfef8U03JUbVM/sNSVuY5mbrdJKUoG6QBdfxsOGzhINmQnT89idjp5GdAUhx/KNpt8hcLXMID4nB0Gbcafn03/z5zEPxPfzVJqQd/UqOtZQcfxN9OrIhLiBsYTbcTBB7EvjCb3wEaBwIDAQAB',
+            type: 'TXT',
+            status: 'verified',
+            ttl: 'Auto',
+          },
+        ],
+      };
+
+      mock.onGet('/domains/1234').replyOnce(200, domain);
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(resend.domains.get('1234')).resolves.toMatchInlineSnapshot(`
+        {
+          "created_at": "2023-06-21T06:10:36.144Z",
+          "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+          "name": "resend.com",
+          "object": "domain",
+          "records": [
+            {
+              "name": "bounces.resend.com",
+              "priority": 10,
+              "record": "SPF",
+              "status": "not_started",
+              "ttl": "Auto",
+              "type": "MX",
+              "value": "feedback-smtp.us-east-1.amazonses.com",
+            },
+            {
+              "name": "bounces.resend.com",
+              "record": "SPF",
+              "status": "not_started",
+              "ttl": "Auto",
+              "type": "TXT",
+              "value": ""v=spf1 include:amazonses.com ~all"",
+            },
+            {
+              "name": "resend._domainkey",
+              "record": "DKIM",
+              "status": "verified",
+              "ttl": "Auto",
+              "type": "TXT",
+              "value": "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDZDhdsAKs5xdSj7h3v22wjx3WMWWADCHwxfef8U03JUbVM/sNSVuY5mbrdJKUoG6QBdfxsOGzhINmQnT89idjp5GdAUhx/KNpt8hcLXMID4nB0Gbcafn03/z5zEPxPfzVJqQd/UqOtZQcfxN9OrIhLiBsYTbcTBB7EvjCb3wEaBwIDAQAB",
+            },
+          ],
+          "region": "us-east-1",
+          "status": "not_started",
+        }
+      `);
     });
   });
 
