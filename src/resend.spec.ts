@@ -1,6 +1,7 @@
 import { Resend } from './resend';
 import MockAdapater from 'axios-mock-adapter';
 import axios from 'axios';
+import { CreateEmailOptions } from './emails/interfaces';
 
 const mock = new MockAdapater(axios);
 const resend = new Resend('re_924b3rjh2387fbewf823');
@@ -13,10 +14,11 @@ describe('Resend', () => {
   });
 
   it('sends email', async () => {
-    const payload = {
+    const payload: CreateEmailOptions = {
       from: 'bu@resend.com',
       to: 'zeno@resend.com',
       subject: 'Hello World',
+      html: '<h1>Hello world</h1>',
     };
     mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
@@ -37,10 +39,11 @@ describe('Resend', () => {
   });
 
   it('sends email with multiple recipients', async () => {
-    const payload = {
+    const payload: CreateEmailOptions = {
       from: 'admin@resend.com',
       to: ['bu@resend.com', 'zeno@resend.com'],
       subject: 'Hello World',
+      text: 'Hello world'
     };
     mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
@@ -64,11 +67,12 @@ describe('Resend', () => {
   });
 
   it('sends email with multiple bcc recipients', async () => {
-    const payload = {
+    const payload: CreateEmailOptions = {
       from: 'admin@resend.com',
       to: 'bu@resend.com',
       bcc: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
+      text: 'Hello world'
     };
     mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
@@ -94,11 +98,12 @@ describe('Resend', () => {
   });
 
   it('sends email with multiple cc recipients', async () => {
-    const payload = {
+    const payload: CreateEmailOptions = {
       from: 'admin@resend.com',
       to: 'bu@resend.com',
       cc: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
+      text: 'Hello world'
     };
     mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
@@ -124,11 +129,12 @@ describe('Resend', () => {
   });
 
   it('sends email with multiple replyTo emails', async () => {
-    const apiPayload = {
+    const apiPayload: CreateEmailOptions = {
       from: 'admin@resend.com',
       to: 'bu@resend.com',
       reply_to: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
+      text: 'Hello world'
     };
 
     mock.onPost('/emails', apiPayload).replyOnce(200, {
@@ -139,11 +145,12 @@ describe('Resend', () => {
       created_at: '123',
     });
 
-    const payload = {
+    const payload: CreateEmailOptions = {
       from: 'admin@resend.com',
       to: 'bu@resend.com',
       reply_to: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
+      text: 'Hello world'
     };
 
     const data = await resend.emails.send(payload);
