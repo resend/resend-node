@@ -6,6 +6,7 @@ interface CreateEmailBaseOptions {
   bcc?: string | string[];
   cc?: string | string[];
   from: string;
+  headers?: Record<string, string>
   react?: ReactElement | null;
   reply_to?: string | string[];
   subject: string;

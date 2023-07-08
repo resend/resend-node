@@ -43,7 +43,7 @@ describe('Resend', () => {
       from: 'admin@resend.com',
       to: ['bu@resend.com', 'zeno@resend.com'],
       subject: 'Hello World',
-      text: 'Hello world'
+      text: 'Hello world',
     };
     mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
@@ -72,7 +72,7 @@ describe('Resend', () => {
       to: 'bu@resend.com',
       bcc: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
-      text: 'Hello world'
+      text: 'Hello world',
     };
     mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
@@ -103,7 +103,7 @@ describe('Resend', () => {
       to: 'bu@resend.com',
       cc: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
-      text: 'Hello world'
+      text: 'Hello world',
     };
     mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
@@ -134,7 +134,7 @@ describe('Resend', () => {
       to: 'bu@resend.com',
       reply_to: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
-      text: 'Hello world'
+      text: 'Hello world',
     };
 
     mock.onPost('/emails', apiPayload).replyOnce(200, {
@@ -150,7 +150,7 @@ describe('Resend', () => {
       to: 'bu@resend.com',
       reply_to: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
-      text: 'Hello world'
+      text: 'Hello world',
     };
 
     const data = await resend.emails.send(payload);
@@ -163,6 +163,40 @@ describe('Resend', () => {
           "foo@resend.com",
           "bar@resend.com",
         ],
+        "to": "bu@resend.com",
+      }
+    `);
+  });
+
+  it('can send an email with headers', async () => {
+    const payload: CreateEmailOptions = {
+      from: 'admin@resend.com',
+      headers: {
+        'X-Entity-Ref-ID': '123',
+      },
+      subject: 'Hello World',
+      text: 'Hello world',
+      to: 'bu@resend.com',
+    };
+    mock.onPost('/emails', payload).replyOnce(200, {
+      id: '1234',
+      from: 'admin@resend.com',
+      to: 'bu@resend.com',
+      headers: {
+        'X-Entity-Ref-ID': '123',
+      },
+      created_at: '123',
+    });
+
+    const data = await resend.emails.send(payload);
+    expect(data).toMatchInlineSnapshot(`
+      {
+        "created_at": "123",
+        "from": "admin@resend.com",
+        "headers": {
+          "X-Entity-Ref-ID": "123",
+        },
+        "id": "1234",
         "to": "bu@resend.com",
       }
     `);
