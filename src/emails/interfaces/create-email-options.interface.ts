@@ -1,19 +1,31 @@
 import { ReactElement } from 'react';
 import { PostOptions } from '../../common/interfaces';
 
-export interface CreateEmailOptions {
+interface CreateEmailBaseOptions {
   attachments?: Attachment[];
   bcc?: string | string[];
   cc?: string | string[];
   from: string;
-  html?: string;
   react?: ReactElement | null;
   reply_to?: string | string[];
   subject: string;
   tags?: Tag[];
-  text?: string;
   to: string | string[];
 }
+
+interface CreateEmailWithHtmlOptions extends CreateEmailBaseOptions {
+  html: string;
+  text?: string;
+}
+
+interface CreateEmailWithTextOptions extends CreateEmailBaseOptions {
+  html?: string;
+  text: string;
+}
+
+export type CreateEmailOptions =
+  | CreateEmailWithHtmlOptions
+  | CreateEmailWithTextOptions;
 
 export interface CreateEmailRequestOptions extends PostOptions {}
 
