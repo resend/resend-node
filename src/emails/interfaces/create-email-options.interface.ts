@@ -6,7 +6,7 @@ interface CreateEmailBaseOptions {
   bcc?: string | string[];
   cc?: string | string[];
   from: string;
-  headers?: Record<string, string>
+  headers?: Record<string, string>;
   react?: ReactElement | null;
   reply_to?: string | string[];
   subject: string;
@@ -15,16 +15,18 @@ interface CreateEmailBaseOptions {
 }
 
 interface CreateEmailWithHtmlOptions extends CreateEmailBaseOptions {
-  html: string
-  text?: string
+  html: string;
+  text?: string;
 }
 
 interface CreateEmailWithTextOptions extends CreateEmailBaseOptions {
-  html?: string
-  text: string
+  html?: string;
+  text: string;
 }
 
-export type CreateEmailOptions = CreateEmailWithHtmlOptions | CreateEmailWithTextOptions
+export type CreateEmailOptions =
+  | CreateEmailWithHtmlOptions
+  | CreateEmailWithTextOptions;
 
 export interface CreateEmailRequestOptions extends PostOptions {}
 
