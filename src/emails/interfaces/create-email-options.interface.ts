@@ -14,16 +14,18 @@ interface CreateEmailBaseOptions {
 }
 
 interface CreateEmailWithHtmlOptions extends CreateEmailBaseOptions {
-  html: string
-  text?: string
+  html: string;
+  text?: string;
 }
 
 interface CreateEmailWithTextOptions extends CreateEmailBaseOptions {
-  html?: string
-  text: string
+  html?: string;
+  text: string;
 }
 
-export type CreateEmailOptions = CreateEmailWithHtmlOptions | CreateEmailWithTextOptions
+export type CreateEmailOptions =
+  | CreateEmailWithHtmlOptions
+  | CreateEmailWithTextOptions;
 
 export interface CreateEmailRequestOptions extends PostOptions {}
 

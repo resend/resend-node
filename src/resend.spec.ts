@@ -43,7 +43,7 @@ describe('Resend', () => {
       from: 'admin@resend.com',
       to: ['bu@resend.com', 'zeno@resend.com'],
       subject: 'Hello World',
-      text: 'Hello world'
+      text: 'Hello world',
     };
     mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
@@ -72,7 +72,7 @@ describe('Resend', () => {
       to: 'bu@resend.com',
       bcc: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
-      text: 'Hello world'
+      text: 'Hello world',
     };
     mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
@@ -103,7 +103,7 @@ describe('Resend', () => {
       to: 'bu@resend.com',
       cc: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
-      text: 'Hello world'
+      text: 'Hello world',
     };
     mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
@@ -134,7 +134,7 @@ describe('Resend', () => {
       to: 'bu@resend.com',
       reply_to: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
-      text: 'Hello world'
+      text: 'Hello world',
     };
 
     mock.onPost('/emails', apiPayload).replyOnce(200, {
@@ -150,7 +150,7 @@ describe('Resend', () => {
       to: 'bu@resend.com',
       reply_to: ['foo@resend.com', 'bar@resend.com'],
       subject: 'Hello World',
-      text: 'Hello world'
+      text: 'Hello world',
     };
 
     const data = await resend.emails.send(payload);
