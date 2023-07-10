@@ -180,24 +180,12 @@ describe('Resend', () => {
     };
     mock.onPost('/emails', payload).replyOnce(200, {
       id: '1234',
-      from: 'admin@resend.com',
-      to: 'bu@resend.com',
-      headers: {
-        'X-Entity-Ref-ID': '123',
-      },
-      created_at: '123',
     });
 
     const data = await resend.emails.send(payload);
     expect(data).toMatchInlineSnapshot(`
       {
-        "created_at": "123",
-        "from": "admin@resend.com",
-        "headers": {
-          "X-Entity-Ref-ID": "123",
-        },
         "id": "1234",
-        "to": "bu@resend.com",
       }
     `);
   });
