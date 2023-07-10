@@ -31,7 +31,7 @@
     "axios": "1.4.0"
   },
   "devDependencies": {
-    "@types/jest": "29.5.2",
+    "@types/jest": "29.5.3",
     "@types/node": "18.16.2",
     "@types/react": "18.2.0",
     "axios-mock-adapter": "1.21.5",
