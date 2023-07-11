@@ -9,7 +9,7 @@ interface CreateEmailBaseOptions {
   from: string;
   headers?: Record<string, string>;
   react?: React.ReactElement | React.ReactNode | null;
-  html: string;
+  html?: string;
   text?: string;
   reply_to?: string | string[];
   subject: string;
