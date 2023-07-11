@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { PostOptions } from '../../common/interfaces';
+import { RequireAtLeastOne } from 'type-fest';
 
 interface CreateEmailBaseOptions {
   attachments?: Attachment[];
@@ -8,25 +9,18 @@ interface CreateEmailBaseOptions {
   from: string;
   headers?: Record<string, string>;
   react?: React.ReactElement | React.ReactNode | null;
+  html?: string;
+  text?: string;
   reply_to?: string | string[];
   subject: string;
   tags?: Tag[];
   to: string | string[];
 }
 
-interface CreateEmailWithHtmlOptions extends CreateEmailBaseOptions {
-  html: string;
-  text?: string;
-}
-
-interface CreateEmailWithTextOptions extends CreateEmailBaseOptions {
-  html?: string;
-  text: string;
-}
-
-export type CreateEmailOptions =
-  | CreateEmailWithHtmlOptions
-  | CreateEmailWithTextOptions;
+export type CreateEmailOptions = RequireAtLeastOne<
+  CreateEmailBaseOptions,
+  'react' | 'html' | 'text'
+>;
 
 export interface CreateEmailRequestOptions extends PostOptions {}
 
