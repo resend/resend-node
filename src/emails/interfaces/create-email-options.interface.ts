@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import * as React from 'react';
 import { PostOptions } from '../../common/interfaces';
 
 interface CreateEmailBaseOptions {
@@ -7,7 +7,7 @@ interface CreateEmailBaseOptions {
   cc?: string | string[];
   from: string;
   headers?: Record<string, string>;
-  react?: ReactElement | null;
+  react?: React.ReactElement | React.ReactNode | null;
   reply_to?: string | string[];
   subject: string;
   tags?: Tag[];

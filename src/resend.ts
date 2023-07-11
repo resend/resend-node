@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import * as React from 'react';
 import { render } from '@react-email/render';
 import { version } from '../package.json';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
@@ -115,7 +116,7 @@ export class Resend {
       const path = `${this.baseUrl}/email`;
 
       if (data.react) {
-        data.html = render(data.react);
+        data.html = render(data.react as React.ReactElement);
         delete data.react;
       }
 
