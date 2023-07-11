@@ -167,4 +167,26 @@ describe('Resend', () => {
       }
     `);
   });
+
+  it('can send an email with headers', async () => {
+    const payload: CreateEmailOptions = {
+      from: 'admin@resend.com',
+      headers: {
+        'X-Entity-Ref-ID': '123',
+      },
+      subject: 'Hello World',
+      text: 'Hello world',
+      to: 'bu@resend.com',
+    };
+    mock.onPost('/emails', payload).replyOnce(200, {
+      id: '1234',
+    });
+
+    const data = await resend.emails.send(payload);
+    expect(data).toMatchInlineSnapshot(`
+      {
+        "id": "1234",
+      }
+    `);
+  });
 });
