@@ -40,13 +40,23 @@ interface CreateEmailBaseOptions {
    */
   react?: React.ReactElement | React.ReactNode | null;
   /**
+   * The HTML version of the message.
+   * 
+   * @link https://resend.com/api-reference/emails/send-email#body-parameters
+   */
+  html?: string;
+  /**
+   * The plain text version of the message.
+   * 
+   * @link https://resend.com/api-reference/emails/send-email#body-parameters
+   */
+  text?: string;
+  /**
    * Reply-to email address. For multiple addresses, send as an array of strings.
    *
    * @link https://resend.com/api-reference/emails/send-email#body-parameters
    */
   reply_to?: string | string[];
-  html?: string;
-  text?: string;
   /**
    * Email subject.
    *
