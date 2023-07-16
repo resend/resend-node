@@ -1,5 +1,6 @@
-import { ReactElement } from 'react';
+import * as React from 'react';
 import { PostOptions } from '../../common/interfaces';
+import { RequireAtLeastOne } from 'type-fest';
 
 interface CreateEmailBaseOptions {
   /**
@@ -37,13 +38,15 @@ interface CreateEmailBaseOptions {
    *
    * @link https://resend.com/api-reference/emails/send-email#body-parameters
    */
-  react?: ReactElement | null;
+  react?: React.ReactElement | React.ReactNode | null;
   /**
    * Reply-to email address. For multiple addresses, send as an array of strings.
    *
    * @link https://resend.com/api-reference/emails/send-email#body-parameters
    */
   reply_to?: string | string[];
+  html?: string;
+  text?: string;
   /**
    * Email subject.
    *
@@ -56,31 +59,13 @@ interface CreateEmailBaseOptions {
    * @link https://resend.com/api-reference/emails/send-email#body-parameters
    */
   tags?: Tag[];
-  /**
-   * Recipient email address. For multiple addresses, send as an array of strings. Max 50.
-   *
-   * @link https://resend.com/api-reference/emails/send-email#body-parameters
-   */
   to: string | string[];
 }
 
-interface CreateEmailWithHtmlOptions extends CreateEmailBaseOptions {
-  /** The HTML version of the message. */
-  html: string;
-  /** The plain text version of the message. */
-  text?: string;
-}
-
-interface CreateEmailWithTextOptions extends CreateEmailBaseOptions {
-  /** The HTML version of the message. */
-  html?: string;
-  /** The plain text version of the message. */
-  text: string;
-}
-
-export type CreateEmailOptions =
-  | CreateEmailWithHtmlOptions
-  | CreateEmailWithTextOptions;
+export type CreateEmailOptions = RequireAtLeastOne<
+  CreateEmailBaseOptions,
+  'react' | 'html' | 'text'
+>;
 
 export interface CreateEmailRequestOptions extends PostOptions {}
 

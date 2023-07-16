@@ -1,4 +1,5 @@
 import { render } from '@react-email/render';
+import * as React from 'react';
 import { Resend } from '../resend';
 import {
   CreateEmailOptions,
@@ -22,7 +23,7 @@ export class Emails {
     options: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
     if (payload.react) {
-      payload.html = render(payload.react);
+      payload.html = render(payload.react as React.ReactElement);
       delete payload.react;
     }
 

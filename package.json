@@ -1,6 +1,6 @@
 {
   "name": "resend",
-  "version": "0.16.0",
+  "version": "0.17.1",
   "description": "Node.js library for the Resend API",
   "main": "build/src/index.js",
   "typings": "build/src/index.d.ts",
@@ -28,10 +28,11 @@
   "homepage": "https://github.com/resend-inc/resend-node#readme",
   "dependencies": {
     "@react-email/render": "0.0.7",
-    "axios": "1.4.0"
+    "axios": "1.4.0",
+    "type-fest": "3.13.0"
   },
   "devDependencies": {
-    "@types/jest": "29.5.2",
+    "@types/jest": "29.5.3",
     "@types/node": "18.16.2",
     "@types/react": "18.2.0",
     "axios-mock-adapter": "1.21.5",
