@@ -69,6 +69,11 @@ interface CreateEmailBaseOptions {
    * @link https://resend.com/api-reference/emails/send-email#body-parameters
    */
   tags?: Tag[];
+  /**
+   * Recipient email address. For multiple addresses, send as an array of strings. Max 50.
+   * 
+   * @link https://resend.com/api-reference/emails/send-email#body-parameters
+   */
   to: string | string[];
 }
 
