@@ -31,7 +31,7 @@ export class Resend {
     this.baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
     this.headers = {
       Authorization: `Bearer ${this.key}`,
-      'User-Agent': `node:${version}`,
+      'User-Agent': `resend-node:${version}`,
       'Content-Type': 'application/json',
     };
     this.request = axios.create({
