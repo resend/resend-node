@@ -10,6 +10,7 @@ import { CreateEmailOptions, CreateEmailResponse } from './emails/interfaces';
 
 export class Resend {
   readonly baseUrl: string;
+  readonly userAgent: string;
   private readonly headers: HeadersInit;
   private readonly request: AxiosInstance;
 
@@ -29,9 +30,10 @@ export class Resend {
     }
 
     this.baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
+    this.userAgent = process.env.RESEND_USER_AGENT || `resend-node:${version}`;
     this.headers = {
       Authorization: `Bearer ${this.key}`,
-      'User-Agent': `resend-node:${version}`,
+      'User-Agent': this.userAgent,
       'Content-Type': 'application/json',
     };
     this.request = axios.create({
