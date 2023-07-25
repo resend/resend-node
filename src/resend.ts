@@ -8,6 +8,9 @@ import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import { CreateEmailOptions, CreateEmailResponse } from './emails/interfaces';
 
+const baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
+const userAgent = process.env.RESEND_USER_AGENT || `resend-node:${version}`;
+
 export class Resend {
   private readonly headers: HeadersInit;
   private readonly request: AxiosInstance;
@@ -26,9 +29,6 @@ export class Resend {
         );
       }
     }
-
-    const baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
-    const userAgent = process.env.RESEND_USER_AGENT || `resend-node:${version}`;
 
     this.headers = {
       Authorization: `Bearer ${this.key}`,
@@ -114,7 +114,7 @@ export class Resend {
 
   async sendEmail(data: CreateEmailOptions): Promise<CreateEmailResponse> {
     try {
-      const path = `${this.baseUrl}/email`;
+      const path = `${baseUrl}/email`;
 
       if (data.react) {
         data.html = render(data.react as React.ReactElement);
