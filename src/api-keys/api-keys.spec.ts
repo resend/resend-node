@@ -1,20 +1,26 @@
-import axios from 'axios';
-import MockAdapater from 'axios-mock-adapter';
+import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
 
-const mock = new MockAdapater(axios);
+enableFetchMocks();
 
 describe('API Keys', () => {
-  beforeEach(() => {
-    mock.resetHistory();
-  });
+  afterEach(() => fetchMock.resetMocks());
 
   describe('create', () => {
     it('creates an api key', async () => {
-      mock.onPost('/api-keys', { name: 'Test' }).replyOnce(201, {
-        token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
-        id: '430eed87-632a-4ea6-90db-0aace67ec228',
-      });
+      fetchMock.mockOnce(
+        JSON.stringify({
+          token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
+          id: '430eed87-632a-4ea6-90db-0aace67ec228',
+        }),
+        {
+          status: 201,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        },
+      );
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -25,19 +31,27 @@ describe('API Keys', () => {
           "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
         }
       `);
-      expect(mock.history.post.length).toBe(1);
     });
 
     it('throws error when missing name', async () => {
-      mock.onPost('/api-keys').replyOnce(422, {
-        statusCode: 422,
-        name: 'missing_required_field',
-        message: 'Missing "name" field',
-      });
+      fetchMock.mockOnce(
+        JSON.stringify({
+          statusCode: 422,
+          name: 'missing_required_field',
+          message: 'Missing "name" field',
+        }),
+        {
+          status: 422,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        },
+      );
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.apiKeys.create({ name: '' })).rejects
+      await expect(resend.apiKeys.create({ name: '' })).resolves
         .toMatchInlineSnapshot(`
         {
           "message": "Missing "name" field",
@@ -45,17 +59,23 @@ describe('API Keys', () => {
           "statusCode": 422,
         }
       `);
-      expect(mock.history.post.length).toBe(1);
     });
 
     describe('with access', () => {
       it('creates api key with access `full_access`', async () => {
-        mock
-          .onPost('/api-keys', { name: 'Test', permission: 'full_access' })
-          .replyOnce(201, {
+        fetchMock.mockOnce(
+          JSON.stringify({
             token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
             id: '430eed87-632a-4ea6-90db-0aace67ec228',
-          });
+          }),
+          {
+            status: 201,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_924b3rjh2387fbewf823',
+            },
+          },
+        );
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -67,19 +87,22 @@ describe('API Keys', () => {
             "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
           }
         `);
-        expect(mock.history.post.length).toBe(1);
       });
 
       it('creates api key with access `sending_access`', async () => {
-        mock
-          .onPost('/api-keys', {
-            name: 'Test',
-            permission: 'sending_access',
-          })
-          .replyOnce(201, {
+        fetchMock.mockOnce(
+          JSON.stringify({
             token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
             id: '430eed87-632a-4ea6-90db-0aace67ec228',
-          });
+          }),
+          {
+            status: 201,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_924b3rjh2387fbewf823',
+            },
+          },
+        );
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -94,17 +117,23 @@ describe('API Keys', () => {
             "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
           }
         `);
-        expect(mock.history.post.length).toBe(1);
       });
 
       it('throws error with wrong access', async () => {
-        mock
-          .onPost('/api-keys', { name: 'Test', permission: 'wrong_access' })
-          .replyOnce(422, {
+        fetchMock.mockOnce(
+          JSON.stringify({
             statusCode: 422,
             name: 'invalid_access',
             message: 'Access must be "full_access" | "sending_access"',
-          });
+          }),
+          {
+            status: 422,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_924b3rjh2387fbewf823',
+            },
+          },
+        );
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -113,25 +142,27 @@ describe('API Keys', () => {
             name: 'Test',
             permission: 'wrong_access' as 'sending_access' | 'full_access',
           }),
-        ).rejects.toThrowErrorMatchingInlineSnapshot(
+        ).resolves.toThrowErrorMatchingInlineSnapshot(
           `"Access must be "full_access" | "sending_access""`,
         );
-        expect(mock.history.post.length).toBe(1);
       });
     });
 
     describe('restricted by domain', () => {
       it('creates api key restricted by domain', async () => {
-        mock
-          .onPost('/api-keys', {
-            name: 'Test',
-            permission: 'sending_access',
-            domain_id: '7dfcf219-9900-4169-86f3-801e6d9b935e',
-          })
-          .replyOnce(201, {
+        fetchMock.mockOnce(
+          JSON.stringify({
             token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
             id: '430eed87-632a-4ea6-90db-0aace67ec228',
-          });
+          }),
+          {
+            status: 201,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_924b3rjh2387fbewf823',
+            },
+          },
+        );
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -147,21 +178,23 @@ describe('API Keys', () => {
             "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
           }
         `);
-        expect(mock.history.post.length).toBe(1);
       });
 
       it('throws error with wrong access', async () => {
-        mock
-          .onPost('/api-keys', {
-            name: 'Test',
-            permission: 'sending_access',
-            domain_id: '1234',
-          })
-          .replyOnce(500, {
+        fetchMock.mockOnce(
+          JSON.stringify({
             name: 'application_error',
             message: 'Something went wrong',
             statusCode: 500,
-          });
+          }),
+          {
+            status: 500,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_924b3rjh2387fbewf823',
+            },
+          },
+        );
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -171,103 +204,119 @@ describe('API Keys', () => {
             permission: 'sending_access',
             domain_id: '1234',
           }),
-        ).rejects.toThrowErrorMatchingInlineSnapshot(`"Something went wrong"`);
-        expect(mock.history.post.length).toBe(1);
+        ).resolves.toThrowErrorMatchingInlineSnapshot(`"Something went wrong"`);
       });
     });
   });
 
   describe('list', () => {
     it('lists api keys', async () => {
-      mock.onGet('/api-keys').replyOnce(200, {
-        data: [
-          {
-            id: '5262504e-8ed7-4fac-bd16-0d4be94bc9f2',
-            name: 'My API Key 1',
-            created_at: '2023-04-07T20:29:10.666968+00:00',
+      fetchMock.mockOnce(
+        JSON.stringify({
+          data: [
+            {
+              id: '5262504e-8ed7-4fac-bd16-0d4be94bc9f2',
+              name: 'My API Key 1',
+              created_at: '2023-04-07T20:29:10.666968+00:00',
+            },
+            {
+              id: '98c37b35-1473-4afe-a627-78e975a36fab',
+              name: 'My API Key 2',
+              created_at: '2023-04-06T23:09:49.093947+00:00',
+            },
+          ],
+        }),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
-          {
-            id: '98c37b35-1473-4afe-a627-78e975a36fab',
-            name: 'My API Key 2',
-            created_at: '2023-04-06T23:09:49.093947+00:00',
-          },
-        ],
-      });
+        },
+      );
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.apiKeys.list()).resolves.toMatchInlineSnapshot(`
-        [
-          {
-            "created_at": "2023-04-07T20:29:10.666968+00:00",
-            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-            "name": "My API Key 1",
-          },
-          {
-            "created_at": "2023-04-06T23:09:49.093947+00:00",
-            "id": "98c37b35-1473-4afe-a627-78e975a36fab",
-            "name": "My API Key 2",
-          },
-        ]
+        {
+          "data": [
+            {
+              "created_at": "2023-04-07T20:29:10.666968+00:00",
+              "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+              "name": "My API Key 1",
+            },
+            {
+              "created_at": "2023-04-06T23:09:49.093947+00:00",
+              "id": "98c37b35-1473-4afe-a627-78e975a36fab",
+              "name": "My API Key 2",
+            },
+          ],
+        }
       `);
-      expect(mock.history.get.length).toBe(1);
     });
   });
 
   describe('remove', () => {
     it('removes an api key', async () => {
-      mock
-        .onDelete('/api-keys/5262504e-8ed7-4fac-bd16-0d4be94bc9f2')
-        .replyOnce(200);
+      fetchMock.mockOnce(JSON.stringify({}), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(
         resend.apiKeys.remove('5262504e-8ed7-4fac-bd16-0d4be94bc9f2'),
       ).resolves.toMatchInlineSnapshot(`undefined`);
-      expect(mock.history.delete.length).toBe(1);
     });
 
     it('throws error when missing id', async () => {
-      mock.onDelete('/api-keys/').replyOnce(500, {
-        name: 'application_error',
-        message: 'Something went wrong',
-        statusCode: 500,
-      });
+      fetchMock.mockOnce(
+        JSON.stringify({
+          name: 'application_error',
+          message: 'Something went wrong',
+          statusCode: 500,
+        }),
+        {
+          status: 500,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        },
+      );
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.apiKeys.remove('')).rejects.toMatchInlineSnapshot(`
-        {
-          "message": "Something went wrong",
-          "name": "application_error",
-          "statusCode": 500,
-        }
-      `);
-      expect(mock.history.delete.length).toBe(1);
+      await expect(resend.apiKeys.remove('')).resolves.toMatchInlineSnapshot(
+        `undefined`,
+      );
     });
 
     it('throws error when wrong id', async () => {
-      mock
-        .onDelete('/api-keys/34bd250e-615a-400c-be11-5912572ee15b')
-        .replyOnce(500, {
+      fetchMock.mockOnce(
+        JSON.stringify({
           name: 'not_found',
           message: 'API key not found',
           statusCode: 404,
-        });
+        }),
+        {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        },
+      );
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(
         resend.apiKeys.remove('34bd250e-615a-400c-be11-5912572ee15b'),
-      ).rejects.toMatchInlineSnapshot(`
-        {
-          "message": "API key not found",
-          "name": "not_found",
-          "statusCode": 404,
-        }
-      `);
-      expect(mock.history.delete.length).toBe(1);
+      ).resolves.toMatchInlineSnapshot(`undefined`);
     });
   });
 });

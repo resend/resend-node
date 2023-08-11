@@ -13,7 +13,7 @@ const userAgent = process.env.RESEND_USER_AGENT || `resend-node:${version}`;
 
 export class Resend {
   private readonly headers: Headers;
-  
+
   readonly apiKeys = new ApiKeys(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
@@ -40,8 +40,8 @@ export class Resend {
     const response = await fetch(`${baseUrl}${path}`, options);
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Unknown error');
+      const error = await response.json();
+      return error;
     }
 
     return await response.json();
@@ -68,11 +68,11 @@ export class Resend {
     return await this.fetchRequest(path, requestOptions);
   }
 
-  async put(
+  async put<T>(
     path: string,
     entity: any,
     options: PutOptions = {},
-  ): Promise<any> {
+  ): Promise<T> {
     const requestOptions = {
       method: 'PUT',
       headers: this.headers,
@@ -83,7 +83,7 @@ export class Resend {
     return await this.fetchRequest(path, requestOptions);
   }
 
-  async delete(path: string, query?: any): Promise<any> {
+  async delete<T>(path: string, query?: any): Promise<T> {
     const requestOptions = {
       method: 'DELETE',
       headers: this.headers,

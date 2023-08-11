@@ -42,3 +42,11 @@ export interface DomainDkimRecord {
   priority?: number;
   proxy_status?: 'enable' | 'disable';
 }
+
+export interface Domain {
+  id: string;
+  name: string;
+  status: DomainStatus;
+  created_at: string;
+  region: DomainRegion;
+}
