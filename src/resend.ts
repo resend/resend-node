@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import * as React from 'react';
-import { render } from '@react-email/render';
+import { render as renderReact } from '@react-email/render';
+import { render as renderSvelte } from 'svelte-email';
 import { version } from '../package.json';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 import { ApiKeys } from './api-keys/api-keys';
@@ -117,8 +118,13 @@ export class Resend {
       const path = `${baseUrl}/email`;
 
       if (data.react) {
-        data.html = render(data.react as React.ReactElement);
+        data.html = renderReact(data.react as React.ReactElement);
         delete data.react;
+      }
+
+      if (data.svelte) {
+        data.html = renderSvelte(data.svelte);
+        delete data.svelte;
       }
 
       const response = await this.post<CreateEmailResponse>(path, {

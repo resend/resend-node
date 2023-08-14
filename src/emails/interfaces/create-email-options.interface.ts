@@ -1,6 +1,16 @@
 import * as React from 'react';
 import { PostOptions } from '../../common/interfaces';
 import { RequireAtLeastOne } from 'type-fest';
+import type { ComponentProps, ComponentType, SvelteComponent } from 'svelte';
+
+interface SvelteEmailConfig<Component extends SvelteComponent> {
+  template: ComponentType<Component>;
+  props?: ComponentProps<Component>;
+  options?: {
+    plainText?: boolean;
+    pretty?: boolean;
+  };
+}
 
 interface CreateEmailBaseOptions {
   attachments?: Attachment[];
@@ -9,6 +19,7 @@ interface CreateEmailBaseOptions {
   from: string;
   headers?: Record<string, string>;
   react?: React.ReactElement | React.ReactNode | null;
+  svelte?: SvelteEmailConfig<SvelteComponent> | null;
   html?: string;
   text?: string;
   reply_to?: string | string[];
@@ -19,7 +30,7 @@ interface CreateEmailBaseOptions {
 
 export type CreateEmailOptions = RequireAtLeastOne<
   CreateEmailBaseOptions,
-  'react' | 'html' | 'text'
+  'react' | 'svelte' | 'html' | 'text'
 >;
 
 export interface CreateEmailRequestOptions extends PostOptions {}
