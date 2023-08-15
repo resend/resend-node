@@ -7,6 +7,9 @@
   "files": [
     "build/"
   ],
+  "engines": {
+		"node": ">=16"
+	},
   "scripts": {
     "build": "tsc -p .",
     "lint": "tslint -p tsconfig.json -c tslint.json",
