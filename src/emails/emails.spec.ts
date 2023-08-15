@@ -1,14 +1,13 @@
-import axios from 'axios';
-import MockAdapater from 'axios-mock-adapter';
+import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
 import { CreateEmailOptions, GetEmailResponse } from './interfaces';
 
-const mock = new MockAdapater(axios);
+enableFetchMocks();
+
+const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
 describe('Emails', () => {
-  beforeEach(() => {
-    mock.resetHistory();
-  });
+  afterEach(() => fetchMock.resetMocks());
 
   describe('create', () => {
     it('sends email', async () => {
@@ -18,11 +17,19 @@ describe('Emails', () => {
         subject: 'Hello World',
         html: '<h1>Hello world</h1>',
       };
-      mock.onPost('/emails', payload).replyOnce(200, {
-        id: '1234',
-      });
 
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      fetchMock.mockOnce(
+        JSON.stringify({
+          id: '1234',
+        }),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
 
       const data = await resend.emails.create(payload);
       expect(data).toMatchInlineSnapshot(`
@@ -41,11 +48,20 @@ describe('Emails', () => {
         subject: 'Hello World',
         html: '<h1>Hello world</h1>',
       };
-      mock.onPost('/emails', payload).replyOnce(200, {
-        id: '1234',
-      });
 
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      fetchMock.mockOnce(
+        JSON.stringify({
+          id: '1234',
+        }),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
+
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
@@ -59,15 +75,22 @@ describe('Emails', () => {
   describe('get', () => {
     describe('when email not found', () => {
       it('returns error', async () => {
-        mock.onGet('/emails/1234').replyOnce(404, {
-          name: 'not_found',
-          message: 'Email not found',
-          statusCode: 404,
-        });
+        fetchMock.mockOnce(
+          JSON.stringify({
+            name: 'not_found',
+            message: 'Email not found',
+            statusCode: 404,
+          }),
+          {
+            status: 404,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
+          },
+        );
 
-        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-
-        await expect(resend.emails.get('1234')).rejects.toMatchInlineSnapshot(`
+        await expect(resend.emails.get('1234')).resolves.toMatchInlineSnapshot(`
           {
             "message": "Email not found",
             "name": "not_found",
@@ -94,9 +117,16 @@ describe('Emails', () => {
           last_event: 'sent',
         };
 
-        mock.onGet('/emails/1234').replyOnce(200, response);
-
-        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        fetchMock.mockOnce(
+          JSON.stringify(response),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
+          },
+        );
 
         await expect(resend.emails.get('1234')).resolves.toMatchInlineSnapshot(`
           {
@@ -134,9 +164,16 @@ describe('Emails', () => {
           last_event: 'sent',
         };
 
-        mock.onGet('/emails/1234').replyOnce(200, response);
-
-        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        fetchMock.mockOnce(
+          JSON.stringify(response),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
+          },
+        );
 
         await expect(resend.emails.get('1234')).resolves.toMatchInlineSnapshot(`
           {
