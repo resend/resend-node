@@ -32,7 +32,7 @@
   "dependencies": {
     "@react-email/render": "0.0.7",
     "node-fetch": "2.6.12",
-    "type-fest": "3.13.0"
+    "type-fest": "4.2.0"
   },
   "devDependencies": {
     "@types/jest": "29.5.3",
