@@ -14,10 +14,10 @@ yarn add resend
 
 Send email with:
 
-* [Node.js](https://github.com/resendlabs/resend-node-example)
-* [Next.js (App Router)](https://github.com/resendlabs/resend-nextjs-app-router-example)
-* [Next.js (Pages Router)](https://github.com/resendlabs/resend-nextjs-pages-router-example)
-* [Express](https://github.com/resendlabs/resend-express-example)
+- [Node.js](https://github.com/resendlabs/resend-node-example)
+- [Next.js (App Router)](https://github.com/resendlabs/resend-nextjs-app-router-example)
+- [Next.js (Pages Router)](https://github.com/resendlabs/resend-nextjs-pages-router-example)
+- [Express](https://github.com/resendlabs/resend-express-example)
 
 ## Setup
 
@@ -59,24 +59,24 @@ await resend.emails.send({
 Start by creating your email template as a React component.
 
 ```jsx
-import React from 'react'
+import React from 'react';
 
 export default function EmailTemplate(props) {
-  const { firstName, product } = props
+  const { firstName, product } = props;
 
   return (
     <div>
       <h1>Welcome, {firstName}!</h1>
       <p>Thanks for trying {product}. We’re thrilled to have you on board.</p>
     </div>
-  )
+  );
 }
 ```
 
 Then import the template component and pass it to the `react` property.
 
 ```jsx
-import EmailTemplate from '../components/EmailTemplate'
+import EmailTemplate from '../components/EmailTemplate';
 
 await resend.emails.send({
   from: 'you@example.com',
