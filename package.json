@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@types/jest": "29.5.3",
-    "@types/node": "18.16.2",
+    "@types/node": "18.17.5",
     "@types/node-fetch": "2.6.4",
     "@types/react": "18.2.0",
     "@typescript-eslint/eslint-plugin": "6.4.0",
