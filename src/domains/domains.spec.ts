@@ -23,7 +23,7 @@ describe('Domains', () => {
               type: 'MX',
               ttl: 'Auto',
               status: 'not_started',
-              value: `feedback-smtp.us-east-1.com`,
+              value: 'feedback-smtp.us-east-1.com',
               priority: 10,
             },
             {
@@ -169,7 +169,7 @@ describe('Domains', () => {
                 type: 'MX',
                 ttl: 'Auto',
                 status: 'not_started',
-                value: `feedback-smtp.eu-west-1.com`,
+                value: 'feedback-smtp.eu-west-1.com',
                 priority: 10,
               },
               {
@@ -488,7 +488,7 @@ describe('Domains', () => {
 
       await expect(
         resend.domains.verify('5262504e-8ed7-4fac-bd16-0d4be94bc9f2'),
-      ).resolves.toMatchInlineSnapshot(`undefined`);
+      ).resolves.toMatchInlineSnapshot('undefined');
     });
   });
 
@@ -506,7 +506,7 @@ describe('Domains', () => {
 
       await expect(
         resend.domains.remove('5262504e-8ed7-4fac-bd16-0d4be94bc9f2'),
-      ).resolves.toMatchInlineSnapshot(`undefined`);
+      ).resolves.toMatchInlineSnapshot('undefined');
     });
   });
 });

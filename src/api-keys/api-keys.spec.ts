@@ -143,7 +143,7 @@ describe('API Keys', () => {
             permission: 'wrong_access' as 'sending_access' | 'full_access',
           }),
         ).resolves.toThrowErrorMatchingInlineSnapshot(
-          `"Access must be "full_access" | "sending_access""`,
+          '"Access must be "full_access" | "sending_access""',
         );
       });
     });
@@ -204,7 +204,7 @@ describe('API Keys', () => {
             permission: 'sending_access',
             domain_id: '1234',
           }),
-        ).resolves.toThrowErrorMatchingInlineSnapshot(`"Something went wrong"`);
+        ).resolves.toThrowErrorMatchingInlineSnapshot('"Something went wrong"');
       });
     });
   });
@@ -270,7 +270,7 @@ describe('API Keys', () => {
 
       await expect(
         resend.apiKeys.remove('5262504e-8ed7-4fac-bd16-0d4be94bc9f2'),
-      ).resolves.toMatchInlineSnapshot(`undefined`);
+      ).resolves.toMatchInlineSnapshot('undefined');
     });
 
     it('throws error when missing id', async () => {
@@ -292,7 +292,7 @@ describe('API Keys', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.apiKeys.remove('')).resolves.toMatchInlineSnapshot(
-        `undefined`,
+        'undefined',
       );
     });
 
@@ -316,7 +316,7 @@ describe('API Keys', () => {
 
       await expect(
         resend.apiKeys.remove('34bd250e-615a-400c-be11-5912572ee15b'),
-      ).resolves.toMatchInlineSnapshot(`undefined`);
+      ).resolves.toMatchInlineSnapshot('undefined');
     });
   });
 });
