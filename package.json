@@ -16,7 +16,7 @@
     "test:watch": "jest --watch",
     "lint": "eslint --fix --ext .ts ./src",
     "format:check": "prettier --check \"**/*.{ts,tsx}\"",
-    "format": "prettier --write .",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
     "prepublishOnly": "yarn run build"
   },
   "repository": {
