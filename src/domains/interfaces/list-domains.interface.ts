@@ -1,9 +1,5 @@
-import { DomainRegion, DomainStatus } from './domain';
+import { Domain } from './domain';
 
 export type ListDomainsResponse = {
-  name: string;
-  id: string;
-  created_at: string;
-  region: DomainRegion;
-  status: DomainStatus;
-}[];
+  data: Domain[];
+};
