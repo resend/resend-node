@@ -31,7 +31,7 @@
   "homepage": "https://github.com/resend-inc/resend-node#readme",
   "dependencies": {
     "@react-email/render": "0.0.7",
-    "node-fetch": "2.6.7",
+    "node-fetch": "2.6.12",
     "type-fest": "3.13.0"
   },
   "devDependencies": {
