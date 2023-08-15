@@ -19,11 +19,11 @@ describe('Emails', () => {
         html: '<h1>Hello world</h1>',
       };
       mock.onPost('/emails', payload).replyOnce(200, {
-        id: '1234'
+        id: '1234',
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-  
+
       const data = await resend.emails.create(payload);
       expect(data).toMatchInlineSnapshot(`
         {
@@ -42,11 +42,11 @@ describe('Emails', () => {
         html: '<h1>Hello world</h1>',
       };
       mock.onPost('/emails', payload).replyOnce(200, {
-        id: '1234'
+        id: '1234',
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-  
+
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
         {
@@ -67,8 +67,7 @@ describe('Emails', () => {
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-        await expect(resend.emails.get('1234'))
-          .rejects.toMatchInlineSnapshot(`
+        await expect(resend.emails.get('1234')).rejects.toMatchInlineSnapshot(`
           {
             "message": "Email not found",
             "name": "not_found",
@@ -82,25 +81,24 @@ describe('Emails', () => {
       it('returns emails with only to', async () => {
         const response: GetEmailResponse = {
           object: 'email',
-          id: "123",
-          to: ["zeno@resend.com"],
-          from: "bu@resend.com",
-          created_at: "321",
-          subject: "Test email",
-          html: "<p>hello hello</p>",
+          id: '123',
+          to: ['zeno@resend.com'],
+          from: 'bu@resend.com',
+          created_at: '321',
+          subject: 'Test email',
+          html: '<p>hello hello</p>',
           text: null,
-          bcc: null, 
+          bcc: null,
           cc: null,
           reply_to: null,
-          last_event: "sent"
-        }
+          last_event: 'sent',
+        };
 
         mock.onGet('/emails/1234').replyOnce(200, response);
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-        await expect(resend.emails.get('1234'))
-          .resolves.toMatchInlineSnapshot(`
+        await expect(resend.emails.get('1234')).resolves.toMatchInlineSnapshot(`
           {
             "bcc": null,
             "cc": null,
@@ -123,25 +121,24 @@ describe('Emails', () => {
       it('returns emails with to and multiple cc', async () => {
         const response: GetEmailResponse = {
           object: 'email',
-          id: "123",
-          to: ["zeno@resend.com"],
-          from: "bu@resend.com",
-          created_at: "321",
-          subject: "Test email",
-          html: "<p>hello hello</p>",
+          id: '123',
+          to: ['zeno@resend.com'],
+          from: 'bu@resend.com',
+          created_at: '321',
+          subject: 'Test email',
+          html: '<p>hello hello</p>',
           text: null,
-          bcc: null, 
-          cc: ["zeno@resend.com", "bu@resend.com"],
+          bcc: null,
+          cc: ['zeno@resend.com', 'bu@resend.com'],
           reply_to: null,
-          last_event: "sent"
-        }
+          last_event: 'sent',
+        };
 
         mock.onGet('/emails/1234').replyOnce(200, response);
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-        await expect(resend.emails.get('1234'))
-          .resolves.toMatchInlineSnapshot(`
+        await expect(resend.emails.get('1234')).resolves.toMatchInlineSnapshot(`
           {
             "bcc": null,
             "cc": [
@@ -165,5 +162,4 @@ describe('Emails', () => {
       });
     });
   });
-
 });

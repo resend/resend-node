@@ -5,7 +5,7 @@ export interface GetEmailResponse {
   from: string;
   html: string | null;
   id: string;
-  last_event: string; 
+  last_event: string;
   reply_to: string[] | null;
   subject: string;
   text: string | null;

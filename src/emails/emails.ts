@@ -5,7 +5,7 @@ import {
   CreateEmailOptions,
   CreateEmailRequestOptions,
   CreateEmailResponse,
-  GetEmailResponse
+  GetEmailResponse,
 } from './interfaces';
 
 export class Emails {
