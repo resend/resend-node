@@ -47,7 +47,7 @@ export class Resend {
     return await response.json();
   }
 
-  async post<T>(path: string, entity?: any, options?: PostOptions): Promise<T> {
+  async post<T>(path: string, entity?: any, options: PostOptions = {}): Promise<T> {
     const requestOptions = {
       method: 'POST',
       headers: this.headers,
