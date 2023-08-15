@@ -12,11 +12,11 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "lint": "eslint --fix --ext .ts ./src",
     "test": "jest",
     "test:watch": "jest --watch",
-    "prettier": "prettier \"src/**/*.{js,ts,tsx}\" --check",
-    "format": "prettier \"src/**/*.{js,ts,tsx}\" --write",
+    "lint": "eslint --fix --ext .ts ./src",
+    "format:check": "prettier --check \"**/*.{ts,tsx}\"",
+    "format": "prettier --write .",
     "prepublishOnly": "yarn run build"
   },
   "repository": {
