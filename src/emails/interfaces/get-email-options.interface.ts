@@ -1,11 +1,14 @@
 export interface GetEmailResponse {
-  bcc?: string[];
-  cc?: string[];
+  bcc: string[] | null;
+  cc: string[] | null;
+  created_at: string;
   from: string;
-  html?: string;
+  html: string | null;
   id: string;
+  last_event: string;
+  reply_to: string[] | null;
   subject: string;
-  text?: string;
+  text: string | null;
   to: string[];
   object: 'email';
 }
