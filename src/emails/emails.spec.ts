@@ -62,7 +62,6 @@ describe('Emails', () => {
         },
       );
 
-
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
         {
@@ -117,16 +116,13 @@ describe('Emails', () => {
           last_event: 'sent',
         };
 
-        fetchMock.mockOnce(
-          JSON.stringify(response),
-          {
-            status: 200,
-            headers: {
-              'content-type': 'application/json',
-              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-            },
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
-        );
+        });
 
         await expect(resend.emails.get('1234')).resolves.toMatchInlineSnapshot(`
           {
@@ -164,16 +160,13 @@ describe('Emails', () => {
           last_event: 'sent',
         };
 
-        fetchMock.mockOnce(
-          JSON.stringify(response),
-          {
-            status: 200,
-            headers: {
-              'content-type': 'application/json',
-              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-            },
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
-        );
+        });
 
         await expect(resend.emails.get('1234')).resolves.toMatchInlineSnapshot(`
           {
