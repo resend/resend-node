@@ -13,8 +13,8 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   rules: {
     'linebreak-style': ['error', 'unix'],
-    'quotes': ['warn', 'single'],
-    'semi': ['error', 'always'],
+    quotes: ['warn', 'single'],
+    semi: ['error', 'always'],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
   },
