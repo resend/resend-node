@@ -83,7 +83,7 @@ interface CreateEmailBaseOptions extends EmailRenderOptions {
   to: string | string[];
 }
 
-export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions>;
+export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions> & CreateEmailBaseOptions;
 
 export interface CreateEmailRequestOptions extends PostOptions {}
 
