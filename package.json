@@ -21,14 +21,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/resend-inc/resend-node.git"
+    "url": "git+https://github.com/resendlabs/resend-node.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/resend-inc/resend-node/issues"
+    "url": "https://github.com/resendlabs/resend-node/issues"
   },
-  "homepage": "https://github.com/resend-inc/resend-node#readme",
+  "homepage": "https://github.com/resendlabs/resend-node#readme",
   "dependencies": {
     "@react-email/render": "0.0.7",
     "node-fetch": "2.6.12",
