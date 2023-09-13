@@ -8,8 +8,9 @@
     "build/"
   ],
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
+  "packageManager": "yarn@3.6.3",
   "scripts": {
     "build": "tsc -p .",
     "test": "jest",
