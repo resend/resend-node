@@ -1,1 +1,1 @@
-export * from './create-email-options.interface';
+export * from './create-batch-options.interface';
