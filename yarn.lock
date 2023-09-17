@@ -4474,7 +4474,7 @@ __metadata:
     prettier-2: "npm:prettier@2"
     supertest: 6.3.3
     ts-jest: 29.1.1
-    type-fest: 3.13.0
+    type-fest: 4.3.1
     typescript: 5.1.6
   languageName: unknown
   linkType: soft
@@ -5024,10 +5024,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:3.13.0":
-  version: 3.13.0
-  resolution: "type-fest@npm:3.13.0"
-  checksum: f7be142ae1ad0582eafd52d085350799c8cd918c15455896a06c82c147b61f8cea58892bedf1348943478e37740562219375b3b59fd855db99cd2b2766510f98
+"type-fest@npm:4.3.1":
+  version: 4.3.1
+  resolution: "type-fest@npm:4.3.1"
+  checksum: 04e0f073dcc31c113c1b8856c089b388e7e9f4383a9ed72cc1466a89ec50d9d67678844eeec342b5a1ce71b21e817764d4f067aa148f6bcb5df9005ff3803382
   languageName: node
   linkType: hard
 
