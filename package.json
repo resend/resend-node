@@ -32,13 +32,11 @@
   "homepage": "https://github.com/resendlabs/resend-node#readme",
   "dependencies": {
     "@react-email/render": "0.0.7",
-    "node-fetch": "2.6.12",
     "type-fest": "3.13.0"
   },
   "devDependencies": {
     "@types/jest": "29.5.5",
     "@types/node": "18.17.5",
-    "@types/node-fetch": "2.6.4",
     "@types/react": "18.2.20",
     "@typescript-eslint/eslint-plugin": "6.4.0",
     "@typescript-eslint/parser": "6.4.0",
