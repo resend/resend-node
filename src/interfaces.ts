@@ -1,12 +1,14 @@
 export const RESEND_ERROR_CODES_BY_KEY = {
-  missing_required_fields: 422,
-  rate_limit_exceeded: 429,
+  missing_required_field: 422,
+  invalid_attachment: 422,
   missing_api_key: 401,
-  invalid_api_Key: 403,
-  invalid_from_address: 403,
+  restricted_api_key: 401,
   not_found: 404,
-  method_not_allowed: 405,
-  internal_server_error: 500,
+  rate_limit_exceeded: 429,
+  daily_quota_exceeded: 429,
+  application_error: 500,
+  validation_error: 400,
+  security_error: 451,
 } as const;
 
 type ValueOf<TObj> = TObj[keyof TObj];
@@ -17,11 +19,9 @@ export type RESEND_ERROR_CODE_NUMBER = ValueOf<
 export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
 interface ErrorResponse {
-  error: {
-    message: string;
-    status: RESEND_ERROR_CODE_NUMBER;
-    type: RESEND_ERROR_CODE_KEY;
-  };
+  message: string;
+  statusCode: RESEND_ERROR_CODE_NUMBER;
+  name: RESEND_ERROR_CODE_KEY;
 }
 
 export { ErrorResponse };
