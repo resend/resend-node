@@ -1,4 +1,3 @@
-import fetch, { Headers } from 'node-fetch';
 import * as React from 'react';
 import { render } from '@react-email/render';
 import { version } from '../package.json';
