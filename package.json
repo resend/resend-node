@@ -32,7 +32,7 @@
   "homepage": "https://github.com/resendlabs/resend-node#readme",
   "dependencies": {
     "@react-email/render": "0.0.7",
-    "type-fest": "3.13.0"
+    "type-fest": "3.13.1"
   },
   "devDependencies": {
     "@types/jest": "29.5.3",
