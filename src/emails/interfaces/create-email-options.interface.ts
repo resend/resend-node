@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { PostOptions } from '../../common/interfaces';
-import { RequireAtLeastOne } from 'type-fest';
 
 interface CreateEmailBaseOptions {
   /**
@@ -108,3 +107,17 @@ export type Tag = {
    */
   value: string;
 };
+
+type Except<ObjectType, KeysType extends keyof ObjectType> = Pick<
+  ObjectType,
+  Exclude<keyof ObjectType, KeysType>
+>;
+
+type RequireAtLeastOne<
+  ObjectType,
+  KeysType extends keyof ObjectType = keyof ObjectType,
+> = {
+  [Key in KeysType]-?: Required<Pick<ObjectType, Key>> &
+    Partial<Pick<ObjectType, Exclude<KeysType, Key>>>;
+}[KeysType] &
+  Except<ObjectType, KeysType>;
