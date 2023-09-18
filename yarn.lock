@@ -1031,17 +1031,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:20.6.2":
   version: 20.6.2
   resolution: "@types/node@npm:20.6.2"
   checksum: 96fe5303872640a173f3fd43e289a451776ed5b8f0090094447c6790b43f23fb607eea8268af0829cef4d132e5afa0bfa4cd871aa7412e9042a414a698e9e971
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:18.17.5":
-  version: 18.17.5
-  resolution: "@types/node@npm:18.17.5"
-  checksum: b8c658a99234b99425243c324b641ed7b9ceb6bee6b06421fdc9bb7c58f9a5552e353225cc549e6982462ac384abe1985022ed76e2e4728797f59b21f659ca2b
   languageName: node
   linkType: hard
 
@@ -4265,7 +4258,7 @@ __metadata:
   dependencies:
     "@react-email/render": 0.0.7
     "@types/jest": 29.5.5
-    "@types/node": 18.17.5
+    "@types/node": 20.6.2
     "@types/react": 18.2.20
     "@typescript-eslint/eslint-plugin": 6.4.0
     "@typescript-eslint/parser": 6.4.0
