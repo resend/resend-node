@@ -1,8 +1,33 @@
 import * as React from 'react';
 import { PostOptions } from '../../common/interfaces';
-import { RequireAtLeastOne } from 'type-fest';
 
-interface CreateEmailBaseOptions {
+type RequireAtLeastOne<T> = {
+  [K in keyof T]-?: Required<Pick<T, K>> &
+    Partial<Pick<T, Exclude<keyof T, K>>>;
+}[keyof T];
+
+interface EmailRenderOptions {
+  /**
+   * The React component used to write the message.
+   *
+   * @link https://resend.com/api-reference/emails/send-email#body-parameters
+   */
+  react?: React.ReactElement | React.ReactNode | null;
+  /**
+   * The HTML version of the message.
+   *
+   * @link https://resend.com/api-reference/emails/send-email#body-parameters
+   */
+  html?: string;
+  /**
+   * The plain text version of the message.
+   *
+   * @link https://resend.com/api-reference/emails/send-email#body-parameters
+   */
+  text?: string;
+}
+
+interface CreateEmailBaseOptions extends EmailRenderOptions {
   /**
    * Filename and content of attachments (max 40mb per email)
    *
@@ -34,24 +59,6 @@ interface CreateEmailBaseOptions {
    */
   headers?: Record<string, string>;
   /**
-   * The React component used to write the message.
-   *
-   * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
-   */
-  react?: React.ReactElement | React.ReactNode | null;
-  /**
-   * The HTML version of the message.
-   *
-   * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
-   */
-  html?: string;
-  /**
-   * The plain text version of the message.
-   *
-   * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
-   */
-  text?: string;
-  /**
    * Reply-to email address. For multiple addresses, send as an array of strings.
    *
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
@@ -77,10 +84,8 @@ interface CreateEmailBaseOptions {
   to: string | string[];
 }
 
-export type CreateEmailOptions = RequireAtLeastOne<
-  CreateEmailBaseOptions,
-  'react' | 'html' | 'text'
->;
+export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions> &
+  CreateEmailBaseOptions;
 
 export interface CreateEmailRequestOptions extends PostOptions {}
 
