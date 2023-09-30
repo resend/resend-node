@@ -6,6 +6,8 @@ import { ApiKeys } from './api-keys/api-keys';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import { CreateEmailOptions, CreateEmailResponse } from './emails/interfaces';
+import { isResendErrorResponse } from './guards';
+import { ResendError } from './error';
 
 const baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
 const userAgent = process.env.RESEND_USER_AGENT || `resend-node:${version}`;
@@ -40,7 +42,12 @@ export class Resend {
 
     if (!response.ok) {
       const error = await response.json();
-      return error;
+
+      if (isResendErrorResponse(error)) {
+        throw new ResendError(error.error.message, error.error.name, error.error.statusCode);
+      }
+
+      throw new Error(error.message);
     }
 
     return await response.json();

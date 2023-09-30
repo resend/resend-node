@@ -1,5 +1,7 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
+import { ErrorResponse } from '../interfaces';
+import { ResendError } from '../error';
 
 enableFetchMocks();
 
@@ -36,10 +38,12 @@ describe('API Keys', () => {
     it('throws error when missing name', async () => {
       fetchMock.mockOnce(
         JSON.stringify({
-          statusCode: 422,
-          name: 'missing_required_field',
-          message: 'Missing "name" field',
-        }),
+          error: {
+            statusCode: 422,
+            name: 'missing_required_field',
+            message: 'Missing "name" field',
+          },
+        } satisfies ErrorResponse),
         {
           status: 422,
           headers: {
@@ -51,14 +55,12 @@ describe('API Keys', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.apiKeys.create({ name: '' })).resolves
-        .toMatchInlineSnapshot(`
-        {
-          "message": "Missing "name" field",
-          "name": "missing_required_field",
-          "statusCode": 422,
-        }
-      `);
+      const result = resend.apiKeys.create({ name: '' });
+
+      await expect(result).rejects.toBeInstanceOf(ResendError);
+      await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+        '"Missing "name" field"',
+      );
     });
 
     describe('with access', () => {
@@ -122,10 +124,12 @@ describe('API Keys', () => {
       it('throws error with wrong access', async () => {
         fetchMock.mockOnce(
           JSON.stringify({
-            statusCode: 422,
-            name: 'invalid_access',
-            message: 'Access must be "full_access" | "sending_access"',
-          }),
+            error: {
+              statusCode: 422,
+              name: 'invalid_access',
+              message: 'Access must be "full_access" | "sending_access"',
+            },
+          } satisfies ErrorResponse),
           {
             status: 422,
             headers: {
@@ -142,7 +146,7 @@ describe('API Keys', () => {
             name: 'Test',
             permission: 'wrong_access' as 'sending_access' | 'full_access',
           }),
-        ).resolves.toThrowErrorMatchingInlineSnapshot(
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
           '"Access must be "full_access" | "sending_access""',
         );
       });
@@ -183,10 +187,12 @@ describe('API Keys', () => {
       it('throws error with wrong access', async () => {
         fetchMock.mockOnce(
           JSON.stringify({
-            name: 'application_error',
-            message: 'Something went wrong',
-            statusCode: 500,
-          }),
+            error: {
+              name: 'application_error',
+              message: 'Something went wrong',
+              statusCode: 500,
+            },
+          } satisfies ErrorResponse),
           {
             status: 500,
             headers: {
@@ -204,7 +210,7 @@ describe('API Keys', () => {
             permission: 'sending_access',
             domain_id: '1234',
           }),
-        ).resolves.toThrowErrorMatchingInlineSnapshot('"Something went wrong"');
+        ).rejects.toThrowErrorMatchingInlineSnapshot('"Something went wrong"');
       });
     });
   });
@@ -276,10 +282,12 @@ describe('API Keys', () => {
     it('throws error when missing id', async () => {
       fetchMock.mockOnce(
         JSON.stringify({
-          name: 'application_error',
-          message: 'Something went wrong',
-          statusCode: 500,
-        }),
+          error: {
+            name: 'application_error',
+            message: 'Something went wrong',
+            statusCode: 500,
+          },
+        } satisfies ErrorResponse),
         {
           status: 500,
           headers: {
@@ -291,18 +299,23 @@ describe('API Keys', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.apiKeys.remove('')).resolves.toMatchInlineSnapshot(
-        'undefined',
+      const result = resend.apiKeys.remove('');
+
+      await expect(result).rejects.toBeInstanceOf(ResendError);
+      await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+        '"Something went wrong"',
       );
     });
 
     it('throws error when wrong id', async () => {
       fetchMock.mockOnce(
         JSON.stringify({
-          name: 'not_found',
-          message: 'API key not found',
-          statusCode: 404,
-        }),
+          error: {
+            name: 'not_found',
+            message: 'API key not found',
+            statusCode: 404,
+          },
+        } satisfies ErrorResponse),
         {
           status: 404,
           headers: {
@@ -314,9 +327,14 @@ describe('API Keys', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(
-        resend.apiKeys.remove('34bd250e-615a-400c-be11-5912572ee15b'),
-      ).resolves.toMatchInlineSnapshot('undefined');
+      const result = resend.apiKeys.remove(
+        '34bd250e-615a-400c-be11-5912572ee15b',
+      );
+
+      await expect(result).rejects.toBeInstanceOf(ResendError);
+      await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+        '"API key not found"',
+      );
     });
   });
 });

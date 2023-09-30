@@ -1,6 +1,8 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
 import { CreateEmailOptions, GetEmailResponse } from './interfaces';
+import { ErrorResponse } from '../interfaces';
+import { ResendError } from '../error';
 
 enableFetchMocks();
 
@@ -76,10 +78,12 @@ describe('Emails', () => {
       it('returns error', async () => {
         fetchMock.mockOnce(
           JSON.stringify({
-            name: 'not_found',
-            message: 'Email not found',
-            statusCode: 404,
-          }),
+            error: {
+              name: 'not_found',
+              message: 'Email not found',
+              statusCode: 404,
+            },
+          } satisfies ErrorResponse),
           {
             status: 404,
             headers: {
@@ -89,13 +93,12 @@ describe('Emails', () => {
           },
         );
 
-        await expect(resend.emails.get('1234')).resolves.toMatchInlineSnapshot(`
-          {
-            "message": "Email not found",
-            "name": "not_found",
-            "statusCode": 404,
-          }
-        `);
+        const result = resend.emails.get('1234');
+
+        await expect(result).rejects.toBeInstanceOf(ResendError);
+        await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"Email not found"',
+        );
       });
     });
 

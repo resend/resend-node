@@ -2,6 +2,8 @@ import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
 import { DomainRegion } from './interfaces/domain';
 import { GetDomainResponse } from './interfaces';
+import { ErrorResponse } from '../interfaces';
+import { ResendError } from '../error';
 
 enableFetchMocks();
 
@@ -129,10 +131,12 @@ describe('Domains', () => {
     it('throws error when missing name', async () => {
       fetchMock.mockOnce(
         JSON.stringify({
-          statusCode: 422,
-          name: 'missing_required_field',
-          message: 'Missing "name" field',
-        }),
+          error: {
+            statusCode: 422,
+            name: 'missing_required_field',
+            message: 'Missing "name" field',
+          },
+        } satisfies ErrorResponse),
         {
           status: 422,
           headers: {
@@ -144,14 +148,12 @@ describe('Domains', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.domains.create({ name: '' })).resolves
-        .toMatchInlineSnapshot(`
-          {
-            "message": "Missing "name" field",
-            "name": "missing_required_field",
-            "statusCode": 422,
-          }
-        `);
+      const result = resend.domains.create({ name: '' });
+
+      await expect(result).rejects.toBeInstanceOf(ResendError);
+      await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+        '"Missing "name" field"',
+      );
     });
 
     describe('with region', () => {
@@ -269,10 +271,12 @@ describe('Domains', () => {
       it('throws error with wrong region', async () => {
         fetchMock.mockOnce(
           JSON.stringify({
-            statusCode: 422,
-            name: 'invalid_region',
-            message: 'Region must be "us-east-1" | "eu-west-1" | "sa-east-1"',
-          }),
+            error: {
+              statusCode: 422,
+              name: 'invalid_region',
+              message: 'Region must be "us-east-1" | "eu-west-1" | "sa-east-1"',
+            },
+          } satisfies ErrorResponse),
           {
             status: 422,
             headers: {
@@ -284,18 +288,14 @@ describe('Domains', () => {
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-        await expect(
-          resend.domains.create({
-            name: 'resend.com',
-            region: 'remote' as DomainRegion,
-          }),
-        ).resolves.toMatchInlineSnapshot(`
-          {
-            "message": "Region must be "us-east-1" | "eu-west-1" | "sa-east-1"",
-            "name": "invalid_region",
-            "statusCode": 422,
-          }
-        `);
+        const result = resend.domains.create({
+          name: 'resend.com',
+          region: 'remote' as DomainRegion,
+        });
+
+        await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"Region must be "us-east-1" | "eu-west-1" | "sa-east-1""',
+        );
       });
     });
   });
@@ -360,10 +360,12 @@ describe('Domains', () => {
       it('returns error', async () => {
         fetchMock.mockOnce(
           JSON.stringify({
-            name: 'not_found',
-            message: 'Domain not found',
-            statusCode: 404,
-          }),
+            error: {
+              name: 'not_found',
+              message: 'Domain not found',
+              statusCode: 404,
+            },
+          } satisfies ErrorResponse),
           {
             status: 404,
             headers: {
@@ -375,14 +377,12 @@ describe('Domains', () => {
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-        await expect(resend.domains.get('1234')).resolves
-          .toMatchInlineSnapshot(`
-          {
-            "message": "Domain not found",
-            "name": "not_found",
-            "statusCode": 404,
-          }
-        `);
+        const result = resend.domains.get('1234');
+
+        await expect(result).rejects.toBeInstanceOf(ResendError);
+        await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"Domain not found"',
+        );
       });
     });
 
