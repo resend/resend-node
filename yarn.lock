@@ -1038,10 +1038,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.17.5":
-  version: 18.17.5
-  resolution: "@types/node@npm:18.17.5"
-  checksum: b8c658a99234b99425243c324b641ed7b9ceb6bee6b06421fdc9bb7c58f9a5552e353225cc549e6982462ac384abe1985022ed76e2e4728797f59b21f659ca2b
+"@types/node@npm:18.18.3":
+  version: 18.18.3
+  resolution: "@types/node@npm:18.18.3"
+  checksum: ed97a832179e0cfbb93738021fe16d0bc5c0f34bea35269c23c9dd5f0ecc8be93dbe5efd51630189a099b31786a47c1bde115508831a7245613a55c3ad1a7d6b
   languageName: node
   linkType: hard
 
@@ -4310,7 +4310,7 @@ __metadata:
   dependencies:
     "@react-email/render": 0.0.7
     "@types/jest": 29.5.5
-    "@types/node": 18.17.5
+    "@types/node": 18.18.3
     "@types/react": 18.2.24
     "@typescript-eslint/eslint-plugin": 6.4.0
     "@typescript-eslint/parser": 6.7.4
