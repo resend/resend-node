@@ -3,7 +3,6 @@ import { Resend } from '../resend';
 import { DomainRegion } from './interfaces/domain';
 import { GetDomainResponse } from './interfaces';
 import { ErrorResponse } from '../interfaces';
-import { ResendError } from '../error';
 
 enableFetchMocks();
 
@@ -129,30 +128,36 @@ describe('Domains', () => {
     });
 
     it('throws error when missing name', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
-          error: {
-            statusCode: 422,
-            name: 'missing_required_field',
-            message: 'Missing "name" field',
-          },
-        } satisfies ErrorResponse),
-        {
-          status: 422,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+      const errorResponse: ErrorResponse = {
+        error: {
+          statusCode: 422,
+          name: 'missing_required_field',
+          message: 'Missing "name" field',
         },
-      );
+      };
+
+      fetchMock.mockOnce(JSON.stringify(errorResponse), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       const result = resend.domains.create({ name: '' });
 
-      await expect(result).rejects.toBeInstanceOf(ResendError);
-      await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
-        '"Missing "name" field"',
+      await expect(result).resolves.toMatchInlineSnapshot(
+        `
+        {
+          "error": {
+            "message": "Missing "name" field",
+            "name": "missing_required_field",
+            "statusCode": 422,
+          },
+        }
+      `,
       );
     });
 
@@ -269,22 +274,21 @@ describe('Domains', () => {
       });
 
       it('throws error with wrong region', async () => {
-        fetchMock.mockOnce(
-          JSON.stringify({
-            error: {
-              statusCode: 422,
-              name: 'invalid_region',
-              message: 'Region must be "us-east-1" | "eu-west-1" | "sa-east-1"',
-            },
-          } satisfies ErrorResponse),
-          {
-            status: 422,
-            headers: {
-              'content-type': 'application/json',
-              Authorization: 'Bearer re_924b3rjh2387fbewf823',
-            },
+        const errorResponse: ErrorResponse = {
+          error: {
+            statusCode: 422,
+            name: 'invalid_region',
+            message: 'Region must be "us-east-1" | "eu-west-1" | "sa-east-1"',
           },
-        );
+        };
+
+        fetchMock.mockOnce(JSON.stringify(errorResponse), {
+          status: 422,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -293,8 +297,16 @@ describe('Domains', () => {
           region: 'remote' as DomainRegion,
         });
 
-        await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
-          '"Region must be "us-east-1" | "eu-west-1" | "sa-east-1""',
+        await expect(result).resolves.toMatchInlineSnapshot(
+          `
+          {
+            "error": {
+              "message": "Region must be "us-east-1" | "eu-west-1" | "sa-east-1"",
+              "name": "invalid_region",
+              "statusCode": 422,
+            },
+          }
+        `,
         );
       });
     });
@@ -358,30 +370,36 @@ describe('Domains', () => {
   describe('get', () => {
     describe('when domain not found', () => {
       it('returns error', async () => {
-        fetchMock.mockOnce(
-          JSON.stringify({
-            error: {
-              name: 'not_found',
-              message: 'Domain not found',
-              statusCode: 404,
-            },
-          } satisfies ErrorResponse),
-          {
-            status: 404,
-            headers: {
-              'content-type': 'application/json',
-              Authorization: 'Bearer re_924b3rjh2387fbewf823',
-            },
+        const errorResponse: ErrorResponse = {
+          error: {
+            name: 'not_found',
+            message: 'Domain not found',
+            statusCode: 404,
           },
-        );
+        };
+
+        fetchMock.mockOnce(JSON.stringify(errorResponse), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
         const result = resend.domains.get('1234');
 
-        await expect(result).rejects.toBeInstanceOf(ResendError);
-        await expect(result).rejects.toThrowErrorMatchingInlineSnapshot(
-          '"Domain not found"',
+        await expect(result).resolves.toMatchInlineSnapshot(
+          `
+          {
+            "error": {
+              "message": "Domain not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+          }
+        `,
         );
       });
     });

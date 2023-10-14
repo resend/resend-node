@@ -7,7 +7,7 @@ import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import { CreateEmailOptions, CreateEmailResponse } from './emails/interfaces';
 import { isResendErrorResponse } from './guards';
-import { ResendError } from './error';
+import { ErrorResponse } from './interfaces';
 
 const baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
 const userAgent = process.env.RESEND_USER_AGENT || `resend-node:${version}`;
@@ -37,27 +37,28 @@ export class Resend {
     });
   }
 
-  async fetchRequest(path: string, options = {}) {
+  async fetchRequest<T>(
+    path: string,
+    options = {},
+  ): Promise<T | ErrorResponse> {
     const response = await fetch(`${baseUrl}${path}`, options);
 
     if (!response.ok) {
       const error = await response.json();
 
       if (isResendErrorResponse(error)) {
-        throw new ResendError(error.error.message, error.error.name, error.error.statusCode);
+        return error;
       }
 
-      throw new Error(error.message);
+      return {
+        error,
+      };
     }
 
     return await response.json();
   }
 
-  async post<T>(
-    path: string,
-    entity?: any,
-    options: PostOptions = {},
-  ): Promise<T> {
+  async post<T>(path: string, entity?: any, options: PostOptions = {}) {
     const requestOptions = {
       method: 'POST',
       headers: this.headers,
@@ -65,24 +66,20 @@ export class Resend {
       ...options,
     };
 
-    return await this.fetchRequest(path, requestOptions);
+    return await this.fetchRequest<T>(path, requestOptions);
   }
 
-  async get<T>(path: string, options: GetOptions = {}): Promise<T> {
+  async get<T>(path: string, options: GetOptions = {}) {
     const requestOptions = {
       method: 'GET',
       headers: this.headers,
       ...options,
     };
 
-    return await this.fetchRequest(path, requestOptions);
+    return await this.fetchRequest<T>(path, requestOptions);
   }
 
-  async put<T>(
-    path: string,
-    entity: any,
-    options: PutOptions = {},
-  ): Promise<T> {
+  async put<T>(path: string, entity: any, options: PutOptions = {}) {
     const requestOptions = {
       method: 'PUT',
       headers: this.headers,
@@ -90,20 +87,20 @@ export class Resend {
       ...options,
     };
 
-    return await this.fetchRequest(path, requestOptions);
+    return await this.fetchRequest<T>(path, requestOptions);
   }
 
-  async delete<T>(path: string, query?: any): Promise<T> {
+  async delete<T>(path: string, query?: any) {
     const requestOptions = {
       method: 'DELETE',
       headers: this.headers,
       body: JSON.stringify(query),
     };
 
-    return await this.fetchRequest(path, requestOptions);
+    return await this.fetchRequest<T>(path, requestOptions);
   }
 
-  async sendEmail(data: CreateEmailOptions): Promise<CreateEmailResponse> {
+  async sendEmail(data: CreateEmailOptions) {
     const path = '/email';
 
     if (data.react) {

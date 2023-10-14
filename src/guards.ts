@@ -46,7 +46,7 @@ export const isResendErrorResponseStrict = (
   return (
     typeof message === 'string' &&
     typeof statusCode === 'number' &&
-    typeof name === 'string'
-    && name in RESEND_ERROR_CODES_BY_KEY
+    typeof name === 'string' &&
+    name in RESEND_ERROR_CODES_BY_KEY
   );
 };

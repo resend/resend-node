@@ -5,13 +5,13 @@ import {
 } from './interfaces';
 
 export class ResendError extends Error {
-  public readonly statusCode: RESEND_ERROR_CODE_NUMBER;
+  public readonly statusCode: RESEND_ERROR_CODE_NUMBER | number;
   public readonly name: RESEND_ERROR_CODE_KEY;
 
   public constructor(
     message: string,
     name: RESEND_ERROR_CODE_KEY,
-    statusCode: RESEND_ERROR_CODE_NUMBER,
+    statusCode: RESEND_ERROR_CODE_NUMBER | number,
   ) {
     super();
     this.message = message;

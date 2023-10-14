@@ -13,7 +13,7 @@ export class Domains {
   async create(
     payload: CreateDomainOptions,
     options: CreateDomainRequestOptions = {},
-  ): Promise<CreateDomainResponse> {
+  ) {
     const data = await this.resend.post<CreateDomainResponse>(
       '/domains',
       payload,
@@ -22,12 +22,12 @@ export class Domains {
     return data;
   }
 
-  async list(): Promise<ListDomainsResponse> {
+  async list() {
     const data = await this.resend.get<ListDomainsResponse>('/domains');
     return data;
   }
 
-  async get(id: string): Promise<GetDomainResponse> {
+  async get(id: string) {
     const data = await this.resend.get<GetDomainResponse>(`/domains/${id}`);
     return data;
   }

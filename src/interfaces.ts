@@ -21,14 +21,12 @@ export type RESEND_ERROR_CODE_NUMBER = ValueOf<
 >;
 export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
-interface ErrorResponse {
+export interface ErrorResponse {
   error: {
     message: string;
-    statusCode: RESEND_ERROR_CODE_NUMBER;
+    statusCode: RESEND_ERROR_CODE_NUMBER | number;
     name: RESEND_ERROR_CODE_KEY;
   };
 }
-
-export { ErrorResponse };
 
 export type Tag = { name: string; value: string };
