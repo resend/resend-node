@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { PostOptions } from '../../common/interfaces';
+import { ErrorResponse } from '../../interfaces';
 
 type RequireAtLeastOne<T> = {
   [K in keyof T]-?: Required<Pick<T, K>> &
@@ -89,10 +90,12 @@ export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions> &
 
 export interface CreateEmailRequestOptions extends PostOptions {}
 
-export interface CreateEmailResponse {
+interface CreateEmailSuccessResponse {
   /** The ID of the newly created email. */
   id: string;
 }
+
+export type CreateEmailResponse = CreateEmailSuccessResponse | ErrorResponse;
 
 interface Attachment {
   /** Content of an attached file. */

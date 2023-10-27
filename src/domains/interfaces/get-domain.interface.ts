@@ -1,6 +1,7 @@
+import { ErrorResponse } from '../../interfaces';
 import { DomainRecords, DomainRegion, DomainStatus } from './domain';
 
-export type GetDomainResponse = {
+interface GetDomainResponseSuccess {
   object: 'domain';
   id: string;
   name: string;
@@ -8,4 +9,6 @@ export type GetDomainResponse = {
   region: DomainRegion;
   status: DomainStatus;
   records: DomainRecords[];
-};
+}
+
+export type GetDomainResponse = GetDomainResponseSuccess | ErrorResponse;
