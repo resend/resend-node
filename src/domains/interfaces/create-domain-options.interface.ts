@@ -1,4 +1,5 @@
 import { PostOptions } from '../../common/interfaces';
+import { ErrorResponse } from '../../interfaces';
 import { DomainRegion, DomainStatus } from './domain';
 
 export interface CreateDomainOptions {
@@ -32,11 +33,13 @@ export interface DomainDkimRecord {
   proxy_status?: 'enable' | 'disable';
 }
 
-export type CreateDomainResponse = {
+interface CreateDomainResponseSuccess {
   name: string;
   id: string;
   status: DomainStatus;
   created_at: string;
   records: (DomainSpfRecord | DomainDkimRecord)[];
   region: DomainRegion;
-};
+}
+
+export type CreateDomainResponse = CreateDomainResponseSuccess | ErrorResponse;
