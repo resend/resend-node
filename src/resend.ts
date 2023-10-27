@@ -1,8 +1,7 @@
-import * as React from 'react';
-import { render } from '@react-email/render';
 import { version } from '../package.json';
-import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 import { ApiKeys } from './api-keys/api-keys';
+import { Batch } from './batch/batch';
+import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import { CreateEmailOptions, CreateEmailResponse } from './emails/interfaces';
@@ -18,6 +17,7 @@ export class Resend {
   readonly apiKeys = new ApiKeys(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
+  readonly batch = new Batch(this);
 
   constructor(readonly key?: string) {
     if (!key) {
@@ -100,27 +100,7 @@ export class Resend {
     return await this.fetchRequest<T>(path, requestOptions);
   }
 
-  async sendEmail(data: CreateEmailOptions) {
-    const path = '/email';
-
-    if (data.react) {
-      data.html = render(data.react as React.ReactElement);
-      delete data.react;
-    }
-
-    const response = await this.post<CreateEmailResponse>(path, {
-      from: data.from,
-      to: data.to,
-      bcc: data.bcc,
-      cc: data.cc,
-      reply_to: data.reply_to,
-      subject: data.subject,
-      text: data.text,
-      html: data.html,
-      attachments: data.attachments,
-      tags: data.tags,
-    });
-
-    return response;
+  async sendEmail(data: CreateEmailOptions): Promise<CreateEmailResponse> {
+    return this.emails.create(data);
   }
 }
