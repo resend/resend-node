@@ -1,5 +1,6 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
+import { ErrorResponse } from '../interfaces';
 
 enableFetchMocks();
 
@@ -34,31 +35,37 @@ describe('API Keys', () => {
     });
 
     it('throws error when missing name', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
+      const errorResponse: ErrorResponse = {
+        error: {
           statusCode: 422,
           name: 'missing_required_field',
           message: 'Missing "name" field',
-        }),
-        {
-          status: 422,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
         },
-      );
+      };
+
+      fetchMock.mockOnce(JSON.stringify(errorResponse), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.apiKeys.create({ name: '' })).resolves
-        .toMatchInlineSnapshot(`
+      const result = resend.apiKeys.create({ name: '' });
+
+      await expect(result).resolves.toMatchInlineSnapshot(
+        `
         {
-          "message": "Missing "name" field",
-          "name": "missing_required_field",
-          "statusCode": 422,
+          "error": {
+            "message": "Missing "name" field",
+            "name": "missing_required_field",
+            "statusCode": 422,
+          },
         }
-      `);
+      `,
+      );
     });
 
     describe('with access', () => {
@@ -120,20 +127,21 @@ describe('API Keys', () => {
       });
 
       it('throws error with wrong access', async () => {
-        fetchMock.mockOnce(
-          JSON.stringify({
+        const errorResponse: ErrorResponse = {
+          error: {
             statusCode: 422,
             name: 'invalid_access',
             message: 'Access must be "full_access" | "sending_access"',
-          }),
-          {
-            status: 422,
-            headers: {
-              'content-type': 'application/json',
-              Authorization: 'Bearer re_924b3rjh2387fbewf823',
-            },
           },
-        );
+        };
+
+        fetchMock.mockOnce(JSON.stringify(errorResponse), {
+          status: 422,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -142,8 +150,16 @@ describe('API Keys', () => {
             name: 'Test',
             permission: 'wrong_access' as 'sending_access' | 'full_access',
           }),
-        ).resolves.toThrowErrorMatchingInlineSnapshot(
-          '"Access must be "full_access" | "sending_access""',
+        ).resolves.toMatchInlineSnapshot(
+          `
+          {
+            "error": {
+              "message": "Access must be "full_access" | "sending_access"",
+              "name": "invalid_access",
+              "statusCode": 422,
+            },
+          }
+        `,
         );
       });
     });
@@ -181,20 +197,21 @@ describe('API Keys', () => {
       });
 
       it('throws error with wrong access', async () => {
-        fetchMock.mockOnce(
-          JSON.stringify({
+        const errorResponse: ErrorResponse = {
+          error: {
             name: 'application_error',
             message: 'Something went wrong',
             statusCode: 500,
-          }),
-          {
-            status: 500,
-            headers: {
-              'content-type': 'application/json',
-              Authorization: 'Bearer re_924b3rjh2387fbewf823',
-            },
           },
-        );
+        };
+
+        fetchMock.mockOnce(JSON.stringify(errorResponse), {
+          status: 500,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -204,7 +221,17 @@ describe('API Keys', () => {
             permission: 'sending_access',
             domain_id: '1234',
           }),
-        ).resolves.toThrowErrorMatchingInlineSnapshot('"Something went wrong"');
+        ).resolves.toMatchInlineSnapshot(
+          `
+          {
+            "error": {
+              "message": "Something went wrong",
+              "name": "application_error",
+              "statusCode": 500,
+            },
+          }
+        `,
+        );
       });
     });
   });
@@ -274,49 +301,53 @@ describe('API Keys', () => {
     });
 
     it('throws error when missing id', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
+      const errorResponse: ErrorResponse = {
+        error: {
           name: 'application_error',
           message: 'Something went wrong',
           statusCode: 500,
-        }),
-        {
-          status: 500,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
         },
-      );
+      };
+
+      fetchMock.mockOnce(JSON.stringify(errorResponse), {
+        status: 500,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.apiKeys.remove('')).resolves.toMatchInlineSnapshot(
-        'undefined',
-      );
+      const result = resend.apiKeys.remove('');
+
+      await expect(result).resolves.toMatchInlineSnapshot('undefined');
     });
 
     it('throws error when wrong id', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
+      const errorResponse: ErrorResponse = {
+        error: {
           name: 'not_found',
           message: 'API key not found',
           statusCode: 404,
-        }),
-        {
-          status: 404,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
         },
-      );
+      };
+
+      fetchMock.mockOnce(JSON.stringify(errorResponse), {
+        status: 404,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(
-        resend.apiKeys.remove('34bd250e-615a-400c-be11-5912572ee15b'),
-      ).resolves.toMatchInlineSnapshot('undefined');
+      const result = resend.apiKeys.remove(
+        '34bd250e-615a-400c-be11-5912572ee15b',
+      );
+
+      await expect(result).resolves.toMatchInlineSnapshot('undefined');
     });
   });
 });

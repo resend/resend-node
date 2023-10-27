@@ -1,6 +1,7 @@
 import { Resend } from './resend';
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { CreateEmailOptions } from './emails/interfaces';
+import { ErrorResponse } from './interfaces';
 
 enableFetchMocks();
 
@@ -245,5 +246,46 @@ describe('Resend', () => {
         "id": "1234",
       }
     `);
+  });
+
+  it('throws an error when an ErrorResponse is returned', async () => {
+    const payload: CreateEmailOptions = {
+      from: 'resend.com', // Invalid from address
+      to: 'bu@resend.com',
+      reply_to: ['foo@resend.com', 'bar@resend.com'],
+      subject: 'Hello World',
+      text: 'Hello world',
+    };
+
+    const errorResponse: ErrorResponse = {
+      error: {
+        statusCode: 422,
+        name: 'invalid_parameter',
+        message:
+          'Invalid `from` field. The email address needs to follow the `email@example.com` or `Name <email@example.com>` format',
+      },
+    };
+
+    fetchMock.mockOnce(JSON.stringify(errorResponse), {
+      status: 422,
+      headers: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer re_924b3rjh2387fbewf823',
+      },
+    });
+
+    const result = resend.emails.send(payload);
+
+    await expect(result).resolves.toMatchInlineSnapshot(
+      `
+      {
+        "error": {
+          "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
+          "name": "invalid_parameter",
+          "statusCode": 422,
+        },
+      }
+    `,
+    );
   });
 });

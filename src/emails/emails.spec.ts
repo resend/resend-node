@@ -1,6 +1,7 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
 import { CreateEmailOptions, GetEmailResponse } from './interfaces';
+import { ErrorResponse } from '../interfaces';
 
 enableFetchMocks();
 
@@ -74,28 +75,35 @@ describe('Emails', () => {
   describe('get', () => {
     describe('when email not found', () => {
       it('returns error', async () => {
-        fetchMock.mockOnce(
-          JSON.stringify({
+        const errorResponse: ErrorResponse = {
+          error: {
             name: 'not_found',
             message: 'Email not found',
             statusCode: 404,
-          }),
-          {
-            status: 404,
-            headers: {
-              'content-type': 'application/json',
-              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-            },
           },
-        );
+        };
 
-        await expect(resend.emails.get('1234')).resolves.toMatchInlineSnapshot(`
+        fetchMock.mockOnce(JSON.stringify(errorResponse), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        });
+
+        const result = resend.emails.get('1234');
+
+        await expect(result).resolves.toMatchInlineSnapshot(
+          `
           {
-            "message": "Email not found",
-            "name": "not_found",
-            "statusCode": 404,
+            "error": {
+              "message": "Email not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
           }
-        `);
+        `,
+        );
       });
     });
 
