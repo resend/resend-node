@@ -14,14 +14,14 @@ export class Emails {
   async send(
     payload: CreateEmailOptions,
     options: CreateEmailRequestOptions = {},
-  ): Promise<CreateEmailResponse> {
+  ) {
     return this.create(payload, options);
   }
 
   async create(
     payload: CreateEmailOptions,
     options: CreateEmailRequestOptions = {},
-  ): Promise<CreateEmailResponse> {
+  ) {
     if (payload.react) {
       payload.html = render(payload.react as React.ReactElement);
       delete payload.react;
@@ -35,7 +35,7 @@ export class Emails {
     return data;
   }
 
-  async get(id: string): Promise<GetEmailResponse> {
+  async get(id: string) {
     const data = await this.resend.get<GetEmailResponse>(`/emails/${id}`);
     return data;
   }
