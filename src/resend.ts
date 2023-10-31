@@ -4,7 +4,6 @@ import { Batch } from './batch/batch';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
-import { CreateEmailOptions, CreateEmailResponse } from './emails/interfaces';
 import { isResendErrorResponse } from './guards';
 import { ErrorResponse } from './interfaces';
 
@@ -40,25 +39,23 @@ export class Resend {
   async fetchRequest<T>(
     path: string,
     options = {},
-  ): Promise<T | ErrorResponse> {
+  ): Promise<{ data: T | null; error: ErrorResponse | null }> {
     const response = await fetch(`${baseUrl}${path}`, options);
 
     if (!response.ok) {
       const error = await response.json();
-
       if (isResendErrorResponse(error)) {
-        return error;
+        return { data: null, error };
       }
 
-      return {
-        error,
-      };
+      return { data: null, error };
     }
 
-    return await response.json();
+    const data = await response.json();
+    return { data, error: null };
   }
 
-  async post<T>(path: string, entity?: any, options: PostOptions = {}) {
+  async post<T>(path: string, entity?: unknown, options: PostOptions = {}) {
     const requestOptions = {
       method: 'POST',
       headers: this.headers,
@@ -66,7 +63,7 @@ export class Resend {
       ...options,
     };
 
-    return await this.fetchRequest<T>(path, requestOptions);
+    return this.fetchRequest<T>(path, requestOptions);
   }
 
   async get<T>(path: string, options: GetOptions = {}) {
@@ -76,7 +73,7 @@ export class Resend {
       ...options,
     };
 
-    return await this.fetchRequest<T>(path, requestOptions);
+    return this.fetchRequest<T>(path, requestOptions);
   }
 
   async put<T>(path: string, entity: any, options: PutOptions = {}) {
@@ -87,20 +84,16 @@ export class Resend {
       ...options,
     };
 
-    return await this.fetchRequest<T>(path, requestOptions);
+    return this.fetchRequest<T>(path, requestOptions);
   }
 
-  async delete<T>(path: string, query?: any) {
+  async delete<T>(path: string, query?: unknown) {
     const requestOptions = {
       method: 'DELETE',
       headers: this.headers,
       body: JSON.stringify(query),
     };
 
-    return await this.fetchRequest<T>(path, requestOptions);
-  }
-
-  async sendEmail(data: CreateEmailOptions): Promise<CreateEmailResponse> {
-    return this.emails.create(data);
+    return this.fetchRequest<T>(path, requestOptions);
   }
 }

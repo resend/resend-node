@@ -1,7 +1,7 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
 import { DomainRegion } from './interfaces/domain';
-import { GetDomainResponse } from './interfaces';
+import { GetDomainResponseSuccess } from './interfaces';
 import { ErrorResponse } from '../interfaces';
 
 enableFetchMocks();
@@ -74,66 +74,66 @@ describe('Domains', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(resend.domains.create({ name: 'resend.com' })).resolves
         .toMatchInlineSnapshot(`
-        {
-          "created_at": "2023-04-07T22:48:33.420498+00:00",
-          "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
-          "name": "resend.com",
-          "records": [
-            {
-              "name": "bounces",
-              "priority": 10,
-              "record": "SPF",
-              "status": "not_started",
-              "ttl": "Auto",
-              "type": "MX",
-              "value": "feedback-smtp.us-east-1.com",
-            },
-            {
-              "name": "bounces",
-              "record": "SPF",
-              "status": "not_started",
-              "ttl": "Auto",
-              "type": "TXT",
-              "value": ""v=spf1 include:com ~all"",
-            },
-            {
-              "name": "nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey",
-              "record": "DKIM",
-              "status": "not_started",
-              "ttl": "Auto",
-              "type": "CNAME",
-              "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
-            },
-            {
-              "name": "qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey",
-              "record": "DKIM",
-              "status": "not_started",
-              "ttl": "Auto",
-              "type": "CNAME",
-              "value": "qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.",
-            },
-            {
-              "name": "eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey",
-              "record": "DKIM",
-              "status": "not_started",
-              "ttl": "Auto",
-              "type": "CNAME",
-              "value": "eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.",
-            },
-          ],
-          "region": "us-east-1",
-          "status": "not_started",
-        }
-      `);
+{
+  "data": {
+    "created_at": "2023-04-07T22:48:33.420498+00:00",
+    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
+    "name": "resend.com",
+    "records": [
+      {
+        "name": "bounces",
+        "priority": 10,
+        "record": "SPF",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "MX",
+        "value": "feedback-smtp.us-east-1.com",
+      },
+      {
+        "name": "bounces",
+        "record": "SPF",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "TXT",
+        "value": ""v=spf1 include:com ~all"",
+      },
+      {
+        "name": "nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey",
+        "record": "DKIM",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "CNAME",
+        "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
+      },
+      {
+        "name": "qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey",
+        "record": "DKIM",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "CNAME",
+        "value": "qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.",
+      },
+      {
+        "name": "eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey",
+        "record": "DKIM",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "CNAME",
+        "value": "eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.",
+      },
+    ],
+    "region": "us-east-1",
+    "status": "not_started",
+  },
+  "error": null,
+}
+`);
     });
 
     it('throws error when missing name', async () => {
       const errorResponse: ErrorResponse = {
-        error: {
-          statusCode: 422,
-          name: 'missing_required_field',
-          message: 'Missing "name" field',
-        },
+        name: 'missing_required_field',
+        message: 'Missing "name" field',
       };
 
       fetchMock.mockOnce(JSON.stringify(errorResponse), {
@@ -148,17 +148,15 @@ describe('Domains', () => {
 
       const result = resend.domains.create({ name: '' });
 
-      await expect(result).resolves.toMatchInlineSnapshot(
-        `
-        {
-          "error": {
-            "message": "Missing "name" field",
-            "name": "missing_required_field",
-            "statusCode": 422,
-          },
-        }
-      `,
-      );
+      await expect(result).resolves.toMatchInlineSnapshot(`
+{
+  "data": null,
+  "error": {
+    "message": "Missing "name" field",
+    "name": "missing_required_field",
+  },
+}
+`);
     });
 
     describe('with region', () => {
@@ -220,66 +218,66 @@ describe('Domains', () => {
         await expect(
           resend.domains.create({ name: 'resend.com', region: 'eu-west-1' }),
         ).resolves.toMatchInlineSnapshot(`
-                  {
-                    "created_at": "2023-04-07T22:48:33.420498+00:00",
-                    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
-                    "name": "resend.com",
-                    "records": [
-                      {
-                        "name": "bounces",
-                        "priority": 10,
-                        "record": "SPF",
-                        "status": "not_started",
-                        "ttl": "Auto",
-                        "type": "MX",
-                        "value": "feedback-smtp.eu-west-1.com",
-                      },
-                      {
-                        "name": "bounces",
-                        "record": "SPF",
-                        "status": "not_started",
-                        "ttl": "Auto",
-                        "type": "TXT",
-                        "value": ""v=spf1 include:com ~all"",
-                      },
-                      {
-                        "name": "nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey",
-                        "record": "DKIM",
-                        "status": "not_started",
-                        "ttl": "Auto",
-                        "type": "CNAME",
-                        "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
-                      },
-                      {
-                        "name": "qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey",
-                        "record": "DKIM",
-                        "status": "not_started",
-                        "ttl": "Auto",
-                        "type": "CNAME",
-                        "value": "qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.",
-                      },
-                      {
-                        "name": "eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey",
-                        "record": "DKIM",
-                        "status": "not_started",
-                        "ttl": "Auto",
-                        "type": "CNAME",
-                        "value": "eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.",
-                      },
-                    ],
-                    "region": "eu-west-1",
-                    "status": "not_started",
-                  }
-              `);
+{
+  "data": {
+    "created_at": "2023-04-07T22:48:33.420498+00:00",
+    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
+    "name": "resend.com",
+    "records": [
+      {
+        "name": "bounces",
+        "priority": 10,
+        "record": "SPF",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "MX",
+        "value": "feedback-smtp.eu-west-1.com",
+      },
+      {
+        "name": "bounces",
+        "record": "SPF",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "TXT",
+        "value": ""v=spf1 include:com ~all"",
+      },
+      {
+        "name": "nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey",
+        "record": "DKIM",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "CNAME",
+        "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
+      },
+      {
+        "name": "qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey",
+        "record": "DKIM",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "CNAME",
+        "value": "qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.",
+      },
+      {
+        "name": "eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey",
+        "record": "DKIM",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "CNAME",
+        "value": "eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.",
+      },
+    ],
+    "region": "eu-west-1",
+    "status": "not_started",
+  },
+  "error": null,
+}
+`);
       });
 
       it('throws error with wrong region', async () => {
         const errorResponse: ErrorResponse = {
-          error: {
-            statusCode: 422,
-            name: 'invalid_region',
-            message: 'Region must be "us-east-1" | "eu-west-1" | "sa-east-1"',
-          },
+          name: 'invalid_region',
+          message: 'Region must be "us-east-1" | "eu-west-1" | "sa-east-1"',
         };
 
         fetchMock.mockOnce(JSON.stringify(errorResponse), {
@@ -297,17 +295,15 @@ describe('Domains', () => {
           region: 'remote' as DomainRegion,
         });
 
-        await expect(result).resolves.toMatchInlineSnapshot(
-          `
-          {
-            "error": {
-              "message": "Region must be "us-east-1" | "eu-west-1" | "sa-east-1"",
-              "name": "invalid_region",
-              "statusCode": 422,
-            },
-          }
-        `,
-        );
+        await expect(result).resolves.toMatchInlineSnapshot(`
+{
+  "data": null,
+  "error": {
+    "message": "Region must be "us-east-1" | "eu-west-1" | "sa-east-1"",
+    "name": "invalid_region",
+  },
+}
+`);
       });
     });
   });
@@ -345,25 +341,28 @@ describe('Domains', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.domains.list()).resolves.toMatchInlineSnapshot(`
-        {
-          "data": [
-            {
-              "created_at": "2023-04-07T23:13:52.669661+00:00",
-              "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-              "name": "resend.com",
-              "region": "eu-west-1",
-              "status": "not_started",
-            },
-            {
-              "created_at": "2023-04-07T23:13:20.417116+00:00",
-              "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-              "name": "react.email",
-              "region": "us-east-1",
-              "status": "not_started",
-            },
-          ],
-        }
-      `);
+{
+  "data": {
+    "data": [
+      {
+        "created_at": "2023-04-07T23:13:52.669661+00:00",
+        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+        "name": "resend.com",
+        "region": "eu-west-1",
+        "status": "not_started",
+      },
+      {
+        "created_at": "2023-04-07T23:13:20.417116+00:00",
+        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
+        "name": "react.email",
+        "region": "us-east-1",
+        "status": "not_started",
+      },
+    ],
+  },
+  "error": null,
+}
+`);
     });
   });
 
@@ -371,11 +370,8 @@ describe('Domains', () => {
     describe('when domain not found', () => {
       it('returns error', async () => {
         const errorResponse: ErrorResponse = {
-          error: {
-            name: 'not_found',
-            message: 'Domain not found',
-            statusCode: 404,
-          },
+          name: 'not_found',
+          message: 'Domain not found',
         };
 
         fetchMock.mockOnce(JSON.stringify(errorResponse), {
@@ -390,22 +386,20 @@ describe('Domains', () => {
 
         const result = resend.domains.get('1234');
 
-        await expect(result).resolves.toMatchInlineSnapshot(
-          `
-          {
-            "error": {
-              "message": "Domain not found",
-              "name": "not_found",
-              "statusCode": 404,
-            },
-          }
-        `,
-        );
+        await expect(result).resolves.toMatchInlineSnapshot(`
+{
+  "data": null,
+  "error": {
+    "message": "Domain not found",
+    "name": "not_found",
+  },
+}
+`);
       });
     });
 
     it('get domain', async () => {
-      const domain: GetDomainResponse = {
+      const domain: GetDomainResponseSuccess = {
         object: 'domain',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'resend.com',
@@ -453,42 +447,45 @@ describe('Domains', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.domains.get('1234')).resolves.toMatchInlineSnapshot(`
-        {
-          "created_at": "2023-06-21T06:10:36.144Z",
-          "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-          "name": "resend.com",
-          "object": "domain",
-          "records": [
-            {
-              "name": "bounces.resend.com",
-              "priority": 10,
-              "record": "SPF",
-              "status": "not_started",
-              "ttl": "Auto",
-              "type": "MX",
-              "value": "feedback-smtp.us-east-1.amazonses.com",
-            },
-            {
-              "name": "bounces.resend.com",
-              "record": "SPF",
-              "status": "not_started",
-              "ttl": "Auto",
-              "type": "TXT",
-              "value": ""v=spf1 include:amazonses.com ~all"",
-            },
-            {
-              "name": "resend._domainkey",
-              "record": "DKIM",
-              "status": "verified",
-              "ttl": "Auto",
-              "type": "TXT",
-              "value": "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDZDhdsAKs5xdSj7h3v22wjx3WMWWADCHwxfef8U03JUbVM/sNSVuY5mbrdJKUoG6QBdfxsOGzhINmQnT89idjp5GdAUhx/KNpt8hcLXMID4nB0Gbcafn03/z5zEPxPfzVJqQd/UqOtZQcfxN9OrIhLiBsYTbcTBB7EvjCb3wEaBwIDAQAB",
-            },
-          ],
-          "region": "us-east-1",
-          "status": "not_started",
-        }
-      `);
+{
+  "data": {
+    "created_at": "2023-06-21T06:10:36.144Z",
+    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+    "name": "resend.com",
+    "object": "domain",
+    "records": [
+      {
+        "name": "bounces.resend.com",
+        "priority": 10,
+        "record": "SPF",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "MX",
+        "value": "feedback-smtp.us-east-1.amazonses.com",
+      },
+      {
+        "name": "bounces.resend.com",
+        "record": "SPF",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "TXT",
+        "value": ""v=spf1 include:amazonses.com ~all"",
+      },
+      {
+        "name": "resend._domainkey",
+        "record": "DKIM",
+        "status": "verified",
+        "ttl": "Auto",
+        "type": "TXT",
+        "value": "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDZDhdsAKs5xdSj7h3v22wjx3WMWWADCHwxfef8U03JUbVM/sNSVuY5mbrdJKUoG6QBdfxsOGzhINmQnT89idjp5GdAUhx/KNpt8hcLXMID4nB0Gbcafn03/z5zEPxPfzVJqQd/UqOtZQcfxN9OrIhLiBsYTbcTBB7EvjCb3wEaBwIDAQAB",
+      },
+    ],
+    "region": "us-east-1",
+    "status": "not_started",
+  },
+  "error": null,
+}
+`);
     });
   });
 
@@ -506,7 +503,12 @@ describe('Domains', () => {
 
       await expect(
         resend.domains.verify('5262504e-8ed7-4fac-bd16-0d4be94bc9f2'),
-      ).resolves.toMatchInlineSnapshot('undefined');
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {},
+  "error": null,
+}
+`);
     });
   });
 
@@ -524,7 +526,12 @@ describe('Domains', () => {
 
       await expect(
         resend.domains.remove('5262504e-8ed7-4fac-bd16-0d4be94bc9f2'),
-      ).resolves.toMatchInlineSnapshot('undefined');
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {},
+  "error": null,
+}
+`);
     });
   });
 });

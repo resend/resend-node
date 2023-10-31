@@ -1,10 +1,11 @@
-import { render } from '@react-email/render';
+import { renderAsync } from '@react-email/render';
 import * as React from 'react';
 import { Resend } from '../resend';
 import {
   CreateBatchOptions,
   CreateBatchRequestOptions,
   CreateBatchResponse,
+  CreateBatchSuccessResponse,
 } from './interfaces';
 
 export class Batch {
@@ -23,12 +24,12 @@ export class Batch {
   ): Promise<CreateBatchResponse> {
     for (const email of payload) {
       if (email.react) {
-        email.html = render(email.react as React.ReactElement);
+        email.html = await renderAsync(email.react as React.ReactElement);
         delete email.react;
       }
     }
 
-    const data = await this.resend.post<CreateBatchResponse>(
+    const data = await this.resend.post<CreateBatchSuccessResponse>(
       '/emails/batch',
       payload,
       options,

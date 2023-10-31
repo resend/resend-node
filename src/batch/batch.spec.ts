@@ -45,9 +45,24 @@ describe('Batch', () => {
       );
 
       const data = await resend.batch.create(payload);
-      expect(data).toMatchObject({
-        data: [{ id: '1234' }, { id: '4567' }, { id: '4242' }],
-      });
+      expect(data).toMatchInlineSnapshot(`
+{
+  "data": {
+    "data": [
+      {
+        "id": "1234",
+      },
+      {
+        "id": "4567",
+      },
+      {
+        "id": "4242",
+      },
+    ],
+  },
+  "error": null,
+}
+`);
     });
   });
 
@@ -88,9 +103,24 @@ describe('Batch', () => {
       );
 
       const data = await resend.batch.send(payload);
-      expect(data).toMatchObject({
-        data: [{ id: '1234' }, { id: '4567' }, { id: '4242' }],
-      });
+      expect(data).toMatchInlineSnapshot(`
+{
+  "data": {
+    "data": [
+      {
+        "id": "1234",
+      },
+      {
+        "id": "4567",
+      },
+      {
+        "id": "4242",
+      },
+    ],
+  },
+  "error": null,
+}
+`);
     });
   });
 });
