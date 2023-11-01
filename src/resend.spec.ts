@@ -41,13 +41,16 @@ describe('Resend', () => {
     const response = await resend.emails.send(payload);
     const data = await response;
     expect(data).toMatchInlineSnapshot(`
-      {
-        "created_at": "123",
-        "from": "bu@resend.com",
-        "id": "1234",
-        "to": "zeno@resend.com",
-      }
-    `);
+{
+  "data": {
+    "created_at": "123",
+    "from": "bu@resend.com",
+    "id": "1234",
+    "to": "zeno@resend.com",
+  },
+  "error": null,
+}
+`);
   });
 
   it('sends email with multiple recipients', async () => {
@@ -77,16 +80,19 @@ describe('Resend', () => {
     const response = await resend.emails.send(payload);
     const data = await response;
     expect(data).toMatchInlineSnapshot(`
-      {
-        "created_at": "123",
-        "from": "admin@resend.com",
-        "id": "1234",
-        "to": [
-          "bu@resend.com",
-          "zeno@resend.com",
-        ],
-      }
-    `);
+{
+  "data": {
+    "created_at": "123",
+    "from": "admin@resend.com",
+    "id": "1234",
+    "to": [
+      "bu@resend.com",
+      "zeno@resend.com",
+    ],
+  },
+  "error": null,
+}
+`);
   });
 
   it('sends email with multiple bcc recipients', async () => {
@@ -118,17 +124,20 @@ describe('Resend', () => {
     const response = await resend.emails.send(payload);
     const data = await response;
     expect(data).toMatchInlineSnapshot(`
-      {
-        "bcc": [
-          "foo@resend.com",
-          "bar@resend.com",
-        ],
-        "created_at": "123",
-        "from": "admin@resend.com",
-        "id": "1234",
-        "to": "bu@resend.com",
-      }
-    `);
+{
+  "data": {
+    "bcc": [
+      "foo@resend.com",
+      "bar@resend.com",
+    ],
+    "created_at": "123",
+    "from": "admin@resend.com",
+    "id": "1234",
+    "to": "bu@resend.com",
+  },
+  "error": null,
+}
+`);
   });
 
   it('sends email with multiple cc recipients', async () => {
@@ -160,17 +169,20 @@ describe('Resend', () => {
     const response = await resend.emails.send(payload);
     const data = await response;
     expect(data).toMatchInlineSnapshot(`
-      {
-        "cc": [
-          "foo@resend.com",
-          "bar@resend.com",
-        ],
-        "created_at": "123",
-        "from": "admin@resend.com",
-        "id": "1234",
-        "to": "bu@resend.com",
-      }
-    `);
+{
+  "data": {
+    "cc": [
+      "foo@resend.com",
+      "bar@resend.com",
+    ],
+    "created_at": "123",
+    "from": "admin@resend.com",
+    "id": "1234",
+    "to": "bu@resend.com",
+  },
+  "error": null,
+}
+`);
   });
 
   it('sends email with multiple replyTo emails', async () => {
@@ -202,17 +214,20 @@ describe('Resend', () => {
     const response = await resend.emails.send(payload);
     const data = await response;
     expect(data).toMatchInlineSnapshot(`
-      {
-        "created_at": "123",
-        "from": "admin@resend.com",
-        "id": "1234",
-        "reply_to": [
-          "foo@resend.com",
-          "bar@resend.com",
-        ],
-        "to": "bu@resend.com",
-      }
-    `);
+{
+  "data": {
+    "created_at": "123",
+    "from": "admin@resend.com",
+    "id": "1234",
+    "reply_to": [
+      "foo@resend.com",
+      "bar@resend.com",
+    ],
+    "to": "bu@resend.com",
+  },
+  "error": null,
+}
+`);
   });
 
   it('can send an email with headers', async () => {
@@ -242,10 +257,13 @@ describe('Resend', () => {
     const response = await resend.emails.send(payload);
     const data = await response;
     expect(data).toMatchInlineSnapshot(`
-      {
-        "id": "1234",
-      }
-    `);
+{
+  "data": {
+    "id": "1234",
+  },
+  "error": null,
+}
+`);
   });
 
   it('throws an error when an ErrorResponse is returned', async () => {
@@ -258,12 +276,9 @@ describe('Resend', () => {
     };
 
     const errorResponse: ErrorResponse = {
-      error: {
-        statusCode: 422,
-        name: 'invalid_parameter',
-        message:
-          'Invalid `from` field. The email address needs to follow the `email@example.com` or `Name <email@example.com>` format',
-      },
+      name: 'invalid_parameter',
+      message:
+        'Invalid `from` field. The email address needs to follow the `email@example.com` or `Name <email@example.com>` format',
     };
 
     fetchMock.mockOnce(JSON.stringify(errorResponse), {
@@ -276,16 +291,14 @@ describe('Resend', () => {
 
     const result = resend.emails.send(payload);
 
-    await expect(result).resolves.toMatchInlineSnapshot(
-      `
-      {
-        "error": {
-          "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
-          "name": "invalid_parameter",
-          "statusCode": 422,
-        },
-      }
-    `,
-    );
+    await expect(result).resolves.toMatchInlineSnapshot(`
+{
+  "data": null,
+  "error": {
+    "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
+    "name": "invalid_parameter",
+  },
+}
+`);
   });
 });

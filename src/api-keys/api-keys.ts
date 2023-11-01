@@ -3,7 +3,11 @@ import {
   CreateApiKeyOptions,
   CreateApiKeyRequestOptions,
   CreateApiKeyResponse,
+  CreateApiKeyResponseSuccess,
   ListApiKeysResponse,
+  ListApiKeysResponseSuccess,
+  RemoveApiKeyResponse,
+  RemoveApiKeyResponseSuccess,
 } from './interfaces';
 
 export class ApiKeys {
@@ -12,8 +16,8 @@ export class ApiKeys {
   async create(
     payload: CreateApiKeyOptions,
     options: CreateApiKeyRequestOptions = {},
-  ) {
-    const data = await this.resend.post<CreateApiKeyResponse>(
+  ): Promise<CreateApiKeyResponse> {
+    const data = await this.resend.post<CreateApiKeyResponseSuccess>(
       '/api-keys',
       payload,
       options,
@@ -22,12 +26,16 @@ export class ApiKeys {
     return data;
   }
 
-  async list() {
-    const data = await this.resend.get<ListApiKeysResponse>('/api-keys');
+  async list(): Promise<ListApiKeysResponse> {
+    const data =
+      await this.resend.get<ListApiKeysResponseSuccess[]>('/api-keys');
     return data;
   }
 
-  async remove(id: string) {
-    await this.resend.delete(`/api-keys/${id}`);
+  async remove(id: string): Promise<RemoveApiKeyResponse> {
+    const data = await this.resend.delete<RemoveApiKeyResponseSuccess>(
+      `/api-keys/${id}`,
+    );
+    return data;
   }
 }

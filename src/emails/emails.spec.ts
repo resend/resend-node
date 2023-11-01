@@ -1,6 +1,6 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
-import { CreateEmailOptions, GetEmailResponse } from './interfaces';
+import { CreateEmailOptions, GetEmailResponseSuccess } from './interfaces';
 import { ErrorResponse } from '../interfaces';
 
 enableFetchMocks();
@@ -12,32 +12,31 @@ describe('Emails', () => {
 
   describe('create', () => {
     it('sends email', async () => {
-      const payload: CreateEmailOptions = {
-        from: 'bu@resend.com',
-        to: 'zeno@resend.com',
-        subject: 'Hello World',
-        html: '<h1>Hello world</h1>',
+      const errorResponse: ErrorResponse = {
+        name: 'missing_required_field',
+
+        message: 'Missing `from` field.',
       };
 
-      fetchMock.mockOnce(
-        JSON.stringify({
-          id: '1234',
-        }),
-        {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+      fetchMock.mockOnce(JSON.stringify(errorResponse), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
-      );
+      });
 
-      const data = await resend.emails.create(payload);
+      const data = await resend.emails.create({} as any);
+      console.log({ data });
       expect(data).toMatchInlineSnapshot(`
-        {
-          "id": "1234",
-        }
-      `);
+{
+  "data": null,
+  "error": {
+    "message": "Missing \`from\` field.",
+    "name": "missing_required_field",
+  },
+}
+`);
     });
   });
 
@@ -50,25 +49,23 @@ describe('Emails', () => {
         html: '<h1>Hello world</h1>',
       };
 
-      fetchMock.mockOnce(
-        JSON.stringify({
-          id: '1234',
-        }),
-        {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+      fetchMock.mockOnce(JSON.stringify({ id: '1234' }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
-      );
+      });
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-        {
-          "id": "1234",
-        }
-      `);
+{
+  "data": {
+    "id": "1234",
+  },
+  "error": null,
+}
+`);
     });
   });
 
@@ -76,11 +73,8 @@ describe('Emails', () => {
     describe('when email not found', () => {
       it('returns error', async () => {
         const errorResponse: ErrorResponse = {
-          error: {
-            name: 'not_found',
-            message: 'Email not found',
-            statusCode: 404,
-          },
+          name: 'not_found',
+          message: 'Email not found',
         };
 
         fetchMock.mockOnce(JSON.stringify(errorResponse), {
@@ -93,23 +87,21 @@ describe('Emails', () => {
 
         const result = resend.emails.get('1234');
 
-        await expect(result).resolves.toMatchInlineSnapshot(
-          `
-          {
-            "error": {
-              "message": "Email not found",
-              "name": "not_found",
-              "statusCode": 404,
-            },
-          }
-        `,
-        );
+        await expect(result).resolves.toMatchInlineSnapshot(`
+{
+  "data": null,
+  "error": {
+    "message": "Email not found",
+    "name": "not_found",
+  },
+}
+`);
       });
     });
 
     describe('when email found', () => {
       it('returns emails with only to', async () => {
-        const response: GetEmailResponse = {
+        const response: GetEmailResponseSuccess = {
           object: 'email',
           id: '123',
           to: ['zeno@resend.com'],
@@ -133,27 +125,30 @@ describe('Emails', () => {
         });
 
         await expect(resend.emails.get('1234')).resolves.toMatchInlineSnapshot(`
-          {
-            "bcc": null,
-            "cc": null,
-            "created_at": "321",
-            "from": "bu@resend.com",
-            "html": "<p>hello hello</p>",
-            "id": "123",
-            "last_event": "sent",
-            "object": "email",
-            "reply_to": null,
-            "subject": "Test email",
-            "text": null,
-            "to": [
-              "zeno@resend.com",
-            ],
-          }
-        `);
+{
+  "data": {
+    "bcc": null,
+    "cc": null,
+    "created_at": "321",
+    "from": "bu@resend.com",
+    "html": "<p>hello hello</p>",
+    "id": "123",
+    "last_event": "sent",
+    "object": "email",
+    "reply_to": null,
+    "subject": "Test email",
+    "text": null,
+    "to": [
+      "zeno@resend.com",
+    ],
+  },
+  "error": null,
+}
+`);
       });
 
       it('returns emails with to and multiple cc', async () => {
-        const response: GetEmailResponse = {
+        const response: GetEmailResponseSuccess = {
           object: 'email',
           id: '123',
           to: ['zeno@resend.com'],
@@ -177,26 +172,29 @@ describe('Emails', () => {
         });
 
         await expect(resend.emails.get('1234')).resolves.toMatchInlineSnapshot(`
-          {
-            "bcc": null,
-            "cc": [
-              "zeno@resend.com",
-              "bu@resend.com",
-            ],
-            "created_at": "321",
-            "from": "bu@resend.com",
-            "html": "<p>hello hello</p>",
-            "id": "123",
-            "last_event": "sent",
-            "object": "email",
-            "reply_to": null,
-            "subject": "Test email",
-            "text": null,
-            "to": [
-              "zeno@resend.com",
-            ],
-          }
-        `);
+{
+  "data": {
+    "bcc": null,
+    "cc": [
+      "zeno@resend.com",
+      "bu@resend.com",
+    ],
+    "created_at": "321",
+    "from": "bu@resend.com",
+    "html": "<p>hello hello</p>",
+    "id": "123",
+    "last_event": "sent",
+    "object": "email",
+    "reply_to": null,
+    "subject": "Test email",
+    "text": null,
+    "to": [
+      "zeno@resend.com",
+    ],
+  },
+  "error": null,
+}
+`);
       });
     });
   });

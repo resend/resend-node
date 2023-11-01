@@ -90,12 +90,15 @@ export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions> &
 
 export interface CreateEmailRequestOptions extends PostOptions {}
 
-interface CreateEmailSuccessResponse {
+export interface CreateEmailResponseSuccess {
   /** The ID of the newly created email. */
   id: string;
 }
 
-export type CreateEmailResponse = CreateEmailSuccessResponse | ErrorResponse;
+export interface CreateEmailResponse {
+  data: CreateEmailResponseSuccess | null;
+  error: ErrorResponse | null;
+}
 
 interface Attachment {
   /** Content of an attached file. */

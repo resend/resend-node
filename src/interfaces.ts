@@ -14,19 +14,11 @@ export const RESEND_ERROR_CODES_BY_KEY = {
   internal_server_error: 500,
 } as const;
 
-type ValueOf<TObj> = TObj[keyof TObj];
-
-export type RESEND_ERROR_CODE_NUMBER = ValueOf<
-  typeof RESEND_ERROR_CODES_BY_KEY
->;
 export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
 export interface ErrorResponse {
-  error: {
-    message: string;
-    statusCode: RESEND_ERROR_CODE_NUMBER | number;
-    name: RESEND_ERROR_CODE_KEY;
-  };
+  message: string;
+  name: RESEND_ERROR_CODE_KEY;
 }
 
 export type Tag = { name: string; value: string };

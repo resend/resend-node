@@ -7,6 +7,7 @@ const config: JestConfigWithTsJest = {
   verbose: true,
   testEnvironment: 'node',
   setupFiles: ['./jest.setup.ts'],
+  prettierPath: null,
 };
 
 export default config;

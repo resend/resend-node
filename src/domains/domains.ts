@@ -3,8 +3,15 @@ import {
   CreateDomainOptions,
   CreateDomainRequestOptions,
   CreateDomainResponse,
+  CreateDomainResponseSuccess,
   GetDomainResponse,
+  GetDomainResponseSuccess,
   ListDomainsResponse,
+  ListDomainsResponseSuccess,
+  RemoveDomainsResponse,
+  RemoveDomainsResponseSuccess,
+  VerifyDomainsResponse,
+  VerifyDomainsResponseSuccess,
 } from './interfaces';
 
 export class Domains {
@@ -13,8 +20,8 @@ export class Domains {
   async create(
     payload: CreateDomainOptions,
     options: CreateDomainRequestOptions = {},
-  ) {
-    const data = await this.resend.post<CreateDomainResponse>(
+  ): Promise<CreateDomainResponse> {
+    const data = await this.resend.post<CreateDomainResponseSuccess>(
       '/domains',
       payload,
       options,
@@ -22,21 +29,29 @@ export class Domains {
     return data;
   }
 
-  async list() {
-    const data = await this.resend.get<ListDomainsResponse>('/domains');
+  async list(): Promise<ListDomainsResponse> {
+    const data = await this.resend.get<ListDomainsResponseSuccess>('/domains');
     return data;
   }
 
-  async get(id: string) {
-    const data = await this.resend.get<GetDomainResponse>(`/domains/${id}`);
+  async get(id: string): Promise<GetDomainResponse> {
+    const data = await this.resend.get<GetDomainResponseSuccess>(
+      `/domains/${id}`,
+    );
     return data;
   }
 
-  async remove(id: string) {
-    await this.resend.delete(`/domains/${id}`);
+  async remove(id: string): Promise<RemoveDomainsResponse> {
+    const data = await this.resend.delete<RemoveDomainsResponseSuccess>(
+      `/domains/${id}`,
+    );
+    return data;
   }
 
-  async verify(id: string) {
-    await this.resend.post(`/domains/${id}/verify`);
+  async verify(id: string): Promise<VerifyDomainsResponse> {
+    const data = await this.resend.post<VerifyDomainsResponseSuccess>(
+      `/domains/${id}/verify`,
+    );
+    return data;
   }
 }

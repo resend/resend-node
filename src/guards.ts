@@ -7,19 +7,15 @@ export const isResendErrorResponse = (
     return false;
   }
 
-  const { error } = response as ErrorResponse;
+  const error = response as ErrorResponse;
 
   if (typeof error !== 'object' || error === null) {
     return false;
   }
 
-  const { message, statusCode, name } = error;
+  const { message, name } = error;
 
-  return (
-    typeof message === 'string' &&
-    typeof statusCode === 'number' &&
-    typeof name === 'string'
-  );
+  return typeof message === 'string' && typeof name === 'string';
 };
 
 /**
@@ -35,17 +31,16 @@ export const isResendErrorResponseStrict = (
     return false;
   }
 
-  const { error } = response as ErrorResponse;
+  const error = response as ErrorResponse;
 
   if (typeof error !== 'object' || error === null) {
     return false;
   }
 
-  const { message, statusCode, name } = error;
+  const { message, name } = error;
 
   return (
     typeof message === 'string' &&
-    typeof statusCode === 'number' &&
     typeof name === 'string' &&
     name in RESEND_ERROR_CODES_BY_KEY
   );

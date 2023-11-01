@@ -6,11 +6,14 @@ export type CreateBatchOptions = CreateEmailOptions[];
 
 export interface CreateBatchRequestOptions extends PostOptions {}
 
-interface CreateBatchSuccessResponse {
+export interface CreateBatchSuccessResponse {
   data: {
     /** The ID of the newly created email. */
     id: string;
   }[];
 }
 
-export type CreateBatchResponse = CreateBatchSuccessResponse | ErrorResponse;
+export interface CreateBatchResponse {
+  data: CreateBatchSuccessResponse | null;
+  error: ErrorResponse | null;
+}

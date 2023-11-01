@@ -1,4 +1,6 @@
-export interface GetEmailResponse {
+import { ErrorResponse } from '../../interfaces';
+
+export interface GetEmailResponseSuccess {
   bcc: string[] | null;
   cc: string[] | null;
   created_at: string;
@@ -11,4 +13,9 @@ export interface GetEmailResponse {
   text: string | null;
   to: string[];
   object: 'email';
+}
+
+export interface GetEmailResponse {
+  data: GetEmailResponseSuccess | null;
+  error: ErrorResponse | null;
 }
