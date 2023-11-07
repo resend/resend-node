@@ -4702,7 +4702,7 @@ __metadata:
     prettier: 3.0.3
     ts-jest: 29.1.1
     ts-node: 10.9.1
-    tsup: ^7.2.0
+    tsup: 7.2.0
     typescript: 5.2.2
   languageName: unknown
   linkType: soft
@@ -5310,7 +5310,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsup@npm:^7.2.0":
+"tsup@npm:7.2.0":
   version: 7.2.0
   resolution: "tsup@npm:7.2.0"
   dependencies:
