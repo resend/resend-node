@@ -1,5 +1,6 @@
 import { version } from '../package.json';
 import { ApiKeys } from './api-keys/api-keys';
+import { Audiences } from './audiences/audiences';
 import { Batch } from './batch/batch';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 import { Domains } from './domains/domains';
@@ -17,6 +18,7 @@ export class Resend {
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
   readonly batch = new Batch(this);
+  readonly audiences = new Audiences(this);
 
   constructor(readonly key?: string) {
     if (!key) {
