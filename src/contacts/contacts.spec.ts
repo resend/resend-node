@@ -1,15 +1,15 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
-import { GetAudienceResponseSuccess } from './interfaces';
+import { GetContactResponseSuccess } from './interfaces';
 import { ErrorResponse } from '../interfaces';
 
 enableFetchMocks();
 
-describe('Audiences', () => {
+describe('Contacts', () => {
   afterEach(() => fetchMock.resetMocks());
 
   describe('create', () => {
-    it('creates a audience', async () => {
+    it('creates a contact', async () => {
       fetchMock.mockOnce(
         JSON.stringify({
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
@@ -26,8 +26,12 @@ describe('Audiences', () => {
       );
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      await expect(resend.audiences.create({ name: 'resend.com' })).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.contacts.create({
+          email: 'team@resend.com',
+          audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+        }),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "created_at": "2023-04-07T22:48:33.420498+00:00",
@@ -42,7 +46,7 @@ describe('Audiences', () => {
     it('throws error when missing name', async () => {
       const errorResponse: ErrorResponse = {
         name: 'missing_required_field',
-        message: 'Missing "name" field',
+        message: 'Missing `email` field.',
       };
 
       fetchMock.mockOnce(JSON.stringify(errorResponse), {
@@ -55,13 +59,13 @@ describe('Audiences', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const result = resend.audiences.create({ name: '' });
+      const result = resend.contacts.create({ email: '', audience_id: '' });
 
       await expect(result).resolves.toMatchInlineSnapshot(`
 {
   "data": null,
   "error": {
-    "message": "Missing "name" field",
+    "message": "Missing \`email\` field.",
     "name": "missing_required_field",
   },
 }
@@ -70,7 +74,7 @@ describe('Audiences', () => {
   });
 
   describe('list', () => {
-    it('lists audiences', async () => {
+    it('lists contacts', async () => {
       fetchMock.mockOnce(
         JSON.stringify({
           data: [
@@ -97,7 +101,11 @@ describe('Audiences', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.audiences.list()).resolves.toMatchInlineSnapshot(`
+      await expect(
+        resend.contacts.list({
+          audience_id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+        }),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "data": [
@@ -120,11 +128,11 @@ describe('Audiences', () => {
   });
 
   describe('get', () => {
-    describe('when audience not found', () => {
+    describe('when contact not found', () => {
       it('returns error', async () => {
         const errorResponse: ErrorResponse = {
           name: 'not_found',
-          message: 'Audience not found',
+          message: 'Contact not found',
         };
 
         fetchMock.mockOnce(JSON.stringify(errorResponse), {
@@ -137,13 +145,16 @@ describe('Audiences', () => {
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-        const result = resend.audiences.get('1234');
+        const result = resend.contacts.get({
+          id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+          audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+        });
 
         await expect(result).resolves.toMatchInlineSnapshot(`
 {
   "data": null,
   "error": {
-    "message": "Audience not found",
+    "message": "Contact not found",
     "name": "not_found",
   },
 }
@@ -151,15 +162,15 @@ describe('Audiences', () => {
       });
     });
 
-    it('get audience', async () => {
-      const audience: GetAudienceResponseSuccess = {
-        object: 'audience',
+    it('get contact', async () => {
+      const contact: GetContactResponseSuccess = {
+        object: 'contact',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'resend.com',
         created_at: '2023-06-21T06:10:36.144Z',
       };
 
-      fetchMock.mockOnce(JSON.stringify(audience), {
+      fetchMock.mockOnce(JSON.stringify(contact), {
         status: 200,
         headers: {
           'content-type': 'application/json',
@@ -169,14 +180,18 @@ describe('Audiences', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.audiences.get('1234')).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.contacts.get({
+          id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+          audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+        }),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "created_at": "2023-06-21T06:10:36.144Z",
     "id": "fd61172c-cafc-40f5-b049-b45947779a29",
     "name": "resend.com",
-    "object": "audience",
+    "object": "contact",
   },
   "error": null,
 }
@@ -185,7 +200,7 @@ describe('Audiences', () => {
   });
 
   describe('remove', () => {
-    it('removes a audience', async () => {
+    it('removes a contact', async () => {
       fetchMock.mockOnce(JSON.stringify({}), {
         status: 200,
         headers: {
@@ -197,7 +212,10 @@ describe('Audiences', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(
-        resend.audiences.remove('5262504e-8ed7-4fac-bd16-0d4be94bc9f2'),
+        resend.contacts.remove({
+          id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+          audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+        }),
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {},
