@@ -3,6 +3,7 @@ import { ApiKeys } from './api-keys/api-keys';
 import { Audiences } from './audiences/audiences';
 import { Batch } from './batch/batch';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
+import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import { isResendErrorResponse } from './guards';
@@ -15,10 +16,11 @@ export class Resend {
   private readonly headers: Headers;
 
   readonly apiKeys = new ApiKeys(this);
+  readonly audiences = new Audiences(this);
+  readonly batch = new Batch(this);
+  readonly contacts = new Contacts(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
-  readonly batch = new Batch(this);
-  readonly audiences = new Audiences(this);
 
   constructor(readonly key?: string) {
     if (!key) {
