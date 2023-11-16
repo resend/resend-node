@@ -22,7 +22,10 @@ export class Resend {
   readonly batch = new Batch(this);
   readonly audiences = new Audiences(this);
 
-  constructor(readonly key?: string, options: Options = {}) {
+  constructor(
+    readonly key?: string,
+    options: Options = {},
+  ) {
     if (!key) {
       this.key = process.env.RESEND_API_KEY;
 
@@ -57,7 +60,7 @@ export class Resend {
     const response = await this.fetch(`${baseUrl}${path}`, options);
 
     if (!response.ok) {
-      const error = await response.json() as any;
+      const error = (await response.json()) as any;
       if (isResendErrorResponse(error)) {
         return { data: null, error };
       }
@@ -65,7 +68,7 @@ export class Resend {
       return { data: null, error };
     }
 
-    const data = await response.json() as any;
+    const data = (await response.json()) as any;
     return { data, error: null };
   }
 

@@ -26,8 +26,8 @@ describe('Audiences', () => {
       );
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      await expect(resend.audiences.create({ name: 'resend.com' })).resolves.
-toMatchInlineSnapshot(`
+      await expect(resend.audiences.create({ name: 'resend.com' })).resolves
+        .toMatchInlineSnapshot(`
 {
   "data": {
     "created_at": "2023-04-07T22:48:33.420498+00:00",
@@ -169,8 +169,8 @@ toMatchInlineSnapshot(`
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.audiences.get('1234')).resolves.
-toMatchInlineSnapshot(`
+      await expect(resend.audiences.get('1234')).resolves
+        .toMatchInlineSnapshot(`
 {
   "data": {
     "created_at": "2023-06-21T06:10:36.144Z",
