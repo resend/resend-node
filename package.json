@@ -2,17 +2,30 @@
   "name": "resend",
   "version": "2.1.0-canary.0",
   "description": "Node.js library for the Resend API",
-  "main": "build/src/index.js",
-  "typings": "build/src/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "files": [
-    "build/"
+    "dist/**"
   ],
   "engines": {
     "node": ">=18"
   },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
   "packageManager": "yarn@3.6.4",
   "scripts": {
-    "build": "tsc -p .",
+    "build": "tsup src/index.ts --format esm,cjs --dts",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint --fix --ext .ts ./src",
@@ -45,6 +58,7 @@
     "prettier": "3.1.0",
     "ts-jest": "29.1.1",
     "ts-node": "10.9.1",
+    "tsup": "7.2.0",
     "typescript": "5.2.2"
   }
 }
