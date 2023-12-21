@@ -11,6 +11,11 @@ import {
   RemoveContactsResponse,
   RemoveContactsResponseSuccess,
 } from './interfaces';
+import {
+  UpdateContactOptions,
+  UpdateContactResponse,
+  UpdateContactResponseSuccess,
+} from './interfaces/update-contact.interface';
 
 export class Contacts {
   constructor(private readonly resend: Resend) {}
@@ -47,6 +52,14 @@ export class Contacts {
   }): Promise<GetContactResponse> {
     const data = await this.resend.get<GetContactResponseSuccess>(
       `/audiences/${audience_id}/contacts/${id}`,
+    );
+    return data;
+  }
+
+  async update(payload: UpdateContactOptions): Promise<UpdateContactResponse> {
+    const data = await this.resend.patch<UpdateContactResponseSuccess>(
+      `/audiences/${payload.audience_id}/contacts/${payload.id}`,
+      payload,
     );
     return data;
   }
