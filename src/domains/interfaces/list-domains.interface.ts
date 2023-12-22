@@ -1,7 +1,7 @@
 import { ErrorResponse } from '../../interfaces';
 import { Domain } from './domain';
 
-export type ListDomainsResponseSuccess = Domain[];
+export type ListDomainsResponseSuccess = { data: Domain[] };
 
 export interface ListDomainsResponse {
   data: ListDomainsResponseSuccess | null;
