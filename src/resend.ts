@@ -3,6 +3,7 @@ import { ApiKeys } from './api-keys/api-keys';
 import { Audiences } from './audiences/audiences';
 import { Batch } from './batch/batch';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
+import { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
@@ -83,6 +84,17 @@ export class Resend {
   async put<T>(path: string, entity: any, options: PutOptions = {}) {
     const requestOptions = {
       method: 'PUT',
+      headers: this.headers,
+      body: JSON.stringify(entity),
+      ...options,
+    };
+
+    return this.fetchRequest<T>(path, requestOptions);
+  }
+
+  async patch<T>(path: string, entity: any, options: PatchOptions = {}) {
+    const requestOptions = {
+      method: 'PATCH',
       headers: this.headers,
       body: JSON.stringify(entity),
       ...options,
