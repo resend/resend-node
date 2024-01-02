@@ -3,14 +3,23 @@ import { ApiKeys } from './api-keys/api-keys';
 import { Audiences } from './audiences/audiences';
 import { Batch } from './batch/batch';
 import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
+import { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import { isResendErrorResponse } from './guards';
 import { ErrorResponse } from './interfaces';
 
-const baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
-const userAgent = process.env.RESEND_USER_AGENT || `resend-node:${version}`;
+const defaultBaseUrl = 'https://api.resend.com';
+const defaultUserAgent = `resend-node:${version}`;
+const baseUrl =
+  typeof process !== 'undefined' && process.env
+    ? process.env.RESEND_BASE_URL || defaultBaseUrl
+    : defaultBaseUrl;
+const userAgent =
+  typeof process !== 'undefined' && process.env
+    ? process.env.RESEND_USER_AGENT || defaultUserAgent
+    : defaultUserAgent;
 
 export class Resend {
   private readonly headers: Headers;
@@ -24,7 +33,9 @@ export class Resend {
 
   constructor(readonly key?: string) {
     if (!key) {
-      this.key = process.env.RESEND_API_KEY;
+      if (typeof process !== 'undefined' && process.env) {
+        this.key = process.env.RESEND_API_KEY;
+      }
 
       if (!this.key) {
         throw new Error(
@@ -83,6 +94,17 @@ export class Resend {
   async put<T>(path: string, entity: any, options: PutOptions = {}) {
     const requestOptions = {
       method: 'PUT',
+      headers: this.headers,
+      body: JSON.stringify(entity),
+      ...options,
+    };
+
+    return this.fetchRequest<T>(path, requestOptions);
+  }
+
+  async patch<T>(path: string, entity: any, options: PatchOptions = {}) {
+    const requestOptions = {
+      method: 'PATCH',
       headers: this.headers,
       body: JSON.stringify(entity),
       ...options,
