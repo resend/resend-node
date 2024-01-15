@@ -289,11 +289,11 @@ describe('Contacts', () => {
     const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
     await expect(
-  resend.contacts.remove({
-    email: 'acme@example.com',
-    audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222'
-  })
-).resolves.toMatchInlineSnapshot(`
+      resend.contacts.remove({
+        email: 'acme@example.com',
+        audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+      }),
+    ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "contact": "acme@example.com",
