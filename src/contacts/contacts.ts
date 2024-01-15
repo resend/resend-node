@@ -8,6 +8,7 @@ import {
   GetContactResponseSuccess,
   ListContactsResponse,
   ListContactsResponseSuccess,
+  RemoveContactOptions,
   RemoveContactsResponse,
   RemoveContactsResponseSuccess,
 } from './interfaces';
@@ -64,15 +65,11 @@ export class Contacts {
     return data;
   }
 
-  async remove({
-    audience_id,
-    id,
-  }: {
-    audience_id: string;
-    id: string;
-  }): Promise<RemoveContactsResponse> {
+  async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
     const data = await this.resend.delete<RemoveContactsResponseSuccess>(
-      `/audiences/${audience_id}/contacts/${id}`,
+      `/audiences/${payload.audience_id}/contacts/${
+        payload?.email ? payload?.email : payload?.id
+      }`,
     );
     return data;
   }

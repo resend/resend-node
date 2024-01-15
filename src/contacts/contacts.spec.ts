@@ -234,9 +234,13 @@ describe('Contacts', () => {
   });
 
   describe('remove', () => {
-    it('removes a contact', async () => {
+    it('removes a contact by id', async () => {
       fetchMock.mockOnce(
-        JSON.stringify({ id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223' }),
+        JSON.stringify({
+          contact: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+          object: 'contact',
+          deleted: true,
+        }),
         {
           status: 200,
           headers: {
@@ -256,11 +260,48 @@ describe('Contacts', () => {
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+    "contact": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+    "deleted": true,
+    "object": "contact",
   },
   "error": null,
 }
 `);
     });
+  });
+
+  it('removes a contact by email', async () => {
+    fetchMock.mockOnce(
+      JSON.stringify({
+        contact: 'acme@example.com',
+        object: 'contact',
+        deleted: true,
+      }),
+      {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      },
+    );
+
+    const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+    await expect(
+  resend.contacts.remove({
+    email: 'acme@example.com',
+    audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222'
+  })
+).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "contact": "acme@example.com",
+    "deleted": true,
+    "object": "contact",
+  },
+  "error": null,
+}
+`);
   });
 });

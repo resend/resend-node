@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { PostOptions } from '../../common/interfaces';
 import { ErrorResponse } from '../../interfaces';
-
-type RequireAtLeastOne<T> = {
-  [K in keyof T]-?: Required<Pick<T, K>> &
-    Partial<Pick<T, Exclude<keyof T, K>>>;
-}[keyof T];
+import { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
 
 interface EmailRenderOptions {
   /**
