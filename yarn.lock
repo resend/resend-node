@@ -1224,12 +1224,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.18.9":
-  version: 18.18.9
-  resolution: "@types/node@npm:18.18.9"
+"@types/node@npm:18.19.7":
+  version: 18.19.7
+  resolution: "@types/node@npm:18.19.7"
   dependencies:
     undici-types: ~5.26.4
-  checksum: 629ce20357586144031cb43d601617eef45e59460dea6b1e123f708e6885664f44d54f65e5b72b2614af5b8613f3652ced832649c0b991accbc6a85139befa51
+  checksum: f1241173a66ec7761a0c1e30deb3ba74c507ba06539e2ebd64d37bc62f4b8af420eef8e0db9487d900afeb9a4bdef72764729fed9742e184f2c743b2bc70bfab
   languageName: node
   linkType: hard
 
@@ -4693,7 +4693,7 @@ __metadata:
   dependencies:
     "@react-email/render": 0.0.10
     "@types/jest": 29.5.11
-    "@types/node": 18.18.9
+    "@types/node": 18.19.7
     "@types/react": 18.2.33
     "@typescript-eslint/eslint-plugin": 6.19.0
     "@typescript-eslint/parser": 6.19.0
