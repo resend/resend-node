@@ -37,6 +37,7 @@ export class Contacts {
       `/audiences/${payload.audienceId}/contacts`,
       {
         unsubscribed: payload.unsubscribed,
+        email: payload.email,
         first_name: payload.firstName,
         last_name: payload.lastName,
       },
