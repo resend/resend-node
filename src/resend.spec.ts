@@ -1,7 +1,7 @@
 import { Resend } from './resend';
 import { enableFetchMocks } from 'jest-fetch-mock';
-import { CreateEmailOptions } from './emails/interfaces';
 import { ErrorResponse } from './interfaces';
+import { CreateEmailOptions } from './emails/interfaces/create-email-options.interface';
 
 enableFetchMocks();
 

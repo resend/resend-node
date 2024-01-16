@@ -4,13 +4,19 @@ import {
   CreateAudienceRequestOptions,
   CreateAudienceResponse,
   CreateAudienceResponseSuccess,
+} from './interfaces/create-audience-options.interface';
+import {
   GetAudienceResponse,
   GetAudienceResponseSuccess,
+} from './interfaces/get-audience.interface';
+import {
   ListAudiencesResponse,
   ListAudiencesResponseSuccess,
+} from './interfaces/list-audiences.interface';
+import {
   RemoveAudiencesResponse,
   RemoveAudiencesResponseSuccess,
-} from './interfaces';
+} from './interfaces/remove-audience.interface';
 
 export class Audiences {
   constructor(private readonly resend: Resend) {}

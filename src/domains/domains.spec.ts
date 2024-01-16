@@ -1,8 +1,8 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
 import { DomainRegion } from './interfaces/domain';
-import { GetDomainResponseSuccess } from './interfaces';
 import { ErrorResponse } from '../interfaces';
+import { GetDomainResponseSuccess } from './interfaces/get-domain.interface';
 
 enableFetchMocks();
 

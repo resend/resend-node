@@ -22,7 +22,7 @@ interface RemoveByOptions {
 }
 
 export interface RemoveContactOptions extends RemoveByOptions {
-  audience_id: string;
+  audienceId: string;
 }
 
 export interface RemoveContactsResponse {

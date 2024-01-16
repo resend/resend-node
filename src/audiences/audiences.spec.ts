@@ -1,7 +1,7 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
-import { GetAudienceResponseSuccess } from './interfaces';
 import { ErrorResponse } from '../interfaces';
+import { GetAudienceResponseSuccess } from './interfaces/get-audience.interface';
 
 enableFetchMocks();
 

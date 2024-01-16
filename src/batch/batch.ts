@@ -6,7 +6,7 @@ import {
   CreateBatchRequestOptions,
   CreateBatchResponse,
   CreateBatchSuccessResponse,
-} from './interfaces';
+} from './interfaces/create-batch-options.interface';
 
 export class Batch {
   constructor(private readonly resend: Resend) {}

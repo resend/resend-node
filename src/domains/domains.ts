@@ -4,15 +4,23 @@ import {
   CreateDomainRequestOptions,
   CreateDomainResponse,
   CreateDomainResponseSuccess,
+} from './interfaces/create-domain-options.interface';
+import {
   GetDomainResponse,
   GetDomainResponseSuccess,
+} from './interfaces/get-domain.interface';
+import {
   ListDomainsResponse,
   ListDomainsResponseSuccess,
+} from './interfaces/list-domains.interface';
+import {
   RemoveDomainsResponse,
   RemoveDomainsResponseSuccess,
+} from './interfaces/remove-domain.interface';
+import {
   VerifyDomainsResponse,
   VerifyDomainsResponseSuccess,
-} from './interfaces';
+} from './interfaces/verify-domain.interface';
 
 export class Domains {
   constructor(private readonly resend: Resend) {}
