@@ -1,7 +1,7 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
-import { GetContactResponseSuccess } from './interfaces';
 import { ErrorResponse } from '../interfaces';
+import { GetContactResponseSuccess } from './interfaces/get-contact.interface';
 
 enableFetchMocks();
 
@@ -29,7 +29,7 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.create({
           email: 'team@resend.com',
-          audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+          audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
         }),
       ).resolves.toMatchInlineSnapshot(`
 {
@@ -59,7 +59,7 @@ describe('Contacts', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const result = resend.contacts.create({ email: '', audience_id: '' });
+      const result = resend.contacts.create({ email: '', audienceId: '' });
 
       await expect(result).resolves.toMatchInlineSnapshot(`
 {
@@ -103,7 +103,7 @@ describe('Contacts', () => {
 
       await expect(
         resend.contacts.list({
-          audience_id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+          audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
         }),
       ).resolves.toMatchInlineSnapshot(`
 {
@@ -147,7 +147,7 @@ describe('Contacts', () => {
 
         const result = resend.contacts.get({
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
-          audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+          audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
         });
 
         await expect(result).resolves.toMatchInlineSnapshot(`
@@ -183,7 +183,7 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.get({
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
-          audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+          audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
         }),
       ).resolves.toMatchInlineSnapshot(`
 {
@@ -219,8 +219,8 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.update({
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
-          audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
-          first_name: 'Bu',
+          audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+          fistName: 'Bu',
         }),
       ).resolves.toMatchInlineSnapshot(`
 {
@@ -255,7 +255,7 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.remove({
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
-          audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+          audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
         }),
       ).resolves.toMatchInlineSnapshot(`
 {
@@ -291,7 +291,7 @@ describe('Contacts', () => {
     await expect(
       resend.contacts.remove({
         email: 'acme@example.com',
-        audience_id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+        audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
       }),
     ).resolves.toMatchInlineSnapshot(`
 {

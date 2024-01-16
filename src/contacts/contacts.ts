@@ -4,14 +4,22 @@ import {
   CreateContactRequestOptions,
   CreateContactResponse,
   CreateContactResponseSuccess,
+} from './interfaces/create-contact-options.interface';
+import {
+  GetContactOptions,
   GetContactResponse,
   GetContactResponseSuccess,
+} from './interfaces/get-contact.interface';
+import {
+  ListContactsOptions,
   ListContactsResponse,
   ListContactsResponseSuccess,
+} from './interfaces/list-contacts.interface';
+import {
   RemoveContactOptions,
   RemoveContactsResponse,
   RemoveContactsResponseSuccess,
-} from './interfaces';
+} from './interfaces/remove-contact.interface';
 import {
   UpdateContactOptions,
   UpdateContactResponse,
@@ -26,48 +34,46 @@ export class Contacts {
     options: CreateContactRequestOptions = {},
   ): Promise<CreateContactResponse> {
     const data = await this.resend.post<CreateContactResponseSuccess>(
-      `/audiences/${payload.audience_id}/contacts`,
-      payload,
+      `/audiences/${payload.audienceId}/contacts`,
+      {
+        ...payload,
+        first_name: payload.firstName,
+        last_name: payload.lastName,
+      },
       options,
     );
     return data;
   }
 
-  async list({
-    audience_id,
-  }: {
-    audience_id: string;
-  }): Promise<ListContactsResponse> {
+  async list(options: ListContactsOptions): Promise<ListContactsResponse> {
     const data = await this.resend.get<ListContactsResponseSuccess>(
-      `/audiences/${audience_id}/contacts`,
+      `/audiences/${options.audienceId}/contacts`,
     );
     return data;
   }
 
-  async get({
-    audience_id,
-    id,
-  }: {
-    audience_id: string;
-    id: string;
-  }): Promise<GetContactResponse> {
+  async get(options: GetContactOptions): Promise<GetContactResponse> {
     const data = await this.resend.get<GetContactResponseSuccess>(
-      `/audiences/${audience_id}/contacts/${id}`,
+      `/audiences/${options.audienceId}/contacts/${options.id}`,
     );
     return data;
   }
 
   async update(payload: UpdateContactOptions): Promise<UpdateContactResponse> {
     const data = await this.resend.patch<UpdateContactResponseSuccess>(
-      `/audiences/${payload.audience_id}/contacts/${payload.id}`,
-      payload,
+      `/audiences/${payload.audienceId}/contacts/${payload.id}`,
+      {
+        ...payload,
+        first_name: payload.fistName,
+        last_name: payload.lastName,
+      },
     );
     return data;
   }
 
   async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
     const data = await this.resend.delete<RemoveContactsResponseSuccess>(
-      `/audiences/${payload.audience_id}/contacts/${
+      `/audiences/${payload.audienceId}/contacts/${
         payload?.email ? payload?.email : payload?.id
       }`,
     );
