@@ -36,7 +36,7 @@ export class Contacts {
     const data = await this.resend.post<CreateContactResponseSuccess>(
       `/audiences/${payload.audienceId}/contacts`,
       {
-        ...payload,
+        unsubscribed: payload.unsubscribed,
         first_name: payload.firstName,
         last_name: payload.lastName,
       },
@@ -63,7 +63,7 @@ export class Contacts {
     const data = await this.resend.patch<UpdateContactResponseSuccess>(
       `/audiences/${payload.audienceId}/contacts/${payload.id}`,
       {
-        ...payload,
+        unsubscribed: payload.unsubscribed,
         first_name: payload.fistName,
         last_name: payload.lastName,
       },
