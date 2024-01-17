@@ -12,8 +12,9 @@ export interface CreateContactOptions {
 
 export interface CreateContactRequestOptions extends PostOptions {}
 
-export interface CreateContactResponseSuccess
-  extends Pick<Contact, 'name' | 'id' | 'created_at'> {}
+export interface CreateContactResponseSuccess extends Pick<Contact, 'id'> {
+  object: 'contact';
+}
 
 export interface CreateContactResponse {
   data: CreateContactResponseSuccess | null;

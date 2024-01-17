@@ -5,7 +5,10 @@ export interface ListContactsOptions {
   audienceId: string;
 }
 
-export type ListContactsResponseSuccess = Contact[];
+export interface ListContactsResponseSuccess {
+  object: 'list';
+  data: Contact[];
+}
 
 export interface ListContactsResponse {
   data: ListContactsResponseSuccess | null;

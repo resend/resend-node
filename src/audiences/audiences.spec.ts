@@ -16,10 +16,11 @@ describe('Audiences', () => {
 
   describe('create', () => {
     it('creates a audience', async () => {
+      const payload: CreateAudienceOptions = { name: 'resend.com' };
       const response: CreateAudienceResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
         name: 'Resend',
-        created_at: '2023-04-07T22:48:33.420498+00:00',
+        object: 'audience',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -30,15 +31,14 @@ describe('Audiences', () => {
         },
       });
 
-      const payload: CreateAudienceOptions = { name: 'resend.com' };
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(resend.audiences.create(payload)).resolves
         .toMatchInlineSnapshot(`
 {
   "data": {
-    "created_at": "2023-04-07T22:48:33.420498+00:00",
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
     "name": "Resend",
+    "object": "audience",
   },
   "error": null,
 }
@@ -46,6 +46,7 @@ describe('Audiences', () => {
     });
 
     it('throws error when missing name', async () => {
+      const payload: CreateAudienceOptions = { name: '' };
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing "name" field',
@@ -61,7 +62,6 @@ describe('Audiences', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const payload: CreateAudienceOptions = { name: '' };
       const result = resend.audiences.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
@@ -78,18 +78,21 @@ describe('Audiences', () => {
 
   describe('list', () => {
     it('lists audiences', async () => {
-      const response: ListAudiencesResponseSuccess = [
-        {
-          id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
-          name: 'resend.com',
-          created_at: '2023-04-07T23:13:52.669661+00:00',
-        },
-        {
-          id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
-          name: 'react.email',
-          created_at: '2023-04-07T23:13:20.417116+00:00',
-        },
-      ];
+      const response: ListAudiencesResponseSuccess = {
+        object: 'list',
+        data: [
+          {
+            id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+            name: 'resend.com',
+            created_at: '2023-04-07T23:13:52.669661+00:00',
+          },
+          {
+            id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
+            name: 'react.email',
+            created_at: '2023-04-07T23:13:20.417116+00:00',
+          },
+        ],
+      };
       fetchMock.mockOnce(JSON.stringify(response), {
         status: 200,
         headers: {
@@ -102,18 +105,21 @@ describe('Audiences', () => {
 
       await expect(resend.audiences.list()).resolves.toMatchInlineSnapshot(`
 {
-  "data": [
-    {
-      "created_at": "2023-04-07T23:13:52.669661+00:00",
-      "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-      "name": "resend.com",
-    },
-    {
-      "created_at": "2023-04-07T23:13:20.417116+00:00",
-      "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-      "name": "react.email",
-    },
-  ],
+  "data": {
+    "data": [
+      {
+        "created_at": "2023-04-07T23:13:52.669661+00:00",
+        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+        "name": "resend.com",
+      },
+      {
+        "created_at": "2023-04-07T23:13:20.417116+00:00",
+        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
+        "name": "react.email",
+      },
+    ],
+    "object": "list",
+  },
   "error": null,
 }
 `);
@@ -189,7 +195,9 @@ describe('Audiences', () => {
     it('removes a audience', async () => {
       const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
       const response: RemoveAudiencesResponseSuccess = {
+        object: 'audience',
         id,
+        deleted: true,
       };
       fetchMock.mockOnce(JSON.stringify(response), {
         status: 200,
@@ -204,7 +212,9 @@ describe('Audiences', () => {
       await expect(resend.audiences.remove(id)).resolves.toMatchInlineSnapshot(`
 {
   "data": {
+    "deleted": true,
     "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+    "object": "audience",
   },
   "error": null,
 }

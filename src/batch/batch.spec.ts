@@ -14,21 +14,6 @@ describe('Batch', () => {
 
   describe('create', () => {
     it('sends multiple emails', async () => {
-      const response: CreateBatchSuccessResponse = {
-        data: [
-          { id: 'aabeeefc-bd13-474a-a440-0ee139b3a4cc' },
-          { id: 'aebe1c6e-30ad-4257-993b-519f5affa626' },
-          { id: 'b2bc2598-f98b-4da4-86c9-7b32881ef394' },
-        ],
-      };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-        },
-      });
-
       const payload: CreateBatchOptions = [
         {
           from: 'bu@resend.com',
@@ -49,6 +34,20 @@ describe('Batch', () => {
           html: '<h1>Hi there</h1>',
         },
       ];
+      const response: CreateBatchSuccessResponse = {
+        data: [
+          { id: 'aabeeefc-bd13-474a-a440-0ee139b3a4cc' },
+          { id: 'aebe1c6e-30ad-4257-993b-519f5affa626' },
+          { id: 'b2bc2598-f98b-4da4-86c9-7b32881ef394' },
+        ],
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
 
       const data = await resend.batch.create(payload);
       expect(data).toMatchInlineSnapshot(`
@@ -74,22 +73,6 @@ describe('Batch', () => {
 
   describe('send', () => {
     it('sends multiple emails', async () => {
-      const response: CreateBatchSuccessResponse = {
-        data: [
-          { id: 'aabeeefc-bd13-474a-a440-0ee139b3a4cc' },
-          { id: 'aebe1c6e-30ad-4257-993b-519f5affa626' },
-          { id: 'b2bc2598-f98b-4da4-86c9-7b32881ef394' },
-        ],
-      };
-
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-        },
-      });
-
       const payload = [
         {
           from: 'bu@resend.com',
@@ -110,6 +93,21 @@ describe('Batch', () => {
           html: '<h1>Hi there</h1>',
         },
       ];
+      const response: CreateBatchSuccessResponse = {
+        data: [
+          { id: 'aabeeefc-bd13-474a-a440-0ee139b3a4cc' },
+          { id: 'aebe1c6e-30ad-4257-993b-519f5affa626' },
+          { id: 'b2bc2598-f98b-4da4-86c9-7b32881ef394' },
+        ],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
 
       const data = await resend.batch.send(payload);
       expect(data).toMatchInlineSnapshot(`

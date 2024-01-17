@@ -26,10 +26,13 @@ describe('Contacts', () => {
 
   describe('create', () => {
     it('creates a contact', async () => {
+      const payload: CreateContactOptions = {
+        email: 'team@resend.com',
+        audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+      };
       const response: CreateContactResponseSuccess = {
-        id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
-        name: 'Resend',
-        created_at: '2023-04-07T22:48:33.420498+00:00',
+        object: 'contact',
+        id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -39,19 +42,14 @@ describe('Contacts', () => {
           Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
-      const payload: CreateContactOptions = {
-        email: 'team@resend.com',
-        audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
-      };
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(resend.contacts.create(payload)).resolves
         .toMatchInlineSnapshot(`
 {
   "data": {
-    "created_at": "2023-04-07T22:48:33.420498+00:00",
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
-    "name": "Resend",
+    "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
+    "object": "contact",
   },
   "error": null,
 }
@@ -59,6 +57,10 @@ describe('Contacts', () => {
     });
 
     it('throws error when missing name', async () => {
+      const payload: CreateContactOptions = {
+        email: '',
+        audienceId: '',
+      };
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing `email` field.',
@@ -71,10 +73,6 @@ describe('Contacts', () => {
           Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
-      const payload: CreateContactOptions = {
-        email: '',
-        audienceId: '',
-      };
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -94,18 +92,30 @@ describe('Contacts', () => {
 
   describe('list', () => {
     it('lists contacts', async () => {
-      const response: ListContactsResponseSuccess = [
-        {
-          id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
-          name: 'resend.com',
-          created_at: '2023-04-07T23:13:52.669661+00:00',
-        },
-        {
-          id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
-          name: 'react.email',
-          created_at: '2023-04-07T23:13:20.417116+00:00',
-        },
-      ];
+      const options: ListContactsOptions = {
+        audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+      };
+      const response: ListContactsResponseSuccess = {
+        object: 'list',
+        data: [
+          {
+            id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+            email: 'team@resend.com',
+            created_at: '2023-04-07T23:13:52.669661+00:00',
+            unsubscribed: false,
+            first_name: 'John',
+            last_name: 'Smith',
+          },
+          {
+            id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
+            email: 'team@react.email',
+            created_at: '2023-04-07T23:13:20.417116+00:00',
+            unsubscribed: false,
+            first_name: 'John',
+            last_name: 'Smith',
+          },
+        ],
+      };
       fetchMock.mockOnce(JSON.stringify(response), {
         status: 200,
         headers: {
@@ -115,24 +125,31 @@ describe('Contacts', () => {
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      const options: ListContactsOptions = {
-        audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
-      };
+
       await expect(resend.contacts.list(options)).resolves
         .toMatchInlineSnapshot(`
 {
-  "data": [
-    {
-      "created_at": "2023-04-07T23:13:52.669661+00:00",
-      "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-      "name": "resend.com",
-    },
-    {
-      "created_at": "2023-04-07T23:13:20.417116+00:00",
-      "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-      "name": "react.email",
-    },
-  ],
+  "data": {
+    "data": [
+      {
+        "created_at": "2023-04-07T23:13:52.669661+00:00",
+        "email": "team@resend.com",
+        "first_name": "John",
+        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+        "last_name": "Smith",
+        "unsubscribed": false,
+      },
+      {
+        "created_at": "2023-04-07T23:13:20.417116+00:00",
+        "email": "team@react.email",
+        "first_name": "John",
+        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
+        "last_name": "Smith",
+        "unsubscribed": false,
+      },
+    ],
+    "object": "list",
+  },
   "error": null,
 }
 `);
@@ -179,8 +196,11 @@ describe('Contacts', () => {
       const response: GetContactResponseSuccess = {
         object: 'contact',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
-        name: 'resend.com',
-        created_at: '2023-06-21T06:10:36.144Z',
+        email: 'team@resend.com',
+        first_name: '',
+        last_name: '',
+        created_at: '2024-01-16T18:12:26.514Z',
+        unsubscribed: false,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -200,10 +220,13 @@ describe('Contacts', () => {
         .toMatchInlineSnapshot(`
 {
   "data": {
-    "created_at": "2023-06-21T06:10:36.144Z",
+    "created_at": "2024-01-16T18:12:26.514Z",
+    "email": "team@resend.com",
+    "first_name": "",
     "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "name": "resend.com",
+    "last_name": "",
     "object": "contact",
+    "unsubscribed": false,
   },
   "error": null,
 }
@@ -213,6 +236,11 @@ describe('Contacts', () => {
 
   describe('update', () => {
     it('updates a contact', async () => {
+      const payload: UpdateContactOptions = {
+        id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+        audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+        fistName: 'Bu',
+      };
       const response = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
@@ -226,11 +254,6 @@ describe('Contacts', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const payload: UpdateContactOptions = {
-        id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
-        audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
-        fistName: 'Bu',
-      };
       await expect(resend.contacts.update(payload)).resolves
         .toMatchInlineSnapshot(`
 {
@@ -275,37 +298,37 @@ describe('Contacts', () => {
 }
 `);
     });
-  });
 
-  it('removes a contact by email', async () => {
-    const response: RemoveContactsResponseSuccess = {
-      contact: 'acme@example.com',
-      object: 'contact',
-      deleted: true,
-    };
-    fetchMock.mockOnce(JSON.stringify(response), {
-      status: 200,
-      headers: {
-        'content-type': 'application/json',
-        Authorization: 'Bearer re_924b3rjh2387fbewf823',
-      },
+    it('removes a contact by email', async () => {
+      const response: RemoveContactsResponseSuccess = {
+        contact: 'acme@example.com',
+        object: 'contact',
+        deleted: true,
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const options: RemoveContactOptions = {
+        email: 'acme@example.com',
+        audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+      };
+      await expect(resend.contacts.remove(options)).resolves
+        .toMatchInlineSnapshot(`
+  {
+    "data": {
+      "contact": "acme@example.com",
+      "deleted": true,
+      "object": "contact",
+    },
+    "error": null,
+  }
+  `);
     });
-
-    const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-    const options: RemoveContactOptions = {
-      email: 'acme@example.com',
-      audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
-    };
-    await expect(resend.contacts.remove(options)).resolves
-      .toMatchInlineSnapshot(`
-{
-  "data": {
-    "contact": "acme@example.com",
-    "deleted": true,
-    "object": "contact",
-  },
-  "error": null,
-}
-`);
   });
 });

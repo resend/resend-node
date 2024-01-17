@@ -15,6 +15,9 @@ describe('API Keys', () => {
 
   describe('create', () => {
     it('creates an api key', async () => {
+      const payload: CreateApiKeyOptions = {
+        name: 'Test',
+      };
       const response: CreateApiKeyResponseSuccess = {
         token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
         id: '430eed87-632a-4ea6-90db-0aace67ec228',
@@ -30,9 +33,6 @@ describe('API Keys', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const payload: CreateApiKeyOptions = {
-        name: 'Test',
-      };
       await expect(resend.apiKeys.create(payload)).resolves
         .toMatchInlineSnapshot(`
 {
@@ -46,9 +46,12 @@ describe('API Keys', () => {
     });
 
     it('throws error when missing name', async () => {
+      const payload: CreateApiKeyOptions = {
+        name: '',
+      };
       const response: ErrorResponse = {
-        name: 'missing_required_field',
-        message: 'Missing "name" field',
+        message: 'String must contain at least 1 character(s)',
+        name: 'validation_error',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -61,17 +64,14 @@ describe('API Keys', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const payload: CreateApiKeyOptions = {
-        name: '',
-      };
       const result = resend.apiKeys.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
 {
   "data": null,
   "error": {
-    "message": "Missing "name" field",
-    "name": "missing_required_field",
+    "message": "String must contain at least 1 character(s)",
+    "name": "validation_error",
   },
 }
 `);
@@ -79,6 +79,11 @@ describe('API Keys', () => {
 
     describe('with access', () => {
       it('creates api key with access `full_access`', async () => {
+        const payload: CreateApiKeyOptions = {
+          name: 'Test',
+          permission: 'full_access',
+        };
+
         const response: CreateApiKeyResponseSuccess = {
           token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
           id: '430eed87-632a-4ea6-90db-0aace67ec228',
@@ -93,11 +98,6 @@ describe('API Keys', () => {
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-
-        const payload: CreateApiKeyOptions = {
-          name: 'Test',
-          permission: 'full_access',
-        };
 
         await expect(resend.apiKeys.create(payload)).resolves
           .toMatchInlineSnapshot(`
@@ -112,6 +112,10 @@ describe('API Keys', () => {
       });
 
       it('creates api key with access `sending_access`', async () => {
+        const payload: CreateApiKeyOptions = {
+          name: 'Test',
+          permission: 'sending_access',
+        };
         const response: CreateApiKeyResponseSuccess = {
           token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
           id: '430eed87-632a-4ea6-90db-0aace67ec228',
@@ -126,11 +130,6 @@ describe('API Keys', () => {
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-
-        const payload: CreateApiKeyOptions = {
-          name: 'Test',
-          permission: 'sending_access',
-        };
 
         await expect(resend.apiKeys.create(payload)).resolves
           .toMatchInlineSnapshot(`
@@ -300,9 +299,7 @@ describe('API Keys', () => {
 
   describe('remove', () => {
     const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
-    const response: RemoveApiKeyResponseSuccess = {
-      id,
-    };
+    const response: RemoveApiKeyResponseSuccess = {};
 
     it('removes an api key', async () => {
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -317,9 +314,7 @@ describe('API Keys', () => {
 
       await expect(resend.apiKeys.remove(id)).resolves.toMatchInlineSnapshot(`
 {
-  "data": {
-    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-  },
+  "data": {},
   "error": null,
 }
 `);
