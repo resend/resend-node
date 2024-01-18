@@ -1043,15 +1043,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-email/render@npm:0.0.11":
-  version: 0.0.11
-  resolution: "@react-email/render@npm:0.0.11"
+"@react-email/render@npm:0.0.12":
+  version: 0.0.12
+  resolution: "@react-email/render@npm:0.0.12"
   dependencies:
     html-to-text: 9.0.5
     js-beautify: ^1.14.11
     react: 18.2.0
     react-dom: 18.2.0
-  checksum: 100f3ee438ad1a368661cb5a75f0306708a51b2a2d33cfa6f2d6e5cb98aedf7f95be33137b56467c2337dd541d23518e32153ac3a809e7a4a1a7273f8236eb9c
+  checksum: a3b27772c8efa58cb2f091debdc92b664b151d50ef97fc73a7d2688715a27c085e4736242ca03490b04e48875323ed724069be63d08b93c558605610edfc1525
   languageName: node
   linkType: hard
 
@@ -4654,7 +4654,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "resend@workspace:."
   dependencies:
-    "@react-email/render": 0.0.11
+    "@react-email/render": 0.0.12
     "@types/jest": 29.5.11
     "@types/node": 18.19.7
     "@types/react": 18.2.48
