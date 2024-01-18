@@ -9,7 +9,9 @@ export interface CreateAudienceOptions {
 export interface CreateAudienceRequestOptions extends PostOptions {}
 
 export interface CreateAudienceResponseSuccess
-  extends Pick<Audience, 'name' | 'id' | 'created_at'> {}
+  extends Pick<Audience, 'name' | 'id'> {
+  object: 'audience';
+}
 
 export interface CreateAudienceResponse {
   data: CreateAudienceResponseSuccess | null;

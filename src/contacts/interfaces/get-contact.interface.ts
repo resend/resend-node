@@ -7,7 +7,10 @@ export interface GetContactOptions {
 }
 
 export interface GetContactResponseSuccess
-  extends Pick<Contact, 'id' | 'name' | 'created_at'> {
+  extends Pick<
+    Contact,
+    'id' | 'email' | 'created_at' | 'first_name' | 'last_name' | 'unsubscribed'
+  > {
   object: 'contact';
 }
 

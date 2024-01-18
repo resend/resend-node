@@ -31,8 +31,7 @@ export class ApiKeys {
   }
 
   async list(): Promise<ListApiKeysResponse> {
-    const data =
-      await this.resend.get<ListApiKeysResponseSuccess[]>('/api-keys');
+    const data = await this.resend.get<ListApiKeysResponseSuccess>('/api-keys');
     return data;
   }
 
