@@ -3,10 +3,10 @@ import { Contact } from './contact';
 
 export interface UpdateContactOptions {
   id: string;
-  audience_id: string;
+  audienceId: string;
   unsubscribed?: boolean;
-  first_name?: string;
-  last_name?: string;
+  fistName?: string;
+  lastName?: string;
 }
 
 export type UpdateContactResponseSuccess = Pick<Contact, 'id'>;

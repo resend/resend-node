@@ -6,9 +6,11 @@ import {
   CreateEmailRequestOptions,
   CreateEmailResponse,
   CreateEmailResponseSuccess,
+} from './interfaces/create-email-options.interface';
+import {
   GetEmailResponse,
   GetEmailResponseSuccess,
-} from './interfaces';
+} from './interfaces/get-email-options.interface';
 
 export class Emails {
   constructor(private readonly resend: Resend) {}

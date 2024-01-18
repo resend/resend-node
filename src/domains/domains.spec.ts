@@ -1,8 +1,14 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
 import { DomainRegion } from './interfaces/domain';
-import { GetDomainResponseSuccess } from './interfaces';
 import { ErrorResponse } from '../interfaces';
+import { GetDomainResponseSuccess } from './interfaces/get-domain.interface';
+import {
+  CreateDomainOptions,
+  CreateDomainResponseSuccess,
+} from './interfaces/create-domain-options.interface';
+import { ListDomainsResponseSuccess } from './interfaces/list-domains.interface';
+import { RemoveDomainsResponseSuccess } from './interfaces/remove-domain.interface';
 
 enableFetchMocks();
 
@@ -11,68 +17,67 @@ describe('Domains', () => {
 
   describe('create', () => {
     it('creates a domain', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
-          id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
-          name: 'resend.com',
-          created_at: '2023-04-07T22:48:33.420498+00:00',
-          status: 'not_started',
-          records: [
-            {
-              record: 'SPF',
-              name: 'bounces',
-              type: 'MX',
-              ttl: 'Auto',
-              status: 'not_started',
-              value: 'feedback-smtp.us-east-1.com',
-              priority: 10,
-            },
-            {
-              record: 'SPF',
-              name: 'bounces',
-              value: '"v=spf1 include:com ~all"',
-              type: 'TXT',
-              ttl: 'Auto',
-              status: 'not_started',
-            },
-            {
-              record: 'DKIM',
-              name: 'nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey',
-              value: 'nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.',
-              type: 'CNAME',
-              status: 'not_started',
-              ttl: 'Auto',
-            },
-            {
-              record: 'DKIM',
-              name: 'qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey',
-              value: 'qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.',
-              type: 'CNAME',
-              status: 'not_started',
-              ttl: 'Auto',
-            },
-            {
-              record: 'DKIM',
-              name: 'eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey',
-              value: 'eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.',
-              type: 'CNAME',
-              status: 'not_started',
-              ttl: 'Auto',
-            },
-          ],
-          region: 'us-east-1',
-        }),
-        {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+      const response: CreateDomainResponseSuccess = {
+        id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+        name: 'resend.com',
+        created_at: '2023-04-07T22:48:33.420498+00:00',
+        status: 'not_started',
+        records: [
+          {
+            record: 'SPF',
+            name: 'bounces',
+            type: 'MX',
+            ttl: 'Auto',
+            status: 'not_started',
+            value: 'feedback-smtp.us-east-1.com',
+            priority: 10,
           },
+          {
+            record: 'SPF',
+            name: 'bounces',
+            value: '"v=spf1 include:com ~all"',
+            type: 'TXT',
+            ttl: 'Auto',
+            status: 'not_started',
+          },
+          {
+            record: 'DKIM',
+            name: 'nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey',
+            value: 'nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.',
+            type: 'CNAME',
+            status: 'not_started',
+            ttl: 'Auto',
+          },
+          {
+            record: 'DKIM',
+            name: 'qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey',
+            value: 'qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.',
+            type: 'CNAME',
+            status: 'not_started',
+            ttl: 'Auto',
+          },
+          {
+            record: 'DKIM',
+            name: 'eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey',
+            value: 'eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.',
+            type: 'CNAME',
+            status: 'not_started',
+            ttl: 'Auto',
+          },
+        ],
+        region: 'us-east-1',
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
-      );
+      });
+      const payload: CreateDomainOptions = { name: 'resend.com' };
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      await expect(resend.domains.create({ name: 'resend.com' })).resolves
+      await expect(resend.domains.create(payload)).resolves
         .toMatchInlineSnapshot(`
 {
   "data": {
@@ -131,12 +136,12 @@ describe('Domains', () => {
     });
 
     it('throws error when missing name', async () => {
-      const errorResponse: ErrorResponse = {
+      const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing "name" field',
       };
 
-      fetchMock.mockOnce(JSON.stringify(errorResponse), {
+      fetchMock.mockOnce(JSON.stringify(response), {
         status: 422,
         headers: {
           'content-type': 'application/json',
@@ -144,9 +149,13 @@ describe('Domains', () => {
         },
       });
 
+      const payload: CreateDomainOptions = {
+        name: '',
+      };
+
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const result = resend.domains.create({ name: '' });
+      const result = resend.domains.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
 {
@@ -161,63 +170,65 @@ describe('Domains', () => {
 
     describe('with region', () => {
       it('creates a domain with region', async () => {
-        fetchMock.mockOnce(
-          JSON.stringify({
-            id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
-            name: 'resend.com',
-            created_at: '2023-04-07T22:48:33.420498+00:00',
-            status: 'not_started',
-            records: [
-              {
-                record: 'SPF',
-                name: 'bounces',
-                type: 'MX',
-                ttl: 'Auto',
-                status: 'not_started',
-                value: 'feedback-smtp.eu-west-1.com',
-                priority: 10,
-              },
-              {
-                record: 'SPF',
-                name: 'bounces',
-                value: '"v=spf1 include:com ~all"',
-                type: 'TXT',
-                ttl: 'Auto',
-                status: 'not_started',
-              },
-              {
-                record: 'DKIM',
-                name: 'nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey',
-                value: 'nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.',
-                type: 'CNAME',
-                status: 'not_started',
-                ttl: 'Auto',
-              },
-              {
-                record: 'DKIM',
-                name: 'qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey',
-                value: 'qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.',
-                type: 'CNAME',
-                status: 'not_started',
-                ttl: 'Auto',
-              },
-              {
-                record: 'DKIM',
-                name: 'eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey',
-                value: 'eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.',
-                type: 'CNAME',
-                status: 'not_started',
-                ttl: 'Auto',
-              },
-            ],
-            region: 'eu-west-1',
-          }),
-        );
+        const response: CreateDomainResponseSuccess = {
+          id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+          name: 'resend.com',
+          created_at: '2023-04-07T22:48:33.420498+00:00',
+          status: 'not_started',
+          records: [
+            {
+              record: 'SPF',
+              name: 'bounces',
+              type: 'MX',
+              ttl: 'Auto',
+              status: 'not_started',
+              value: 'feedback-smtp.eu-west-1.com',
+              priority: 10,
+            },
+            {
+              record: 'SPF',
+              name: 'bounces',
+              value: '"v=spf1 include:com ~all"',
+              type: 'TXT',
+              ttl: 'Auto',
+              status: 'not_started',
+            },
+            {
+              record: 'DKIM',
+              name: 'nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey',
+              value: 'nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.',
+              type: 'CNAME',
+              status: 'not_started',
+              ttl: 'Auto',
+            },
+            {
+              record: 'DKIM',
+              name: 'qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey',
+              value: 'qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.',
+              type: 'CNAME',
+              status: 'not_started',
+              ttl: 'Auto',
+            },
+            {
+              record: 'DKIM',
+              name: 'eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey',
+              value: 'eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.',
+              type: 'CNAME',
+              status: 'not_started',
+              ttl: 'Auto',
+            },
+          ],
+          region: 'eu-west-1',
+        };
+        fetchMock.mockOnce(JSON.stringify(response));
+        const payload: CreateDomainOptions = {
+          name: 'resend.com',
+          region: 'eu-west-1',
+        };
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-        await expect(
-          resend.domains.create({ name: 'resend.com', region: 'eu-west-1' }),
-        ).resolves.toMatchInlineSnapshot(`
+        await expect(resend.domains.create(payload)).resolves
+          .toMatchInlineSnapshot(`
 {
   "data": {
     "created_at": "2023-04-07T22:48:33.420498+00:00",
@@ -310,56 +321,50 @@ describe('Domains', () => {
 
   describe('list', () => {
     it('lists domains', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
-          data: [
-            {
-              id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
-              name: 'resend.com',
-              status: 'not_started',
-              created_at: '2023-04-07T23:13:52.669661+00:00',
-              region: 'eu-west-1',
-            },
-            {
-              id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
-              name: 'react.email',
-              status: 'not_started',
-              created_at: '2023-04-07T23:13:20.417116+00:00',
-              region: 'us-east-1',
-            },
-          ],
-        }),
+      const response: ListDomainsResponseSuccess = [
         {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+          id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+          name: 'resend.com',
+          status: 'not_started',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          region: 'eu-west-1',
         },
-      );
+        {
+          id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
+          name: 'react.email',
+          status: 'not_started',
+          created_at: '2023-04-07T23:13:20.417116+00:00',
+          region: 'us-east-1',
+        },
+      ];
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.domains.list()).resolves.toMatchInlineSnapshot(`
 {
-  "data": {
-    "data": [
-      {
-        "created_at": "2023-04-07T23:13:52.669661+00:00",
-        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-        "name": "resend.com",
-        "region": "eu-west-1",
-        "status": "not_started",
-      },
-      {
-        "created_at": "2023-04-07T23:13:20.417116+00:00",
-        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-        "name": "react.email",
-        "region": "us-east-1",
-        "status": "not_started",
-      },
-    ],
-  },
+  "data": [
+    {
+      "created_at": "2023-04-07T23:13:52.669661+00:00",
+      "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+      "name": "resend.com",
+      "region": "eu-west-1",
+      "status": "not_started",
+    },
+    {
+      "created_at": "2023-04-07T23:13:20.417116+00:00",
+      "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
+      "name": "react.email",
+      "region": "us-east-1",
+      "status": "not_started",
+    },
+  ],
   "error": null,
 }
 `);
@@ -369,12 +374,12 @@ describe('Domains', () => {
   describe('get', () => {
     describe('when domain not found', () => {
       it('returns error', async () => {
-        const errorResponse: ErrorResponse = {
+        const response: ErrorResponse = {
           name: 'not_found',
           message: 'Domain not found',
         };
 
-        fetchMock.mockOnce(JSON.stringify(errorResponse), {
+        fetchMock.mockOnce(JSON.stringify(response), {
           status: 404,
           headers: {
             'content-type': 'application/json',
@@ -399,7 +404,7 @@ describe('Domains', () => {
     });
 
     it('get domain', async () => {
-      const domain: GetDomainResponseSuccess = {
+      const response: GetDomainResponseSuccess = {
         object: 'domain',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'resend.com',
@@ -436,7 +441,7 @@ describe('Domains', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(domain), {
+      fetchMock.mockOnce(JSON.stringify(response), {
         status: 200,
         headers: {
           'content-type': 'application/json',
@@ -514,7 +519,11 @@ describe('Domains', () => {
 
   describe('remove', () => {
     it('removes a domain', async () => {
-      fetchMock.mockOnce(JSON.stringify({}), {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      const response: RemoveDomainsResponseSuccess = {
+        id: id,
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
         status: 200,
         headers: {
           'content-type': 'application/json',
@@ -524,11 +533,11 @@ describe('Domains', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(
-        resend.domains.remove('5262504e-8ed7-4fac-bd16-0d4be94bc9f2'),
-      ).resolves.toMatchInlineSnapshot(`
+      await expect(resend.domains.remove(id)).resolves.toMatchInlineSnapshot(`
 {
-  "data": {},
+  "data": {
+    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+  },
   "error": null,
 }
 `);

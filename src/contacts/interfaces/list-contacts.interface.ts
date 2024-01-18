@@ -1,7 +1,14 @@
 import { ErrorResponse } from '../../interfaces';
 import { Contact } from './contact';
 
-export type ListContactsResponseSuccess = Contact[];
+export interface ListContactsOptions {
+  audienceId: string;
+}
+
+export interface ListContactsResponseSuccess {
+  object: 'list';
+  data: Contact[];
+}
 
 export interface ListContactsResponse {
   data: ListContactsResponseSuccess | null;

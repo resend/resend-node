@@ -4,11 +4,15 @@ import {
   CreateApiKeyRequestOptions,
   CreateApiKeyResponse,
   CreateApiKeyResponseSuccess,
+} from './interfaces/create-api-key-options.interface';
+import {
   ListApiKeysResponse,
   ListApiKeysResponseSuccess,
+} from './interfaces/list-api-keys.interface';
+import {
   RemoveApiKeyResponse,
   RemoveApiKeyResponseSuccess,
-} from './interfaces';
+} from './interfaces/remove-api-keys.interface';
 
 export class ApiKeys {
   constructor(private readonly resend: Resend) {}
@@ -27,8 +31,7 @@ export class ApiKeys {
   }
 
   async list(): Promise<ListApiKeysResponse> {
-    const data =
-      await this.resend.get<ListApiKeysResponseSuccess[]>('/api-keys');
+    const data = await this.resend.get<ListApiKeysResponseSuccess>('/api-keys');
     return data;
   }
 

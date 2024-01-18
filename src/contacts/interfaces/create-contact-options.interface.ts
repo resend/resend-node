@@ -3,17 +3,18 @@ import { ErrorResponse } from '../../interfaces';
 import { Contact } from './contact';
 
 export interface CreateContactOptions {
-  audience_id: string;
+  audienceId: string;
   email: string;
   unsubscribed?: boolean;
-  first_name?: string;
-  last_name?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface CreateContactRequestOptions extends PostOptions {}
 
-export interface CreateContactResponseSuccess
-  extends Pick<Contact, 'name' | 'id' | 'created_at'> {}
+export interface CreateContactResponseSuccess extends Pick<Contact, 'id'> {
+  object: 'contact';
+}
 
 export interface CreateContactResponse {
   data: CreateContactResponseSuccess | null;

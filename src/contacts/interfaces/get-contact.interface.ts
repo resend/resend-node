@@ -1,8 +1,16 @@
 import { ErrorResponse } from '../../interfaces';
 import { Contact } from './contact';
 
+export interface GetContactOptions {
+  audienceId: string;
+  id: string;
+}
+
 export interface GetContactResponseSuccess
-  extends Pick<Contact, 'id' | 'name' | 'created_at'> {
+  extends Pick<
+    Contact,
+    'id' | 'email' | 'created_at' | 'first_name' | 'last_name' | 'unsubscribed'
+  > {
   object: 'contact';
 }
 
