@@ -321,22 +321,24 @@ describe('Domains', () => {
 
   describe('list', () => {
     it('lists domains', async () => {
-      const response: ListDomainsResponseSuccess = [
-        {
-          id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
-          name: 'resend.com',
-          status: 'not_started',
-          created_at: '2023-04-07T23:13:52.669661+00:00',
-          region: 'eu-west-1',
-        },
-        {
-          id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
-          name: 'react.email',
-          status: 'not_started',
-          created_at: '2023-04-07T23:13:20.417116+00:00',
-          region: 'us-east-1',
-        },
-      ];
+      const response: ListDomainsResponseSuccess = {
+        data: [
+          {
+            id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+            name: 'resend.com',
+            status: 'not_started',
+            created_at: '2023-04-07T23:13:52.669661+00:00',
+            region: 'eu-west-1',
+          },
+          {
+            id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
+            name: 'react.email',
+            status: 'not_started',
+            created_at: '2023-04-07T23:13:20.417116+00:00',
+            region: 'us-east-1',
+          },
+        ],
+      };
       fetchMock.mockOnce(JSON.stringify(response), {
         status: 200,
         headers: {
@@ -349,22 +351,24 @@ describe('Domains', () => {
 
       await expect(resend.domains.list()).resolves.toMatchInlineSnapshot(`
 {
-  "data": [
-    {
-      "created_at": "2023-04-07T23:13:52.669661+00:00",
-      "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-      "name": "resend.com",
-      "region": "eu-west-1",
-      "status": "not_started",
-    },
-    {
-      "created_at": "2023-04-07T23:13:20.417116+00:00",
-      "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-      "name": "react.email",
-      "region": "us-east-1",
-      "status": "not_started",
-    },
-  ],
+  "data": {
+    "data": [
+      {
+        "created_at": "2023-04-07T23:13:52.669661+00:00",
+        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+        "name": "resend.com",
+        "region": "eu-west-1",
+        "status": "not_started",
+      },
+      {
+        "created_at": "2023-04-07T23:13:20.417116+00:00",
+        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
+        "name": "react.email",
+        "region": "us-east-1",
+        "status": "not_started",
+      },
+    ],
+  },
   "error": null,
 }
 `);
