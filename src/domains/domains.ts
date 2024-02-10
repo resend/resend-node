@@ -59,7 +59,7 @@ export class Domains {
       `/domains/${payload.id}`,
       {
         click_tracking: payload.click_tracking,
-        domain_tracking: payload.domain_tracking,
+        open_tracking: payload.open_tracking,
       },
     );
     return data;
