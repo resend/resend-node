@@ -500,7 +500,7 @@ describe('Domains', () => {
   });
 
   describe('patch', () => {
-    it('oatch domain click tracking', async () => {
+    it('patch domain click tracking', async () => {
       const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
       const response: PatchDomainsResponseSuccess = {
         object: 'domain',
