@@ -9,6 +9,7 @@ import {
 } from './interfaces/create-domain-options.interface';
 import { ListDomainsResponseSuccess } from './interfaces/list-domains.interface';
 import { RemoveDomainsResponseSuccess } from './interfaces/remove-domain.interface';
+import { PatchDomainsResponseSuccess } from './interfaces/patch-domain.interface';
 
 enableFetchMocks();
 
@@ -498,6 +499,41 @@ describe('Domains', () => {
     });
   });
 
+  describe('patch', () => {
+    it('oatch domain click tracking', async () => {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      const response: PatchDomainsResponseSuccess = {
+        object: 'domain',
+        id,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.domains.patch({
+          id,
+          click_tracking: true,
+        }),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+    "object": "domain",
+  },
+  "error": null,
+}
+`);
+    });
+  });
+
   describe('verify', () => {
     it('verifies a domain', async () => {
       fetchMock.mockOnce(JSON.stringify({}), {
@@ -525,7 +561,7 @@ describe('Domains', () => {
     it('removes a domain', async () => {
       const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
       const response: RemoveDomainsResponseSuccess = {
-        id: id,
+        id,
       };
       fetchMock.mockOnce(JSON.stringify(response), {
         status: 200,

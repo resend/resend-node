@@ -14,6 +14,11 @@ import {
   ListDomainsResponseSuccess,
 } from './interfaces/list-domains.interface';
 import {
+  PatchDomainsOptions,
+  PatchDomainsResponse,
+  PatchDomainsResponseSuccess,
+} from './interfaces/patch-domain.interface';
+import {
   RemoveDomainsResponse,
   RemoveDomainsResponseSuccess,
 } from './interfaces/remove-domain.interface';
@@ -45,6 +50,17 @@ export class Domains {
   async get(id: string): Promise<GetDomainResponse> {
     const data = await this.resend.get<GetDomainResponseSuccess>(
       `/domains/${id}`,
+    );
+    return data;
+  }
+
+  async patch(payload: PatchDomainsOptions): Promise<PatchDomainsResponse> {
+    const data = await this.resend.patch<PatchDomainsResponseSuccess>(
+      `/domains/${payload.id}`,
+      {
+        click_tracking: payload.click_tracking,
+        domain_tracking: payload.domain_tracking,
+      },
     );
     return data;
   }
