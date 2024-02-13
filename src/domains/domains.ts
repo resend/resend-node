@@ -14,10 +14,10 @@ import {
   ListDomainsResponseSuccess,
 } from './interfaces/list-domains.interface';
 import {
-  PatchDomainsOptions,
-  PatchDomainsResponse,
-  PatchDomainsResponseSuccess,
-} from './interfaces/patch-domain.interface';
+  UpdateDomainsOptions,
+  UpdateDomainsResponse,
+  UpdateDomainsResponseSuccess,
+} from './interfaces/update-domain.interface';
 import {
   RemoveDomainsResponse,
   RemoveDomainsResponseSuccess,
@@ -54,8 +54,8 @@ export class Domains {
     return data;
   }
 
-  async patch(payload: PatchDomainsOptions): Promise<PatchDomainsResponse> {
-    const data = await this.resend.patch<PatchDomainsResponseSuccess>(
+  async update(payload: UpdateDomainsOptions): Promise<UpdateDomainsResponse> {
+    const data = await this.resend.patch<UpdateDomainsResponseSuccess>(
       `/domains/${payload.id}`,
       {
         click_tracking: payload.clickTracking,

@@ -9,7 +9,7 @@ import {
 } from './interfaces/create-domain-options.interface';
 import { ListDomainsResponseSuccess } from './interfaces/list-domains.interface';
 import { RemoveDomainsResponseSuccess } from './interfaces/remove-domain.interface';
-import { PatchDomainsResponseSuccess } from './interfaces/patch-domain.interface';
+import { UpdateDomainsResponseSuccess } from './interfaces/update-domain.interface';
 
 enableFetchMocks();
 
@@ -499,10 +499,10 @@ describe('Domains', () => {
     });
   });
 
-  describe('patch', () => {
-    it('patch domain click tracking', async () => {
+  describe('update', () => {
+    it('update domain click tracking', async () => {
       const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
-      const response: PatchDomainsResponseSuccess = {
+      const response: UpdateDomainsResponseSuccess = {
         object: 'domain',
         id,
       };
@@ -518,7 +518,7 @@ describe('Domains', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(
-        resend.domains.patch({
+        resend.domains.update({
           id,
           clickTracking: true,
         }),

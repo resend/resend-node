@@ -1,17 +1,17 @@
 import { ErrorResponse } from '../../interfaces';
 import { Domain } from './domain';
 
-export interface PatchDomainsOptions {
+export interface UpdateDomainsOptions {
   id: string;
   clickTracking?: boolean;
   openTracking?: boolean;
 }
 
-export type PatchDomainsResponseSuccess = Pick<Domain, 'id'> & {
+export type UpdateDomainsResponseSuccess = Pick<Domain, 'id'> & {
   object: 'domain';
 };
 
-export interface PatchDomainsResponse {
-  data: PatchDomainsResponseSuccess | null;
+export interface UpdateDomainsResponse {
+  data: UpdateDomainsResponseSuccess | null;
   error: ErrorResponse | null;
 }
