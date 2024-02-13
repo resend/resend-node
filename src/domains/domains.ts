@@ -58,8 +58,8 @@ export class Domains {
     const data = await this.resend.patch<PatchDomainsResponseSuccess>(
       `/domains/${payload.id}`,
       {
-        click_tracking: payload.click_tracking,
-        open_tracking: payload.open_tracking,
+        click_tracking: payload.clickTracking,
+        open_tracking: payload.openTracking,
       },
     );
     return data;
