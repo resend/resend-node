@@ -3,8 +3,8 @@ import { Domain } from './domain';
 
 export interface PatchDomainsOptions {
   id: string;
-  click_tracking?: boolean;
-  open_tracking?: boolean;
+  clickTracking?: boolean;
+  openTracking?: boolean;
 }
 
 export type PatchDomainsResponseSuccess = Pick<Domain, 'id'> & {

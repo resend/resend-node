@@ -520,7 +520,7 @@ describe('Domains', () => {
       await expect(
         resend.domains.patch({
           id,
-          click_tracking: true,
+          clickTracking: true,
         }),
       ).resolves.toMatchInlineSnapshot(`
 {
