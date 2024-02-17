@@ -65,7 +65,7 @@ export class Contacts {
       `/audiences/${payload.audienceId}/contacts/${payload.id}`,
       {
         unsubscribed: payload.unsubscribed,
-        first_name: payload.fistName,
+        first_name: payload.firstName,
         last_name: payload.lastName,
       },
     );

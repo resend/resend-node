@@ -5,7 +5,7 @@ export interface UpdateContactOptions {
   id: string;
   audienceId: string;
   unsubscribed?: boolean;
-  fistName?: string;
+  firstName?: string;
   lastName?: string;
 }
 
