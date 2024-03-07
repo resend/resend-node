@@ -58,12 +58,25 @@ export class Resend {
     const response = await fetch(`${baseUrl}${path}`, options);
 
     if (!response.ok) {
-      const error = await response.json();
-      if (isResendErrorResponse(error)) {
+      let error: ErrorResponse = {
+        message: response.statusText,
+        name: 'application_error',
+      };
+
+      try {
+        error = await response.json();
+        if (isResendErrorResponse(error)) {
+          return { data: null, error };
+        }
+
+        return { data: null, error };
+      } catch (err) {
+        if (err instanceof Error) {
+          return { data: null, error: { ...error, message: err.message } };
+        }
+
         return { data: null, error };
       }
-
-      return { data: null, error };
     }
 
     const data = await response.json();
