@@ -71,7 +71,11 @@ export class Resend {
 
         return { data: null, error };
       } catch (err) {
-        return { data: null, error: { ...error } };
+        if (err instanceof Error) {
+          return { data: null, error: { ...error, message: err.message } };
+        }
+
+        return { data: null, error };
       }
     }
 
