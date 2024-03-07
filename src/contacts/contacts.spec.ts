@@ -239,7 +239,7 @@ describe('Contacts', () => {
       const payload: UpdateContactOptions = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
         audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
-        fistName: 'Bu',
+        firstName: 'Bu',
       };
       const response = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
