@@ -84,7 +84,7 @@ interface CreateEmailBaseOptions extends EmailRenderOptions {
 export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions> &
   CreateEmailBaseOptions;
 
-export interface CreateEmailRequestOptions extends PostOptions { }
+export interface CreateEmailRequestOptions extends PostOptions {}
 
 export interface CreateEmailResponseSuccess {
   /** The ID of the newly created email. */
