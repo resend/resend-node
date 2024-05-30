@@ -243,6 +243,7 @@ describe('Contacts', () => {
       };
       const response = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+        object: 'contact',
       };
       fetchMock.mockOnce(JSON.stringify(response), {
         status: 200,
@@ -259,6 +260,7 @@ describe('Contacts', () => {
 {
   "data": {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+    "object": "contact",
   },
   "error": null,
 }
