@@ -561,7 +561,9 @@ describe('Domains', () => {
     it('removes a domain', async () => {
       const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
       const response: RemoveDomainsResponseSuccess = {
+        object: 'domain',
         id,
+        deleted: true,
       };
       fetchMock.mockOnce(JSON.stringify(response), {
         status: 200,
@@ -576,7 +578,9 @@ describe('Domains', () => {
       await expect(resend.domains.remove(id)).resolves.toMatchInlineSnapshot(`
 {
   "data": {
+    "deleted": true,
     "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+    "object": "domain",
   },
   "error": null,
 }
