@@ -1,3 +1,3 @@
 export interface PostOptions {
-  query?: { [key: string]: any };
+  query?: { [key: string]: unknown };
 }

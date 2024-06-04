@@ -104,7 +104,7 @@ export class Resend {
     return this.fetchRequest<T>(path, requestOptions);
   }
 
-  async put<T>(path: string, entity: any, options: PutOptions = {}) {
+  async put<T>(path: string, entity: unknown, options: PutOptions = {}) {
     const requestOptions = {
       method: 'PUT',
       headers: this.headers,
@@ -115,7 +115,7 @@ export class Resend {
     return this.fetchRequest<T>(path, requestOptions);
   }
 
-  async patch<T>(path: string, entity: any, options: PatchOptions = {}) {
+  async patch<T>(path: string, entity: unknown, options: PatchOptions = {}) {
     const requestOptions = {
       method: 'PATCH',
       headers: this.headers,

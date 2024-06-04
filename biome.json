@@ -16,14 +16,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
-      "suspicious": {
-        "noControlCharactersInRegex": "off",
-        "noExplicitAny": "off"
-      },
-      "style": {
-        "noParameterAssign": "off"
-      }
+      "recommended": true
     }
   },
   "files": {
