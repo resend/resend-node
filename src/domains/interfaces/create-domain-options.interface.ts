@@ -1,6 +1,6 @@
-import { PostOptions } from '../../common/interfaces';
-import { ErrorResponse } from '../../interfaces';
-import { Domain, DomainRecords, DomainRegion } from './domain';
+import type { PostOptions } from '../../common/interfaces';
+import type { ErrorResponse } from '../../interfaces';
+import type { Domain, DomainRecords, DomainRegion } from './domain';
 
 export interface CreateDomainOptions {
   name: string;

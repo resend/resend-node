@@ -1,7 +1,7 @@
 import { renderAsync } from '@react-email/render';
-import * as React from 'react';
-import { Resend } from '../resend';
-import {
+import type * as React from 'react';
+import type { Resend } from '../resend';
+import type {
   CreateBatchOptions,
   CreateBatchRequestOptions,
   CreateBatchResponse,
@@ -25,6 +25,7 @@ export class Batch {
     for (const email of payload) {
       if (email.react) {
         email.html = await renderAsync(email.react as React.ReactElement);
+        // biome-ignore lint/performance/noDelete: <explanation>
         delete email.react;
       }
     }

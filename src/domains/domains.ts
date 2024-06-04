@@ -1,28 +1,28 @@
-import { Resend } from '../resend';
-import {
+import type { Resend } from '../resend';
+import type {
   CreateDomainOptions,
   CreateDomainRequestOptions,
   CreateDomainResponse,
   CreateDomainResponseSuccess,
 } from './interfaces/create-domain-options.interface';
-import {
+import type {
   GetDomainResponse,
   GetDomainResponseSuccess,
 } from './interfaces/get-domain.interface';
-import {
+import type {
   ListDomainsResponse,
   ListDomainsResponseSuccess,
 } from './interfaces/list-domains.interface';
-import {
+import type {
+  RemoveDomainsResponse,
+  RemoveDomainsResponseSuccess,
+} from './interfaces/remove-domain.interface';
+import type {
   UpdateDomainsOptions,
   UpdateDomainsResponse,
   UpdateDomainsResponseSuccess,
 } from './interfaces/update-domain.interface';
-import {
-  RemoveDomainsResponse,
-  RemoveDomainsResponseSuccess,
-} from './interfaces/remove-domain.interface';
-import {
+import type {
   VerifyDomainsResponse,
   VerifyDomainsResponseSuccess,
 } from './interfaces/verify-domain.interface';

@@ -2,13 +2,13 @@ import { version } from '../package.json';
 import { ApiKeys } from './api-keys/api-keys';
 import { Audiences } from './audiences/audiences';
 import { Batch } from './batch/batch';
-import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
-import { PatchOptions } from './common/interfaces/patch-option.interface';
+import type { GetOptions, PostOptions, PutOptions } from './common/interfaces';
+import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import { isResendErrorResponse } from './guards';
-import { ErrorResponse } from './interfaces';
+import type { ErrorResponse } from './interfaces';
 
 const defaultBaseUrl = 'https://api.resend.com';
 const defaultUserAgent = `resend-node:${version}`;

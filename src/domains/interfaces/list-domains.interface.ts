@@ -1,5 +1,5 @@
-import { ErrorResponse } from '../../interfaces';
-import { Domain } from './domain';
+import type { ErrorResponse } from '../../interfaces';
+import type { Domain } from './domain';
 
 export type ListDomainsResponseSuccess = { data: Domain[] };
 

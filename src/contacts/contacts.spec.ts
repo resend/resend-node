@@ -1,23 +1,23 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
+import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
-import { ErrorResponse } from '../interfaces';
-import {
-  GetContactOptions,
-  GetContactResponseSuccess,
-} from './interfaces/get-contact.interface';
-import {
+import type {
   CreateContactOptions,
   CreateContactResponseSuccess,
 } from './interfaces/create-contact-options.interface';
-import {
+import type {
+  GetContactOptions,
+  GetContactResponseSuccess,
+} from './interfaces/get-contact.interface';
+import type {
   ListContactsOptions,
   ListContactsResponseSuccess,
 } from './interfaces/list-contacts.interface';
-import { UpdateContactOptions } from './interfaces/update-contact.interface';
-import {
+import type {
   RemoveContactOptions,
   RemoveContactsResponseSuccess,
 } from './interfaces/remove-contact.interface';
+import type { UpdateContactOptions } from './interfaces/update-contact.interface';
 
 enableFetchMocks();
 
@@ -44,8 +44,9 @@ describe('Contacts', () => {
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      await expect(resend.contacts.create(payload)).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.contacts.create(payload),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
@@ -126,8 +127,9 @@ describe('Contacts', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.contacts.list(options)).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.contacts.list(options),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "data": [
@@ -216,8 +218,9 @@ describe('Contacts', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
         audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
       };
-      await expect(resend.contacts.get(options)).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.contacts.get(options),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "created_at": "2024-01-16T18:12:26.514Z",
@@ -255,8 +258,9 @@ describe('Contacts', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.contacts.update(payload)).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.contacts.update(payload),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
@@ -288,8 +292,9 @@ describe('Contacts', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
         audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
       };
-      await expect(resend.contacts.remove(options)).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.contacts.remove(options),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "contact": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
@@ -320,8 +325,9 @@ describe('Contacts', () => {
         email: 'acme@example.com',
         audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
       };
-      await expect(resend.contacts.remove(options)).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.contacts.remove(options),
+      ).resolves.toMatchInlineSnapshot(`
   {
     "data": {
       "contact": "acme@example.com",
