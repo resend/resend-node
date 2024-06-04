@@ -10,6 +10,7 @@ import {
 import { ListDomainsResponseSuccess } from './interfaces/list-domains.interface';
 import { RemoveDomainsResponseSuccess } from './interfaces/remove-domain.interface';
 import { UpdateDomainsResponseSuccess } from './interfaces/update-domain.interface';
+import { VerifyDomainsResponseSuccess } from './interfaces/verify-domain.interface';
 
 enableFetchMocks();
 
@@ -536,7 +537,12 @@ describe('Domains', () => {
 
   describe('verify', () => {
     it('verifies a domain', async () => {
-      fetchMock.mockOnce(JSON.stringify({}), {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      const response: VerifyDomainsResponseSuccess = {
+        object: 'domain',
+        id,
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
         status: 200,
         headers: {
           'content-type': 'application/json',
@@ -546,11 +552,12 @@ describe('Domains', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(
-        resend.domains.verify('5262504e-8ed7-4fac-bd16-0d4be94bc9f2'),
-      ).resolves.toMatchInlineSnapshot(`
+      await expect(resend.domains.verify(id)).resolves.toMatchInlineSnapshot(`
 {
-  "data": {},
+  "data": {
+    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+    "object": "domain",
+  },
   "error": null,
 }
 `);
