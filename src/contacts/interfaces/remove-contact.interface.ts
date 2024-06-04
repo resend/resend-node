@@ -10,13 +10,13 @@ interface RemoveByOptions {
   /**
    * The contact id.
    *
-   * @link https://resend.com/api-reference/contacts/delete-contact#body-parameters
+   * @link https://resend.com/docs/api-reference/contacts/delete-contact#body-parameters
    */
   id?: string;
   /**
    * The contact email.
    *
-   * @link https://resend.com/api-reference/contacts/delete-contact#body-parameters
+   * @link https://resend.com/docs/api-reference/contacts/delete-contact#body-parameters
    */
   email?: string;
 }

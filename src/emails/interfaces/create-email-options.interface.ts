@@ -7,19 +7,19 @@ interface EmailRenderOptions {
   /**
    * The React component used to write the message.
    *
-   * @link https://resend.com/api-reference/emails/send-email#body-parameters
+   * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
   react?: React.ReactElement | React.ReactNode | null;
   /**
    * The HTML version of the message.
    *
-   * @link https://resend.com/api-reference/emails/send-email#body-parameters
+   * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
   html?: string;
   /**
    * The plain text version of the message.
    *
-   * @link https://resend.com/api-reference/emails/send-email#body-parameters
+   * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
   text?: string;
 }
