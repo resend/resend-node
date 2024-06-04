@@ -9,7 +9,9 @@ export interface UpdateContactOptions {
   lastName?: string;
 }
 
-export type UpdateContactResponseSuccess = Pick<Contact, 'id'>;
+export type UpdateContactResponseSuccess = Pick<Contact, 'id'> & {
+  object: 'contact';
+};
 
 export interface UpdateContactResponse {
   data: UpdateContactResponseSuccess | null;
