@@ -60,6 +60,7 @@ export class Domains {
       {
         click_tracking: payload.clickTracking,
         open_tracking: payload.openTracking,
+        tls: payload.tls,
       },
     );
     return data;

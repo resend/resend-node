@@ -5,6 +5,7 @@ export interface UpdateDomainsOptions {
   id: string;
   clickTracking?: boolean;
   openTracking?: boolean;
+  tls?: boolean
 }
 
 export type UpdateDomainsResponseSuccess = Pick<Domain, 'id'> & {
