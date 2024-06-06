@@ -2,7 +2,7 @@ import { ErrorResponse } from '../../interfaces';
 import { Domain } from './domain';
 
 export type RemoveDomainsResponseSuccess = Pick<Domain, 'id'> & {
-  object: 'domain',
+  object: 'domain';
   deleted: boolean;
 };
 
