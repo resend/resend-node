@@ -7,7 +7,13 @@ export interface GetEmailResponseSuccess {
   from: string;
   html: string | null;
   id: string;
-  last_event: string;
+  last_event:
+    | 'delivered'
+    | 'opened'
+    | 'clicked'
+    | 'bounced'
+    | 'complained'
+    | 'delivery_delayed';
   reply_to: string[] | null;
   subject: string;
   text: string | null;
