@@ -1,5 +1,5 @@
-import { ErrorResponse } from '../../interfaces';
-import { Audience } from './audience';
+import type { ErrorResponse } from '../../interfaces';
+import type { Audience } from './audience';
 
 export interface GetAudienceResponseSuccess
   extends Pick<Audience, 'id' | 'name' | 'created_at'> {

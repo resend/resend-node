@@ -1,4 +1,4 @@
-import { ErrorResponse } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 
 export interface GetEmailResponseSuccess {
   bcc: string[] | null;

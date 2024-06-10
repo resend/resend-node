@@ -1,3 +1,3 @@
 export interface PutOptions {
-  query?: { [key: string]: any };
+  query?: { [key: string]: unknown };
 }

@@ -1,13 +1,13 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
+import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
-import { ErrorResponse } from '../interfaces';
-import { GetAudienceResponseSuccess } from './interfaces/get-audience.interface';
-import {
+import type {
   CreateAudienceOptions,
   CreateAudienceResponseSuccess,
 } from './interfaces/create-audience-options.interface';
-import { ListAudiencesResponseSuccess } from './interfaces/list-audiences.interface';
-import { RemoveAudiencesResponseSuccess } from './interfaces/remove-audience.interface';
+import type { GetAudienceResponseSuccess } from './interfaces/get-audience.interface';
+import type { ListAudiencesResponseSuccess } from './interfaces/list-audiences.interface';
+import type { RemoveAudiencesResponseSuccess } from './interfaces/remove-audience.interface';
 
 enableFetchMocks();
 
@@ -32,8 +32,9 @@ describe('Audiences', () => {
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      await expect(resend.audiences.create(payload)).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.audiences.create(payload),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
@@ -176,8 +177,9 @@ describe('Audiences', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.audiences.get('1234')).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.audiences.get('1234'),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "created_at": "2023-06-21T06:10:36.144Z",

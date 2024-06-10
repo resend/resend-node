@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { PostOptions } from '../../common/interfaces';
-import { ErrorResponse } from '../../interfaces';
-import { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
+import type * as React from 'react';
+import type { PostOptions } from '../../common/interfaces';
+import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
+import type { ErrorResponse } from '../../interfaces';
 
 interface EmailRenderOptions {
   /**

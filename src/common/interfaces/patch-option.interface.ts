@@ -1,3 +1,3 @@
 export interface PatchOptions {
-  query?: { [key: string]: any };
+  query?: { [key: string]: unknown };
 }

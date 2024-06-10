@@ -1,11 +1,11 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
+import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
-import { ErrorResponse } from '../interfaces';
-import { GetEmailResponseSuccess } from './interfaces/get-email-options.interface';
-import {
+import type {
   CreateEmailOptions,
   CreateEmailResponseSuccess,
 } from './interfaces/create-email-options.interface';
+import type { GetEmailResponseSuccess } from './interfaces/get-email-options.interface';
 
 enableFetchMocks();
 
@@ -328,8 +328,9 @@ describe('Emails', () => {
           },
         });
 
-        await expect(resend.emails.get('67d9bcdb-5a02-42d7-8da9-0d6feea18cff'))
-          .resolves.toMatchInlineSnapshot(`
+        await expect(
+          resend.emails.get('67d9bcdb-5a02-42d7-8da9-0d6feea18cff'),
+        ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "bcc": null,
@@ -376,8 +377,9 @@ describe('Emails', () => {
           },
         });
 
-        await expect(resend.emails.get('67d9bcdb-5a02-42d7-8da9-0d6feea18cff'))
-          .resolves.toMatchInlineSnapshot(`
+        await expect(
+          resend.emails.get('67d9bcdb-5a02-42d7-8da9-0d6feea18cff'),
+        ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "bcc": null,

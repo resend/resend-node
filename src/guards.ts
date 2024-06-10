@@ -1,4 +1,4 @@
-import { ErrorResponse, RESEND_ERROR_CODES_BY_KEY } from './interfaces';
+import { type ErrorResponse, RESEND_ERROR_CODES_BY_KEY } from './interfaces';
 
 export const isResendErrorResponse = (
   response: unknown,

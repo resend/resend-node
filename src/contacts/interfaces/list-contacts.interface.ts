@@ -1,5 +1,5 @@
-import { ErrorResponse } from '../../interfaces';
-import { Contact } from './contact';
+import type { ErrorResponse } from '../../interfaces';
+import type { Contact } from './contact';
 
 export interface ListContactsOptions {
   audienceId: string;

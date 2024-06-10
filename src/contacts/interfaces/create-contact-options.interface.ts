@@ -1,6 +1,6 @@
-import { PostOptions } from '../../common/interfaces';
-import { ErrorResponse } from '../../interfaces';
-import { Contact } from './contact';
+import type { PostOptions } from '../../common/interfaces';
+import type { ErrorResponse } from '../../interfaces';
+import type { Contact } from './contact';
 
 export interface CreateContactOptions {
   audienceId: string;

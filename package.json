@@ -5,9 +5,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist/**"
-  ],
+  "files": ["dist/**"],
   "engines": {
     "node": ">=18"
   },
@@ -27,9 +25,10 @@
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "test": "jest",
     "test:watch": "jest --watch",
-    "lint": "eslint --fix --ext .ts ./src",
-    "format:check": "prettier --check \"**/*.{ts,tsx}\"",
-    "format": "prettier --write .",
+    "format:apply": "biome check --apply .",
+    "format:check": "biome format .",
+    "format": "biome format --write .",
+    "lint": "biome check .",
     "prepublishOnly": "yarn run build"
   },
   "repository": {
@@ -46,15 +45,12 @@
     "@react-email/render": "0.0.15"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.0",
     "@types/jest": "29.5.12",
     "@types/node": "18.19.34",
     "@types/react": "18.3.3",
-    "@typescript-eslint/eslint-plugin": "7.13.0",
-    "@typescript-eslint/parser": "7.13.0",
-    "eslint": "8.57.0",
     "jest": "29.7.0",
     "jest-fetch-mock": "3.0.3",
-    "prettier": "3.3.1",
     "ts-jest": "29.1.4",
     "ts-node": "10.9.2",
     "tsup": "7.2.0",
