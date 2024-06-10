@@ -23,7 +23,7 @@
       }
     }
   },
-  "packageManager": "yarn@3.8.2",
+  "packageManager": "yarn@4.3.0",
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "test": "jest",
