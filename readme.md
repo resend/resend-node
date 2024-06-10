@@ -61,9 +61,7 @@ Start by creating your email template as a React component.
 ```jsx
 import React from 'react';
 
-export default function EmailTemplate(props) {
-  const { firstName, product } = props;
-
+export default function EmailTemplate({ firstName, product }) {
   return (
     <div>
       <h1>Welcome, {firstName}!</h1>
