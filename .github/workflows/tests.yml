@@ -54,7 +54,7 @@ jobs:
       - name: pnpm setup
         uses: pnpm/action-setup@v3
       - name: Install packages
-        run: pnpm
+        run: pnpm install
       - name: Check for pinned dependencies
         run: |
           node -e '
