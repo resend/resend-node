@@ -1,3 +1,3 @@
 export interface GetOptions {
-  query?: Record<string, any>;
+  query?: Record<string, unknown>;
 }

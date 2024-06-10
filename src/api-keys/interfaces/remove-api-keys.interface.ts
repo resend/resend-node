@@ -1,6 +1,7 @@
-import { ErrorResponse } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 
-export interface RemoveApiKeyResponseSuccess {}
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
+export type RemoveApiKeyResponseSuccess = {};
 
 export interface RemoveApiKeyResponse {
   data: RemoveApiKeyResponseSuccess | null;

@@ -1,16 +1,16 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
+import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
-import { DomainRegion } from './interfaces/domain';
-import { ErrorResponse } from '../interfaces';
-import { GetDomainResponseSuccess } from './interfaces/get-domain.interface';
-import {
+import type {
   CreateDomainOptions,
   CreateDomainResponseSuccess,
 } from './interfaces/create-domain-options.interface';
-import { ListDomainsResponseSuccess } from './interfaces/list-domains.interface';
-import { RemoveDomainsResponseSuccess } from './interfaces/remove-domain.interface';
-import { UpdateDomainsResponseSuccess } from './interfaces/update-domain.interface';
-import { VerifyDomainsResponseSuccess } from './interfaces/verify-domain.interface';
+import type { DomainRegion } from './interfaces/domain';
+import type { GetDomainResponseSuccess } from './interfaces/get-domain.interface';
+import type { ListDomainsResponseSuccess } from './interfaces/list-domains.interface';
+import type { RemoveDomainsResponseSuccess } from './interfaces/remove-domain.interface';
+import type { UpdateDomainsResponseSuccess } from './interfaces/update-domain.interface';
+import type { VerifyDomainsResponseSuccess } from './interfaces/verify-domain.interface';
 
 enableFetchMocks();
 
@@ -79,8 +79,9 @@ describe('Domains', () => {
       const payload: CreateDomainOptions = { name: 'resend.com' };
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      await expect(resend.domains.create(payload)).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.domains.create(payload),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "created_at": "2023-04-07T22:48:33.420498+00:00",
@@ -229,8 +230,9 @@ describe('Domains', () => {
         };
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-        await expect(resend.domains.create(payload)).resolves
-          .toMatchInlineSnapshot(`
+        await expect(
+          resend.domains.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "created_at": "2023-04-07T22:48:33.420498+00:00",

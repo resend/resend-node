@@ -1,19 +1,19 @@
-import { Resend } from '../resend';
-import {
+import type { Resend } from '../resend';
+import type {
   CreateAudienceOptions,
   CreateAudienceRequestOptions,
   CreateAudienceResponse,
   CreateAudienceResponseSuccess,
 } from './interfaces/create-audience-options.interface';
-import {
+import type {
   GetAudienceResponse,
   GetAudienceResponseSuccess,
 } from './interfaces/get-audience.interface';
-import {
+import type {
   ListAudiencesResponse,
   ListAudiencesResponseSuccess,
 } from './interfaces/list-audiences.interface';
-import {
+import type {
   RemoveAudiencesResponse,
   RemoveAudiencesResponseSuccess,
 } from './interfaces/remove-audience.interface';

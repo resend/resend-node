@@ -1,15 +1,15 @@
-import { Resend } from '../resend';
-import {
+import type { Resend } from '../resend';
+import type {
   CreateApiKeyOptions,
   CreateApiKeyRequestOptions,
   CreateApiKeyResponse,
   CreateApiKeyResponseSuccess,
 } from './interfaces/create-api-key-options.interface';
-import {
+import type {
   ListApiKeysResponse,
   ListApiKeysResponseSuccess,
 } from './interfaces/list-api-keys.interface';
-import {
+import type {
   RemoveApiKeyResponse,
   RemoveApiKeyResponseSuccess,
 } from './interfaces/remove-api-keys.interface';

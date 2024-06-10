@@ -1,6 +1,6 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
-import {
+import type {
   CreateBatchOptions,
   CreateBatchSuccessResponse,
 } from './interfaces/create-batch-options.interface';

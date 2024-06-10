@@ -1,12 +1,12 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
+import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
-import { ErrorResponse } from '../interfaces';
-import {
+import type {
   CreateApiKeyOptions,
   CreateApiKeyResponseSuccess,
 } from './interfaces/create-api-key-options.interface';
-import { ListApiKeysResponseSuccess } from './interfaces/list-api-keys.interface';
-import { RemoveApiKeyResponseSuccess } from './interfaces/remove-api-keys.interface';
+import type { ListApiKeysResponseSuccess } from './interfaces/list-api-keys.interface';
+import type { RemoveApiKeyResponseSuccess } from './interfaces/remove-api-keys.interface';
 
 enableFetchMocks();
 
@@ -33,8 +33,9 @@ describe('API Keys', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.apiKeys.create(payload)).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.apiKeys.create(payload),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "id": "430eed87-632a-4ea6-90db-0aace67ec228",
@@ -99,8 +100,9 @@ describe('API Keys', () => {
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-        await expect(resend.apiKeys.create(payload)).resolves
-          .toMatchInlineSnapshot(`
+        await expect(
+          resend.apiKeys.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "id": "430eed87-632a-4ea6-90db-0aace67ec228",
@@ -131,8 +133,9 @@ describe('API Keys', () => {
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-        await expect(resend.apiKeys.create(payload)).resolves
-          .toMatchInlineSnapshot(`
+        await expect(
+          resend.apiKeys.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "id": "430eed87-632a-4ea6-90db-0aace67ec228",
@@ -164,8 +167,9 @@ describe('API Keys', () => {
           permission: 'wrong_access' as 'sending_access' | 'full_access',
         };
 
-        await expect(resend.apiKeys.create(payload)).resolves
-          .toMatchInlineSnapshot(`
+        await expect(
+          resend.apiKeys.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
 {
   "data": null,
   "error": {

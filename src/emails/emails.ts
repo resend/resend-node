@@ -1,13 +1,13 @@
 import { renderAsync } from '@react-email/render';
-import * as React from 'react';
-import { Resend } from '../resend';
-import {
+import type * as React from 'react';
+import type { Resend } from '../resend';
+import type {
   CreateEmailOptions,
   CreateEmailRequestOptions,
   CreateEmailResponse,
   CreateEmailResponseSuccess,
 } from './interfaces/create-email-options.interface';
-import {
+import type {
   GetEmailResponse,
   GetEmailResponseSuccess,
 } from './interfaces/get-email-options.interface';
@@ -28,6 +28,7 @@ export class Emails {
   ): Promise<CreateEmailResponse> {
     if (payload.react) {
       payload.html = await renderAsync(payload.react as React.ReactElement);
+      // biome-ignore lint/performance/noDelete: <explanation>
       delete payload.react;
     }
 

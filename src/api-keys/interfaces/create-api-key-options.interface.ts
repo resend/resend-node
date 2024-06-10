@@ -1,5 +1,5 @@
-import { PostOptions } from '../../common/interfaces';
-import { ErrorResponse } from '../../interfaces';
+import type { PostOptions } from '../../common/interfaces';
+import type { ErrorResponse } from '../../interfaces';
 
 export interface CreateApiKeyOptions {
   name: string;

@@ -1,26 +1,26 @@
-import { Resend } from '../resend';
-import {
+import type { Resend } from '../resend';
+import type {
   CreateContactOptions,
   CreateContactRequestOptions,
   CreateContactResponse,
   CreateContactResponseSuccess,
 } from './interfaces/create-contact-options.interface';
-import {
+import type {
   GetContactOptions,
   GetContactResponse,
   GetContactResponseSuccess,
 } from './interfaces/get-contact.interface';
-import {
+import type {
   ListContactsOptions,
   ListContactsResponse,
   ListContactsResponseSuccess,
 } from './interfaces/list-contacts.interface';
-import {
+import type {
   RemoveContactOptions,
   RemoveContactsResponse,
   RemoveContactsResponseSuccess,
 } from './interfaces/remove-contact.interface';
-import {
+import type {
   UpdateContactOptions,
   UpdateContactResponse,
   UpdateContactResponseSuccess,

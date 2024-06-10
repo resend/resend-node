@@ -1,5 +1,5 @@
-import { ErrorResponse } from '../../interfaces';
-import { ApiKey } from './api-key';
+import type { ErrorResponse } from '../../interfaces';
+import type { ApiKey } from './api-key';
 
 export type ListApiKeysResponseSuccess = Pick<
   ApiKey,
