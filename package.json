@@ -29,7 +29,7 @@
     "format:check": "biome format .",
     "format": "biome format --write .",
     "lint": "biome check .",
-    "prepublishOnly": "yarn run build"
+    "prepublishOnly": "pnpm run build"
   },
   "repository": {
     "type": "git",
