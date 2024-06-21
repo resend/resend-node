@@ -269,6 +269,59 @@ describe('Emails', () => {
   }
   `);
     });
+
+    it('returns an error when fetch fails', async () => {
+      const originalEnv = process.env;
+      process.env = {
+        ...originalEnv,
+        RESEND_BASE_URL: 'http://invalidurl.noturl',
+      };
+
+      const result = await resend.emails.send({
+        from: 'example@resend.com',
+        to: 'bu@resend.com',
+        subject: 'Hello World',
+        text: 'Hello world',
+      });
+
+      expect(result).toEqual(
+        expect.objectContaining({
+          data: null,
+          error: {
+            message: 'Unable to fetch data. The request could not be resolved.',
+            name: 'application_error',
+          },
+        }),
+      );
+      process.env = originalEnv;
+    });
+
+    it('returns an error when api responds with text payload', async () => {
+      fetchMock.mockOnce('local_rate_limited', {
+        status: 422,
+        headers: {
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const result = await resend.emails.send({
+        from: 'example@resend.com',
+        to: 'bu@resend.com',
+        subject: 'Hello World',
+        text: 'Hello world',
+      });
+
+      expect(result).toEqual(
+        expect.objectContaining({
+          data: null,
+          error: {
+            message:
+              'Internal server error. We are unable to process your request right now, please try again later.',
+            name: 'application_error',
+          },
+        }),
+      );
+    });
   });
 
   describe('get', () => {
@@ -317,7 +370,7 @@ describe('Emails', () => {
           bcc: null,
           cc: null,
           reply_to: null,
-          last_event: 'sent',
+          last_event: 'delivered',
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -339,7 +392,7 @@ describe('Emails', () => {
     "from": "bu@resend.com",
     "html": "<p>hello hello</p>",
     "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
-    "last_event": "sent",
+    "last_event": "delivered",
     "object": "email",
     "reply_to": null,
     "subject": "Test email",
@@ -366,7 +419,7 @@ describe('Emails', () => {
           bcc: null,
           cc: ['zeno@resend.com', 'bu@resend.com'],
           reply_to: null,
-          last_event: 'sent',
+          last_event: 'delivered',
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -391,7 +444,7 @@ describe('Emails', () => {
     "from": "bu@resend.com",
     "html": "<p>hello hello</p>",
     "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
-    "last_event": "sent",
+    "last_event": "delivered",
     "object": "email",
     "reply_to": null,
     "subject": "Test email",

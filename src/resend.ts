@@ -7,7 +7,6 @@ import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
-import { isResendErrorResponse } from './guards';
 import type { ErrorResponse } from './interfaces';
 
 const defaultBaseUrl = 'https://api.resend.com';
@@ -55,32 +54,49 @@ export class Resend {
     path: string,
     options = {},
   ): Promise<{ data: T | null; error: ErrorResponse | null }> {
-    const response = await fetch(`${baseUrl}${path}`, options);
+    try {
+      const response = await fetch(`${baseUrl}${path}`, options);
 
-    if (!response.ok) {
-      let error: ErrorResponse = {
-        message: response.statusText,
-        name: 'application_error',
-      };
+      if (!response.ok) {
+        try {
+          const rawError = await response.text();
+          return { data: null, error: JSON.parse(rawError) };
+        } catch (err) {
+          if (err instanceof SyntaxError) {
+            return {
+              data: null,
+              error: {
+                name: 'application_error',
+                message:
+                  'Internal server error. We are unable to process your request right now, please try again later.',
+              },
+            };
+          }
 
-      try {
-        error = await response.json();
-        if (isResendErrorResponse(error)) {
+          const error: ErrorResponse = {
+            message: response.statusText,
+            name: 'application_error',
+          };
+
+          if (err instanceof Error) {
+            return { data: null, error: { ...error, message: err.message } };
+          }
+
           return { data: null, error };
         }
-
-        return { data: null, error };
-      } catch (err) {
-        if (err instanceof Error) {
-          return { data: null, error: { ...error, message: err.message } };
-        }
-
-        return { data: null, error };
       }
-    }
 
-    const data = await response.json();
-    return { data, error: null };
+      const data = await response.json();
+      return { data, error: null };
+    } catch (error) {
+      return {
+        data: null,
+        error: {
+          name: 'application_error',
+          message: 'Unable to fetch data. The request could not be resolved.',
+        },
+      };
+    }
   }
 
   async post<T>(path: string, entity?: unknown, options: PostOptions = {}) {
