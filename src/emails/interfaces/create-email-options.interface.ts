@@ -104,7 +104,7 @@ interface Attachment {
   /** Path where the attachment file is hosted */
   path?: string;
   /** Optional content type for the attachment, if not set will be derived from the filename property */
-  contentType?: string;
+  content_type?: string;
 }
 
 export type Tag = {
