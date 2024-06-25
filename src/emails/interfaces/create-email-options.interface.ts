@@ -103,6 +103,8 @@ interface Attachment {
   filename?: string | false | undefined;
   /** Path where the attachment file is hosted */
   path?: string;
+  /** Optional content type for the attachment, if not set will be derived from the filename property */
+  contentType?: string;
 }
 
 export type Tag = {
