@@ -11,6 +11,7 @@ import type { ErrorResponse } from './interfaces';
 
 const defaultBaseUrl = 'https://api.resend.com';
 const defaultUserAgent = `resend-node:${version}`;
+
 const baseUrl =
   typeof process !== 'undefined' && process.env
     ? process.env.RESEND_BASE_URL || defaultBaseUrl
@@ -21,7 +22,7 @@ const userAgent =
     : defaultUserAgent;
 
 export class Resend {
-  private readonly headers: Headers;
+  private readonly headers: any;
 
   readonly apiKeys = new ApiKeys(this);
   readonly audiences = new Audiences(this);
@@ -43,11 +44,12 @@ export class Resend {
       }
     }
 
-    this.headers = new Headers({
+    this.headers = {
       Authorization: `Bearer ${this.key}`,
-      'User-Agent': userAgent,
-      'Content-Type': 'application/json',
-    });
+      "User-Agent": userAgent,
+      "Content-Type": "application/json"
+    };
+
   }
 
   async fetchRequest<T>(
