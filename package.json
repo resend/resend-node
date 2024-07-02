@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/resendlabs/resend-node#readme",
   "dependencies": {
-    "@react-email/render": "0.0.15"
+    "@react-email/render": "0.0.16"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.1",
