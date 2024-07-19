@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/resendlabs/resend-node#readme",
   "dependencies": {
-    "@react-email/render": "0.0.15"
+    "@react-email/render": "0.0.16"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.1",
@@ -56,5 +56,5 @@
     "tsup": "7.2.0",
     "typescript": "5.4.5"
   },
-  "packageManager": "pnpm@9.3.0"
+  "packageManager": "pnpm@9.5.0"
 }
