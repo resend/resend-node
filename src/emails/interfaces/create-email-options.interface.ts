@@ -9,22 +9,22 @@ interface EmailRenderOptions {
    *
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
-  react?: React.ReactElement | React.ReactNode | null;
+  react: React.ReactNode;
   /**
    * The HTML version of the message.
    *
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
-  html?: string;
+  html: string;
   /**
    * The plain text version of the message.
    *
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
-  text?: string;
+  text: string;
 }
 
-interface CreateEmailBaseOptions extends EmailRenderOptions {
+interface CreateEmailBaseOptions {
   /**
    * Filename and content of attachments (max 40mb per email)
    *
