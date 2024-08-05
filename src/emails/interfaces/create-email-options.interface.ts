@@ -79,6 +79,13 @@ interface CreateEmailBaseOptions {
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
   to: string | string[];
+  /**
+   * Schedule the email to be sent later. The time format accepts UTC or local time with a timezone offset.
+   * The time should be in ISO 8601 fAormat (e.g: 2024-08-05T11:52:01.858Z).
+   *
+   * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
+   */
+  schedule_at: string;
 }
 
 export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions> &

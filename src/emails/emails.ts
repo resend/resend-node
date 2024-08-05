@@ -8,6 +8,8 @@ import type {
   CreateEmailResponseSuccess,
 } from './interfaces/create-email-options.interface';
 import type {
+  CancelScheduleResponse,
+  CancelScheduleResponseSuccess,
   GetEmailResponse,
   GetEmailResponseSuccess,
 } from './interfaces/get-email-options.interface';
@@ -44,6 +46,13 @@ export class Emails {
   async get(id: string): Promise<GetEmailResponse> {
     const data = await this.resend.get<GetEmailResponseSuccess>(
       `/emails/${id}`,
+    );
+    return data;
+  }
+
+  async cancelSchedule(id: string): Promise<CancelScheduleResponse> {
+    const data = await this.resend.delete<CancelScheduleResponseSuccess>(
+      `/email/${id}/schedule`,
     );
     return data;
   }
