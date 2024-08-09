@@ -32,5 +32,7 @@ export interface CancelScheduleResponse {
 }
 
 export interface CancelScheduleResponseSuccess {
-  email_id: string;
+  id: string;
+  object: 'schedule';
+  deleted: boolean;
 }
