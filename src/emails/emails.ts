@@ -2,6 +2,10 @@ import { renderAsync } from '@react-email/render';
 import type * as React from 'react';
 import type { Resend } from '../resend';
 import type {
+  CancelEmailResponse,
+  CancelEmailResponseSuccess,
+} from './interfaces/cancel-email-options.interface';
+import type {
   CreateEmailOptions,
   CreateEmailRequestOptions,
   CreateEmailResponse,
@@ -44,6 +48,13 @@ export class Emails {
   async get(id: string): Promise<GetEmailResponse> {
     const data = await this.resend.get<GetEmailResponseSuccess>(
       `/emails/${id}`,
+    );
+    return data;
+  }
+
+  async cancel(id: string): Promise<CancelEmailResponse> {
+    const data = await this.resend.post<CancelEmailResponseSuccess>(
+      `/emails/${id}/cancel`,
     );
     return data;
   }

@@ -79,6 +79,13 @@ interface CreateEmailBaseOptions {
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
   to: string | string[];
+  /**
+   * Schedule email to be sent later.
+   * The date should be in ISO 8601 format (e.g: 2024-08-05T11:52:01.858Z).
+   *
+   * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
+   */
+  scheduled_at: string;
 }
 
 export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions> &
