@@ -54,7 +54,7 @@ export class Emails {
 
   async cancel(id: string): Promise<CancelEmailResponse> {
     const data = await this.resend.post<CancelEmailResponseSuccess>(
-      `/email/${id}/cancel`,
+      `/emails/${id}/cancel`,
     );
     return data;
   }
