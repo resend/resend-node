@@ -25,14 +25,3 @@ export interface GetEmailResponse {
   data: GetEmailResponseSuccess | null;
   error: ErrorResponse | null;
 }
-
-export interface CancelScheduleResponse {
-  data: CancelScheduleResponseSuccess | null;
-  error: ErrorResponse | null;
-}
-
-export interface CancelScheduleResponseSuccess {
-  id: string;
-  object: 'schedule';
-  deleted: boolean;
-}
