@@ -1,3 +1,5 @@
+import type { ErrorResponse } from '../../interfaces';
+
 export interface CancelEmailResponse {
   data: CancelEmailResponseSuccess | null;
   error: ErrorResponse | null;
