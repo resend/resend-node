@@ -85,7 +85,7 @@ interface CreateEmailBaseOptions {
    *
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
-  scheduled_at: string;
+  scheduledAt: string;
 }
 
 export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions> &

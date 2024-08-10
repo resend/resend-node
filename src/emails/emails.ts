@@ -15,6 +15,11 @@ import type {
   GetEmailResponse,
   GetEmailResponseSuccess,
 } from './interfaces/get-email-options.interface';
+import type {
+  UpdateEmailOptions,
+  UpdateEmailResponse,
+  UpdateEmailResponseSuccess,
+} from './interfaces/update-email-options.interface';
 
 export class Emails {
   constructor(private readonly resend: Resend) {}
@@ -48,6 +53,16 @@ export class Emails {
   async get(id: string): Promise<GetEmailResponse> {
     const data = await this.resend.get<GetEmailResponseSuccess>(
       `/emails/${id}`,
+    );
+    return data;
+  }
+
+  async update(payload: UpdateEmailOptions): Promise<UpdateEmailResponse> {
+    const data = await this.resend.patch<UpdateEmailResponseSuccess>(
+      `/emails/${payload.id}`,
+      {
+        scheduled_at: payload.scheduledAt,
+      },
     );
     return data;
   }
