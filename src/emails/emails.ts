@@ -43,7 +43,20 @@ export class Emails {
 
     const data = await this.resend.post<CreateEmailResponseSuccess>(
       '/emails',
-      payload,
+      {
+        attachments: payload.attachments,
+        bcc: payload.bcc,
+        cc: payload.cc,
+        from: payload.from,
+        headers: payload.headers,
+        html: payload.html,
+        reply_to: payload.reply_to,
+        scheduled_at: payload.scheduledAt,
+        subject: payload.subject,
+        tags: payload.tags,
+        text: payload.text,
+        to: payload.to,
+      },
       options,
     );
 
