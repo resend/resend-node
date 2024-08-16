@@ -51,6 +51,7 @@ export class Domains {
     const data = await this.resend.get<GetDomainResponseSuccess>(
       `/domains/${id}`,
     );
+
     return data;
   }
 
