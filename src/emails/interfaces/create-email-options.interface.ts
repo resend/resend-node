@@ -60,7 +60,7 @@ interface CreateEmailBaseOptions {
    *
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
-  reply_to?: string | string[];
+  replyTo?: string | string[];
   /**
    * Email subject.
    *
