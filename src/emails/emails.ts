@@ -50,7 +50,7 @@ export class Emails {
         from: payload.from,
         headers: payload.headers,
         html: payload.html,
-        reply_to: payload.reply_to,
+        reply_to: payload.replyTo,
         scheduled_at: payload.scheduledAt,
         subject: payload.subject,
         tags: payload.tags,
