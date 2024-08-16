@@ -13,6 +13,7 @@ import type {
 } from './interfaces/create-email-options.interface';
 import type {
   GetEmailResponse,
+  GetEmailResponseData,
   GetEmailResponseSuccess,
 } from './interfaces/get-email-options.interface';
 import type {
@@ -64,10 +65,24 @@ export class Emails {
   }
 
   async get(id: string): Promise<GetEmailResponse> {
-    const data = await this.resend.get<GetEmailResponseSuccess>(
+    const { data, error } = await this.resend.get<GetEmailResponseSuccess>(
       `/emails/${id}`,
     );
-    return data;
+
+    const payload = data
+      ? {
+          ...data,
+          createdAt: data.created_at,
+          replyTo: data.reply_to,
+          scheduledAt: data.scheduled_at,
+          lastEvent: data.last_event,
+        }
+      : null;
+
+    return {
+      data: payload,
+      error,
+    };
   }
 
   async update(payload: UpdateEmailOptions): Promise<UpdateEmailResponse> {
