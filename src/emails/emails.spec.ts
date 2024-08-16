@@ -184,7 +184,7 @@ describe('Emails', () => {
       const payload: CreateEmailOptions = {
         from: 'admin@resend.com',
         to: 'bu@resend.com',
-        reply_to: ['foo@resend.com', 'bar@resend.com'],
+        replyTo: ['foo@resend.com', 'bar@resend.com'],
         subject: 'Hello World',
         text: 'Hello world',
       };
@@ -252,7 +252,7 @@ describe('Emails', () => {
       const payload: CreateEmailOptions = {
         from: 'resend.com', // Invalid from address
         to: 'bu@resend.com',
-        reply_to: ['foo@resend.com', 'bar@resend.com'],
+        replyTo: ['foo@resend.com', 'bar@resend.com'],
         subject: 'Hello World',
         text: 'Hello world',
       };
