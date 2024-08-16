@@ -8,16 +8,20 @@ export interface GetEmailResponseSuccess {
   html: string | null;
   id: string;
   last_event:
-    | 'delivered'
-    | 'opened'
-    | 'clicked'
     | 'bounced'
+    | 'canceled'
+    | 'clicked'
     | 'complained'
-    | 'delivery_delayed';
+    | 'delivered'
+    | 'delivery_delayed'
+    | 'opened'
+    | 'queued'
+    | 'scheduled';
   reply_to: string[] | null;
   subject: string;
   text: string | null;
   to: string[];
+  scheduled_at: string | null;
   object: 'email';
 }
 
