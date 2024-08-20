@@ -1,0 +1,16 @@
+{
+  "name": "with-react-email",
+  "version": "1.0.0",
+  "description": "Resend with React Email",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "resend": "latest"
+  }
+}

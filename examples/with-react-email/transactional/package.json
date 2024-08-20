@@ -1,0 +1,13 @@
+{
+  "name": "transactional",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "email dev",
+    "export": "email export"
+  },
+  "devDependencies": {
+    "@react-email/components": "^0.0.22",
+    "react-email": "^2.1.6"
+  }
+}
