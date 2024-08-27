@@ -22,18 +22,16 @@ export class Batch {
     payload: CreateBatchOptions,
     options: CreateBatchRequestOptions = {},
   ): Promise<CreateBatchResponse> {
-    for (const email of payload) {
-      if (email.react) {
-        email.html = await renderAsync(email.react as React.ReactElement);
-        // biome-ignore lint/performance/noDelete: <explanation>
-        delete email.react;
-      }
-    }
-
     const data = await this.resend.post<CreateBatchSuccessResponse>(
       '/emails/batch',
-      payload,
-      options,
+      await Promise.all(
+        payload.map(async ({ react, replyTo, ...email }) => ({
+          ...email,
+          reply_to: replyTo,
+          html: await renderAsync(react as React.ReactElement),
+        }))
+      ),
+      options
     );
 
     return data;
