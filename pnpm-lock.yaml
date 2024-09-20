@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@react-email/render':
-        specifier: 0.0.17
-        version: 0.0.17(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: 1.0.1
+        version: 1.0.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.8.3
@@ -523,12 +523,12 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@react-email/render@0.0.17':
-    resolution: {integrity: sha512-xBQ+/73+WsGuXKY7r1U73zMBNV28xdV0cp9cFjhNYipBReDHhV97IpA6v7Hl0dDtDzt+yS/72dY5vYXrF1v8NA==}
+  '@react-email/render@1.0.1':
+    resolution: {integrity: sha512-W3gTrcmLOVYnG80QuUp22ReIT/xfLsVJ+n7ghSlG2BITB8evNABn1AO2rGQoXuK84zKtDAlxCdm3hRyIpZdGSA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      react: ^18.2.0
-      react-dom: ^18.2.0
+      react: ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^18.0 || ^19.0 || ^19.0.0-rc
 
   '@selderee/plugin-htmlparser2@0.11.0':
     resolution: {integrity: sha512-P33hHGdldxGabLFjPPpaTxVolMrzrcegejx+0GxjrIb9Zv48D8yAIA/QTDR2dFl7Uz7urX8aX6+5bCZslr+gWQ==}
@@ -2421,7 +2421,7 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@react-email/render@0.0.17(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+  '@react-email/render@1.0.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       html-to-text: 9.0.5
       js-beautify: 1.15.1
