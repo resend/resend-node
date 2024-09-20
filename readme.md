@@ -36,6 +36,7 @@ Send your first email:
 await resend.emails.send({
   from: 'you@example.com',
   to: 'user@gmail.com',
+  replyTo: 'you@example.com',
   subject: 'hello world',
   text: 'it works!',
 });
@@ -49,6 +50,7 @@ Send an email custom HTML content:
 await resend.emails.send({
   from: 'you@example.com',
   to: 'user@gmail.com',
+  replyTo: 'you@example.com',
   subject: 'hello world',
   html: '<strong>it works!</strong>',
 });
@@ -79,6 +81,7 @@ import EmailTemplate from '../components/EmailTemplate';
 await resend.emails.send({
   from: 'you@example.com',
   to: 'user@gmail.com',
+  replyTo: 'you@example.com',
   subject: 'hello world',
   react: <EmailTemplate firstName="John" product="MyApp" />,
 });
