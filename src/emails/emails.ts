@@ -1,4 +1,3 @@
-import { renderAsync } from '@react-email/render';
 import type * as React from 'react';
 import type { Resend } from '../resend';
 import type {
@@ -36,9 +35,16 @@ export class Emails {
     options: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
     if (payload.react) {
-      payload.html = await renderAsync(payload.react as React.ReactElement);
-      // biome-ignore lint/performance/noDelete: <explanation>
-      delete payload.react;
+      try {
+        const { renderAsync } = await import('@react-email/render');
+        payload.html = await renderAsync(payload.react as React.ReactElement);
+        // biome-ignore lint/performance/noDelete: <explanation>
+        delete payload.react;
+      } catch (error) {
+        throw new Error(
+          'Failed to render React component. Make sure to install `@react-email/render`',
+        );
+      }
     }
 
     const data = await this.resend.post<CreateEmailResponseSuccess>(
