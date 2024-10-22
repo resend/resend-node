@@ -1,4 +1,3 @@
-import { renderAsync } from '@react-email/render';
 import type * as React from 'react';
 import type { Resend } from '../resend';
 import type {
@@ -24,9 +23,16 @@ export class Batch {
   ): Promise<CreateBatchResponse> {
     for (const email of payload) {
       if (email.react) {
-        email.html = await renderAsync(email.react as React.ReactElement);
-        // biome-ignore lint/performance/noDelete: <explanation>
-        delete email.react;
+        try {
+          const { renderAsync } = await import('@react-email/render');
+          email.html = await renderAsync(email.react as React.ReactElement);
+          // biome-ignore lint/performance/noDelete: <explanation>
+          delete email.react;
+        } catch (error) {
+          throw new Error(
+            'Failed to render React component. Make sure to install `@react-email/render`',
+          );
+        }
       }
     }
 
