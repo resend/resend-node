@@ -2,6 +2,7 @@ import { version } from '../package.json';
 import { ApiKeys } from './api-keys/api-keys';
 import { Audiences } from './audiences/audiences';
 import { Batch } from './batch/batch';
+import { Broadcasts } from './broadcasts/broadcasts';
 import type { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
@@ -26,6 +27,7 @@ export class Resend {
   readonly apiKeys = new ApiKeys(this);
   readonly audiences = new Audiences(this);
   readonly batch = new Batch(this);
+  readonly broadcasts = new Broadcasts(this);
   readonly contacts = new Contacts(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
