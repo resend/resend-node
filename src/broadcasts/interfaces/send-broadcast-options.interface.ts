@@ -7,7 +7,7 @@ interface SendBroadcastBaseOptions {
    * The date should be in ISO 8601 format (e.g: 2024-08-05T11:52:01.858Z)
    * or relative time (eg: in 2 days).
    *
-   * @link https://resend.com/docs/api-reference/broadcasts/sendl#body-parameters
+   * @link https://resend.com/docs/api-reference/broadcasts/send#body-parameters
    */
   scheduledAt?: string;
 }
