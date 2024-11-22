@@ -17,7 +17,7 @@ export type SendBroadcastOptions = SendBroadcastBaseOptions;
 export interface SendBroadcastRequestOptions extends PostOptions {}
 
 export interface SendBroadcastResponseSuccess {
-  /** The ID of the newly sent broadcasts. */
+  /** The ID of the sent broadcast. */
   id: string;
 }
 
