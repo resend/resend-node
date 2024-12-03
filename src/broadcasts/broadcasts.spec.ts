@@ -29,7 +29,6 @@ describe('Broadcasts', () => {
       });
 
       const data = await resend.broadcasts.create({} as CreateBroadcastOptions);
-      console.log({ data });
       expect(data).toMatchInlineSnapshot(`
 {
   "data": null,
@@ -220,6 +219,34 @@ describe('Broadcasts', () => {
           },
         }),
       );
+    });
+  });
+
+  describe('send', () => {
+    it('sends a broadcast successfully', async () => {
+      const randomBroadcastId = 'b01e0de9-7c27-4a53-bf38-2e3f98389a65';
+      const response = {
+        id: randomBroadcastId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const data = await resend.broadcasts.send(randomBroadcastId);
+
+      expect(data).toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
+  },
+  "error": null,
+}
+`);
     });
   });
 });
