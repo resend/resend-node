@@ -30,7 +30,7 @@ describe('Emails', () => {
       });
 
       const data = await resend.emails.create({} as CreateEmailOptions);
-      console.log({ data });
+
       expect(data).toMatchInlineSnapshot(`
 {
   "data": null,

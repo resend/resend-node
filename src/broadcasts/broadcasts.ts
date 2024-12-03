@@ -55,11 +55,11 @@ export class Broadcasts {
 
   async send(
     id: string,
-    payload: SendBroadcastOptions,
+    payload?: SendBroadcastOptions,
   ): Promise<SendBroadcastResponse> {
     const data = await this.resend.post<SendBroadcastResponseSuccess>(
       `/broadcasts/${id}/send`,
-      { scheduled_at: payload.scheduledAt },
+      { scheduled_at: payload?.scheduledAt },
     );
 
     return data;
