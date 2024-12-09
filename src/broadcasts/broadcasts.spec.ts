@@ -5,6 +5,9 @@ import type {
   CreateBroadcastOptions,
   CreateBroadcastResponseSuccess,
 } from './interfaces/create-broadcast-options.interface';
+import type { GetBroadcastResponseSuccess } from './interfaces/get-broadcast.interface';
+import type { ListBroadcastsResponseSuccess } from './interfaces/list-broadcasts.interface';
+import type { RemoveBroadcastResponseSuccess } from './interfaces/remove-broadcast.interface';
 
 enableFetchMocks();
 
@@ -243,6 +246,189 @@ describe('Broadcasts', () => {
 {
   "data": {
     "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
+  },
+  "error": null,
+}
+`);
+    });
+  });
+
+  describe('list', () => {
+    it('lists broadcasts', async () => {
+      const response: ListBroadcastsResponseSuccess = {
+        object: 'list',
+        data: [
+          {
+            id: '49a3999c-0ce1-4ea6-ab68-afcd6dc2e794',
+            audience_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
+            name: 'broadcast 1',
+            status: 'draft',
+            created_at: '2024-11-01T15:13:31.723Z',
+            scheduled_at: null,
+            sent_at: null,
+          },
+          {
+            id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+            audience_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
+            name: 'broadcast 2',
+            status: 'sent',
+            created_at: '2024-12-01T19:32:22.980Z',
+            scheduled_at: '2024-12-02T19:32:22.980Z',
+            sent_at: '2024-12-02T19:32:22.980Z',
+          },
+        ],
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(resend.broadcasts.list()).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "data": [
+      {
+        "audience_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
+        "created_at": "2024-11-01T15:13:31.723Z",
+        "id": "49a3999c-0ce1-4ea6-ab68-afcd6dc2e794",
+        "name": "broadcast 1",
+        "scheduled_at": null,
+        "sent_at": null,
+        "status": "draft",
+      },
+      {
+        "audience_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
+        "created_at": "2024-12-01T19:32:22.980Z",
+        "id": "559ac32e-9ef5-46fb-82a1-b76b840c0f7b",
+        "name": "broadcast 2",
+        "scheduled_at": "2024-12-02T19:32:22.980Z",
+        "sent_at": "2024-12-02T19:32:22.980Z",
+        "status": "sent",
+      },
+    ],
+    "object": "list",
+  },
+  "error": null,
+}
+`);
+    });
+  });
+
+  describe('get', () => {
+    describe('when broadcast not found', () => {
+      it('returns error', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          message: 'Broadcast not found',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = resend.broadcasts.get(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+        );
+
+        await expect(result).resolves.toMatchInlineSnapshot(`
+{
+  "data": null,
+  "error": {
+    "message": "Broadcast not found",
+    "name": "not_found",
+  },
+}
+`);
+      });
+    });
+
+    it('get broadcast', async () => {
+      const response: GetBroadcastResponseSuccess = {
+        object: 'broadcast',
+        id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+        name: 'Announcements',
+        audience_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
+        from: 'Acme <onboarding@resend.dev>',
+        subject: 'hello world',
+        reply_to: null,
+        preview_text: 'Check out our latest announcements',
+        status: 'draft',
+        created_at: '2024-12-01T19:32:22.980Z',
+        scheduled_at: null,
+        sent_at: null,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.broadcasts.get('559ac32e-9ef5-46fb-82a1-b76b840c0f7b'),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "audience_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
+    "created_at": "2024-12-01T19:32:22.980Z",
+    "from": "Acme <onboarding@resend.dev>",
+    "id": "559ac32e-9ef5-46fb-82a1-b76b840c0f7b",
+    "name": "Announcements",
+    "object": "broadcast",
+    "preview_text": "Check out our latest announcements",
+    "reply_to": null,
+    "scheduled_at": null,
+    "sent_at": null,
+    "status": "draft",
+    "subject": "hello world",
+  },
+  "error": null,
+}
+`);
+    });
+  });
+
+  describe('remove', () => {
+    it('removes a broadcast', async () => {
+      const id = 'b01e0de9-7c27-4a53-bf38-2e3f98389a65';
+      const response: RemoveBroadcastResponseSuccess = {
+        object: 'broadcast',
+        id,
+        deleted: true,
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.broadcasts.remove(id),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "deleted": true,
+    "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
+    "object": "broadcast",
   },
   "error": null,
 }
