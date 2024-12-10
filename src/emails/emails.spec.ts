@@ -371,6 +371,7 @@ describe('Emails', () => {
           cc: null,
           reply_to: null,
           last_event: 'delivered',
+          scheduled_at: null,
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -395,6 +396,7 @@ describe('Emails', () => {
     "last_event": "delivered",
     "object": "email",
     "reply_to": null,
+    "scheduled_at": null,
     "subject": "Test email",
     "text": null,
     "to": [
@@ -420,6 +422,7 @@ describe('Emails', () => {
           cc: ['zeno@resend.com', 'bu@resend.com'],
           reply_to: null,
           last_event: 'delivered',
+          scheduled_at: null,
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -447,6 +450,7 @@ describe('Emails', () => {
     "last_event": "delivered",
     "object": "email",
     "reply_to": null,
+    "scheduled_at": null,
     "subject": "Test email",
     "text": null,
     "to": [
