@@ -61,8 +61,18 @@ export class Contacts {
   }
 
   async update(payload: UpdateContactOptions): Promise<UpdateContactResponse> {
+    if (!payload.id && !payload.email) {
+      return {
+        data: null,
+        error: {
+          message: 'Missing `id` or `email` field.',
+          name: 'missing_required_field',
+        },
+      };
+    }
+
     const data = await this.resend.patch<UpdateContactResponseSuccess>(
-      `/audiences/${payload.audienceId}/contacts/${payload.id}`,
+      `/audiences/${payload.audienceId}/contacts/${payload?.email ? payload?.email : payload?.id}`,
       {
         unsubscribed: payload.unsubscribed,
         first_name: payload.firstName,
@@ -73,6 +83,16 @@ export class Contacts {
   }
 
   async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
+    if (!payload.id && !payload.email) {
+      return {
+        data: null,
+        error: {
+          message: 'Missing `id` or `email` field.',
+          name: 'missing_required_field',
+        },
+      };
+    }
+
     const data = await this.resend.delete<RemoveContactsResponseSuccess>(
       `/audiences/${payload.audienceId}/contacts/${
         payload?.email ? payload?.email : payload?.id
