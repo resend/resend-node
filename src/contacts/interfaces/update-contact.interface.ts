@@ -1,8 +1,12 @@
 import type { ErrorResponse } from '../../interfaces';
 import type { Contact } from './contact';
 
-export interface UpdateContactOptions {
-  id: string;
+interface UpdateContactBaseOptions {
+  id?: string;
+  email?: string;
+}
+
+export interface UpdateContactOptions extends UpdateContactBaseOptions {
   audienceId: string;
   unsubscribed?: boolean;
   firstName?: string;
