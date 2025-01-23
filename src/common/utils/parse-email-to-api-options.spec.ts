@@ -1,7 +1,7 @@
 import type { CreateEmailOptions } from '../../emails/interfaces/create-email-options.interface';
 import { parseEmailToApiOptions } from './parse-email-to-api-options';
 
-describe('parseEmailToAPIOptions', () => {
+describe('parseEmailToApiOptions', () => {
   it('should handle minimal email with only required fields', () => {
     const emailPayload: CreateEmailOptions = {
       from: 'joao@resend.com',
