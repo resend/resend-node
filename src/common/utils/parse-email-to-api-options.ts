@@ -1,9 +1,9 @@
 import type { CreateEmailOptions } from '../../emails/interfaces/create-email-options.interface';
-import type { EmailAPIOptions } from '../interfaces/email-api-options.interface';
+import type { EmailApiOptions } from '../interfaces/email-api-options.interface';
 
 export function parseEmailToAPIOptions(
   email: CreateEmailOptions,
-): EmailAPIOptions {
+): EmailApiOptions {
   return {
     attachments: email.attachments,
     bcc: email.bcc,

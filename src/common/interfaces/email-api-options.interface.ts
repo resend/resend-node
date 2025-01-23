@@ -1,7 +1,7 @@
 import type { Attachment } from '../../emails/interfaces/create-email-options.interface';
 import type { Tag } from '../../interfaces';
 
-export interface EmailAPIOptions {
+export interface EmailApiOptions {
   from: string;
   to: string | string[];
   subject: string;

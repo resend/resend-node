@@ -1,5 +1,5 @@
 import type * as React from 'react';
-import type { EmailAPIOptions } from '../common/interfaces/email-api-options.interface';
+import type { EmailApiOptions } from '../common/interfaces/email-api-options.interface';
 import { parseEmailToAPIOptions } from '../common/utils/parse-email-to-api-options';
 import type { Resend } from '../resend';
 import type {
@@ -24,7 +24,7 @@ export class Batch {
     payload: CreateBatchOptions,
     options: CreateBatchRequestOptions = {},
   ): Promise<CreateBatchResponse> {
-    const emails: EmailAPIOptions[] = [];
+    const emails: EmailApiOptions[] = [];
 
     for (const email of payload) {
       if (email.react) {
