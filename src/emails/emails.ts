@@ -1,5 +1,5 @@
 import type * as React from 'react';
-import { parseEmailToAPIOptions } from '../common/utils/parse-email-to-api-options';
+import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import type { Resend } from '../resend';
 import type {
   CancelEmailResponse,
@@ -55,7 +55,7 @@ export class Emails {
 
     const data = await this.resend.post<CreateEmailResponseSuccess>(
       '/emails',
-      parseEmailToAPIOptions(payload),
+      parseEmailToApiOptions(payload),
       options,
     );
 

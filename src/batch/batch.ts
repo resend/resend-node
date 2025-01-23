@@ -1,6 +1,6 @@
 import type * as React from 'react';
 import type { EmailApiOptions } from '../common/interfaces/email-api-options.interface';
-import { parseEmailToAPIOptions } from '../common/utils/parse-email-to-api-options';
+import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import type { Resend } from '../resend';
 import type {
   CreateBatchOptions,
@@ -43,7 +43,7 @@ export class Batch {
         email.react = undefined;
       }
 
-      emails.push(parseEmailToAPIOptions(email));
+      emails.push(parseEmailToApiOptions(email));
     }
 
     const data = await this.resend.post<CreateBatchSuccessResponse>(

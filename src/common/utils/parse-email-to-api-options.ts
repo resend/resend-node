@@ -1,7 +1,7 @@
 import type { CreateEmailOptions } from '../../emails/interfaces/create-email-options.interface';
 import type { EmailApiOptions } from '../interfaces/email-api-options.interface';
 
-export function parseEmailToAPIOptions(
+export function parseEmailToApiOptions(
   email: CreateEmailOptions,
 ): EmailApiOptions {
   return {

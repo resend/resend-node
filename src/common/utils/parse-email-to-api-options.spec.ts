@@ -1,5 +1,5 @@
 import type { CreateEmailOptions } from '../../emails/interfaces/create-email-options.interface';
-import { parseEmailToAPIOptions } from './parse-email-to-api-options';
+import { parseEmailToApiOptions } from './parse-email-to-api-options';
 
 describe('parseEmailToAPIOptions', () => {
   it('should handle minimal email with only required fields', () => {
@@ -10,7 +10,7 @@ describe('parseEmailToAPIOptions', () => {
       html: '<h1>Hey, there!</h1>',
     };
 
-    const apiOptions = parseEmailToAPIOptions(emailPayload);
+    const apiOptions = parseEmailToApiOptions(emailPayload);
 
     expect(apiOptions).toEqual({
       from: 'joao@resend.com',
@@ -30,7 +30,7 @@ describe('parseEmailToAPIOptions', () => {
       scheduledAt: 'in 1 min',
     };
 
-    const apiOptions = parseEmailToAPIOptions(emailPayload);
+    const apiOptions = parseEmailToApiOptions(emailPayload);
 
     expect(apiOptions).toEqual({
       from: 'joao@resend.com',
