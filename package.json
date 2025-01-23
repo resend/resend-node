@@ -1,11 +1,13 @@
 {
   "name": "resend",
-  "version": "4.1.1",
+  "version": "4.1.2-canary.0",
   "description": "Node.js library for the Resend API",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "files": ["dist/**"],
+  "files": [
+    "dist/**"
+  ],
   "engines": {
     "node": ">=18"
   },
