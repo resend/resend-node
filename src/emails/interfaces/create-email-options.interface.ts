@@ -103,7 +103,7 @@ export interface CreateEmailResponse {
   error: ErrorResponse | null;
 }
 
-interface Attachment {
+export interface Attachment {
   /** Content of an attached file. */
   content?: string | Buffer;
   /** Name of attached file. */
