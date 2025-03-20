@@ -21,6 +21,11 @@ import type {
   SendBroadcastResponse,
   SendBroadcastResponseSuccess,
 } from './interfaces/send-broadcast-options.interface';
+import type {
+  UpdateBroadcastOptions,
+  UpdateBroadcastResponse,
+  UpdateBroadcastResponseSuccess,
+} from './interfaces/update-broadcast.interface';
 
 export class Broadcasts {
   private renderAsync?: (component: React.ReactElement) => Promise<string>;
@@ -93,6 +98,26 @@ export class Broadcasts {
   async remove(id: string): Promise<RemoveBroadcastResponse> {
     const data = await this.resend.delete<RemoveBroadcastResponseSuccess>(
       `/broadcasts/${id}`,
+    );
+    return data;
+  }
+
+  async update(
+    id: string,
+    payload: UpdateBroadcastOptions,
+  ): Promise<UpdateBroadcastResponse> {
+    const data = await this.resend.patch<UpdateBroadcastResponseSuccess>(
+      `/broadcasts/${id}`,
+      {
+        name: payload.name,
+        audience_id: payload.audienceId,
+        from: payload.from,
+        html: payload.html,
+        text: payload.text,
+        subject: payload.subject,
+        reply_to: payload.replyTo,
+        preview_text: payload.previewText,
+      },
     );
     return data;
   }
