@@ -7,8 +7,6 @@ on:
 jobs:
   tests:
     runs-on: buildjet-4vcpu-ubuntu-2204
-    env:
-      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_TEST }}
     container:
       image: node:20
       credentials:
