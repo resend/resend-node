@@ -1,0 +1,18 @@
+name: PR Title Check
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+jobs:
+  pr-title-check:
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    container:
+      image: node:20
+      credentials:
+        username: ${{ vars.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_API_KEY }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run PR title check
+        run: |
+          node .github/scripts/pr-title-check.js
