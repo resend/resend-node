@@ -1,14 +1,12 @@
-name: Tests
+name: Lint
 on:
   push:
     branches:
       - main
   pull_request:
 jobs:
-  tests:
+  lint:
     runs-on: buildjet-4vcpu-ubuntu-2204
-    env:
-      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_TEST }}
     container:
       image: node:20
       credentials:
@@ -24,11 +22,9 @@ jobs:
         with:
           node-version: 20
           cache: "pnpm"
-      - name: Install Doppler CLI
-        uses: dopplerhq/cli-action@v3
       - name: Install packages
         run: pnpm install
-      - name: Run Tests
-        run: pnpm test
+      - name: Run Lint
+        run: pnpm lint
         env:
           SKIP_ENV_VALIDATION: true
