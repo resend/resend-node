@@ -452,8 +452,8 @@ describe('Broadcasts', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(
-  resend.broadcasts.update(id, { name: 'New Name' })
-).resolves.toMatchInlineSnapshot(`
+        resend.broadcasts.update(id, { name: 'New Name' }),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
