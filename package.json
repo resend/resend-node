@@ -54,7 +54,7 @@
     "ts-jest": "29.2.6",
     "ts-node": "10.9.2",
     "tsup": "7.2.0",
-    "typescript": "5.5.4"
+    "typescript": "5.8.2"
   },
   "packageManager": "pnpm@10.6.5"
 }
