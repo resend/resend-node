@@ -8,7 +8,7 @@ import type {
 import type { GetBroadcastResponseSuccess } from './interfaces/get-broadcast.interface';
 import type { ListBroadcastsResponseSuccess } from './interfaces/list-broadcasts.interface';
 import type { RemoveBroadcastResponseSuccess } from './interfaces/remove-broadcast.interface';
-import { UpdateBroadcastResponseSuccess } from './interfaces/update-broadcast.interface';
+import type { UpdateBroadcastResponseSuccess } from './interfaces/update-broadcast.interface';
 
 enableFetchMocks();
 
