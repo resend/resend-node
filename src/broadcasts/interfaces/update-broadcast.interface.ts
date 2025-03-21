@@ -11,7 +11,7 @@ export interface UpdateBroadcastOptions {
   html?: string;
   text?: string;
   subject?: string;
-  replyTo?: string;
+  replyTo?: string[];
   previewText?: string;
 }
 
