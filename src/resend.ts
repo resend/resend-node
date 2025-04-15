@@ -4,7 +4,7 @@ import { Audiences } from './audiences/audiences';
 import { Batch } from './batch/batch';
 import { Broadcasts } from './broadcasts/broadcasts';
 import type { GetOptions, PostOptions, PutOptions } from './common/interfaces';
-import { IdempotentRequest } from './common/interfaces/idempotent-request.inferface';
+import type { IdempotentRequest } from './common/interfaces/idempotent-request.inferface';
 import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';

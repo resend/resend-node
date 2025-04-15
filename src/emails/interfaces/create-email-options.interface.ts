@@ -1,8 +1,8 @@
-import type * as React from 'react';
+import type { ErrorResponse } from '../../interfaces';
+import type { IdempotentRequest } from '../../common/interfaces/idempotent-request.inferface';
 import type { PostOptions } from '../../common/interfaces';
 import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
-import type { ErrorResponse } from '../../interfaces';
-import { IdempotentRequest } from '../../common/interfaces/idempotent-request.inferface';
+import type * as React from 'react';
 
 interface EmailRenderOptions {
   /**
