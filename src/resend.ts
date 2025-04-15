@@ -103,11 +103,8 @@ export class Resend {
   }
 
   async post<T>(path: string, entity?: unknown, options: PostOptions & IdempotentRequest = {}) {
-    // Clone the headers so we don't mutate the default ones
-    const headers = new Headers(this.headers)
-
     if (options.idempotencyKey) {
-      headers.set('Idempotency-Key', options.idempotencyKey)
+      this.headers.set('Idempotency-Key', options.idempotencyKey)
     }
 
     const requestOptions = {
