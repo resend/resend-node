@@ -2,6 +2,7 @@ import type * as React from 'react';
 import type { PostOptions } from '../../common/interfaces';
 import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
 import type { ErrorResponse } from '../../interfaces';
+import { IdempotentRequest } from '../../common/interfaces/idempotent-request.inferface';
 
 interface EmailRenderOptions {
   /**
@@ -91,7 +92,7 @@ interface CreateEmailBaseOptions {
 export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions> &
   CreateEmailBaseOptions;
 
-export interface CreateEmailRequestOptions extends PostOptions {}
+export interface CreateEmailRequestOptions extends PostOptions, IdempotentRequest {}
 
 export interface CreateEmailResponseSuccess {
   /** The ID of the newly created email. */
