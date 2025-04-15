@@ -60,23 +60,23 @@ describe('Emails', () => {
         to: 'user@resend.com',
         subject: 'Not Idempotent Test',
         html: '<h1>Test</h1>',
-      }
+      };
 
       await resend.emails.create(payload);
 
       // Inspect the last fetch call and body
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
-    
-      console.log('debug:', lastCall[1]?.headers)
+
+      console.log('debug:', lastCall[1]?.headers);
       //@ts-ignore
-      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key')
-      expect(hasIdempotencyKey).toBeFalsy()
+      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
+      expect(hasIdempotencyKey).toBeFalsy();
 
       //@ts-ignore
-      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key')
-      expect(usedIdempotencyKey).toBeNull()
-    })
+      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
+      expect(usedIdempotencyKey).toBeNull();
+    });
 
     it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
       const response: CreateEmailResponseSuccess = {
@@ -104,18 +104,18 @@ describe('Emails', () => {
       // Inspect the last fetch call and body
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
-      
+
       // Check if headers contains Idempotency-Key
       // In the mock, headers is an object with key-value pairs
       expect(fetchMock.mock.calls[0][1]?.headers).toBeDefined();
 
       //@ts-ignore
-      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key')
-      expect(hasIdempotencyKey).toBeTruthy()
+      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
+      expect(hasIdempotencyKey).toBeTruthy();
 
       //@ts-ignore
-      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key')
-      expect(usedIdempotencyKey).toBe(idempotencyKey)
+      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
+      expect(usedIdempotencyKey).toBe(idempotencyKey);
     });
   });
 

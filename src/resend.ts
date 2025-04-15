@@ -102,9 +102,13 @@ export class Resend {
     }
   }
 
-  async post<T>(path: string, entity?: unknown, options: PostOptions & IdempotentRequest = {}) {
+  async post<T>(
+    path: string,
+    entity?: unknown,
+    options: PostOptions & IdempotentRequest = {},
+  ) {
     if (options.idempotencyKey) {
-      this.headers.set('Idempotency-Key', options.idempotencyKey)
+      this.headers.set('Idempotency-Key', options.idempotencyKey);
     }
 
     const requestOptions = {
