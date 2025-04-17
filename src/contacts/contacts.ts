@@ -54,8 +54,18 @@ export class Contacts {
   }
 
   async get(options: GetContactOptions): Promise<GetContactResponse> {
+    if (!options.id && !options.email) {
+      return {
+        data: null,
+        error: {
+          message: 'Missing `id` or `email` field.',
+          name: 'missing_required_field',
+        },
+      };
+    }
+
     const data = await this.resend.get<GetContactResponseSuccess>(
-      `/audiences/${options.audienceId}/contacts/${options.id}`,
+      `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
     );
     return data;
   }
