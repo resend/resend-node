@@ -8,6 +8,7 @@ import type {
 import type { GetBroadcastResponseSuccess } from './interfaces/get-broadcast.interface';
 import type { ListBroadcastsResponseSuccess } from './interfaces/list-broadcasts.interface';
 import type { RemoveBroadcastResponseSuccess } from './interfaces/remove-broadcast.interface';
+import type { UpdateBroadcastResponseSuccess } from './interfaces/update-broadcast.interface';
 
 enableFetchMocks();
 
@@ -429,6 +430,33 @@ describe('Broadcasts', () => {
     "deleted": true,
     "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
     "object": "broadcast",
+  },
+  "error": null,
+}
+`);
+    });
+  });
+
+  describe('update', () => {
+    it('updates a broadcast', async () => {
+      const id = 'b01e0de9-7c27-4a53-bf38-2e3f98389a65';
+      const response: UpdateBroadcastResponseSuccess = { id };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.broadcasts.update(id, { name: 'New Name' }),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
   },
   "error": null,
 }

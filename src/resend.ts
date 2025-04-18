@@ -4,6 +4,7 @@ import { Audiences } from './audiences/audiences';
 import { Batch } from './batch/batch';
 import { Broadcasts } from './broadcasts/broadcasts';
 import type { GetOptions, PostOptions, PutOptions } from './common/interfaces';
+import type { IdempotentRequest } from './common/interfaces/idempotent-request.interface';
 import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
@@ -101,7 +102,15 @@ export class Resend {
     }
   }
 
-  async post<T>(path: string, entity?: unknown, options: PostOptions = {}) {
+  async post<T>(
+    path: string,
+    entity?: unknown,
+    options: PostOptions & IdempotentRequest = {},
+  ) {
+    if (options.idempotencyKey) {
+      this.headers.set('Idempotency-Key', options.idempotencyKey);
+    }
+
     const requestOptions = {
       method: 'POST',
       headers: this.headers,

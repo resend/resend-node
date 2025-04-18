@@ -194,7 +194,7 @@ describe('Contacts', () => {
       });
     });
 
-    it('get contact', async () => {
+    it('get contact by id', async () => {
       const response: GetContactResponseSuccess = {
         object: 'contact',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
@@ -216,6 +216,48 @@ describe('Contacts', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       const options: GetContactOptions = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+        audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+      };
+      await expect(
+        resend.contacts.get(options),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "created_at": "2024-01-16T18:12:26.514Z",
+    "email": "team@resend.com",
+    "first_name": "",
+    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+    "last_name": "",
+    "object": "contact",
+    "unsubscribed": false,
+  },
+  "error": null,
+}
+`);
+    });
+
+    it('get contact by email', async () => {
+      const response: GetContactResponseSuccess = {
+        object: 'contact',
+        id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+        email: 'team@resend.com',
+        first_name: '',
+        last_name: '',
+        created_at: '2024-01-16T18:12:26.514Z',
+        unsubscribed: false,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const options: GetContactOptions = {
+        email: 'team@resend.com',
         audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
       };
       await expect(
