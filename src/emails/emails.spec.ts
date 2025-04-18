@@ -1,4 +1,5 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
+import React from 'react';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import type {
@@ -320,6 +321,27 @@ describe('Emails', () => {
             name: 'application_error',
           },
         }),
+      );
+    });
+    it.only('should automatically send text when you send react component if text is falsy', async () => {
+      const sendSpy = jest.spyOn(resend.emails, 'send');
+      const EmailComponent = () =>
+        React.createElement('div', null, 'This is a cool email');
+
+      const payload: CreateEmailOptions = {
+        from: 'bu@resend.com',
+        to: 'zeno@resend.com',
+        subject: 'Hello World',
+        react: EmailComponent(),
+      };
+      await resend.emails.send(payload);
+
+      const postCallArgs = sendSpy.mock.calls[0];
+      const sentPayload = postCallArgs[0];
+
+      expect(sentPayload.text).toBe('This is a cool email');
+      expect(sentPayload.html).toMatchInlineSnapshot(
+`"<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><!--$--><div>This is a cool email</div><!--/$-->"`,
       );
     });
   });
