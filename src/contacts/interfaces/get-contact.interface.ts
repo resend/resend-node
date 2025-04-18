@@ -3,7 +3,8 @@ import type { Contact } from './contact';
 
 export interface GetContactOptions {
   audienceId: string;
-  id: string;
+  id?: string;
+  email?: string;
 }
 
 export interface GetContactResponseSuccess
