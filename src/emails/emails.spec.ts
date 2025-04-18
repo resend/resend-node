@@ -323,7 +323,7 @@ describe('Emails', () => {
         }),
       );
     });
-    it.only('should automatically send text when you send react component if text is falsy', async () => {
+    it('should automatically send text when you send react component if text is falsy', async () => {
       const sendSpy = jest.spyOn(resend.emails, 'send');
       const EmailComponent = () =>
         React.createElement('div', null, 'This is a cool email');
