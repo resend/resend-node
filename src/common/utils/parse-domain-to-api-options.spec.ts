@@ -29,4 +29,4 @@ describe('parseDomainToApiOptions', () => {
       custom_return_path: 'bounce@example.com',
     });
   });
-}); 
+});

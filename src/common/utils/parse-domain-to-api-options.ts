@@ -9,4 +9,4 @@ export function parseDomainToApiOptions(
     region: domain.region,
     custom_return_path: domain.customReturnPath,
   };
-}   
+}

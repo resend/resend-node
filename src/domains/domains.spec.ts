@@ -358,7 +358,7 @@ describe('Domains', () => {
           ],
           region: 'us-east-1',
         };
-        
+
         fetchMock.mockOnce(JSON.stringify(response), {
           status: 200,
           headers: {
@@ -366,7 +366,7 @@ describe('Domains', () => {
             Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
-        
+
         const payload: CreateDomainOptions = {
           name: 'resend.com',
           customReturnPath: 'custom',
@@ -414,7 +414,7 @@ describe('Domains', () => {
   "error": null,
 }
 `);
-      }); 
+      });
     });
   });
 
