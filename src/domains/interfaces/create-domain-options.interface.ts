@@ -5,6 +5,7 @@ import type { Domain, DomainRecords, DomainRegion } from './domain';
 export interface CreateDomainOptions {
   name: string;
   region?: DomainRegion;
+  customReturnPath?: string;
 }
 
 export interface CreateDomainRequestOptions extends PostOptions {}
