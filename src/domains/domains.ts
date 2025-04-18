@@ -1,3 +1,4 @@
+import { parseDomainToApiOptions } from '../common/utils/parse-domain-to-api-options';
 import type { Resend } from '../resend';
 import type {
   CreateDomainOptions,
@@ -36,7 +37,7 @@ export class Domains {
   ): Promise<CreateDomainResponse> {
     const data = await this.resend.post<CreateDomainResponseSuccess>(
       '/domains',
-      payload,
+      parseDomainToApiOptions(payload),
       options,
     );
     return data;

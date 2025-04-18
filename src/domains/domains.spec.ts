@@ -321,6 +321,101 @@ describe('Domains', () => {
 `);
       });
     });
+
+    describe('with customReturnPath', () => {
+      it('creates a domain with customReturnPath', async () => {
+        const response: CreateDomainResponseSuccess = {
+          id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+          name: 'resend.com',
+          created_at: '2023-04-07T22:48:33.420498+00:00',
+          status: 'not_started',
+          records: [
+            {
+              record: 'SPF',
+              name: 'custom',
+              type: 'MX',
+              ttl: 'Auto',
+              status: 'not_started',
+              value: 'feedback-smtp.us-east-1.com',
+              priority: 10,
+            },
+            {
+              record: 'SPF',
+              name: 'custom',
+              value: '"v=spf1 include:com ~all"',
+              type: 'TXT',
+              ttl: 'Auto',
+              status: 'not_started',
+            },
+            {
+              record: 'DKIM',
+              name: 'resend._domainkey',
+              value: 'nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.',
+              type: 'CNAME',
+              status: 'not_started',
+              ttl: 'Auto',
+            },
+          ],
+          region: 'us-east-1',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const payload: CreateDomainOptions = {
+          name: 'resend.com',
+          customReturnPath: 'custom',
+        };
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        await expect(
+          resend.domains.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "created_at": "2023-04-07T22:48:33.420498+00:00",
+    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
+    "name": "resend.com",
+    "records": [
+      {
+        "name": "custom",
+        "priority": 10,
+        "record": "SPF",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "MX",
+        "value": "feedback-smtp.us-east-1.com",
+      },
+      {
+        "name": "custom",
+        "record": "SPF",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "TXT",
+        "value": ""v=spf1 include:com ~all"",
+      },
+      {
+        "name": "resend._domainkey",
+        "record": "DKIM",
+        "status": "not_started",
+        "ttl": "Auto",
+        "type": "CNAME",
+        "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
+      },
+    ],
+    "region": "us-east-1",
+    "status": "not_started",
+  },
+  "error": null,
+}
+`);
+      });
+    });
   });
 
   describe('list', () => {
