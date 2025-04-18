@@ -43,7 +43,7 @@ export class Batch {
         }
         const reactElement = email.react as React.ReactElement;
         email.html = await this.renderAsync(reactElement);
-        if (email.text === undefined) {
+        if (!email.text) {
           email.text = await this.renderAsync(reactElement, {
             plainText: true,
           });

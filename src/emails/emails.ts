@@ -53,7 +53,7 @@ export class Emails {
 
       const reactElement = payload.react as React.ReactElement;
       payload.html = await this.renderAsync(reactElement);
-      if (payload.text === undefined) {
+      if (!payload.text) {
         payload.text = await this.renderAsync(reactElement, {
           plainText: true,
         });
