@@ -336,13 +336,14 @@ describe('Emails', () => {
       };
       await resend.emails.send(payload);
 
-      const postCallArgs = sendSpy.mock.calls[0];
-      const sentPayload = postCallArgs[0];
+      const sentPayload = sendSpy.mock.calls[0][0];
 
       expect(sentPayload.text).toBe('This is a cool email');
       expect(sentPayload.html).toMatchInlineSnapshot(
         `"<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><!--$--><div>This is a cool email</div><!--/$-->"`,
       );
+
+      sendSpy.mockRestore();
     });
   });
 
