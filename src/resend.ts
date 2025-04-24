@@ -107,13 +107,15 @@ export class Resend {
     entity?: unknown,
     options: PostOptions & IdempotentRequest = {},
   ) {
+    const headers = new Headers(this.headers);
+
     if (options.idempotencyKey) {
-      this.headers.set('Idempotency-Key', options.idempotencyKey);
+      headers.set('Idempotency-Key', options.idempotencyKey);
     }
 
     const requestOptions = {
       method: 'POST',
-      headers: this.headers,
+      headers: headers,
       body: JSON.stringify(entity),
       ...options,
     };
