@@ -1,57 +1,46 @@
-import type * as React from 'react';
-import type { EmailApiOptions } from '../common/interfaces/email-api-options.interface';
-import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
-import type { Resend } from '../resend';
+import type * as React from "react";
+import type { EmailApiOptions } from "../common/interfaces/email-api-options.interface";
+import { parseEmailToApiOptions } from "../common/utils/parse-email-to-api-options";
+import type { Resend } from "../resend";
 import type {
-  CreateBatchOptions,
-  CreateBatchRequestOptions,
-  CreateBatchResponse,
-  CreateBatchSuccessResponse,
-} from './interfaces/create-batch-options.interface';
+	CreateBatchOptions,
+	CreateBatchRequestOptions,
+	CreateBatchResponse,
+	CreateBatchSuccessResponse,
+} from "./interfaces/create-batch-options.interface";
+import { render } from "../common/utils/render";
 
 export class Batch {
-  private renderAsync?: (component: React.ReactElement) => Promise<string>;
-  constructor(private readonly resend: Resend) {}
+	constructor(private readonly resend: Resend) {}
 
-  async send(
-    payload: CreateBatchOptions,
-    options: CreateBatchRequestOptions = {},
-  ): Promise<CreateBatchResponse> {
-    return this.create(payload, options);
-  }
+	async send(
+		payload: CreateBatchOptions,
+		options: CreateBatchRequestOptions = {},
+	): Promise<CreateBatchResponse> {
+		return this.create(payload, options);
+	}
 
-  async create(
-    payload: CreateBatchOptions,
-    options: CreateBatchRequestOptions = {},
-  ): Promise<CreateBatchResponse> {
-    const emails: EmailApiOptions[] = [];
+	async create(
+		payload: CreateBatchOptions,
+		options: CreateBatchRequestOptions = {},
+	): Promise<CreateBatchResponse> {
+		const emails: EmailApiOptions[] = [];
 
-    for (const email of payload) {
-      if (email.react) {
-        if (!this.renderAsync) {
-          try {
-            const { renderAsync } = await import('@react-email/render');
-            this.renderAsync = renderAsync;
-          } catch (error) {
-            throw new Error(
-              'Failed to render React component. Make sure to install `@react-email/render`',
-            );
-          }
-        }
+		for (const email of payload) {
+			if (email.react) {
+				email.html = await render(email.react as React.ReactElement);
+				email.react = undefined;
+			}
 
-        email.html = await this.renderAsync(email.react as React.ReactElement);
-        email.react = undefined;
-      }
+			emails.push(parseEmailToApiOptions(email));
+		}
 
-      emails.push(parseEmailToApiOptions(email));
-    }
+		const data = await this.resend.post<CreateBatchSuccessResponse>(
+			"/emails/batch",
+			emails,
+			options,
+		);
 
-    const data = await this.resend.post<CreateBatchSuccessResponse>(
-      '/emails/batch',
-      emails,
-      options,
-    );
-
-    return data;
-  }
+		return data;
+	}
 }
