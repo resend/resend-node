@@ -65,7 +65,7 @@ await resend.emails.send({
 ```
 
 > [!NOTE]  
-> In order to send from your own domain, you will first need to verify your domain in the [Resend Dashboard](https://resend.com/domains) 
+> In order to send from your own domain, you will first need to verify your domain in the [Resend Dashboard](https://resend.com/domains). 
 
 ## Send email using HTML
 
