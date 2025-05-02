@@ -1,5 +1,8 @@
 export const RESEND_ERROR_CODES_BY_KEY = {
   missing_required_field: 422,
+  invalid_idempotency_key: 400,
+  invalid_idempotent_request: 409,
+  concurrent_idempotent_requests: 409,
   invalid_access: 422,
   invalid_parameter: 422,
   invalid_region: 422,
