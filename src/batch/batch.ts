@@ -10,7 +10,7 @@ import type {
 } from './interfaces/create-batch-options.interface';
 
 export class Batch {
-  private renderAsync?: (component: React.ReactElement) => Promise<string>;
+  private render?: (component: React.ReactElement) => Promise<string>;
   constructor(private readonly resend: Resend) {}
 
   async send(
@@ -28,10 +28,10 @@ export class Batch {
 
     for (const email of payload) {
       if (email.react) {
-        if (!this.renderAsync) {
+        if (!this.render) {
           try {
-            const { renderAsync } = await import('@react-email/render');
-            this.renderAsync = renderAsync;
+            const { render } = await import('@react-email/render');
+            this.render = render;
           } catch (error) {
             throw new Error(
               'Failed to render React component. Make sure to install `@react-email/render`',
@@ -39,7 +39,7 @@ export class Batch {
           }
         }
 
-        email.html = await this.renderAsync(email.react as React.ReactElement);
+        email.html = await this.render(email.react as React.ReactElement);
         email.react = undefined;
       }
 
