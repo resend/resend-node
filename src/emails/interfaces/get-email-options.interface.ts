@@ -14,9 +14,11 @@ export interface GetEmailResponseSuccess {
     | 'complained'
     | 'delivered'
     | 'delivery_delayed'
+    | 'failed'
     | 'opened'
     | 'queued'
-    | 'scheduled';
+    | 'scheduled'
+    | 'sent';
   reply_to: string[] | null;
   subject: string;
   text: string | null;
