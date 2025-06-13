@@ -6,7 +6,12 @@ export type ListAudiencesResponseSuccess = {
   data: Audience[];
 };
 
-export interface ListAudiencesResponse {
-  data: ListAudiencesResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type ListAudiencesResponse =
+  | {
+      data: ListAudiencesResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

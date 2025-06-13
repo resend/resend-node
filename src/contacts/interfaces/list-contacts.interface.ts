@@ -10,7 +10,12 @@ export interface ListContactsResponseSuccess {
   data: Contact[];
 }
 
-export interface ListContactsResponse {
-  data: ListContactsResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type ListContactsResponse =
+  | {
+      data: ListContactsResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

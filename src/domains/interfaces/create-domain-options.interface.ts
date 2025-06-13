@@ -15,7 +15,12 @@ export interface CreateDomainResponseSuccess
   records: DomainRecords[];
 }
 
-export interface CreateDomainResponse {
-  data: CreateDomainResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateDomainResponse =
+  | {
+      data: CreateDomainResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

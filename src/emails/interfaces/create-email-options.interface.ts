@@ -101,10 +101,15 @@ export interface CreateEmailResponseSuccess {
   id: string;
 }
 
-export interface CreateEmailResponse {
-  data: CreateEmailResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateEmailResponse =
+  | {
+      data: CreateEmailResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };
 
 export interface Attachment {
   /** Content of an attached file. */

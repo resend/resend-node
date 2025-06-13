@@ -6,7 +6,12 @@ export type ListApiKeysResponseSuccess = Pick<
   'name' | 'id' | 'created_at'
 >[];
 
-export interface ListApiKeysResponse {
-  data: ListApiKeysResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type ListApiKeysResponse =
+  | {
+      data: ListApiKeysResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

@@ -16,7 +16,12 @@ export interface CreateBatchSuccessResponse {
   }[];
 }
 
-export interface CreateBatchResponse {
-  data: CreateBatchSuccessResponse | null;
-  error: ErrorResponse | null;
-}
+export type CreateBatchResponse =
+  | {
+      data: CreateBatchSuccessResponse;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

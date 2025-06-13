@@ -6,7 +6,12 @@ export interface RemoveBroadcastResponseSuccess extends Pick<Broadcast, 'id'> {
   deleted: boolean;
 }
 
-export interface RemoveBroadcastResponse {
-  data: RemoveBroadcastResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type RemoveBroadcastResponse =
+  | {
+      data: RemoveBroadcastResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

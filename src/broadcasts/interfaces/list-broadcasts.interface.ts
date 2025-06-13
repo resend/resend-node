@@ -15,7 +15,12 @@ export type ListBroadcastsResponseSuccess = {
   >[];
 };
 
-export interface ListBroadcastsResponse {
-  data: ListBroadcastsResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type ListBroadcastsResponse =
+  | {
+      data: ListBroadcastsResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

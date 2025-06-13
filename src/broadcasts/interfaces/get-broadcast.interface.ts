@@ -5,7 +5,12 @@ export interface GetBroadcastResponseSuccess extends Broadcast {
   object: 'broadcast';
 }
 
-export interface GetBroadcastResponse {
-  data: GetBroadcastResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type GetBroadcastResponse =
+  | {
+      data: GetBroadcastResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

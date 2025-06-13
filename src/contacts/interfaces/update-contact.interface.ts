@@ -17,7 +17,12 @@ export type UpdateContactResponseSuccess = Pick<Contact, 'id'> & {
   object: 'contact';
 };
 
-export interface UpdateContactResponse {
-  data: UpdateContactResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type UpdateContactResponse =
+  | {
+      data: UpdateContactResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };
