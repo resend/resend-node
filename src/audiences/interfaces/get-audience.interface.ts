@@ -6,7 +6,12 @@ export interface GetAudienceResponseSuccess
   object: 'audience';
 }
 
-export interface GetAudienceResponse {
-  data: GetAudienceResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type GetAudienceResponse =
+  | {
+      data: GetAudienceResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

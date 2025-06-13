@@ -6,7 +6,12 @@ export type RemoveDomainsResponseSuccess = Pick<Domain, 'id'> & {
   deleted: boolean;
 };
 
-export interface RemoveDomainsResponse {
-  data: RemoveDomainsResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type RemoveDomainsResponse =
+  | {
+      data: RemoveDomainsResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

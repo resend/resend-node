@@ -16,7 +16,12 @@ export interface CreateContactResponseSuccess extends Pick<Contact, 'id'> {
   object: 'contact';
 }
 
-export interface CreateContactResponse {
-  data: CreateContactResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateContactResponse =
+  | {
+      data: CreateContactResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

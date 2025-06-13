@@ -21,7 +21,12 @@ export interface SendBroadcastResponseSuccess {
   id: string;
 }
 
-export interface SendBroadcastResponse {
-  data: SendBroadcastResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type SendBroadcastResponse =
+  | {
+      data: SendBroadcastResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

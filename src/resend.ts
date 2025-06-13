@@ -56,7 +56,7 @@ export class Resend {
   async fetchRequest<T>(
     path: string,
     options = {},
-  ): Promise<{ data: T | null; error: ErrorResponse | null }> {
+  ): Promise<{ data: T; error: null } | { data: null; error: ErrorResponse }> {
     try {
       const response = await fetch(`${baseUrl}${path}`, options);
 

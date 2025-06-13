@@ -6,7 +6,12 @@ export interface RemoveAudiencesResponseSuccess extends Pick<Audience, 'id'> {
   deleted: boolean;
 }
 
-export interface RemoveAudiencesResponse {
-  data: RemoveAudiencesResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type RemoveAudiencesResponse =
+  | {
+      data: RemoveAudiencesResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

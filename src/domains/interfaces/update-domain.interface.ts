@@ -12,7 +12,12 @@ export type UpdateDomainsResponseSuccess = Pick<Domain, 'id'> & {
   object: 'domain';
 };
 
-export interface UpdateDomainsResponse {
-  data: UpdateDomainsResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type UpdateDomainsResponse =
+  | {
+      data: UpdateDomainsResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

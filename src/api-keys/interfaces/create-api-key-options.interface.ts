@@ -14,7 +14,12 @@ export interface CreateApiKeyResponseSuccess {
   id: string;
 }
 
-export interface CreateApiKeyResponse {
-  data: CreateApiKeyResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateApiKeyResponse =
+  | {
+      data: CreateApiKeyResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

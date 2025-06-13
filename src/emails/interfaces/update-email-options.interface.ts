@@ -10,7 +10,12 @@ export interface UpdateEmailResponseSuccess {
   object: 'email';
 }
 
-export interface UpdateEmailResponse {
-  data: UpdateEmailResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type UpdateEmailResponse =
+  | {
+      data: UpdateEmailResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

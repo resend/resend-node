@@ -73,7 +73,12 @@ export interface CreateBroadcastResponseSuccess {
   id: string;
 }
 
-export interface CreateBroadcastResponse {
-  data: CreateBroadcastResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateBroadcastResponse =
+  | {
+      data: CreateBroadcastResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

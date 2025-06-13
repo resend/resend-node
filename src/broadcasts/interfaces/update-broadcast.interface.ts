@@ -15,7 +15,12 @@ export interface UpdateBroadcastOptions {
   previewText?: string;
 }
 
-export interface UpdateBroadcastResponse {
-  data: UpdateBroadcastResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type UpdateBroadcastResponse =
+  | {
+      data: UpdateBroadcastResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

@@ -13,7 +13,12 @@ export interface CreateAudienceResponseSuccess
   object: 'audience';
 }
 
-export interface CreateAudienceResponse {
-  data: CreateAudienceResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateAudienceResponse =
+  | {
+      data: CreateAudienceResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

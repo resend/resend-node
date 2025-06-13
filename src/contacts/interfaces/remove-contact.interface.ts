@@ -25,7 +25,12 @@ export interface RemoveContactOptions extends RemoveByOptions {
   audienceId: string;
 }
 
-export interface RemoveContactsResponse {
-  data: RemoveContactsResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type RemoveContactsResponse =
+  | {
+      data: RemoveContactsResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

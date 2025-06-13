@@ -5,7 +5,12 @@ export type VerifyDomainsResponseSuccess = Pick<Domain, 'id'> & {
   object: 'domain';
 };
 
-export interface VerifyDomainsResponse {
-  data: VerifyDomainsResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type VerifyDomainsResponse =
+  | {
+      data: VerifyDomainsResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

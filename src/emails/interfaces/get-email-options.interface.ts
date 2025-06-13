@@ -27,7 +27,12 @@ export interface GetEmailResponseSuccess {
   object: 'email';
 }
 
-export interface GetEmailResponse {
-  data: GetEmailResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type GetEmailResponse =
+  | {
+      data: GetEmailResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

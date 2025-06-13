@@ -7,7 +7,12 @@ export interface GetDomainResponseSuccess
   records: DomainRecords[];
 }
 
-export interface GetDomainResponse {
-  data: GetDomainResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type GetDomainResponse =
+  | {
+      data: GetDomainResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

@@ -15,7 +15,12 @@ export interface GetContactResponseSuccess
   object: 'contact';
 }
 
-export interface GetContactResponse {
-  data: GetContactResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type GetContactResponse =
+  | {
+      data: GetContactResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };
