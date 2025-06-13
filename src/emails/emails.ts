@@ -1,5 +1,6 @@
 import type * as React from 'react';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
+import { render } from '../common/utils/render';
 import type { Resend } from '../resend';
 import type {
   CancelEmailResponse,
@@ -22,7 +23,6 @@ import type {
 } from './interfaces/update-email-options.interface';
 
 export class Emails {
-  private renderAsync?: (component: React.ReactElement) => Promise<string>;
   constructor(private readonly resend: Resend) {}
 
   async send(
@@ -37,20 +37,7 @@ export class Emails {
     options: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
     if (payload.react) {
-      if (!this.renderAsync) {
-        try {
-          const { renderAsync } = await import('@react-email/render');
-          this.renderAsync = renderAsync;
-        } catch (error) {
-          throw new Error(
-            'Failed to render React component. Make sure to install `@react-email/render`',
-          );
-        }
-      }
-
-      payload.html = await this.renderAsync(
-        payload.react as React.ReactElement,
-      );
+      payload.html = await render(payload.react as React.ReactElement);
     }
 
     const data = await this.resend.post<CreateEmailResponseSuccess>(
