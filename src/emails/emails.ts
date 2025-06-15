@@ -22,7 +22,7 @@ import type {
 } from './interfaces/update-email-options.interface';
 
 export class Emails {
-  private renderAsync?: (component: React.ReactElement) => Promise<string>;
+  private render?: (component: React.ReactElement) => Promise<string>;
   constructor(private readonly resend: Resend) {}
 
   async send(
@@ -37,10 +37,10 @@ export class Emails {
     options: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
     if (payload.react) {
-      if (!this.renderAsync) {
+      if (!this.render) {
         try {
-          const { renderAsync } = await import('@react-email/render');
-          this.renderAsync = renderAsync;
+          const { render } = await import('@react-email/render');
+          this.render = render;
         } catch (error) {
           throw new Error(
             'Failed to render React component. Make sure to install `@react-email/render`',
@@ -48,7 +48,7 @@ export class Emails {
         }
       }
 
-      payload.html = await this.renderAsync(
+      payload.html = await this.render(
         payload.react as React.ReactElement,
       );
     }
