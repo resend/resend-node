@@ -91,7 +91,7 @@ export class Resend {
 
       const data = await response.json();
       return { data, error: null };
-    } catch (error) {
+    } catch {
       return {
         data: null,
         error: {
