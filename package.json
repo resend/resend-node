@@ -45,7 +45,7 @@
     "@react-email/render": "1.1.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.0.6",
     "@types/jest": "29.5.14",
     "@types/node": "18.19.86",
     "@types/react": "19.1.2",
