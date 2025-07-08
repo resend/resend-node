@@ -13,6 +13,7 @@ import { Emails } from './emails/emails';
 import { Inbound } from './inbound/inbound';
 import type { ErrorResponse } from './interfaces';
 import { Templates } from './templates/templates';
+import { Topics } from './topics/topics';
 
 const defaultBaseUrl = 'https://api.resend.com';
 const defaultUserAgent = `resend-node:${version}`;
@@ -38,6 +39,7 @@ export class Resend {
   readonly emails = new Emails(this);
   readonly templates = new Templates(this);
   readonly inbound = new Inbound(this);
+  readonly topics = new Topics(this);
 
   constructor(readonly key?: string) {
     if (!key) {
