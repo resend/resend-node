@@ -11,6 +11,7 @@ import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import type { ErrorResponse, Response } from './interfaces';
 import { parseRateLimit } from './rate-limiting';
+import { Topics } from './topics/topics';
 
 const defaultBaseUrl = 'https://api.resend.com';
 const defaultUserAgent = `resend-node:${version}`;
@@ -33,6 +34,7 @@ export class Resend {
   readonly contacts = new Contacts(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
+  readonly topics = new Topics(this);
 
   constructor(readonly key?: string) {
     if (!key) {
