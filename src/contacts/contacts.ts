@@ -25,9 +25,14 @@ import type {
   UpdateContactResponse,
   UpdateContactResponseSuccess,
 } from './interfaces/update-contact.interface';
+import { ContactTopics } from './topics/contact-topics';
 
 export class Contacts {
-  constructor(private readonly resend: Resend) {}
+  readonly topics: ContactTopics;
+
+  constructor(private readonly resend: Resend) {
+    this.topics = new ContactTopics(this.resend);
+  }
 
   async create(
     payload: CreateContactOptions,
