@@ -168,10 +168,14 @@ describe('ContactTopics', () => {
         topics: [
           {
             id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+            name: 'Test Topic',
+            description: 'This is a test topic',
             subscription: 'opt_in',
           },
           {
             id: 'another-topic-id',
+            name: 'Another Topic',
+            description: null,
             subscription: 'opt_out',
           },
         ],
@@ -194,11 +198,15 @@ describe('ContactTopics', () => {
     "email": "carolina@resend.com",
     "topics": [
       {
+        "description": "This is a test topic",
         "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
+        "name": "Test Topic",
         "subscription": "opt_in",
       },
       {
+        "description": null,
         "id": "another-topic-id",
+        "name": "Another Topic",
         "subscription": "opt_out",
       },
     ],
@@ -217,6 +225,8 @@ describe('ContactTopics', () => {
         topics: [
           {
             id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+            name: 'Test Topic',
+            description: 'This is a test topic',
             subscription: 'opt_in',
           },
         ],
@@ -239,7 +249,9 @@ describe('ContactTopics', () => {
     "email": "carolina@resend.com",
     "topics": [
       {
+        "description": "This is a test topic",
         "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
+        "name": "Test Topic",
         "subscription": "opt_in",
       },
     ],
