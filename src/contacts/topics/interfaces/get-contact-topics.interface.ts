@@ -12,6 +12,8 @@ export interface GetContactTopicsRequestOptions extends GetOptions {}
 
 export interface ContactTopic {
   id: string;
+  name: string;
+  description: string | null;
   subscription: 'opt_in' | 'opt_out';
 }
 
