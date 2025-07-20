@@ -32,7 +32,7 @@ export class Batch {
           try {
             const { renderAsync } = await import('@react-email/render');
             this.renderAsync = renderAsync;
-          } catch (error) {
+          } catch {
             throw new Error(
               'Failed to render React component. Make sure to install `@react-email/render`',
             );
