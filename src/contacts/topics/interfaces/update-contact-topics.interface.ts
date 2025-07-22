@@ -8,8 +8,7 @@ interface UpdateContactTopicsBaseOptions {
 
 export interface UpdateContactTopicsOptions
   extends UpdateContactTopicsBaseOptions {
-  opt_in?: string | string[];
-  opt_out?: string | string[];
+  topics: { id: string; subscription: 'opt_in' | 'opt_out' }[];
 }
 
 export interface UpdateContactTopicsRequestOptions extends PatchOptions {}
