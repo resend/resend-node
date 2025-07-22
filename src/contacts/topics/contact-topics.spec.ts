@@ -18,7 +18,12 @@ describe('ContactTopics', () => {
     it('updates contact topics with opt_in', async () => {
       const payload: UpdateContactTopicsOptions = {
         email: 'carolina+2@resend.com',
-        opt_in: ['c7e1e488-ae2c-4255-a40c-a4db3af7ed0b'],
+        topics: [
+          {
+            id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+            subscription: 'opt_in',
+          },
+        ],
       };
       const response: UpdateContactTopicsResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
@@ -48,7 +53,12 @@ describe('ContactTopics', () => {
     it('updates contact topics with opt_out', async () => {
       const payload: UpdateContactTopicsOptions = {
         email: 'carolina+2@resend.com',
-        opt_out: ['c7e1e488-ae2c-4255-a40c-a4db3af7ed0b'],
+        topics: [
+          {
+            id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+            subscription: 'opt_out',
+          },
+        ],
       };
       const response: UpdateContactTopicsResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
@@ -78,8 +88,16 @@ describe('ContactTopics', () => {
     it('updates contact topics with both opt_in and opt_out', async () => {
       const payload: UpdateContactTopicsOptions = {
         email: 'carolina+2@resend.com',
-        opt_in: ['c7e1e488-ae2c-4255-a40c-a4db3af7ed0b'],
-        opt_out: ['another-topic-id'],
+        topics: [
+          {
+            id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+            subscription: 'opt_in',
+          },
+          {
+            id: 'another-topic-id',
+            subscription: 'opt_out',
+          },
+        ],
       };
       const response: UpdateContactTopicsResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
@@ -108,7 +126,12 @@ describe('ContactTopics', () => {
 
     it('returns error when missing both id and email', async () => {
       const payload = {
-        opt_in: ['c7e1e488-ae2c-4255-a40c-a4db3af7ed0b'],
+        topics: [
+          {
+            id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+            subscription: 'opt_in',
+          },
+        ],
       };
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -130,7 +153,12 @@ describe('ContactTopics', () => {
     it('updates contact topics using ID', async () => {
       const payload: UpdateContactTopicsOptions = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
-        opt_in: ['c7e1e488-ae2c-4255-a40c-a4db3af7ed0b'],
+        topics: [
+          {
+            id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+            subscription: 'opt_in',
+          },
+        ],
       };
       const response: UpdateContactTopicsResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',

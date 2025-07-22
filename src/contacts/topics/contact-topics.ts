@@ -29,10 +29,7 @@ export class ContactTopics {
     const identifier = payload.email ? payload.email : payload.id;
     const data = await this.resend.patch<UpdateContactTopicsResponseSuccess>(
       `/contacts/${identifier}/topics`,
-      {
-        opt_in: payload.opt_in,
-        opt_out: payload.opt_out,
-      },
+      payload.topics,
     );
 
     return data;
