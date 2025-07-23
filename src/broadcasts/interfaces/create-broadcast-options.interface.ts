@@ -61,6 +61,12 @@ interface CreateBroadcastBaseOptions {
    * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
    */
   subject: string;
+  /**
+   * The id of the topic you want to send to
+   *
+   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   */
+  topicId?: string | null;
 }
 
 export type CreateBroadcastOptions = RequireAtLeastOne<EmailRenderOptions> &

@@ -63,6 +63,7 @@ export class Broadcasts {
         reply_to: payload.replyTo,
         subject: payload.subject,
         text: payload.text,
+        topic_id: payload.topicId,
       },
       options,
     );
@@ -117,6 +118,7 @@ export class Broadcasts {
         subject: payload.subject,
         reply_to: payload.replyTo,
         preview_text: payload.previewText,
+        topic_id: payload.topicId,
       },
     );
     return data;
