@@ -13,6 +13,7 @@ export interface UpdateBroadcastOptions {
   subject?: string;
   replyTo?: string[];
   previewText?: string;
+  topicId?: string | null;
 }
 
 export interface UpdateBroadcastResponse {

@@ -23,6 +23,7 @@ export interface GetEmailResponseSuccess {
   subject: string;
   text: string | null;
   to: string[];
+  topic_id?: string | null;
   scheduled_at: string | null;
   object: 'email';
 }

@@ -12,6 +12,7 @@ export interface EmailApiOptions {
   bcc?: string | string[];
   cc?: string | string[];
   reply_to?: string | string[];
+  topic_id?: string | null;
   scheduled_at?: string;
   tags?: Tag[];
   attachments?: Attachment[];

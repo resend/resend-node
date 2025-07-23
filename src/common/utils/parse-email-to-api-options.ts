@@ -17,5 +17,6 @@ export function parseEmailToApiOptions(
     tags: email.tags,
     text: email.text,
     to: email.to,
+    topic_id: email.topicId,
   };
 }
