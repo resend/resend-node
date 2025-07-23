@@ -94,6 +94,12 @@ interface CreateEmailBaseOptions {
    */
   to: string | string[];
   /**
+   * The id of the topic you want to send to
+   *
+   * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
+   */
+  topicId?: string | null;
+  /**
    * Schedule email to be sent later.
    * The date should be in ISO 8601 format (e.g: 2024-08-05T11:52:01.858Z).
    *

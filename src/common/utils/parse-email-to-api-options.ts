@@ -38,5 +38,6 @@ export function parseEmailToApiOptions(
           variables: email.template.variables,
         }
       : undefined,
+    topic_id: email.topicId,
   };
 }

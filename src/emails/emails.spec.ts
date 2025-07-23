@@ -59,6 +59,7 @@ describe('Emails', () => {
         to: 'user@resend.com',
         subject: 'Not Idempotent Test',
         html: '<h1>Test</h1>',
+        topicId: '9f31e56e-3083-46cf-8e96-c6995e0e576a',
       };
 
       await resend.emails.create(payload);
@@ -69,8 +70,18 @@ describe('Emails', () => {
       const request = lastCall[1];
       expect(request).toBeDefined();
 
-      const headers = new Headers(request?.headers);
-      expect(headers.has('Idempotency-Key')).toBe(false);
+      // Make sure the topic_id is included in the body
+      expect(lastCall[1]?.body).toEqual(
+        '{"from":"admin@resend.com","html":"<h1>Test</h1>","subject":"Not Idempotent Test","to":"user@resend.com","topic_id":"9f31e56e-3083-46cf-8e96-c6995e0e576a"}',
+      );
+
+      //@ts-ignore
+      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
+      expect(hasIdempotencyKey).toBeFalsy();
+
+      //@ts-expect-error
+      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
+      expect(usedIdempotencyKey).toBeNull();
     });
 
     it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
