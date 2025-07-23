@@ -422,6 +422,7 @@ describe('Broadcasts', () => {
         created_at: '2024-12-01T19:32:22.980Z',
         scheduled_at: null,
         sent_at: null,
+        topic_id: '9f31e56e-3083-46cf-8e96-c6995e0e576a',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -451,6 +452,7 @@ describe('Broadcasts', () => {
     "sent_at": null,
     "status": "draft",
     "subject": "hello world",
+    "topic_id": "9f31e56e-3083-46cf-8e96-c6995e0e576a",
   },
   "error": null,
 }
