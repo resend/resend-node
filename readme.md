@@ -113,7 +113,20 @@ await resend.emails.send({
 ```
 
 > [!NOTE]
-> If your endpoint is a JS/TS file, render the template (i.e., pass `EmailTemplate({firstName="John", product="MyApp"})` instead of the component).
+> If you're sending emails from a file that doesn't have JSX transpilation set up (e.g., in a JS/TS file instead of JSX/TSX), use React's `jsx` runtime function instead of passing the component as JSX:
+>
+>```js
+>import { jsx } from 'react/jsx-runtime'
+>import EmailTemplate from '../components/EmailTemplate';
+>
+>await resend.emails.send({
+>  from: 'you@example.com',
+>  to: 'user@gmail.com',
+>  replyTo: 'you@example.com',
+>  subject: 'hello world',
+>  react: jsx(EmailTemplate, { firstName:"John", product:"MyApp" }),
+>});
+>```
 
 ## License
 
