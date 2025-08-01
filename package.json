@@ -1,6 +1,6 @@
 {
   "name": "resend",
-  "version": "5.0.0-canary.0",
+  "version": "5.0.0-canary.1",
   "description": "Node.js library for the Resend API",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -41,16 +41,9 @@
     "url": "https://github.com/resendlabs/resend-node/issues"
   },
   "homepage": "https://github.com/resendlabs/resend-node#readme",
-  "peerDependencies": {
-    "@react-email/render": "^1.1.0"
-  },
-  "peerDependenciesMeta": {
-    "@react-email/render": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@react-email/render": "1.1.2",
     "@types/jest": "29.5.14",
     "@types/node": "18.19.86",
     "@types/react": "19.1.2",
