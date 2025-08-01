@@ -42,15 +42,10 @@
   },
   "homepage": "https://github.com/resendlabs/resend-node#readme",
   "peerDependencies": {
-    "@react-email/render": "^1.1.0"
-  },
-  "peerDependenciesMeta": {
-    "@react-email/render": {
-      "optional": true
-    }
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@react-email/render": "^1.1.0",
     "@types/jest": "29.5.14",
     "@types/node": "18.19.86",
     "@types/react": "19.1.2",
