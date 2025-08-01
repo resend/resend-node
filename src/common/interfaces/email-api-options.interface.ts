@@ -1,5 +1,12 @@
-import type { Attachment } from '../../emails/interfaces/create-email-options.interface';
 import type { Tag } from '../../interfaces';
+
+export interface EmailApiAttachment {
+  content?: string | Buffer;
+  filename?: string | false | undefined;
+  path?: string;
+  content_type?: string;
+  inline_content_id?: string;
+}
 
 export interface EmailApiOptions {
   from: string;
@@ -14,5 +21,5 @@ export interface EmailApiOptions {
   reply_to?: string | string[];
   scheduled_at?: string;
   tags?: Tag[];
-  attachments?: Attachment[];
+  attachments?: EmailApiAttachment[];
 }
