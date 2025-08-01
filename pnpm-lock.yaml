@@ -12,8 +12,8 @@ importers:
         specifier: 1.9.4
         version: 1.9.4
       '@react-email/render':
-        specifier: 1.1.0
-        version: 1.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 1.1.2
+        version: 1.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/jest':
         specifier: 29.5.14
         version: 29.5.14
@@ -519,8 +519,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@react-email/render@1.1.0':
-    resolution: {integrity: sha512-X4CsHvXi5X7kTn5NgXNGg8Y5U1VtVJmlpNLlTc2E8RVHKFS3bpr+o/ZXhEPN4yRkdY+ZYN5eqVTV922Hujqsxw==}
+  '@react-email/render@1.1.2':
+    resolution: {integrity: sha512-RnRehYN3v9gVlNMehHPHhyp2RQo7+pSkHDtXPvg3s0GbzM9SQMW4Qrf8GRNvtpLC4gsI+Wt0VatNRUFqjvevbw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
@@ -2386,7 +2386,7 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@react-email/render@1.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@react-email/render@1.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       html-to-text: 9.0.5
       prettier: 3.5.3
