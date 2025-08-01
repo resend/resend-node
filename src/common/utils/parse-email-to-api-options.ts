@@ -1,11 +1,26 @@
 import type { CreateEmailOptions } from '../../emails/interfaces/create-email-options.interface';
-import type { EmailApiOptions } from '../interfaces/email-api-options.interface';
+import type {
+  EmailApiAttachment,
+  EmailApiOptions,
+} from '../interfaces/email-api-options.interface';
+
+function parseAttachments(
+  attachments: CreateEmailOptions['attachments'],
+): EmailApiAttachment[] | undefined {
+  return attachments?.map((attachment) => ({
+    content: attachment.content,
+    filename: attachment.filename,
+    path: attachment.path,
+    content_type: attachment.contentType,
+    inline_content_id: attachment.inlineContentId,
+  }));
+}
 
 export function parseEmailToApiOptions(
   email: CreateEmailOptions,
 ): EmailApiOptions {
   return {
-    attachments: email.attachments,
+    attachments: parseAttachments(email.attachments),
     bcc: email.bcc,
     cc: email.cc,
     from: email.from,
