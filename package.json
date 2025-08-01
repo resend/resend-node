@@ -41,8 +41,6 @@
     "url": "https://github.com/resendlabs/resend-node/issues"
   },
   "homepage": "https://github.com/resendlabs/resend-node#readme",
-  "peerDependencies": {
-  },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@react-email/render": "^1.1.0",
