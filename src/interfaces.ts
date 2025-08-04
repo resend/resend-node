@@ -19,9 +19,30 @@ export const RESEND_ERROR_CODES_BY_KEY = {
 
 export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
-export interface ErrorResponse {
+export type ErrorResponse = {
   message: string;
   name: RESEND_ERROR_CODE_KEY;
+} | {
+  name: 'rate_limit_exceeded';
+  message: string;
+  /**
+    * Information to help you with remediation of the error, for example, with rate limiting.
+    */
+  remediation: {
+    /**
+      * Time in seconds after which the request can be retried.
+      */
+    retry_after: number;
+
+    /**
+      * The number of requests allowed per second.
+      */
+    limit: number;
+    /**
+      * Time in seconds for the limit 
+      */
+    reset: number;
+  }
 }
 
 export type Tag = { name: string; value: string };
