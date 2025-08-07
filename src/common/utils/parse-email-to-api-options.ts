@@ -12,7 +12,7 @@ function parseAttachments(
     filename: attachment.filename,
     path: attachment.path,
     content_type: attachment.contentType,
-    inline_content_id: attachment.inlineContentId,
+    content_id: attachment.contentId,
   }));
 }
 
