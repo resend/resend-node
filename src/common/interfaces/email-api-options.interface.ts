@@ -5,7 +5,7 @@ export interface EmailApiAttachment {
   filename?: string | false | undefined;
   path?: string;
   content_type?: string;
-  inline_content_id?: string;
+  content_id?: string;
 }
 
 export interface EmailApiOptions {
