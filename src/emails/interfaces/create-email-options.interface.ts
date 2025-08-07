@@ -124,7 +124,7 @@ export interface Attachment {
    * Optional content ID for the attachment, to be used as a reference in the HTML content.
    * If set, this attachment will be sent as an inline attachment and you can reference it in the HTML content using the `cid:` prefix.
    */
-  inlineContentId?: string;
+  contentId?: string;
 }
 
 export type Tag = {
