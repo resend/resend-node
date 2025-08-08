@@ -9,9 +9,12 @@ jobs:
     runs-on: buildjet-4vcpu-ubuntu-2204
     container:
       image: node:20
-      credentials:
-        username: "${{ vars.DOCKER_HUB_USERNAME }}"
-        password: "${{ secrets.DOCKER_HUB_API_KEY }}"
+      ${{ secrets.DOCKER_HUB_API_KEY && format('credentials:
+        username: {0}
+        password: {1}', 
+        vars.DOCKER_HUB_USERNAME, 
+        secrets.DOCKER_HUB_API_KEY
+      ) || ""}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
