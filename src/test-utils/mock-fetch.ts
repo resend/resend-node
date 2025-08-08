@@ -24,9 +24,9 @@ export function mockFetchWithRateLimit(
   } = options;
 
   const defaultRateLimit = {
-    limit: 100,
-    remaining: 99,
-    reset: 1754677253, // Fixed timestamp for consistent tests
+    limit: 2,
+    remaining: 2,
+    reset: 1, // Fixed timestamp for consistent tests
   };
 
   const rateLimitHeaders = {
