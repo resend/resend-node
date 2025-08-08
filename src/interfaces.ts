@@ -29,6 +29,9 @@ export type ErrorResponse =
   | {
       message: string;
       name: Extract<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
+      /**
+        * Time in seconds.
+        */
       retryAfter: number;
     };
 
