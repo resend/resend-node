@@ -1,4 +1,4 @@
-import { RateLimit } from './rate-limiting';
+import type { RateLimit } from './rate-limiting';
 
 export const RESEND_ERROR_CODES_BY_KEY = {
   missing_required_field: 422,
@@ -26,17 +26,16 @@ export type ErrorResponse = {
   name: RESEND_ERROR_CODE_KEY;
 };
 
-export type Response<Data> = (
+export type Response<Data> =
   | {
       data: Data;
+      rateLimiting: RateLimit;
       error: null;
     }
   | {
       data: null;
+      rateLimiting: RateLimit | null;
       error: ErrorResponse;
-    }
-) & {
-  rateLimiting: RateLimit;
-};
+    };
 
 export type Tag = { name: string; value: string };

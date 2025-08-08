@@ -4,16 +4,15 @@ export type RateLimit = {
   shouldResetAfter: number;
 };
 
-export function parseRateLimit(headers: Headers): RateLimit | undefined {
+export function parseRateLimit(headers: Headers): RateLimit {
   const limitHeader = headers.get('ratelimit-limit');
   const remainingHeader = headers.get('ratelimit-remaining');
   const resetHeader = headers.get('ratelimit-reset');
 
   if (!limitHeader || !remainingHeader || !resetHeader) {
-    console.warn(
+    throw new Error(
       "The rate limit headers are not present in the response, something must've gone wrong, please email us at support@resend.com",
     );
-    return undefined;
   }
 
   const limit = Number.parseInt(limitHeader, 10);
