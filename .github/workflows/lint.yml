@@ -9,6 +9,9 @@ jobs:
     runs-on: buildjet-4vcpu-ubuntu-2204
     container:
       image: node:20
+      credentials:
+        username: 
+        password:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
