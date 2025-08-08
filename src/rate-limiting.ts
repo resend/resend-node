@@ -1,6 +1,19 @@
 export type RateLimit = {
+  /**
+    * The maximum amount of requests that can be made in the time window of {@link shouldResetAfter}.
+    */
   limit: number;
+  /**
+    * The amount of requests that can still be made before hitting {@link RateLimit.limit}.
+    *
+    * Resets after the seconds in {@link RateLimit.shouldResetAfter} go by.
+    */
   remainingRequests: number;
+  /**
+    * The number of seconds after which the rate limiting will reset, 
+    * and {@link RateLimit.remainingRequests} goes back to the value of 
+    * {@link RateLimit.limit}.
+    */
   shouldResetAfter: number;
 };
 
