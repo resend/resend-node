@@ -3,8 +3,8 @@ import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import {
   mockErrorResponse,
-  mockSuccessResponse,
   mockFetchWithRateLimit,
+  mockSuccessResponse,
 } from '../test-utils/mock-fetch';
 import type {
   CreateBroadcastOptions,
