@@ -19,30 +19,35 @@ export const RESEND_ERROR_CODES_BY_KEY = {
 
 export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
-export type ErrorResponse = {
-  message: string;
-  name: RESEND_ERROR_CODE_KEY;
-} | {
-  name: 'rate_limit_exceeded';
-  message: string;
-  /**
-    * Information to help you with remediation of the error, for example, with rate limiting.
-    */
-  remediation: {
-    /**
-      * Time in seconds after which the request can be retried.
-      */
-    retry_after: number;
+export type ErrorResponse =
+  | {
+      message: string;
+      name: Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
+    }
+  | {
+      name: Extract<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
+      message: string;
+      /**
+       * Information to help you with remediation of the error, for example,
+       * waiting for `retry_after` before retrying a rate limited request.
+       */
+      remediation: {
+        /**
+         * Time in seconds after which the request can be retried.
+         */
+        retry_after: number;
 
-    /**
-      * The number of requests allowed per second.
-      */
-    limit: number;
-    /**
-      * Time in seconds for the limit 
-      */
-    reset: number;
-  }
-}
+        /**
+         * The number of requests allowed per {@member reset}.
+         */
+        limit: number;
+        /**
+         * Time in seconds for the limit
+         */
+        reset: number;
+
+        policy: string;
+      };
+    };
 
 export type Tag = { name: string; value: string };
