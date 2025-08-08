@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Domain } from './domain';
 
 export interface UpdateDomainsOptions {
@@ -12,12 +12,4 @@ export type UpdateDomainsResponseSuccess = Pick<Domain, 'id'> & {
   object: 'domain';
 };
 
-export type UpdateDomainsResponse =
-  | {
-      data: UpdateDomainsResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type UpdateDomainsResponse = Response<UpdateDomainsResponseSuccess>;

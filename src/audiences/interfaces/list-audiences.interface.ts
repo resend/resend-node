@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Audience } from './audience';
 
 export type ListAudiencesResponseSuccess = {
@@ -6,12 +6,4 @@ export type ListAudiencesResponseSuccess = {
   data: Audience[];
 };
 
-export type ListAudiencesResponse =
-  | {
-      data: ListAudiencesResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type ListAudiencesResponse = Response<ListAudiencesResponseSuccess>;
