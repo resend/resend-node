@@ -1,4 +1,4 @@
-// this is used in the jsdoc for `shouldResetAfter`
+// @ts-ignore: this is used in the jsdoc for `shouldResetAfter`
 import type { Response } from './interfaces';
 
 export type RateLimit = {
