@@ -1,3 +1,5 @@
+import { RateLimit } from './rate-limiting';
+
 export const RESEND_ERROR_CODES_BY_KEY = {
   missing_required_field: 422,
   invalid_idempotency_key: 400,
@@ -19,35 +21,22 @@ export const RESEND_ERROR_CODES_BY_KEY = {
 
 export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
-export type ErrorResponse =
+export type ErrorResponse = {
+  message: string;
+  name: RESEND_ERROR_CODE_KEY;
+};
+
+export type Response<Data> = (
   | {
-      message: string;
-      name: Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
+      data: Data;
+      error: null;
     }
   | {
-      name: Extract<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
-      message: string;
-      /**
-       * Information to help you with remediation of the error, for example,
-       * waiting for `retry_after` before retrying a rate limited request.
-       */
-      remediation: {
-        /**
-         * Time in seconds after which the request can be retried.
-         */
-        retry_after: number;
-
-        /**
-         * The number of requests allowed per {@member reset}.
-         */
-        limit: number;
-        /**
-         * Time in seconds for the limit
-         */
-        reset: number;
-
-        policy: string;
-      };
-    };
+      data: null;
+      error: ErrorResponse;
+    }
+) & {
+  rateLimiting: RateLimit;
+};
 
 export type Tag = { name: string; value: string };
