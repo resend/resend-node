@@ -10,8 +10,8 @@ jobs:
     container:
       image: node:20
       credentials:
-        username: 
-        password:
+        username: ""
+        password: ""
     steps:
       - name: Checkout
         uses: actions/checkout@v4
