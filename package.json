@@ -5,7 +5,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "files": ["dist/**"],
+  "files": [
+    "dist/**"
+  ],
   "engines": {
     "node": ">=18"
   },
@@ -23,13 +25,13 @@
   },
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "format": "biome format --write .",
     "format:apply": "biome check --write .",
     "format:check": "biome format .",
-    "format": "biome format --write .",
     "lint": "biome check .",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "repository": {
     "type": "git",
@@ -59,7 +61,8 @@
     "ts-jest": "29.3.4",
     "ts-node": "10.9.2",
     "tsup": "7.2.0",
-    "typescript": "5.8.3"
+    "typescript": "5.8.3",
+    "vitest": "3.2.4"
   },
   "packageManager": "pnpm@10.14.0"
 }
