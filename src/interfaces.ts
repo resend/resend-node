@@ -21,10 +21,16 @@ export const RESEND_ERROR_CODES_BY_KEY = {
 
 export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
-export type ErrorResponse = {
-  message: string;
-  name: RESEND_ERROR_CODE_KEY;
-};
+export type ErrorResponse =
+  | {
+      message: string;
+      name: Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
+    }
+  | {
+      message: string;
+      name: Extract<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
+      retryAfter: number;
+    };
 
 export type Response<Data> =
   | {

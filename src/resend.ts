@@ -63,7 +63,14 @@ export class Resend {
       if (!response.ok) {
         try {
           const rawError = await response.text();
-          return { data: null, rateLimiting, error: JSON.parse(rawError) };
+          const error: ErrorResponse = JSON.parse(rawError);
+          if (error.name === 'rate_limit_exceeded' && response.status === 429) {
+            const retryAfterHeader = response.headers.get('retry-after');
+            if (retryAfterHeader) {
+              error.retryAfter = Number.parseInt(retryAfterHeader, 10);
+            }
+          }
+          return { data: null, rateLimiting, error };
         } catch (err) {
           if (err instanceof SyntaxError) {
             return {
