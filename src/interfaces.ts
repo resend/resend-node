@@ -38,13 +38,15 @@ export type ErrorResponse =
 export type Response<Data> =
   | {
       data: Data;
-      rateLimiting: RateLimit;
       error: null;
+      http: Awaited<ReturnType<typeof fetch>>;
+      rateLimiting: RateLimit;
     }
   | {
       data: null;
-      rateLimiting: RateLimit | null;
       error: ErrorResponse;
+      http: Awaited<ReturnType<typeof fetch>> | null;
+      rateLimiting: RateLimit | null;
     };
 
 export type Tag = { name: string; value: string };
