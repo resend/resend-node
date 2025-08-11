@@ -70,13 +70,13 @@ export class Resend {
               error.retryAfter = Number.parseInt(retryAfterHeader, 10);
             }
           }
-          return { data: null, http: response, rateLimiting, error };
+          return { data: null, transportResponse: response, rateLimiting, error };
         } catch (err) {
           if (err instanceof SyntaxError) {
             return {
               data: null,
               rateLimiting,
-              http: response,
+              transportResponse: response,
               error: {
                 name: 'application_error',
                 message:
@@ -93,23 +93,23 @@ export class Resend {
           if (err instanceof Error) {
             return {
               data: null,
-              http: response,
+              transportResponse: response,
               rateLimiting: rateLimiting,
               error: { ...error, message: err.message },
             };
           }
 
-          return { data: null, http: response, rateLimiting, error };
+          return { data: null, transportResponse: response, rateLimiting, error };
         }
       }
 
       const data = await response.json();
-      return { data, rateLimiting, http: response, error: null };
+      return { data, rateLimiting, transportResponse: response, error: null };
     } catch (error) {
       return {
         data: null,
         rateLimiting: null,
-        http: null,
+        transportResponse: null,
         error: {
           name: 'application_error',
           message: 'Unable to fetch data. The request could not be resolved.',

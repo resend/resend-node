@@ -39,13 +39,13 @@ export type Response<Data> =
   | {
       data: Data;
       error: null;
-      http: Awaited<ReturnType<typeof fetch>>;
+      transportResponse: Awaited<ReturnType<typeof fetch>>;
       rateLimiting: RateLimit;
     }
   | {
       data: null;
       error: ErrorResponse;
-      http: Awaited<ReturnType<typeof fetch>> | null;
+      transportResponse: Awaited<ReturnType<typeof fetch>> | null;
       rateLimiting: RateLimit | null;
     };
 
