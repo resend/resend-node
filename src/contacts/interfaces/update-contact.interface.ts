@@ -1,17 +1,12 @@
 import type { ErrorResponse } from '../../interfaces';
-import type { Contact } from './contact';
+import type { Contact, SelectingField } from './contact';
 
-interface UpdateContactBaseOptions {
-  id?: string;
-  email?: string;
-}
-
-export interface UpdateContactOptions extends UpdateContactBaseOptions {
+export type UpdateContactOptions = {
   audienceId: string;
   unsubscribed?: boolean;
   firstName?: string;
   lastName?: string;
-}
+} & SelectingField;
 
 export type UpdateContactResponseSuccess = Pick<Contact, 'id'> & {
   object: 'contact';
