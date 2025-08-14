@@ -102,6 +102,7 @@ export class Contacts {
         data: null,
         error: {
           message: 'Missing `id` or `email` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
@@ -126,6 +127,7 @@ export class Contacts {
         data: null,
         error: {
           message: 'Missing `id` or `email` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
@@ -167,6 +169,7 @@ export class Contacts {
         data: null,
         error: {
           message: 'Missing `id` or `email` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };

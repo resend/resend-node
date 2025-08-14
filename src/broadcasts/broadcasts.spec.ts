@@ -24,6 +24,7 @@ describe('Broadcasts', () => {
     it('missing `from`', async () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
+        statusCode: 422,
         message: 'Missing `from` field.',
       };
 
@@ -42,6 +43,7 @@ describe('Broadcasts', () => {
   "error": {
     "message": "Missing \`from\` field.",
     "name": "missing_required_field",
+    "statusCode": 422,
   },
 }
 `);
@@ -142,6 +144,7 @@ describe('Broadcasts', () => {
     it('throws an error when an ErrorResponse is returned', async () => {
       const response: ErrorResponse = {
         name: 'invalid_parameter',
+        statusCode: 422,
         message:
           'Invalid `from` field. The email address needs to follow the `email@example.com` or `Name <email@example.com>` format',
       };
@@ -170,6 +173,7 @@ describe('Broadcasts', () => {
     "error": {
       "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
       "name": "invalid_parameter",
+      "statusCode": 422,
     },
   }
   `);
@@ -195,6 +199,7 @@ describe('Broadcasts', () => {
           error: {
             message: 'Unable to fetch data. The request could not be resolved.',
             name: 'application_error',
+            statusCode: null,
           },
         }),
       );
@@ -223,6 +228,7 @@ describe('Broadcasts', () => {
             message:
               'Internal server error. We are unable to process your request right now, please try again later.',
             name: 'application_error',
+            statusCode: 422,
           },
         }),
       );
@@ -384,6 +390,7 @@ describe('Broadcasts', () => {
       it('returns error', async () => {
         const response: ErrorResponse = {
           name: 'not_found',
+          statusCode: 404,
           message: 'Broadcast not found',
         };
 
@@ -407,6 +414,7 @@ describe('Broadcasts', () => {
   "error": {
     "message": "Broadcast not found",
     "name": "not_found",
+    "statusCode": 404,
   },
 }
 `);

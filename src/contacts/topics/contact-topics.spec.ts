@@ -136,6 +136,7 @@ describe('ContactTopics', () => {
   "error": {
     "message": "Missing \`id\` or \`email\` field.",
     "name": "missing_required_field",
+    "statusCode": null,
   },
 }
 `);
@@ -298,6 +299,7 @@ describe('ContactTopics', () => {
   "error": {
     "message": "Missing \`id\` or \`email\` field.",
     "name": "missing_required_field",
+    "statusCode": null,
   },
 }
 `);

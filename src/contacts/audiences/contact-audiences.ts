@@ -27,6 +27,7 @@ export class ContactAudiences {
         data: null,
         error: {
           message: 'Missing `id` or `email` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
@@ -51,6 +52,7 @@ export class ContactAudiences {
         data: null,
         error: {
           message: 'Missing `id` or `email` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
@@ -70,6 +72,7 @@ export class ContactAudiences {
         data: null,
         error: {
           message: 'Missing `id` or `email` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
