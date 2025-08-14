@@ -53,6 +53,7 @@ describe('API Keys', () => {
       const response: ErrorResponse = {
         message: 'String must contain at least 1 character(s)',
         name: 'validation_error',
+        statusCode: 403,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -73,6 +74,7 @@ describe('API Keys', () => {
   "error": {
     "message": "String must contain at least 1 character(s)",
     "name": "validation_error",
+    "statusCode": 403,
   },
 }
 `);
@@ -150,6 +152,7 @@ describe('API Keys', () => {
         const response: ErrorResponse = {
           name: 'invalid_access',
           message: 'Access must be "full_access" | "sending_access"',
+          statusCode: 422,
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -168,13 +171,14 @@ describe('API Keys', () => {
         };
 
         await expect(
-          resend.apiKeys.create(payload),
-        ).resolves.toMatchInlineSnapshot(`
+  resend.apiKeys.create(payload)
+).resolves.toMatchInlineSnapshot(`
 {
   "data": null,
   "error": {
     "message": "Access must be "full_access" | "sending_access"",
     "name": "invalid_access",
+    "statusCode": 422,
   },
 }
 `);
@@ -328,6 +332,7 @@ describe('API Keys', () => {
       const response: ErrorResponse = {
         name: 'application_error',
         message: 'Something went wrong',
+        statusCode: 500,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -348,6 +353,7 @@ describe('API Keys', () => {
   "error": {
     "message": "Something went wrong",
     "name": "application_error",
+    "statusCode": 500,
   },
 }
 `);
@@ -357,6 +363,7 @@ describe('API Keys', () => {
       const response: ErrorResponse = {
         name: 'not_found',
         message: 'API key not found',
+        statusCode: 404,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -379,6 +386,7 @@ describe('API Keys', () => {
   "error": {
     "message": "API key not found",
     "name": "not_found",
+    "statusCode": 404,
   },
 }
 `);
