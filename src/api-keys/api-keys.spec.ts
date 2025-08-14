@@ -171,8 +171,8 @@ describe('API Keys', () => {
         };
 
         await expect(
-  resend.apiKeys.create(payload)
-).resolves.toMatchInlineSnapshot(`
+          resend.apiKeys.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
 {
   "data": null,
   "error": {
