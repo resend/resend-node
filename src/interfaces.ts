@@ -19,9 +19,12 @@ export const RESEND_ERROR_CODES_BY_KEY = {
 
 export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
-export interface ErrorResponse {
-  message: string;
-  name: RESEND_ERROR_CODE_KEY;
-}
+export type ErrorResponse = {
+  [K in RESEND_ERROR_CODE_KEY]: {
+    message: string;
+    statusCode: (typeof RESEND_ERROR_CODES_BY_KEY)[K];
+    name: K;
+  };
+}[RESEND_ERROR_CODE_KEY];
 
 export type Tag = { name: string; value: string };
