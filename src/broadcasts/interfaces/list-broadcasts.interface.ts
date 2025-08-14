@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Broadcast } from './broadcast';
 
 export type ListBroadcastsResponseSuccess = {
@@ -15,12 +15,4 @@ export type ListBroadcastsResponseSuccess = {
   >[];
 };
 
-export type ListBroadcastsResponse =
-  | {
-      data: ListBroadcastsResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type ListBroadcastsResponse = Response<ListBroadcastsResponseSuccess>;
