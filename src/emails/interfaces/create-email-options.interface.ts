@@ -120,6 +120,11 @@ export interface Attachment {
   path?: string;
   /** Optional content type for the attachment, if not set will be derived from the filename property */
   contentType?: string;
+  /**
+   * Optional content ID for the attachment, to be used as a reference in the HTML content.
+   * If set, this attachment will be sent as an inline attachment and you can reference it in the HTML content using the `cid:` prefix.
+   */
+  contentId?: string;
 }
 
 export type Tag = {

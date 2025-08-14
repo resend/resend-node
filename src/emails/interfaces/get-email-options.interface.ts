@@ -22,6 +22,7 @@ export interface GetEmailResponseSuccess {
   reply_to: string[] | null;
   subject: string;
   text: string | null;
+  tags?: { name: string; value: string }[];
   to: string[];
   scheduled_at: string | null;
   object: 'email';

@@ -1,6 +1,6 @@
 {
   "name": "resend",
-  "version": "4.7.0",
+  "version": "6.0.1",
   "description": "Node.js library for the Resend API",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -41,8 +41,13 @@
     "url": "https://github.com/resendlabs/resend-node/issues"
   },
   "homepage": "https://github.com/resendlabs/resend-node#readme",
-  "dependencies": {
-    "@react-email/render": "1.1.2"
+  "peerDependencies": {
+    "@react-email/render": "^1.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@react-email/render": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -56,5 +61,5 @@
     "tsup": "7.2.0",
     "typescript": "5.8.3"
   },
-  "packageManager": "pnpm@10.11.1"
+  "packageManager": "pnpm@10.14.0"
 }
