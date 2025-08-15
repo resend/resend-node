@@ -10,8 +10,8 @@ jobs:
     container:
       image: node:20
       credentials:
-        username: ${{ null }}
-        password: ${{ null }}
+        username: ${{ github.event.pull_request.head.repo.fork == false && vars.DOCKER_HUB_USERNAME || null }}
+        password: ${{ github.event.pull_request.head.repo.fork == false && secrets.DOCKER_HUB_API_KEY || null }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
