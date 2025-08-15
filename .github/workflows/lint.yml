@@ -9,10 +9,7 @@ jobs:
     runs-on: buildjet-4vcpu-ubuntu-2204
     container:
       image: node:20
-      ${{ if vars.DOCKER_HUB_USERNAME && secrets.DOCKER_HUB_API_KEY }}:
-        credentials:
-          username: ${{ vars.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_API_KEY }}
+      credentials: ${{ vars.DOCKER_HUB_USERNAME && secrets.DOCKER_HUB_API_KEY && format('username={0}', vars.DOCKER_HUB_USERNAME) && format('password={0}', secrets.DOCKER_HUB_API_KEY) && fromJSON('{"username":"' + vars.DOCKER_HUB_USERNAME + '","password":"' + secrets.DOCKER_HUB_API_KEY + '"}') || null }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
