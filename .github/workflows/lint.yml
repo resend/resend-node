@@ -6,9 +6,21 @@ on:
   pull_request:
 jobs:
   lint:
+    strategy:
+      matrix:
+        include:
+          - container:
+              image: node:20
+              credentials:
+                username: ${{ vars.DOCKER_HUB_USERNAME }}
+                password: ${{ secrets.DOCKER_HUB_API_KEY }}
+            condition: ${{ vars.DOCKER_HUB_USERNAME && secrets.DOCKER_HUB_API_KEY }}
+          - container:
+              image: node:20
+            condition: ${{ !vars.DOCKER_HUB_USERNAME || !secrets.DOCKER_HUB_API_KEY }}
     runs-on: buildjet-4vcpu-ubuntu-2204
-    container:
-      image: ghcr.io/library/node:20
+    if: ${{ matrix.condition }}
+    container: ${{ matrix.container }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
