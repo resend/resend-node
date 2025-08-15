@@ -1,18 +1,12 @@
 name: Lint
 on:
-  push:
-    branches:
-      - main
   pull_request:
 jobs:
   lint:
+    if: github.event.pull_request.head.repo.fork == true
     runs-on: buildjet-4vcpu-ubuntu-2204
-    if: github.event.pull_request.head.repo.fork == false
     container:
       image: node:20
-      credentials:
-        username: ${{ vars.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
