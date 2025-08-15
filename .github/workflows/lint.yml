@@ -8,10 +8,10 @@ jobs:
   lint:
     runs-on: buildjet-4vcpu-ubuntu-2204
     container:
-      image: node:20
+      image: ghcr.io/library/node:20
       credentials:
-        username: ${{ github.event.pull_request.head.repo.fork == false && vars.DOCKER_HUB_USERNAME || null }}
-        password: ${{ github.event.pull_request.head.repo.fork == false && secrets.DOCKER_HUB_API_KEY || null }}
+         username: ${{ github.actor }}
+         password: ${{ secrets.github_token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
