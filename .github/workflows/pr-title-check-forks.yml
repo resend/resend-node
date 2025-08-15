@@ -1,11 +1,11 @@
-name: PR Title Check
+name: PR Title Check (forks)
 on:
   pull_request:
     types: [opened, edited, synchronize]
 jobs:
   pr-title-check:
     runs-on: buildjet-4vcpu-ubuntu-2204
-    if: github.event.pull_request.head.repo.fork == false
+    if: github.event.pull_request.head.repo.fork == true
     container:
       image: node:20
       credentials:

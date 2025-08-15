@@ -1,4 +1,4 @@
-name: Pin Dependencies Check
+name: Pin Dependencies Check (forks)
 on:
   push:
     branches:
@@ -7,7 +7,7 @@ on:
 jobs:
   pin-dependencies-check:
     runs-on: buildjet-4vcpu-ubuntu-2204
-    if: github.event.pull_request.head.repo.fork == false
+    if: github.event.pull_request.head.repo.fork == true
     container:
       image: node:20
       credentials:

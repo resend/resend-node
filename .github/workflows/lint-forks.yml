@@ -1,9 +1,6 @@
-name: Lint
+name: Lint (forks)
 on:
   pull_request:
-    head:
-      repo:
-        fork: true
 jobs:
   lint:
     if: github.event.pull_request.head.repo.fork == true
