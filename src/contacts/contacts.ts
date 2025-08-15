@@ -54,14 +54,25 @@ export class Contacts {
   }
 
   async get(options: GetContactOptions): Promise<GetContactResponse> {
+    if (!options.id && !options.email) {
+      return {
+        data: null,
+        rateLimiting: null,
+        error: {
+          message: 'Missing `id` or `email` field.',
+          name: 'missing_required_field',
+        },
+      };
+    }
+
     const data = await this.resend.get<GetContactResponseSuccess>(
       `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
     );
     return data;
   }
 
-  async update(payload: UpdateContactOptions): Promise<UpdateContactResponse> {
-    if (!payload.id && !payload.email) {
+  async update(options: UpdateContactOptions): Promise<UpdateContactResponse> {
+    if (!options.id && !options.email) {
       return {
         data: null,
         rateLimiting: null,
@@ -73,11 +84,11 @@ export class Contacts {
     }
 
     const data = await this.resend.patch<UpdateContactResponseSuccess>(
-      `/audiences/${payload.audienceId}/contacts/${payload?.email ? payload?.email : payload?.id}`,
+      `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
       {
-        unsubscribed: payload.unsubscribed,
-        first_name: payload.firstName,
-        last_name: payload.lastName,
+        unsubscribed: options.unsubscribed,
+        first_name: options.firstName,
+        last_name: options.lastName,
       },
     );
     return data;
