@@ -6,47 +6,35 @@ on:
   pull_request:
 jobs:
   lint:
-    if: github.event.pull_request.head.repo.fork == false || github.event_name == 'push'
     runs-on: buildjet-4vcpu-ubuntu-2204
+    strategy:
+      matrix:
+        include:
+          - is-fork: false
+            credentials:
+              username: ${{ vars.DOCKER_HUB_USERNAME }}
+              password: ${{ secrets.DOCKER_HUB_API_KEY }}
+          - is-fork: true
+    if: (matrix.is-fork == false && (github.event.pull_request.head.repo.fork == false || github.event_name == 'push')) || (matrix.is-fork == true && github.event.pull_request.head.repo.fork == true)
     container:
       image: node:20
-      credentials:
-        username: ${{ vars.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_API_KEY }}
+      credentials: ${{ matrix.credentials }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        
       - name: pnpm setup
         uses: pnpm/action-setup@v4
+        
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
+          
       - name: Install packages
         run: pnpm install
-      - name: Run Lint
-        run: pnpm lint
-        env:
-          SKIP_ENV_VALIDATION: true
-
-  lint-forks:
-    if: github.event.pull_request.head.repo.fork == true
-    runs-on: buildjet-4vcpu-ubuntu-2204
-    container:
-      image: node:20
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: pnpm setup
-        uses: pnpm/action-setup@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-      - name: Install packages
-        run: pnpm install
+        
       - name: Run Lint
         run: pnpm lint
         env:
