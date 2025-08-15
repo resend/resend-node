@@ -1,6 +1,11 @@
 import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
+import {
+  mockErrorResponse,
+  mockFetchWithRateLimit,
+  mockSuccessResponse,
+} from '../test-utils/mock-fetch';
 import type {
   CreateEmailOptions,
   CreateEmailResponseSuccess,
@@ -22,10 +27,8 @@ describe('Emails', () => {
         statusCode: 422,
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 422,
+      mockErrorResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -40,6 +43,11 @@ describe('Emails', () => {
     "name": "missing_required_field",
     "statusCode": 422,
   },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -49,10 +57,8 @@ describe('Emails', () => {
         id: 'not-idempotent-123',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -85,10 +91,8 @@ describe('Emails', () => {
         id: 'idempotent-123',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -126,10 +130,8 @@ describe('Emails', () => {
       const response: CreateEmailResponseSuccess = {
         id: '71cdfe68-cf79-473a-a9d7-21f91db6a526',
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -148,6 +150,11 @@ describe('Emails', () => {
     "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -157,12 +164,8 @@ describe('Emails', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const payload: CreateEmailOptions = {
@@ -178,6 +181,11 @@ describe('Emails', () => {
     "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -187,12 +195,8 @@ describe('Emails', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const payload: CreateEmailOptions = {
@@ -210,6 +214,11 @@ describe('Emails', () => {
     "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -219,12 +228,8 @@ describe('Emails', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const payload: CreateEmailOptions = {
@@ -242,6 +247,11 @@ describe('Emails', () => {
     "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -251,12 +261,8 @@ describe('Emails', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const payload: CreateEmailOptions = {
@@ -274,6 +280,11 @@ describe('Emails', () => {
     "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -283,12 +294,8 @@ describe('Emails', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const payload: CreateEmailOptions = {
@@ -308,6 +315,11 @@ describe('Emails', () => {
     "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -320,12 +332,8 @@ describe('Emails', () => {
         statusCode: 422,
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 422,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const payload: CreateEmailOptions = {
@@ -345,6 +353,11 @@ describe('Emails', () => {
     "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
     "name": "invalid_parameter",
     "statusCode": 422,
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -378,7 +391,7 @@ describe('Emails', () => {
     });
 
     it('returns an error when api responds with text payload', async () => {
-      fetchMock.mockOnce('local_rate_limited', {
+      mockFetchWithRateLimit('local_rate_limited', {
         status: 422,
         headers: {
           Authorization: 'Bearer re_924b3rjh2387fbewf823',
@@ -415,10 +428,8 @@ describe('Emails', () => {
           statusCode: 404,
         };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
-          status: 404,
+        mockErrorResponse(response, {
           headers: {
-            'content-type': 'application/json',
             Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
@@ -434,6 +445,11 @@ describe('Emails', () => {
     "message": "Email not found",
     "name": "not_found",
     "statusCode": 404,
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -458,10 +474,8 @@ describe('Emails', () => {
           scheduled_at: null,
         };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
-          status: 200,
+        mockSuccessResponse(response, {
           headers: {
-            'content-type': 'application/json',
             Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
@@ -488,6 +502,11 @@ describe('Emails', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
       });
@@ -509,10 +528,8 @@ describe('Emails', () => {
           scheduled_at: null,
         };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
-          status: 200,
+        mockSuccessResponse(response, {
           headers: {
-            'content-type': 'application/json',
             Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
@@ -542,6 +559,11 @@ describe('Emails', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
       });

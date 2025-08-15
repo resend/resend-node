@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Audience } from './audience';
 
 export interface RemoveAudiencesResponseSuccess extends Pick<Audience, 'id'> {
@@ -6,12 +6,4 @@ export interface RemoveAudiencesResponseSuccess extends Pick<Audience, 'id'> {
   deleted: boolean;
 }
 
-export type RemoveAudiencesResponse =
-  | {
-      data: RemoveAudiencesResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type RemoveAudiencesResponse = Response<RemoveAudiencesResponseSuccess>;

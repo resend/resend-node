@@ -1,3 +1,5 @@
+import type { RateLimit } from './rate-limiting';
+
 export const RESEND_ERROR_CODES_BY_KEY = {
   missing_required_field: 422,
   invalid_idempotency_key: 400,
@@ -19,12 +21,54 @@ export const RESEND_ERROR_CODES_BY_KEY = {
 
 export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
-export type ErrorResponse = {
-  [K in RESEND_ERROR_CODE_KEY]: {
+export type StandardErrorResponse = {
+  [K in Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>]: {
     message: string;
-    statusCode: (typeof RESEND_ERROR_CODES_BY_KEY)[K];
     name: K;
+    statusCode: (typeof RESEND_ERROR_CODES_BY_KEY)[K];
   };
-}[RESEND_ERROR_CODE_KEY];
+}[Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>];
+
+export type RateLimitErrorResponse = {
+  message: string;
+  name: 'rate_limit_exceeded';
+  retryAfter: number;
+  statusCode: (typeof RESEND_ERROR_CODES_BY_KEY)['rate_limit_exceeded'];
+};
+
+/**
+ * Union type representing all possible error responses from the Resend API
+ *
+ * @example
+ * ```typescript
+ * // Standard error
+ * const error: ErrorResponse = {
+ *   message: "Invalid email address",
+ *   statusCode: 422,
+ *   name: "validation_error"
+ * };
+ *
+ * // Rate limit error
+ * const rateLimitError: ErrorResponse = {
+ *   message: "Rate limit exceeded",
+ *   statusCode: 429,
+ *   name: "rate_limit_exceeded",
+ *   retryAfter: 1
+ * };
+ * ```
+ */
+export type ErrorResponse = StandardErrorResponse | RateLimitErrorResponse;
+
+export type Response<Data> =
+  | {
+      data: Data;
+      rateLimiting: RateLimit;
+      error: null;
+    }
+  | {
+      data: null;
+      rateLimiting: RateLimit | null;
+      error: ErrorResponse;
+    };
 
 export type Tag = { name: string; value: string };

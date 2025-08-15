@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 
 export type RemoveContactsResponseSuccess = {
   object: 'contact';
@@ -25,12 +25,4 @@ export interface RemoveContactOptions extends RemoveByOptions {
   audienceId: string;
 }
 
-export type RemoveContactsResponse =
-  | {
-      data: RemoveContactsResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type RemoveContactsResponse = Response<RemoveContactsResponseSuccess>;
