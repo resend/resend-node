@@ -7,11 +7,18 @@ on:
 jobs:
   lint:
     runs-on: buildjet-4vcpu-ubuntu-2204
+    strategy:
+      matrix:
+        include:
+          - is-fork: false
+            credentials:
+              username: ${{ vars.DOCKER_HUB_USERNAME }}
+              password: ${{ secrets.DOCKER_HUB_API_KEY }}
+          - is-fork: true
+    if: (matrix.is-fork == false && (github.event.pull_request.head.repo.fork == false || github.event_name == 'push')) || (matrix.is-fork == true && github.event.pull_request.head.repo.fork == true)
     container:
-      image: ghcr.io/library/node:20
-      credentials:
-         username: ${{ github.actor }}
-         password: ${{ secrets.github_token }}
+      image: node:20
+      credentials: ${{ matrix.credentials }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
