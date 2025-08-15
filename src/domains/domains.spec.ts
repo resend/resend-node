@@ -246,6 +246,7 @@ describe('Domains', () => {
   "error": {
     "message": "Unable to fetch data. The request could not be resolved.",
     "name": "application_error",
+    "statusCode": 500,
   },
   "rateLimiting": null,
 }
