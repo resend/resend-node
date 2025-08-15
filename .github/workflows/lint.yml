@@ -8,8 +8,7 @@ jobs:
   lint:
     runs-on: buildjet-4vcpu-ubuntu-2204
     container:
-      image: node:20
-      credentials: ${{ vars.DOCKER_HUB_USERNAME && secrets.DOCKER_HUB_API_KEY && format('username={0}', vars.DOCKER_HUB_USERNAME) && format('password={0}', secrets.DOCKER_HUB_API_KEY) && fromJSON('{"username":"' + vars.DOCKER_HUB_USERNAME + '","password":"' + secrets.DOCKER_HUB_API_KEY + '"}') || null }}
+      image: ghcr.io/library/node:20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
