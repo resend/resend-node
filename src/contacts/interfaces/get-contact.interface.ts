@@ -1,11 +1,9 @@
 import type { Response } from '../../interfaces';
-import type { Contact } from './contact';
+import type { Contact, SelectingField } from './contact';
 
-export interface GetContactOptions {
+export type GetContactOptions = {
   audienceId: string;
-  id?: string;
-  email?: string;
-}
+} & SelectingField;
 
 export interface GetContactResponseSuccess
   extends Pick<
