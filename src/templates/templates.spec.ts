@@ -42,22 +42,22 @@ describe('Templates', () => {
       await expect(
         resend.templates.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
-    "object": "template",
-  },
-  "error": null,
-}
-`);
+    {
+      "data": {
+        "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
+        "object": "template",
+      },
+      "error": null,
+    }
+    `);
     });
 
     it('creates a template with all optional fields', async () => {
       const payload: CreateTemplateOptions = {
         name: 'Welcome Email',
         subject: 'Welcome to our platform',
-        html: '<h1>Welcome to our platform!</h1>',
-        text: 'Welcome to our platform!',
+        html: '<h1>Welcome to our platform, {{{name}}}!</h1><p>We are excited to have you join {{{company}}}.</p>',
+        text: 'Welcome to our platform, {{{name}}}! We are excited to have you join {{{company}}}.',
         variables: [
           {
             key: 'name',
@@ -91,21 +91,34 @@ describe('Templates', () => {
       await expect(
         resend.templates.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "object": "template",
-  },
-  "error": null,
-}
-`);
+    {
+      "data": {
+        "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+        "object": "template",
+      },
+      "error": null,
+    }
+    `);
     });
 
     it('creates a template with some optional fields', async () => {
       const payload: CreateTemplateOptions = {
         name: 'Password Reset',
         subject: 'Reset your password',
-        html: '<h1>Reset your password</h1><p>Click the link below to reset your password.</p>',
+        html: '<h1>Reset your password, {{{username}}}</h1><p>Click the link below to reset your password: {{{reset_link}}}</p>',
+        text: 'Reset your password, {{{username}}}. Click here to reset: {{{reset_link}}}',
+        variables: [
+          {
+            key: 'username',
+            fallback_value: 'there',
+            type: 'string',
+          },
+          {
+            key: 'reset_link',
+            fallback_value: 'https://example.com/reset',
+            type: 'string',
+          },
+        ],
         alias: 'password-reset',
         from: 'security@example.com',
       };
@@ -126,14 +139,14 @@ describe('Templates', () => {
       await expect(
         resend.templates.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-    "object": "template",
-  },
-  "error": null,
-}
-`);
+    {
+      "data": {
+        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
+        "object": "template",
+      },
+      "error": null,
+    }
+    `);
     });
 
     it('throws error when missing required name field', async () => {
@@ -159,14 +172,14 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Missing \`name\` field",
-    "name": "missing_required_field",
-  },
-}
-`);
+    {
+      "data": null,
+      "error": {
+        "message": "Missing \`name\` field",
+        "name": "missing_required_field",
+      },
+    }
+    `);
     });
 
     it('throws error when missing required html field', async () => {
@@ -192,14 +205,14 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Missing \`html\` field",
-    "name": "missing_required_field",
-  },
-}
-`);
+    {
+      "data": null,
+      "error": {
+        "message": "Missing \`html\` field",
+        "name": "missing_required_field",
+      },
+    }
+    `);
     });
 
     it('throws error when invalid email format in from field', async () => {
@@ -226,14 +239,14 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Invalid email format in \`from\` field.",
-    "name": "invalid_parameter",
-  },
-}
-`);
+    {
+      "data": null,
+      "error": {
+        "message": "Invalid email format in \`from\` field.",
+        "name": "invalid_parameter",
+      },
+    }
+    `);
     });
 
     it('throws error when invalid email format in reply_to field', async () => {
@@ -260,14 +273,14 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Invalid email format in \`reply_to\` field.",
-    "name": "invalid_parameter",
-  },
-}
-`);
+    {
+      "data": null,
+      "error": {
+        "message": "Invalid email format in \`reply_to\` field.",
+        "name": "invalid_parameter",
+      },
+    }
+    `);
     });
 
     it('throws error when invalid variable type', async () => {
@@ -301,14 +314,14 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Invalid variable type. Must be one of: string, number, boolean.",
-    "name": "invalid_parameter",
-  },
-}
-`);
+    {
+      "data": null,
+      "error": {
+        "message": "Invalid variable type. Must be one of: string, number, boolean.",
+        "name": "invalid_parameter",
+      },
+    }
+    `);
     });
 
     it('throws error when variable key contains invalid characters', async () => {
@@ -342,14 +355,14 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "The \`variables, key\` field must only contain alphanumeric characters and underscores.",
-    "name": "validation_error",
-  },
-}
-`);
+    {
+      "data": null,
+      "error": {
+        "message": "The \`variables, key\` field must only contain alphanumeric characters and underscores.",
+        "name": "validation_error",
+      },
+    }
+    `);
     });
 
     it('throws error when variable is used in template but not defined', async () => {
@@ -383,14 +396,14 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Variable 'user_email' is used in the template but not defined in the variables list",
-    "name": "validation_error",
-  },
-}
-`);
+    {
+      "data": null,
+      "error": {
+        "message": "Variable 'user_email' is used in the template but not defined in the variables list",
+        "name": "validation_error",
+      },
+    }
+    `);
     });
 
     it('throws error when name exceeds max length', async () => {
@@ -416,14 +429,14 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "The \`name\` field must not exceed 50 characters.",
-    "name": "validation_error",
-  },
-}
-`);
+    {
+      "data": null,
+      "error": {
+        "message": "The \`name\` field must not exceed 50 characters.",
+        "name": "validation_error",
+      },
+    }
+    `);
     });
 
     it('throws error when alias exceeds max length', async () => {
@@ -450,14 +463,14 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "The \`alias\` field must not exceed 50 characters.",
-    "name": "validation_error",
-  },
-}
-`);
+    {
+      "data": null,
+      "error": {
+        "message": "The \`alias\` field must not exceed 50 characters.",
+        "name": "validation_error",
+      },
+    }
+    `);
     });
 
     it('throws error when too many variables are provided', async () => {
@@ -489,14 +502,14 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "The \`variables\` field must not exceed 20 items.",
-    "name": "validation_error",
-  },
-}
-`);
+    {
+      "data": null,
+      "error": {
+        "message": "The \`variables\` field must not exceed 20 items.",
+        "name": "validation_error",
+      },
+    }
+    `);
     });
 
     it('throws error when too many reply_to addresses are provided', async () => {
@@ -523,6 +536,15 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
+    {
+      "data": null,
+      "error": {
+        "message": "The \`reply_to\` field must not exceed 50 items.",
+        "name": "validation_error",
+      },
+    }
+    `);
+    });
 
     it('creates template with reply_to as array', async () => {
       const payload: CreateTemplateOptions = {
