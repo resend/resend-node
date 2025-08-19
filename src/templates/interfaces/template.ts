@@ -8,7 +8,7 @@ export interface Template {
   variables: TemplateVariable[] | null;
   alias: string | null;
   from: string | null;
-  reply_to: string | string[] | null;
+  reply_to: string[] | null;
   published_at: string | null;
   created_at: string;
   updated_at: string;
