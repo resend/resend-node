@@ -8,13 +8,15 @@ type TemplateContentCreationOptions = RequireAtLeastOne<{
   react: React.ReactNode;
 }>;
 
-export type CreateTemplateOptions = Pick<
-  Template,
-  'name' | 'subject' | 'text' | 'alias' | 'from' | 'reply_to'
-> &
-  TemplateContentCreationOptions & {
-    variables?: Pick<TemplateVariable, 'key' | 'fallback_value' | 'type'>[];
-  };
+type TemplateOptionalFieldsForCreation = Partial<
+  Pick<Template, 'subject' | 'text' | 'alias' | 'from' | 'reply_to'>
+> & {
+  variables?: Pick<TemplateVariable, 'key' | 'fallback_value' | 'type'>[];
+};
+
+export type CreateTemplateOptions = Pick<Template, 'name'> &
+  TemplateOptionalFieldsForCreation &
+  TemplateContentCreationOptions;
 
 export interface CreateTemplateRequestOptions extends PostOptions {}
 

@@ -1,14 +1,14 @@
 export interface Template {
   id: string;
   name: string;
-  subject?: string;
+  subject: string | null;
   html: string;
-  text?: string;
-  status: 'draft' | 'published' | 'deleted';
-  variables?: TemplateVariable[];
-  alias?: string;
-  from?: string;
-  reply_to?: string | string[];
+  text: string | null;
+  status: 'draft' | 'published';
+  variables: TemplateVariable[] | null;
+  alias: string | null;
+  from: string | null;
+  reply_to: string | string[] | null;
   published_at?: string;
   created_at: string;
   updated_at: string;
@@ -16,7 +16,7 @@ export interface Template {
 
 export interface TemplateVariable {
   key: string;
-  fallback_value?: string;
+  fallback_value: string | null;
   type: 'string' | 'number' | 'boolean';
   created_at: string;
   updated_at: string;
