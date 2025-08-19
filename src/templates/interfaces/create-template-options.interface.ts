@@ -1,14 +1,20 @@
 import type { PostOptions } from '../../common/interfaces';
+import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
 import type { ErrorResponse } from '../../interfaces';
 import type { Template, TemplateVariable } from './template';
 
-export interface CreateTemplateOptions
-  extends Pick<
-    Template,
-    'name' | 'subject' | 'html' | 'text' | 'alias' | 'from' | 'reply_to'
-  > {
-  variables?: Pick<TemplateVariable, 'key' | 'fallback_value' | 'type'>[];
-}
+type TemplateContentCreationOptions = RequireAtLeastOne<{
+  html: string;
+  react: React.ReactNode;
+}>;
+
+export type CreateTemplateOptions = Pick<
+  Template,
+  'name' | 'subject' | 'text' | 'alias' | 'from' | 'reply_to'
+> &
+  TemplateContentCreationOptions & {
+    variables?: Pick<TemplateVariable, 'key' | 'fallback_value' | 'type'>[];
+  };
 
 export interface CreateTemplateRequestOptions extends PostOptions {}
 
