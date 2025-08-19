@@ -12,6 +12,7 @@ type TemplateOptionalFieldsForCreation = Partial<
   Pick<Template, 'subject' | 'text' | 'alias' | 'from' | 'reply_to'>
 > & {
   variables?: Pick<TemplateVariable, 'key' | 'fallback_value' | 'type'>[];
+  reply_to?: string[] | string;
 };
 
 export type CreateTemplateOptions = Pick<Template, 'name'> &
