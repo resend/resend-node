@@ -8,8 +8,16 @@ import type {
 
 enableFetchMocks();
 
+const mockRenderAsync = jest.fn();
+jest.mock('@react-email/render', () => ({
+  renderAsync: mockRenderAsync,
+}));
+
 describe('Templates', () => {
-  afterEach(() => fetchMock.resetMocks());
+  afterEach(() => {
+    jest.resetAllMocks();
+    fetchMock.resetMocks();
+  });
 
   describe('create', () => {
     it('creates a template with minimal required fields', async () => {
@@ -515,15 +523,6 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "The \`reply_to\` field must not exceed 50 items.",
-    "name": "validation_error",
-  },
-}
-`);
-    });
 
     it('creates template with reply_to as array', async () => {
       const payload: CreateTemplateOptions = {
@@ -531,6 +530,112 @@ describe('Templates', () => {
         html: '<h1>Welcome!</h1>',
         reply_to: ['support@example.com', 'noreply@example.com'],
       };
+      const response: CreateTemplateResponseSuccess = {
+        object: 'template',
+        id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      await expect(
+        resend.templates.create(payload),
+      ).resolves.toMatchInlineSnapshot(`
+    {
+      "data": {
+        "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+        "object": "template",
+      },
+      "error": null,
+    }
+    `);
+    });
+
+    it('creates template with React component', async () => {
+      const mockReactComponent = {
+        type: 'div',
+        props: { children: 'Welcome!' },
+      } as React.ReactElement;
+
+      mockRenderAsync.mockResolvedValueOnce('<div>Welcome!</div>');
+
+      const payload: CreateTemplateOptions = {
+        name: 'Welcome Email',
+        react: mockReactComponent,
+      };
+
+      const response: CreateTemplateResponseSuccess = {
+        object: 'template',
+        id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      await expect(
+        resend.templates.create(payload),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
+    "object": "template",
+  },
+  "error": null,
+}
+`);
+
+      expect(mockRenderAsync).toHaveBeenCalledWith(mockReactComponent);
+    });
+
+    it('creates template with React component and all optional fields', async () => {
+      const mockReactComponent = {
+        type: 'div',
+        props: {
+          children: [
+            { type: 'h1', props: { children: 'Welcome {name}!' } },
+            { type: 'p', props: { children: 'Welcome to {company}.' } },
+          ],
+        },
+      } as React.ReactElement;
+
+      mockRenderAsync.mockResolvedValueOnce(
+        '<div><h1>Welcome {{{name}}}!</h1><p>Welcome to {{{company}}}.</p></div>',
+      );
+
+      const payload: CreateTemplateOptions = {
+        name: 'Welcome Email',
+        subject: 'Welcome to our platform',
+        react: mockReactComponent,
+        text: 'Welcome {{{name}}}! Welcome to {{{company}}}.',
+        variables: [
+          {
+            key: 'name',
+            fallback_value: 'User',
+            type: 'string',
+          },
+          {
+            key: 'company',
+            fallback_value: 'Company',
+            type: 'string',
+          },
+        ],
+        alias: 'welcome-email',
+        from: 'noreply@example.com',
+        reply_to: ['support@example.com', 'help@example.com'],
+      };
+
       const response: CreateTemplateResponseSuccess = {
         object: 'template',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
@@ -556,6 +661,53 @@ describe('Templates', () => {
   "error": null,
 }
 `);
+
+      expect(mockRenderAsync).toHaveBeenCalledWith(mockReactComponent);
+    });
+
+    it('throws error when React renderer fails to load', async () => {
+      const mockReactComponent = {
+        type: 'div',
+        props: { children: 'Welcome!' },
+      } as React.ReactElement;
+
+      // Temporarily clear the mock implementation to simulate module load failure
+      mockRenderAsync.mockImplementationOnce(() => {
+        throw new Error(
+          'Failed to render React component. Make sure to install `@react-email/render`',
+        );
+      });
+
+      const payload: CreateTemplateOptions = {
+        name: 'Welcome Email',
+        react: mockReactComponent,
+      };
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(resend.templates.create(payload)).rejects.toThrow(
+        'Failed to render React component. Make sure to install `@react-email/render`',
+      );
+    });
+
+    it('throws error when React rendering fails', async () => {
+      const mockReactComponent = {
+        type: 'div',
+        props: { children: 'Welcome!' },
+      } as React.ReactElement;
+
+      mockRenderAsync.mockRejectedValueOnce(new Error('Rendering failed'));
+
+      const payload: CreateTemplateOptions = {
+        name: 'Welcome Email',
+        react: mockReactComponent,
+      };
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(resend.templates.create(payload)).rejects.toThrow(
+        'Rendering failed',
+      );
     });
   });
 });
