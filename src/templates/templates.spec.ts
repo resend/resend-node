@@ -677,3 +677,61 @@ describe('Templates', () => {
     });
   });
 });
+
+describe('publish', () => {
+  it('publishes a template', async () => {
+    const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+    const response = {
+      object: 'template',
+      id,
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+      },
+    });
+
+    const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+    await expect(resend.templates.publish(id)).resolves.toMatchInlineSnapshot(`
+{
+"data": {
+  "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+  "object": "template",
+},
+"error": null,
+}
+`);
+  });
+
+  it('throws error when template not found', async () => {
+    const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+    const response: ErrorResponse = {
+      name: 'not_found',
+      message: 'Template not found',
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 404,
+      headers: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+      },
+    });
+
+    const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+    await expect(resend.templates.publish(id)).resolves.toMatchInlineSnapshot(`
+{
+"data": null,
+"error": {
+  "message": "Template not found",
+  "name": "not_found",
+},
+}
+`);
+  });
+});
