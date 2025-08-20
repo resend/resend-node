@@ -19,6 +19,10 @@ import type {
   ListTemplatesResponseSuccess,
 } from './interfaces/list-templates.interface';
 import type {
+  PublishTemplateResponse,
+  PublishTemplateResponseSuccess,
+} from './interfaces/publish-template.interface';
+import type {
   RemoveTemplateResponse,
   RemoveTemplateResponseSuccess,
 } from './interfaces/remove-template.interface';
@@ -77,6 +81,13 @@ export class Templates {
   async duplicate(identifier: string): Promise<DuplicateTemplateResponse> {
     const data = await this.resend.post<DuplicateTemplateResponseSuccess>(
       `/templates/${identifier}/duplicate`,
+    );
+    return data;
+  }
+
+  async publish(identifier: string): Promise<PublishTemplateResponse> {
+    const data = await this.resend.post<PublishTemplateResponseSuccess>(
+      `/templates/${identifier}/publish`,
     );
     return data;
   }
