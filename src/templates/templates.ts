@@ -22,6 +22,11 @@ import type {
   RemoveTemplateResponse,
   RemoveTemplateResponseSuccess,
 } from './interfaces/remove-template.interface';
+import type {
+  UpdateTemplateOptions,
+  UpdateTemplateResponse,
+  UpdateTemplateResponseSuccess,
+} from './interfaces/update-template.interface';
 
 export class Templates {
   private renderAsync?: (component: React.ReactElement) => Promise<string>;
@@ -77,6 +82,17 @@ export class Templates {
   async duplicate(identifier: string): Promise<DuplicateTemplateResponse> {
     const data = await this.resend.post<DuplicateTemplateResponseSuccess>(
       `/templates/${identifier}/duplicate`,
+    );
+    return data;
+  }
+
+  async update(
+    identifier: string,
+    payload: UpdateTemplateOptions,
+  ): Promise<UpdateTemplateResponse> {
+    const data = await this.resend.patch<UpdateTemplateResponseSuccess>(
+      `/templates/${identifier}`,
+      payload,
     );
     return data;
   }
