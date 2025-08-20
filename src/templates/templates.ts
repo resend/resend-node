@@ -5,6 +5,10 @@ import type {
   CreateTemplateResponseSuccess,
 } from './interfaces/create-template-options.interface';
 import type {
+  GetTemplateResponse,
+  GetTemplateResponseSuccess,
+} from './interfaces/get-template.interface';
+import type {
   RemoveTemplateResponse,
   RemoveTemplateResponseSuccess,
 } from './interfaces/remove-template.interface';
@@ -42,6 +46,13 @@ export class Templates {
 
   async remove(identifier: string): Promise<RemoveTemplateResponse> {
     const data = await this.resend.delete<RemoveTemplateResponseSuccess>(
+      `/templates/${identifier}`,
+    );
+    return data;
+  }
+
+  async get(identifier: string): Promise<GetTemplateResponse> {
+    const data = await this.resend.get<GetTemplateResponseSuccess>(
       `/templates/${identifier}`,
     );
     return data;
