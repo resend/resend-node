@@ -6,6 +6,7 @@ import type {
   CreateTemplateResponseSuccess,
 } from './interfaces/create-template-options.interface';
 import type { GetTemplateResponseSuccess } from './interfaces/get-template.interface';
+import type { UpdateTemplateOptions } from './interfaces/update-template.interface';
 
 enableFetchMocks();
 
@@ -387,6 +388,124 @@ describe('Templates', () => {
 
       await expect(
         resend.templates.duplicate(id),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": null,
+  "error": {
+    "message": "Template not found",
+    "name": "not_found",
+  },
+}
+`);
+    });
+  });
+
+  describe('update', () => {
+    it('updates a template with minimal fields', async () => {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      const payload: UpdateTemplateOptions = {
+        name: 'Updated Welcome Email',
+      };
+      const response = {
+        object: 'template',
+        id,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.templates.update(id, payload),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+    "object": "template",
+  },
+  "error": null,
+}
+`);
+    });
+
+    it('updates a template with all optional fields', async () => {
+      const id = 'fd61172c-cafc-40f5-b049-b45947779a29';
+      const payload: UpdateTemplateOptions = {
+        name: 'Updated Welcome Email',
+        subject: 'Updated Welcome to our platform',
+        html: '<h1>Updated Welcome to our platform, {{{name}}}!</h1><p>We are excited to have you join {{{company}}}.</p>',
+        text: 'Updated Welcome to our platform, {{{name}}}! We are excited to have you join {{{company}}}.',
+        variables: [
+          {
+            key: 'name',
+            fallback_value: 'User',
+            type: 'string',
+          },
+          {
+            key: 'company',
+            type: 'string',
+          },
+        ],
+        alias: 'updated-welcome-email',
+        from: 'updated@example.com',
+        reply_to: ['updated-support@example.com'],
+      };
+      const response = {
+        object: 'template',
+        id,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.templates.update(id, payload),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+    "object": "template",
+  },
+  "error": null,
+}
+`);
+    });
+
+    it('throws error when template not found', async () => {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      const payload: UpdateTemplateOptions = {
+        name: 'Updated Welcome Email',
+      };
+      const response: ErrorResponse = {
+        name: 'not_found',
+        message: 'Template not found',
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 404,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.templates.update(id, payload),
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": null,
