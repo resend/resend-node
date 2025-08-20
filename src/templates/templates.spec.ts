@@ -5,6 +5,7 @@ import type {
   CreateTemplateOptions,
   CreateTemplateResponseSuccess,
 } from './interfaces/create-template-options.interface';
+import type { GetTemplateResponseSuccess } from './interfaces/get-template.interface';
 
 enableFetchMocks();
 
@@ -334,5 +335,109 @@ describe('Templates', () => {
 }
 `);
     });
+  });
+});
+
+describe('get', () => {
+  describe('when template not found', () => {
+    it('returns error', async () => {
+      const response: ErrorResponse = {
+        name: 'not_found',
+        message: 'Template not found',
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 404,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+  resend.templates.get('non-existent-id')
+).resolves.toMatchInlineSnapshot(`
+{
+  "data": null,
+  "error": {
+    "message": "Template not found",
+    "name": "not_found",
+  },
+}
+`);
+    });
+  });
+
+  it('get template', async () => {
+    const response: GetTemplateResponseSuccess = {
+      object: 'template',
+      id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+      name: 'Welcome Email',
+      created_at: '2025-08-19 19:28:27.947052+00',
+      updated_at: '2025-08-19 19:28:27.947052+00',
+      html: '<h1>Welcome!</h1>',
+      text: 'Welcome!',
+      subject: 'Welcome to our platform',
+      status: 'published',
+      alias: 'welcome-email',
+      from: 'noreply@example.com',
+      reply_to: ['support@example.com'],
+      published_at: '2025-08-19 19:28:27.947052+00',
+      variables: [
+        {
+          key: 'name',
+          type: 'string',
+          fallback_value: 'User',
+          created_at: '2025-08-19 19:28:27.947052+00',
+          updated_at: '2025-08-19 19:28:27.947052+00',
+        },
+      ],
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+        Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+      },
+    });
+
+    const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+    await expect(
+  resend.templates.get('fd61172c-cafc-40f5-b049-b45947779a29')
+).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "alias": "welcome-email",
+    "created_at": "2025-08-19 19:28:27.947052+00",
+    "from": "noreply@example.com",
+    "html": "<h1>Welcome!</h1>",
+    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+    "name": "Welcome Email",
+    "object": "template",
+    "published_at": "2025-08-19 19:28:27.947052+00",
+    "reply_to": [
+      "support@example.com",
+    ],
+    "status": "published",
+    "subject": "Welcome to our platform",
+    "text": "Welcome!",
+    "updated_at": "2025-08-19 19:28:27.947052+00",
+    "variables": [
+      {
+        "created_at": "2025-08-19 19:28:27.947052+00",
+        "fallback_value": "User",
+        "key": "name",
+        "type": "string",
+        "updated_at": "2025-08-19 19:28:27.947052+00",
+      },
+    ],
+  },
+  "error": null,
+}
+`);
   });
 });
