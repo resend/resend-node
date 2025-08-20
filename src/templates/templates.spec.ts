@@ -357,8 +357,8 @@ describe('get', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(
-  resend.templates.get('non-existent-id')
-).resolves.toMatchInlineSnapshot(`
+        resend.templates.get('non-existent-id'),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": null,
   "error": {
@@ -407,8 +407,8 @@ describe('get', () => {
     const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
     await expect(
-  resend.templates.get('fd61172c-cafc-40f5-b049-b45947779a29')
-).resolves.toMatchInlineSnapshot(`
+      resend.templates.get('fd61172c-cafc-40f5-b049-b45947779a29'),
+    ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "alias": "welcome-email",
