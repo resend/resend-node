@@ -24,7 +24,7 @@ export class ChainableTemplateResult<
     return this.promise.then(onfulfilled, onrejected);
   }
 
-  async publish(): Promise<PublishTemplateResponse | null> {
+  async publish(): Promise<PublishTemplateResponse> {
     const { data, error } = await this.promise;
 
     if (error) {
