@@ -5,6 +5,10 @@ import type {
   CreateTemplateResponseSuccess,
 } from './interfaces/create-template-options.interface';
 import type {
+  DuplicateTemplateResponse,
+  DuplicateTemplateResponseSuccess,
+} from './interfaces/duplicate-template.interface';
+import type {
   GetTemplateResponse,
   GetTemplateResponseSuccess,
 } from './interfaces/get-template.interface';
@@ -54,6 +58,13 @@ export class Templates {
   async get(identifier: string): Promise<GetTemplateResponse> {
     const data = await this.resend.get<GetTemplateResponseSuccess>(
       `/templates/${identifier}`,
+    );
+    return data;
+  }
+
+  async duplicate(identifier: string): Promise<DuplicateTemplateResponse> {
+    const data = await this.resend.post<DuplicateTemplateResponseSuccess>(
+      `/templates/${identifier}/duplicate`,
     );
     return data;
   }
