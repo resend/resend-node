@@ -40,9 +40,9 @@ export class Templates {
     return data;
   }
 
-  async remove(id: string): Promise<RemoveTemplateResponse> {
+  async remove(identifier: string): Promise<RemoveTemplateResponse> {
     const data = await this.resend.delete<RemoveTemplateResponseSuccess>(
-      `/templates/${id}`,
+      `/templates/${identifier}`,
     );
     return data;
   }
