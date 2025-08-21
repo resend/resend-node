@@ -1,4 +1,5 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
+import type { SelectingField } from './contact';
 
 export type RemoveContactsResponseSuccess = {
   object: 'contact';
@@ -6,31 +7,8 @@ export type RemoveContactsResponseSuccess = {
   contact: string;
 };
 
-interface RemoveByOptions {
-  /**
-   * The contact id.
-   *
-   * @link https://resend.com/docs/api-reference/contacts/delete-contact#body-parameters
-   */
-  id?: string;
-  /**
-   * The contact email.
-   *
-   * @link https://resend.com/docs/api-reference/contacts/delete-contact#body-parameters
-   */
-  email?: string;
-}
-
-export interface RemoveContactOptions extends RemoveByOptions {
+export type RemoveContactOptions = SelectingField & {
   audienceId: string;
-}
+};
 
-export type RemoveContactsResponse =
-  | {
-      data: RemoveContactsResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type RemoveContactsResponse = Response<RemoveContactsResponseSuccess>;

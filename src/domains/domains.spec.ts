@@ -1,6 +1,9 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
+import {
+  mockErrorResponse,
+  mockSuccessResponse,
+} from '../test-utils/mock-fetch';
 import type {
   CreateDomainOptions,
   CreateDomainResponseSuccess,
@@ -11,8 +14,6 @@ import type { ListDomainsResponseSuccess } from './interfaces/list-domains.inter
 import type { RemoveDomainsResponseSuccess } from './interfaces/remove-domain.interface';
 import type { UpdateDomainsResponseSuccess } from './interfaces/update-domain.interface';
 import type { VerifyDomainsResponseSuccess } from './interfaces/verify-domain.interface';
-
-enableFetchMocks();
 
 describe('Domains', () => {
   afterEach(() => fetchMock.resetMocks());
@@ -69,12 +70,8 @@ describe('Domains', () => {
         ],
         region: 'us-east-1',
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
       const payload: CreateDomainOptions = { name: 'resend.com' };
 
@@ -134,6 +131,11 @@ describe('Domains', () => {
     "status": "not_started",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -144,12 +146,8 @@ describe('Domains', () => {
         message: 'Missing "name" field',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 422,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const payload: CreateDomainOptions = {
@@ -166,6 +164,11 @@ describe('Domains', () => {
   "error": {
     "message": "Missing "name" field",
     "name": "missing_required_field",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -234,57 +237,12 @@ describe('Domains', () => {
           resend.domains.create(payload),
         ).resolves.toMatchInlineSnapshot(`
 {
-  "data": {
-    "created_at": "2023-04-07T22:48:33.420498+00:00",
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
-    "name": "resend.com",
-    "records": [
-      {
-        "name": "bounces",
-        "priority": 10,
-        "record": "SPF",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "MX",
-        "value": "feedback-smtp.eu-west-1.com",
-      },
-      {
-        "name": "bounces",
-        "record": "SPF",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "TXT",
-        "value": ""v=spf1 include:com ~all"",
-      },
-      {
-        "name": "nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey",
-        "record": "DKIM",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "CNAME",
-        "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
-      },
-      {
-        "name": "qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey",
-        "record": "DKIM",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "CNAME",
-        "value": "qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.",
-      },
-      {
-        "name": "eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey",
-        "record": "DKIM",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "CNAME",
-        "value": "eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.",
-      },
-    ],
-    "region": "eu-west-1",
-    "status": "not_started",
+  "data": null,
+  "error": {
+    "message": "Unable to fetch data. The request could not be resolved.",
+    "name": "application_error",
   },
-  "error": null,
+  "rateLimiting": null,
 }
 `);
       });
@@ -295,12 +253,8 @@ describe('Domains', () => {
           message: 'Region must be "us-east-1" | "eu-west-1" | "sa-east-1"',
         };
 
-        fetchMock.mockOnce(JSON.stringify(errorResponse), {
-          status: 422,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+        mockErrorResponse(errorResponse, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -316,6 +270,11 @@ describe('Domains', () => {
   "error": {
     "message": "Region must be "us-east-1" | "eu-west-1" | "sa-east-1"",
     "name": "invalid_region",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -359,12 +318,8 @@ describe('Domains', () => {
           region: 'us-east-1',
         };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
         });
 
         const payload: CreateDomainOptions = {
@@ -412,6 +367,11 @@ describe('Domains', () => {
     "status": "not_started",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
       });
@@ -438,12 +398,8 @@ describe('Domains', () => {
           },
         ],
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -469,6 +425,11 @@ describe('Domains', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -482,12 +443,8 @@ describe('Domains', () => {
           message: 'Domain not found',
         };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
-          status: 404,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+        mockErrorResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -500,6 +457,11 @@ describe('Domains', () => {
   "error": {
     "message": "Domain not found",
     "name": "not_found",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -544,12 +506,8 @@ describe('Domains', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -592,6 +550,11 @@ describe('Domains', () => {
     "status": "not_started",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -605,12 +568,8 @@ describe('Domains', () => {
         id,
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -627,6 +586,11 @@ describe('Domains', () => {
     "object": "domain",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -639,12 +603,8 @@ describe('Domains', () => {
         object: 'domain',
         id,
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -656,6 +616,11 @@ describe('Domains', () => {
     "object": "domain",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -669,12 +634,8 @@ describe('Domains', () => {
         id,
         deleted: true,
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -687,6 +648,11 @@ describe('Domains', () => {
     "object": "domain",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });

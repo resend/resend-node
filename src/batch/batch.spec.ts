@@ -1,11 +1,9 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
+import { mockSuccessResponse } from '../test-utils/mock-fetch';
 import type {
   CreateBatchOptions,
   CreateBatchSuccessResponse,
 } from './interfaces/create-batch-options.interface';
-
-enableFetchMocks();
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -41,10 +39,8 @@ describe('Batch', () => {
           { id: 'b2bc2598-f98b-4da4-86c9-7b32881ef394' },
         ],
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -66,6 +62,11 @@ describe('Batch', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -79,10 +80,8 @@ describe('Batch', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -120,10 +119,8 @@ describe('Batch', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -188,10 +185,8 @@ describe('Batch', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -213,6 +208,11 @@ describe('Batch', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -226,10 +226,8 @@ describe('Batch', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -267,10 +265,8 @@ describe('Batch', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
