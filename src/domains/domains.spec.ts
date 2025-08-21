@@ -1,4 +1,3 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import {
@@ -15,8 +14,6 @@ import type { ListDomainsResponseSuccess } from './interfaces/list-domains.inter
 import type { RemoveDomainsResponseSuccess } from './interfaces/remove-domain.interface';
 import type { UpdateDomainsResponseSuccess } from './interfaces/update-domain.interface';
 import type { VerifyDomainsResponseSuccess } from './interfaces/verify-domain.interface';
-
-enableFetchMocks();
 
 describe('Domains', () => {
   afterEach(() => fetchMock.resetMocks());
