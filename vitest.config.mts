@@ -4,6 +4,6 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    setupFiles: ['vitest.setup.mjs'],
+    setupFiles: ['vitest.setup.mts'],
   },
 });

@@ -16,5 +16,5 @@
     "outDir": "build",
     "strict": true
   },
-  "include": ["src", "vitest.setup.mjs"]
+  "include": ["src"]
 }
