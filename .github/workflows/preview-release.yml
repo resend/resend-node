@@ -23,7 +23,6 @@ jobs:
       - name: pnpm setup
         uses: pnpm/action-setup@v4
       - name: Install packages
-        if: steps.pnpm-cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
       - name: Run Build
         run: pnpm build
