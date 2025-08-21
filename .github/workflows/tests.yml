@@ -8,7 +8,7 @@ jobs:
   tests:
     runs-on: buildjet-4vcpu-ubuntu-2204
     container:
-      image: node:23
+      image: node:20
       credentials:
         username: ${{ vars.DOCKER_HUB_USERNAME || '' }}
         password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
