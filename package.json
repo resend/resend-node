@@ -52,7 +52,7 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.5",
+    "@biomejs/biome": "2.2.0",
     "@types/node": "20.19.11",
     "@types/react": "19.1.2",
     "tsup": "8.5.0",

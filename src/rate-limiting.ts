@@ -1,4 +1,4 @@
-// @ts-ignore: this is used in the jsdoc for `shouldResetAfter`
+// @ts-expect-error: this is used in the jsdoc for `shouldResetAfter`
 // biome-ignore lint/correctness/noUnusedImports: this is used in the jsdoc for `shouldResetAfter`
 import type { Response } from './interfaces';
 
