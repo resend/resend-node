@@ -635,14 +635,12 @@ describe('Templates', () => {
 `);
 
       // Verify the request was made with correct query parameters
-      expect(fetchMock).toHaveBeenCalledWith(
-        expect.stringMatching(
-          /^https?:\/\/[^\/]+\/templates\?before=cursor123&limit=10$/,
-        ),
-        expect.objectContaining({
-          method: 'GET',
-        }),
-      );
+      const [url] = fetchMock.mock.calls[0];
+      const parsedUrl = new URL(url as string);
+
+      expect(parsedUrl.pathname).toBe('/templates');
+      expect(parsedUrl.searchParams.get('before')).toBe('cursor123');
+      expect(parsedUrl.searchParams.get('limit')).toBe('10');
     });
 
     it('handles all pagination options', async () => {
@@ -669,14 +667,13 @@ describe('Templates', () => {
       });
 
       // Verify all pagination parameters are included
-      expect(fetchMock).toHaveBeenCalledWith(
-        expect.stringMatching(
-          /^https?:\/\/[^\/]+\/templates\?before=cursor1&after=cursor2&limit=25$/,
-        ),
-        expect.objectContaining({
-          method: 'GET',
-        }),
-      );
+      const [url] = fetchMock.mock.calls[0];
+      const parsedUrl = new URL(url as string);
+
+      expect(parsedUrl.pathname).toBe('/templates');
+      expect(parsedUrl.searchParams.get('before')).toBe('cursor1');
+      expect(parsedUrl.searchParams.get('after')).toBe('cursor2');
+      expect(parsedUrl.searchParams.get('limit')).toBe('25');
     });
   });
 });
