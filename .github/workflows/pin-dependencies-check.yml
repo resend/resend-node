@@ -20,31 +20,4 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
       - name: Check for pinned dependencies
         run: |
-          node -e '
-            const fs = require("fs");
-            const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
-            const errors = [];
-
-            function isPinned(version) {
-              return /^\d+\.\d+\.\d+(-canary\.\d+)?$/.test(version);
-            }
-
-            for (const [dep, version] of Object.entries(pkg.dependencies || {})) {
-              if (!isPinned(version)) {
-                errors.push(`Dependency "${dep}" is not pinned: "${version}"`);
-              }
-            }
-
-            for (const [dep, version] of Object.entries(pkg.devDependencies || {})) {
-              if (!isPinned(version)) {
-                errors.push(`Dev dependency "${dep}" is not pinned: "${version}"`);
-              }
-            }
-
-            if (errors.length > 0) {
-              console.error(`\n${errors.join("\n")}\n`);
-              process.exit(1);
-            } else {
-              console.log("All dependencies are pinned.");
-            }
-          '
+          node .github/scripts/check-pinned-dependencies.mjs
