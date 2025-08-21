@@ -1,4 +1,3 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import {
@@ -22,8 +21,6 @@ import type {
   RemoveContactsResponseSuccess,
 } from './interfaces/remove-contact.interface';
 import type { UpdateContactOptions } from './interfaces/update-contact.interface';
-
-enableFetchMocks();
 
 describe('Contacts', () => {
   afterEach(() => fetchMock.resetMocks());

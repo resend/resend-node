@@ -1,4 +1,3 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import {
@@ -12,11 +11,7 @@ import type {
 import type { ListApiKeysResponseSuccess } from './interfaces/list-api-keys.interface';
 import type { RemoveApiKeyResponseSuccess } from './interfaces/remove-api-keys.interface';
 
-enableFetchMocks();
-
 describe('API Keys', () => {
-  afterEach(() => fetchMock.resetMocks());
-
   describe('create', () => {
     it('creates an api key', async () => {
       const payload: CreateApiKeyOptions = {
