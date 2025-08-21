@@ -1,7 +1,7 @@
 import type * as React from 'react';
 import type { PostOptions } from '../../common/interfaces';
 import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 
 interface EmailRenderOptions {
   /**
@@ -73,7 +73,4 @@ export interface CreateBroadcastResponseSuccess {
   id: string;
 }
 
-export interface CreateBroadcastResponse {
-  data: CreateBroadcastResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateBroadcastResponse = Response<CreateBroadcastResponseSuccess>;

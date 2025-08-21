@@ -1,11 +1,9 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
+import { mockSuccessResponse } from '../test-utils/mock-fetch';
 import type {
   CreateBatchOptions,
   CreateBatchSuccessResponse,
 } from './interfaces/create-batch-options.interface';
-
-enableFetchMocks();
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -41,10 +39,8 @@ describe('Batch', () => {
           { id: 'b2bc2598-f98b-4da4-86c9-7b32881ef394' },
         ],
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -66,8 +62,96 @@ describe('Batch', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
+    });
+
+    it('does not send the Idempotency-Key header when idempotencyKey is not provided', async () => {
+      const response: CreateBatchSuccessResponse = {
+        data: [
+          {
+            id: 'not-idempotent-123',
+          },
+        ],
+      };
+
+      mockSuccessResponse(response, {
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const payload: CreateBatchOptions = [
+        {
+          from: 'admin@resend.com',
+          to: 'user@resend.com',
+          subject: 'Not Idempotent Test',
+          html: '<h1>Test</h1>',
+        },
+      ];
+
+      await resend.batch.create(payload);
+
+      // Inspect the last fetch call and body
+      const lastCall = fetchMock.mock.calls[0];
+      expect(lastCall).toBeDefined();
+
+      //@ts-ignore
+      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
+      expect(hasIdempotencyKey).toBeFalsy();
+
+      //@ts-ignore
+      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
+      expect(usedIdempotencyKey).toBeNull();
+    });
+
+    it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
+      const response: CreateBatchSuccessResponse = {
+        data: [
+          {
+            id: 'idempotent-123',
+          },
+        ],
+      };
+
+      mockSuccessResponse(response, {
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const payload: CreateBatchOptions = [
+        {
+          from: 'admin@resend.com',
+          to: 'user@resend.com',
+          subject: 'Idempotency Test',
+          html: '<h1>Test</h1>',
+        },
+      ];
+      const idempotencyKey = 'unique-key-123';
+
+      await resend.batch.create(payload, { idempotencyKey });
+
+      // Inspect the last fetch call and body
+      const lastCall = fetchMock.mock.calls[0];
+      expect(lastCall).toBeDefined();
+
+      // Check if headers contains Idempotency-Key
+      // In the mock, headers is an object with key-value pairs
+      expect(fetchMock.mock.calls[0][1]?.headers).toBeDefined();
+
+      //@ts-ignore
+      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
+      expect(hasIdempotencyKey).toBeTruthy();
+
+      //@ts-ignore
+      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
+      expect(usedIdempotencyKey).toBe(idempotencyKey);
     });
   });
 
@@ -101,10 +185,8 @@ describe('Batch', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -126,8 +208,96 @@ describe('Batch', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
+    });
+
+    it('does not send the Idempotency-Key header when idempotencyKey is not provided', async () => {
+      const response: CreateBatchSuccessResponse = {
+        data: [
+          {
+            id: 'not-idempotent-123',
+          },
+        ],
+      };
+
+      mockSuccessResponse(response, {
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const payload: CreateBatchOptions = [
+        {
+          from: 'admin@resend.com',
+          to: 'user@resend.com',
+          subject: 'Not Idempotent Test',
+          html: '<h1>Test</h1>',
+        },
+      ];
+
+      await resend.batch.send(payload);
+
+      // Inspect the last fetch call and body
+      const lastCall = fetchMock.mock.calls[0];
+      expect(lastCall).toBeDefined();
+
+      //@ts-ignore
+      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
+      expect(hasIdempotencyKey).toBeFalsy();
+
+      //@ts-ignore
+      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
+      expect(usedIdempotencyKey).toBeNull();
+    });
+
+    it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
+      const response: CreateBatchSuccessResponse = {
+        data: [
+          {
+            id: 'idempotent-123',
+          },
+        ],
+      };
+
+      mockSuccessResponse(response, {
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const payload: CreateBatchOptions = [
+        {
+          from: 'admin@resend.com',
+          to: 'user@resend.com',
+          subject: 'Idempotency Test',
+          html: '<h1>Test</h1>',
+        },
+      ];
+      const idempotencyKey = 'unique-key-123';
+
+      await resend.batch.send(payload, { idempotencyKey });
+
+      // Inspect the last fetch call and body
+      const lastCall = fetchMock.mock.calls[0];
+      expect(lastCall).toBeDefined();
+
+      // Check if headers contains Idempotency-Key
+      // In the mock, headers is an object with key-value pairs
+      expect(fetchMock.mock.calls[0][1]?.headers).toBeDefined();
+
+      //@ts-ignore
+      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
+      expect(hasIdempotencyKey).toBeTruthy();
+
+      //@ts-ignore
+      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
+      expect(usedIdempotencyKey).toBe(idempotencyKey);
     });
   });
 });

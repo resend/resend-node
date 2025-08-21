@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 
 export interface GetEmailResponseSuccess {
   bcc: string[] | null;
@@ -14,18 +14,18 @@ export interface GetEmailResponseSuccess {
     | 'complained'
     | 'delivered'
     | 'delivery_delayed'
+    | 'failed'
     | 'opened'
     | 'queued'
-    | 'scheduled';
+    | 'scheduled'
+    | 'sent';
   reply_to: string[] | null;
   subject: string;
   text: string | null;
+  tags?: { name: string; value: string }[];
   to: string[];
   scheduled_at: string | null;
   object: 'email';
 }
 
-export interface GetEmailResponse {
-  data: GetEmailResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type GetEmailResponse = Response<GetEmailResponseSuccess>;

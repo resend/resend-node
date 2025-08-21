@@ -2,7 +2,7 @@ import type * as React from 'react';
 import type { PostOptions } from '../../common/interfaces';
 import type { IdempotentRequest } from '../../common/interfaces/idempotent-request.interface';
 import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 
 interface EmailRenderOptions {
   /**
@@ -101,10 +101,7 @@ export interface CreateEmailResponseSuccess {
   id: string;
 }
 
-export interface CreateEmailResponse {
-  data: CreateEmailResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateEmailResponse = Response<CreateEmailResponseSuccess>;
 
 export interface Attachment {
   /** Content of an attached file. */
@@ -115,6 +112,11 @@ export interface Attachment {
   path?: string;
   /** Optional content type for the attachment, if not set will be derived from the filename property */
   contentType?: string;
+  /**
+   * Optional content ID for the attachment, to be used as a reference in the HTML content.
+   * If set, this attachment will be sent as an inline attachment and you can reference it in the HTML content using the `cid:` prefix.
+   */
+  contentId?: string;
 }
 
 export type Tag = {

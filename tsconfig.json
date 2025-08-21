@@ -9,6 +9,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
+    "types": ["vitest/globals"],
     "target": "es6",
     "module": "commonjs",
     "declaration": true,

@@ -9,7 +9,8 @@ import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
-import type { ErrorResponse } from './interfaces';
+import type { ErrorResponse, Response } from './interfaces';
+import { parseRateLimit } from './rate-limiting';
 
 const defaultBaseUrl = 'https://api.resend.com';
 const defaultUserAgent = `resend-node:${version}`;
@@ -53,21 +54,28 @@ export class Resend {
     });
   }
 
-  async fetchRequest<T>(
-    path: string,
-    options = {},
-  ): Promise<{ data: T | null; error: ErrorResponse | null }> {
+  async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
     try {
       const response = await fetch(`${baseUrl}${path}`, options);
+
+      const rateLimiting = parseRateLimit(response.headers);
 
       if (!response.ok) {
         try {
           const rawError = await response.text();
-          return { data: null, error: JSON.parse(rawError) };
+          const error: ErrorResponse = JSON.parse(rawError);
+          if (error.name === 'rate_limit_exceeded' && response.status === 429) {
+            const retryAfterHeader = response.headers.get('retry-after');
+            if (retryAfterHeader) {
+              error.retryAfter = Number.parseInt(retryAfterHeader, 10);
+            }
+          }
+          return { data: null, rateLimiting, error };
         } catch (err) {
           if (err instanceof SyntaxError) {
             return {
               data: null,
+              rateLimiting,
               error: {
                 name: 'application_error',
                 message:
@@ -82,18 +90,23 @@ export class Resend {
           };
 
           if (err instanceof Error) {
-            return { data: null, error: { ...error, message: err.message } };
+            return {
+              data: null,
+              rateLimiting: rateLimiting,
+              error: { ...error, message: err.message },
+            };
           }
 
-          return { data: null, error };
+          return { data: null, rateLimiting, error };
         }
       }
 
       const data = await response.json();
-      return { data, error: null };
+      return { data, rateLimiting, error: null };
     } catch (error) {
       return {
         data: null,
+        rateLimiting: null,
         error: {
           name: 'application_error',
           message: 'Unable to fetch data. The request could not be resolved.',
@@ -107,13 +120,15 @@ export class Resend {
     entity?: unknown,
     options: PostOptions & IdempotentRequest = {},
   ) {
+    const headers = new Headers(this.headers);
+
     if (options.idempotencyKey) {
-      this.headers.set('Idempotency-Key', options.idempotencyKey);
+      headers.set('Idempotency-Key', options.idempotencyKey);
     }
 
     const requestOptions = {
       method: 'POST',
-      headers: this.headers,
+      headers: headers,
       body: JSON.stringify(entity),
       ...options,
     };
