@@ -698,11 +698,11 @@ describe('publish', () => {
 
     await expect(resend.templates.publish(id)).resolves.toMatchInlineSnapshot(`
 {
-"data": {
-  "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-  "object": "template",
-},
-"error": null,
+  "data": {
+    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+    "object": "template",
+  },
+  "error": null,
 }
 `);
   });
@@ -726,12 +726,125 @@ describe('publish', () => {
 
     await expect(resend.templates.publish(id)).resolves.toMatchInlineSnapshot(`
 {
-"data": null,
-"error": {
-  "message": "Template not found",
-  "name": "not_found",
-},
+  "data": null,
+  "error": {
+    "message": "Template not found",
+    "name": "not_found",
+  },
 }
 `);
+  });
+
+  describe('chaining with create', () => {
+    it('chains create().publish() successfully', async () => {
+      const createResponse = {
+        object: 'template',
+        id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+      };
+
+      const publishResponse = {
+        object: 'template',
+        id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+      };
+
+      // Mock create request
+      fetchMock.mockOnceIf(
+        (req) => req.url.includes('/templates') && !req.url.includes('publish'),
+        JSON.stringify(createResponse),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
+
+      // Mock publish request
+      fetchMock.mockOnceIf(
+        (req) => req.url.includes('/templates') && req.url.includes('publish'),
+        JSON.stringify(publishResponse),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.templates
+          .create({
+            name: 'Welcome Email',
+            html: '<h1>Welcome!</h1>',
+          })
+          .publish(),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+    "object": "template",
+  },
+  "error": null,
+}
+`);
+    });
+  });
+
+  describe('chaining with duplicate', () => {
+    it('chains duplicate().publish() successfully', async () => {
+      const duplicateResponse = {
+        object: 'template',
+        id: 'new-template-id-123',
+      };
+
+      const publishResponse = {
+        object: 'template',
+        id: 'new-template-id-123',
+      };
+
+      // Mock duplicate request
+      fetchMock.mockOnceIf(
+        (req) => req.url.includes('/duplicate'),
+        JSON.stringify(duplicateResponse),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
+
+      // Mock publish request
+      fetchMock.mockOnceIf(
+        (req) => req.url.includes('/publish'),
+        JSON.stringify(publishResponse),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.templates.duplicate('original-template-id').publish(),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "new-template-id-123",
+    "object": "template",
+  },
+  "error": null,
+}
+`);
+    });
   });
 });
