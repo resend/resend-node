@@ -2,6 +2,8 @@ name: PR Title Check
 on:
   pull_request:
     types: [opened, edited, synchronize]
+permissions: 
+  pull-requests: read
 jobs:
   pr-title-check:
     runs-on: buildjet-4vcpu-ubuntu-2204
