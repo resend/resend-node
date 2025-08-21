@@ -29,6 +29,7 @@ export class Emails {
     payload: CreateEmailOptions,
     options: CreateEmailRequestOptions = {},
   ) {
+    throw new Error('Email sending is not allowed in this version');
     return this.create(payload, options);
   }
 
