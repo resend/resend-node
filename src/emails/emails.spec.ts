@@ -1,4 +1,3 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import type {
@@ -6,8 +5,6 @@ import type {
   CreateEmailResponseSuccess,
 } from './interfaces/create-email-options.interface';
 import type { GetEmailResponseSuccess } from './interfaces/get-email-options.interface';
-
-enableFetchMocks();
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -68,7 +65,6 @@ describe('Emails', () => {
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
 
-      console.log('debug:', lastCall[1]?.headers);
       //@ts-ignore
       const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
       expect(hasIdempotencyKey).toBeFalsy();

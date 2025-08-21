@@ -1,4 +1,3 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import type {
@@ -8,8 +7,6 @@ import type {
 import type { GetAudienceResponseSuccess } from './interfaces/get-audience.interface';
 import type { ListAudiencesResponseSuccess } from './interfaces/list-audiences.interface';
 import type { RemoveAudiencesResponseSuccess } from './interfaces/remove-audience.interface';
-
-enableFetchMocks();
 
 describe('Audiences', () => {
   afterEach(() => fetchMock.resetMocks());

@@ -6,7 +6,6 @@ import type {
 } from './interfaces/create-api-key-options.interface';
 import type { ListApiKeysResponseSuccess } from './interfaces/list-api-keys.interface';
 import type { RemoveApiKeyResponseSuccess } from './interfaces/remove-api-keys.interface';
-import { vi } from 'vitest';
 
 describe('API Keys', () => {
   describe('create', () => {
@@ -19,13 +18,12 @@ describe('API Keys', () => {
         id: '430eed87-632a-4ea6-90db-0aace67ec228',
       };
 
-      vi.spyOn(global, 'fetch').mockResolvedValue({
+      fetchMock.mockOnce(JSON.stringify(response), {
         status: 201,
-        ok: true,
-        headers: new Headers({
-          'Content-Type': 'application/json',
+        headers: {
+          'content-type': 'application/json',
           Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        }),
+        },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
