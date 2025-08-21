@@ -39,13 +39,19 @@ export type Response<Data> =
   | {
       data: Data;
       error: null;
-      raw: Awaited<ReturnType<typeof fetch>>;
+      /**
+       * The raw response from the internal {@link fetch} call.
+       */
+      raw: globalThis.Response;
       rateLimiting: RateLimit;
     }
   | {
       data: null;
       error: ErrorResponse;
-      raw: Awaited<ReturnType<typeof fetch>> | null;
+      /**
+       * The raw response from the internal {@link fetch} call.
+       */
+      raw: globalThis.Response | null;
       rateLimiting: RateLimit | null;
     };
 
