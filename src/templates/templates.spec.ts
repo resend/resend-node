@@ -504,4 +504,179 @@ describe('Templates', () => {
   `);
     });
   });
+
+  describe('list', () => {
+    it('lists templates without pagination options', async () => {
+      const response = {
+        object: 'list',
+        has_more: false,
+        data: [
+          {
+            id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+            name: 'Welcome Email',
+            created_at: '2023-04-07T23:13:52.669661+00:00',
+            updated_at: '2023-04-07T23:13:52.669661+00:00',
+            status: 'published',
+            alias: 'welcome-email',
+            published_at: '2023-04-07T23:13:52.669661+00:00',
+          },
+          {
+            id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+            name: 'Newsletter Template',
+            created_at: '2023-04-06T20:10:30.417116+00:00',
+            updated_at: '2023-04-06T20:10:30.417116+00:00',
+            status: 'draft',
+            alias: 'newsletter',
+            published_at: null,
+          },
+        ],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${TEST_API_KEY}`,
+        },
+      });
+
+      const resend = new Resend(TEST_API_KEY);
+
+      await expect(resend.templates.list()).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "data": [
+      {
+        "alias": "welcome-email",
+        "created_at": "2023-04-07T23:13:52.669661+00:00",
+        "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+        "name": "Welcome Email",
+        "published_at": "2023-04-07T23:13:52.669661+00:00",
+        "status": "published",
+        "updated_at": "2023-04-07T23:13:52.669661+00:00",
+      },
+      {
+        "alias": "newsletter",
+        "created_at": "2023-04-06T20:10:30.417116+00:00",
+        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+        "name": "Newsletter Template",
+        "published_at": null,
+        "status": "draft",
+        "updated_at": "2023-04-06T20:10:30.417116+00:00",
+      },
+    ],
+    "has_more": false,
+    "object": "list",
+  },
+  "error": null,
+}
+`);
+
+      // Verify the request was made without query parameters
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringMatching(/^https?:\/\/[^\/]+\/templates$/),
+        expect.objectContaining({
+          method: 'GET',
+        }),
+      );
+    });
+
+    it('lists templates with pagination options', async () => {
+      const response = {
+        object: 'list',
+        has_more: true,
+        data: [
+          {
+            id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+            name: 'Welcome Email',
+            created_at: '2023-04-07T23:13:52.669661+00:00',
+            updated_at: '2023-04-07T23:13:52.669661+00:00',
+            status: 'published',
+            alias: 'welcome-email',
+            published_at: '2023-04-07T23:13:52.669661+00:00',
+          },
+        ],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${TEST_API_KEY}`,
+        },
+      });
+
+      const resend = new Resend(TEST_API_KEY);
+
+      await expect(
+        resend.templates.list({
+          before: 'cursor123',
+          limit: 10,
+        }),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "data": [
+      {
+        "alias": "welcome-email",
+        "created_at": "2023-04-07T23:13:52.669661+00:00",
+        "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+        "name": "Welcome Email",
+        "published_at": "2023-04-07T23:13:52.669661+00:00",
+        "status": "published",
+        "updated_at": "2023-04-07T23:13:52.669661+00:00",
+      },
+    ],
+    "has_more": true,
+    "object": "list",
+  },
+  "error": null,
+}
+`);
+
+      // Verify the request was made with correct query parameters
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringMatching(
+          /^https?:\/\/[^\/]+\/templates\?before=cursor123&limit=10$/,
+        ),
+        expect.objectContaining({
+          method: 'GET',
+        }),
+      );
+    });
+
+    it('handles all pagination options', async () => {
+      const response = {
+        object: 'list',
+        has_more: false,
+        data: [],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${TEST_API_KEY}`,
+        },
+      });
+
+      const resend = new Resend(TEST_API_KEY);
+
+      await resend.templates.list({
+        before: 'cursor1',
+        after: 'cursor2',
+        limit: 25,
+      });
+
+      // Verify all pagination parameters are included
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringMatching(
+          /^https?:\/\/[^\/]+\/templates\?before=cursor1&after=cursor2&limit=25$/,
+        ),
+        expect.objectContaining({
+          method: 'GET',
+        }),
+      );
+    });
+  });
 });
