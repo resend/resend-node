@@ -53,6 +53,7 @@
     "@biomejs/biome": "1.9.4",
     "@types/node": "20.19.11",
     "@types/react": "19.1.2",
+    "pkg-pr-new": "0.0.56",
     "tsup": "7.2.0",
     "typescript": "5.8.3",
     "vitest": "3.2.4",
