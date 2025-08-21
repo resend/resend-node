@@ -38,6 +38,6 @@
     }
   },
   "files": {
-    "includes": ["**", "!**/pnpm-lock.yaml"]
+    "includes": ["**", "!**/pnpm-lock.yaml", "!dist"]
   }
 }
