@@ -71,11 +71,11 @@ describe('Emails', () => {
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
 
-      //@ts-ignore
+      //@ts-expect-error
       const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
       expect(hasIdempotencyKey).toBeFalsy();
 
-      //@ts-ignore
+      //@ts-expect-error
       const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
       expect(usedIdempotencyKey).toBeNull();
     });
@@ -109,11 +109,11 @@ describe('Emails', () => {
       // In the mock, headers is an object with key-value pairs
       expect(fetchMock.mock.calls[0][1]?.headers).toBeDefined();
 
-      //@ts-ignore
+      //@ts-expect-error
       const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
       expect(hasIdempotencyKey).toBeTruthy();
 
-      //@ts-ignore
+      //@ts-expect-error
       const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
       expect(usedIdempotencyKey).toBe(idempotencyKey);
     });

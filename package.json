@@ -5,7 +5,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "files": ["dist/**"],
+  "files": [
+    "dist/**"
+  ],
   "engines": {
     "node": ">=18"
   },
@@ -50,12 +52,12 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.2.0",
     "@types/node": "20.19.11",
     "@types/react": "19.1.2",
     "pkg-pr-new": "0.0.56",
     "tsup": "8.5.0",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "vitest": "3.2.4",
     "vitest-fetch-mock": "0.4.5"
   },

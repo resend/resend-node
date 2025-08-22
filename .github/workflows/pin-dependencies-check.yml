@@ -4,44 +4,20 @@ on:
     branches:
       - main
   pull_request:
+permissions: 
+  contents: read
+  pull-requests: read
 jobs:
   pin-dependencies-check:
     runs-on: buildjet-4vcpu-ubuntu-2204
     container:
       image: node:20
-      credentials:
-        username: ${{ vars.DOCKER_HUB_USERNAME || '' }}
-        password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
+      # credentials:
+      #   username: ${{ vars.DOCKER_HUB_USERNAME || '' }}
+      #   password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
       - name: Check for pinned dependencies
         run: |
-          node -e '
-            const fs = require("fs");
-            const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
-            const errors = [];
-
-            function isPinned(version) {
-              return /^\d+\.\d+\.\d+(-canary\.\d+)?$/.test(version);
-            }
-
-            for (const [dep, version] of Object.entries(pkg.dependencies || {})) {
-              if (!isPinned(version)) {
-                errors.push(`Dependency "${dep}" is not pinned: "${version}"`);
-              }
-            }
-
-            for (const [dep, version] of Object.entries(pkg.devDependencies || {})) {
-              if (!isPinned(version)) {
-                errors.push(`Dev dependency "${dep}" is not pinned: "${version}"`);
-              }
-            }
-
-            if (errors.length > 0) {
-              console.error(`\n${errors.join("\n")}\n`);
-              process.exit(1);
-            } else {
-              console.log("All dependencies are pinned.");
-            }
-          '
+          node .github/scripts/check-pinned-dependencies.mjs
