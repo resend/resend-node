@@ -25,12 +25,15 @@ export function parseEmailToApiOptions(
     cc: email.cc,
     from: email.from,
     headers: email.headers,
-    html: email.html,
+    html: 'html' in email ? email.html : undefined,
     reply_to: email.replyTo,
     scheduled_at: email.scheduledAt,
     subject: email.subject,
     tags: email.tags,
-    text: email.text,
+    text: 'text' in email ? email.text : undefined,
     to: email.to,
+    template_id: 'template_id' in email ? email.template_id : undefined,
+    template_variables:
+      'template_variables' in email ? email.template_variables : undefined,
   };
 }
