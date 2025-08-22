@@ -854,17 +854,3 @@ describe('Templates', () => {
     });
   });
 });
-//       resend.templates.publish(id),
-//     ).resolves.toMatchInlineSnapshot(`
-// {
-//   "data": null,
-//   "error": {
-//     "message": "Template not found",
-//     "name": "not_found",
-//   },
-// }
-// `);
-//   });
-
-//   });
-// });
