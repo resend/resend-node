@@ -16,7 +16,7 @@ export interface Template {
 
 export interface TemplateVariable {
   key: string;
-  fallback_value: string | null;
+  fallback_value: string | number | boolean | null;
   type: 'string' | 'number' | 'boolean';
   created_at: string;
   updated_at: string;
