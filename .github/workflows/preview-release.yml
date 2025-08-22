@@ -17,7 +17,7 @@ jobs:
       contents: write
       pull-requests: write
     container:
-      image: node:20
+      image: node:22
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -29,7 +29,7 @@ jobs:
         run: pnpm build
       - name: Find changed packages
         id: changed_packages
-        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c
+        uses: tj-actions/changed-files@2036da178f85576f1940fedb74bb93a36cd89ab7
         with:
           files: src/**
           dir_names: true

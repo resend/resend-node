@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
-    "@types/node": "20.19.11",
+    "@types/node": "22.17.2",
     "@types/react": "19.1.10",
     "pkg-pr-new": "0.0.56",
     "tsup": "8.5.0",
