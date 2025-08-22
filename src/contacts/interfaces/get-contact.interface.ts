@@ -1,11 +1,9 @@
-import type { ErrorResponse } from '../../interfaces';
-import type { Contact } from './contact';
+import type { Response } from '../../interfaces';
+import type { Contact, SelectingField } from './contact';
 
-export interface GetContactOptions {
+export type GetContactOptions = {
   audienceId: string;
-  id?: string;
-  email?: string;
-}
+} & SelectingField;
 
 export interface GetContactResponseSuccess
   extends Pick<
@@ -15,7 +13,4 @@ export interface GetContactResponseSuccess
   object: 'contact';
 }
 
-export interface GetContactResponse {
-  data: GetContactResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type GetContactResponse = Response<GetContactResponseSuccess>;

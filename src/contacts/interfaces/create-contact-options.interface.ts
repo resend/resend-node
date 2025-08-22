@@ -1,5 +1,5 @@
 import type { PostOptions } from '../../common/interfaces';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Contact } from './contact';
 
 export interface CreateContactOptions {
@@ -16,7 +16,4 @@ export interface CreateContactResponseSuccess extends Pick<Contact, 'id'> {
   object: 'contact';
 }
 
-export interface CreateContactResponse {
-  data: CreateContactResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateContactResponse = Response<CreateContactResponseSuccess>;

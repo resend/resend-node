@@ -1,11 +1,9 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../resend';
+import { mockSuccessResponse } from '../test-utils/mock-fetch';
 import type {
   CreateBatchOptions,
   CreateBatchSuccessResponse,
 } from './interfaces/create-batch-options.interface';
-
-enableFetchMocks();
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -41,10 +39,8 @@ describe('Batch', () => {
           { id: 'b2bc2598-f98b-4da4-86c9-7b32881ef394' },
         ],
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -66,6 +62,11 @@ describe('Batch', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -79,10 +80,8 @@ describe('Batch', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -102,11 +101,11 @@ describe('Batch', () => {
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
 
-      //@ts-ignore
+      //@ts-expect-error
       const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
       expect(hasIdempotencyKey).toBeFalsy();
 
-      //@ts-ignore
+      //@ts-expect-error
       const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
       expect(usedIdempotencyKey).toBeNull();
     });
@@ -120,10 +119,8 @@ describe('Batch', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -148,11 +145,11 @@ describe('Batch', () => {
       // In the mock, headers is an object with key-value pairs
       expect(fetchMock.mock.calls[0][1]?.headers).toBeDefined();
 
-      //@ts-ignore
+      //@ts-expect-error
       const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
       expect(hasIdempotencyKey).toBeTruthy();
 
-      //@ts-ignore
+      //@ts-expect-error
       const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
       expect(usedIdempotencyKey).toBe(idempotencyKey);
     });
@@ -188,10 +185,8 @@ describe('Batch', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -213,6 +208,11 @@ describe('Batch', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -226,10 +226,8 @@ describe('Batch', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -249,11 +247,11 @@ describe('Batch', () => {
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
 
-      //@ts-ignore
+      //@ts-expect-error
       const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
       expect(hasIdempotencyKey).toBeFalsy();
 
-      //@ts-ignore
+      //@ts-expect-error
       const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
       expect(usedIdempotencyKey).toBeNull();
     });
@@ -267,10 +265,8 @@ describe('Batch', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -295,11 +291,11 @@ describe('Batch', () => {
       // In the mock, headers is an object with key-value pairs
       expect(fetchMock.mock.calls[0][1]?.headers).toBeDefined();
 
-      //@ts-ignore
+      //@ts-expect-error
       const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
       expect(hasIdempotencyKey).toBeTruthy();
 
-      //@ts-ignore
+      //@ts-expect-error
       const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
       expect(usedIdempotencyKey).toBe(idempotencyKey);
     });

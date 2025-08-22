@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Domain, DomainRecords } from './domain';
 
 export interface GetDomainResponseSuccess
@@ -7,7 +7,4 @@ export interface GetDomainResponseSuccess
   records: DomainRecords[];
 }
 
-export interface GetDomainResponse {
-  data: GetDomainResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type GetDomainResponse = Response<GetDomainResponseSuccess>;

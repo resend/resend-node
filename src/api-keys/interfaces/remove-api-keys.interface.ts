@@ -1,9 +1,6 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
+// biome-ignore lint/complexity/noBannedTypes: allow empty types
 export type RemoveApiKeyResponseSuccess = {};
 
-export interface RemoveApiKeyResponse {
-  data: RemoveApiKeyResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type RemoveApiKeyResponse = Response<RemoveApiKeyResponseSuccess>;

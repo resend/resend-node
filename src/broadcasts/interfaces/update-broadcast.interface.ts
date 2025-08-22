@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 
 export interface UpdateBroadcastResponseSuccess {
   id: string;
@@ -15,7 +15,4 @@ export interface UpdateBroadcastOptions {
   previewText?: string;
 }
 
-export interface UpdateBroadcastResponse {
-  data: UpdateBroadcastResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type UpdateBroadcastResponse = Response<UpdateBroadcastResponseSuccess>;

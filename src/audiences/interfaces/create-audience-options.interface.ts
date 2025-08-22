@@ -1,5 +1,5 @@
 import type { PostOptions } from '../../common/interfaces';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Audience } from './audience';
 
 export interface CreateAudienceOptions {
@@ -13,7 +13,4 @@ export interface CreateAudienceResponseSuccess
   object: 'audience';
 }
 
-export interface CreateAudienceResponse {
-  data: CreateAudienceResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateAudienceResponse = Response<CreateAudienceResponseSuccess>;
