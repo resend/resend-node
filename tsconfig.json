@@ -2,19 +2,21 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "alwaysStrict": true,
+    "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
     "moduleResolution": "node",
+    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "resolveJsonModule": true,
-    "types": ["vitest/globals"],
-    "target": "es6",
-    "module": "commonjs",
-    "declaration": true,
+    "skipLibCheck": true,
     "outDir": "build",
-    "strict": true
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "es6",
+    "types": ["vitest/globals"]
   },
   "include": ["src"]
 }
