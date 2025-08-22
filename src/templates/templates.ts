@@ -1,3 +1,5 @@
+import type { PaginationOptions } from '../common/interfaces';
+import { getPaginationQueryProperties } from '../common/utils/get-pagination-query-properties';
 import type { Resend } from '../resend';
 import type {
   CreateTemplateOptions,
@@ -12,6 +14,10 @@ import type {
   GetTemplateResponse,
   GetTemplateResponseSuccess,
 } from './interfaces/get-template.interface';
+import type {
+  ListTemplatesResponse,
+  ListTemplatesResponseSuccess,
+} from './interfaces/list-templates.interface';
 import type {
   RemoveTemplateResponse,
   RemoveTemplateResponseSuccess,
@@ -60,6 +66,12 @@ export class Templates {
       `/templates/${identifier}`,
     );
     return data;
+  }
+
+  async list(options: PaginationOptions = {}): Promise<ListTemplatesResponse> {
+    return this.resend.get<ListTemplatesResponseSuccess>(
+      `/templates${getPaginationQueryProperties(options)}`,
+    );
   }
 
   async duplicate(identifier: string): Promise<DuplicateTemplateResponse> {
