@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+
 const pkg = JSON.parse(await fs.promises.readFile('package.json', 'utf8'));
 const errors = [];
 
