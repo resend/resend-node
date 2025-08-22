@@ -27,6 +27,11 @@ import type {
   RemoveTemplateResponse,
   RemoveTemplateResponseSuccess,
 } from './interfaces/remove-template.interface';
+import type {
+  UpdateTemplateOptions,
+  UpdateTemplateResponse,
+  UpdateTemplateResponseSuccess,
+} from './interfaces/update-template.interface';
 
 export class Templates {
   private renderAsync?: (component: React.ReactElement) => Promise<string>;
@@ -103,6 +108,17 @@ export class Templates {
   async publish(identifier: string): Promise<PublishTemplateResponse> {
     const data = await this.resend.post<PublishTemplateResponseSuccess>(
       `/templates/${identifier}/publish`,
+    );
+    return data;
+  }
+
+  async update(
+    identifier: string,
+    payload: UpdateTemplateOptions,
+  ): Promise<UpdateTemplateResponse> {
+    const data = await this.resend.patch<UpdateTemplateResponseSuccess>(
+      `/templates/${identifier}`,
+      payload,
     );
     return data;
   }
