@@ -1,72 +1,79 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
+import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
-import { ErrorResponse } from '../interfaces';
-
-enableFetchMocks();
+import {
+  mockErrorResponse,
+  mockSuccessResponse,
+} from '../test-utils/mock-fetch';
+import type {
+  CreateApiKeyOptions,
+  CreateApiKeyResponseSuccess,
+} from './interfaces/create-api-key-options.interface';
+import type { ListApiKeysResponseSuccess } from './interfaces/list-api-keys.interface';
+import type { RemoveApiKeyResponseSuccess } from './interfaces/remove-api-keys.interface';
 
 describe('API Keys', () => {
-  afterEach(() => fetchMock.resetMocks());
-
   describe('create', () => {
     it('creates an api key', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
-          data: {
-            token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
-            id: '430eed87-632a-4ea6-90db-0aace67ec228',
-          },
-          error: null,
-        }),
-        {
-          status: 201,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
-        },
-      );
+      const payload: CreateApiKeyOptions = {
+        name: 'Test',
+      };
+      const response: CreateApiKeyResponseSuccess = {
+        token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
+        id: '430eed87-632a-4ea6-90db-0aace67ec228',
+      };
+
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.apiKeys.create({ name: 'Test' })).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.apiKeys.create(payload),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
-    "data": {
-      "id": "430eed87-632a-4ea6-90db-0aace67ec228",
-      "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
-    },
-    "error": null,
+    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+    "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
 
     it('throws error when missing name', async () => {
-      const errorResponse: ErrorResponse = {
-        name: 'missing_required_field',
-        message: 'Missing "name" field',
+      const payload: CreateApiKeyOptions = {
+        name: '',
+      };
+      const response: ErrorResponse = {
+        message: 'String must contain at least 1 character(s)',
+        name: 'validation_error',
       };
 
-      fetchMock.mockOnce(JSON.stringify(errorResponse), {
-        status: 422,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const result = resend.apiKeys.create({ name: '' });
+      const result = resend.apiKeys.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
 {
   "data": null,
   "error": {
-    "message": "Missing "name" field",
-    "name": "missing_required_field",
+    "message": "String must contain at least 1 character(s)",
+    "name": "validation_error",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -74,107 +81,104 @@ describe('API Keys', () => {
 
     describe('with access', () => {
       it('creates api key with access `full_access`', async () => {
-        fetchMock.mockOnce(
-          JSON.stringify({
-            data: {
-              token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
-              id: '430eed87-632a-4ea6-90db-0aace67ec228',
-            },
-            error: null,
-          }),
-          {
-            status: 201,
-            headers: {
-              'content-type': 'application/json',
-              Authorization: 'Bearer re_924b3rjh2387fbewf823',
-            },
-          },
-        );
-
-        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-
-        await expect(
-          resend.apiKeys.create({ name: 'Test', permission: 'full_access' }),
-        ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": {
-      "id": "430eed87-632a-4ea6-90db-0aace67ec228",
-      "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
-    },
-    "error": null,
-  },
-  "error": null,
-}
-`);
-      });
-
-      it('creates api key with access `sending_access`', async () => {
-        fetchMock.mockOnce(
-          JSON.stringify({
-            data: {
-              token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
-              id: '430eed87-632a-4ea6-90db-0aace67ec228',
-            },
-            error: null,
-          }),
-          {
-            status: 201,
-            headers: {
-              'content-type': 'application/json',
-              Authorization: 'Bearer re_924b3rjh2387fbewf823',
-            },
-          },
-        );
-
-        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-
-        await expect(
-          resend.apiKeys.create({
-            name: 'Test',
-            permission: 'sending_access',
-          }),
-        ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": {
-      "id": "430eed87-632a-4ea6-90db-0aace67ec228",
-      "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
-    },
-    "error": null,
-  },
-  "error": null,
-}
-`);
-      });
-
-      it('throws error with wrong access', async () => {
-        const errorResponse: ErrorResponse = {
-          name: 'invalid_access',
-          message: 'Access must be "full_access" | "sending_access"',
+        const payload: CreateApiKeyOptions = {
+          name: 'Test',
+          permission: 'full_access',
         };
 
-        fetchMock.mockOnce(JSON.stringify(errorResponse), {
-          status: 422,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+        const response: CreateApiKeyResponseSuccess = {
+          token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
+          id: '430eed87-632a-4ea6-90db-0aace67ec228',
+        };
+
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
         await expect(
-          resend.apiKeys.create({
-            name: 'Test',
-            permission: 'wrong_access' as 'sending_access' | 'full_access',
-          }),
+          resend.apiKeys.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+    "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
+  },
+  "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
+}
+`);
+      });
+
+      it('creates api key with access `sending_access`', async () => {
+        const payload: CreateApiKeyOptions = {
+          name: 'Test',
+          permission: 'sending_access',
+        };
+        const response: CreateApiKeyResponseSuccess = {
+          token: 're_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk',
+          id: '430eed87-632a-4ea6-90db-0aace67ec228',
+        };
+
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        await expect(
+          resend.apiKeys.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+    "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
+  },
+  "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
+}
+`);
+      });
+
+      it('throws error with wrong access', async () => {
+        const response: ErrorResponse = {
+          name: 'invalid_access',
+          message: 'Access must be "full_access" | "sending_access"',
+        };
+
+        mockErrorResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const payload: CreateApiKeyOptions = {
+          name: 'Test',
+          permission: 'wrong_access' as 'sending_access' | 'full_access',
+        };
+
+        await expect(
+          resend.apiKeys.create(payload),
         ).resolves.toMatchInlineSnapshot(`
 {
   "data": null,
   "error": {
     "message": "Access must be "full_access" | "sending_access"",
     "name": "invalid_access",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -259,103 +263,81 @@ describe('API Keys', () => {
 
   describe('list', () => {
     it('lists api keys', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
-          data: [
-            {
-              id: '5262504e-8ed7-4fac-bd16-0d4be94bc9f2',
-              name: 'My API Key 1',
-              created_at: '2023-04-07T20:29:10.666968+00:00',
-            },
-            {
-              id: '98c37b35-1473-4afe-a627-78e975a36fab',
-              name: 'My API Key 2',
-              created_at: '2023-04-06T23:09:49.093947+00:00',
-            },
-          ],
-          error: null,
-        }),
+      const response: ListApiKeysResponseSuccess = [
         {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+          id: '5262504e-8ed7-4fac-bd16-0d4be94bc9f2',
+          name: 'My API Key 1',
+          created_at: '2023-04-07T20:29:10.666968+00:00',
         },
-      );
+        {
+          id: '98c37b35-1473-4afe-a627-78e975a36fab',
+          name: 'My API Key 2',
+          created_at: '2023-04-06T23:09:49.093947+00:00',
+        },
+      ];
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.apiKeys.list()).resolves.toMatchInlineSnapshot(`
 {
-  "data": {
-    "data": [
-      {
-        "created_at": "2023-04-07T20:29:10.666968+00:00",
-        "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-        "name": "My API Key 1",
-      },
-      {
-        "created_at": "2023-04-06T23:09:49.093947+00:00",
-        "id": "98c37b35-1473-4afe-a627-78e975a36fab",
-        "name": "My API Key 2",
-      },
-    ],
-    "error": null,
-  },
+  "data": [
+    {
+      "created_at": "2023-04-07T20:29:10.666968+00:00",
+      "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+      "name": "My API Key 1",
+    },
+    {
+      "created_at": "2023-04-06T23:09:49.093947+00:00",
+      "id": "98c37b35-1473-4afe-a627-78e975a36fab",
+      "name": "My API Key 2",
+    },
+  ],
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
   });
 
   describe('remove', () => {
+    const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+    const response: RemoveApiKeyResponseSuccess = {};
+
     it('removes an api key', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
-          data: {
-            id: '5262504e-8ed7-4fac-bd16-0d4be94bc9f2',
-          },
-          error: null,
-        }),
-        {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
-        },
-      );
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(
-        resend.apiKeys.remove('5262504e-8ed7-4fac-bd16-0d4be94bc9f2'),
-      ).resolves.toMatchInlineSnapshot(`
+      await expect(resend.apiKeys.remove(id)).resolves.toMatchInlineSnapshot(`
 {
-  "data": {
-    "data": {
-      "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-    },
-    "error": null,
-  },
+  "data": {},
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
 
     it('throws error when missing id', async () => {
-      const errorResponse: ErrorResponse = {
+      const response: ErrorResponse = {
         name: 'application_error',
         message: 'Something went wrong',
       };
 
-      fetchMock.mockOnce(JSON.stringify(errorResponse), {
-        status: 500,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -369,22 +351,23 @@ describe('API Keys', () => {
     "message": "Something went wrong",
     "name": "application_error",
   },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
 
     it('throws error when wrong id', async () => {
-      const errorResponse: ErrorResponse = {
+      const response: ErrorResponse = {
         name: 'not_found',
         message: 'API key not found',
       };
 
-      fetchMock.mockOnce(JSON.stringify(errorResponse), {
-        status: 404,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -399,6 +382,11 @@ describe('API Keys', () => {
   "error": {
     "message": "API key not found",
     "name": "not_found",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);

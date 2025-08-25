@@ -1,12 +1,9 @@
-import { ErrorResponse } from '../../interfaces';
-import { Audience } from './audience';
+import type { Response } from '../../interfaces';
+import type { Audience } from './audience';
 
 export interface GetAudienceResponseSuccess
   extends Pick<Audience, 'id' | 'name' | 'created_at'> {
   object: 'audience';
 }
 
-export interface GetAudienceResponse {
-  data: GetAudienceResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type GetAudienceResponse = Response<GetAudienceResponseSuccess>;

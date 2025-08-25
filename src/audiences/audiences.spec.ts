@@ -1,61 +1,67 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
+import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
-import { GetAudienceResponseSuccess } from './interfaces';
-import { ErrorResponse } from '../interfaces';
-
-enableFetchMocks();
+import {
+  mockErrorResponse,
+  mockSuccessResponse,
+} from '../test-utils/mock-fetch';
+import type {
+  CreateAudienceOptions,
+  CreateAudienceResponseSuccess,
+} from './interfaces/create-audience-options.interface';
+import type { GetAudienceResponseSuccess } from './interfaces/get-audience.interface';
+import type { ListAudiencesResponseSuccess } from './interfaces/list-audiences.interface';
+import type { RemoveAudiencesResponseSuccess } from './interfaces/remove-audience.interface';
 
 describe('Audiences', () => {
   afterEach(() => fetchMock.resetMocks());
 
   describe('create', () => {
     it('creates a audience', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
-          id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
-          name: 'Resend',
-          created_at: '2023-04-07T22:48:33.420498+00:00',
-        }),
-        {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
-        },
-      );
+      const payload: CreateAudienceOptions = { name: 'resend.com' };
+      const response: CreateAudienceResponseSuccess = {
+        id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+        name: 'Resend',
+        object: 'audience',
+      };
+
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      await expect(resend.audiences.create({ name: 'resend.com' })).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.audiences.create(payload),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
-    "created_at": "2023-04-07T22:48:33.420498+00:00",
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
     "name": "Resend",
+    "object": "audience",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
 
     it('throws error when missing name', async () => {
-      const errorResponse: ErrorResponse = {
+      const payload: CreateAudienceOptions = { name: '' };
+      const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing "name" field',
       };
 
-      fetchMock.mockOnce(JSON.stringify(errorResponse), {
-        status: 422,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const result = resend.audiences.create({ name: '' });
+      const result = resend.audiences.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
 {
@@ -64,6 +70,11 @@ describe('Audiences', () => {
     "message": "Missing "name" field",
     "name": "missing_required_field",
   },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -71,29 +82,24 @@ describe('Audiences', () => {
 
   describe('list', () => {
     it('lists audiences', async () => {
-      fetchMock.mockOnce(
-        JSON.stringify({
-          data: [
-            {
-              id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
-              name: 'resend.com',
-              created_at: '2023-04-07T23:13:52.669661+00:00',
-            },
-            {
-              id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
-              name: 'react.email',
-              created_at: '2023-04-07T23:13:20.417116+00:00',
-            },
-          ],
-        }),
-        {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+      const response: ListAudiencesResponseSuccess = {
+        object: 'list',
+        data: [
+          {
+            id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+            name: 'resend.com',
+            created_at: '2023-04-07T23:13:52.669661+00:00',
           },
-        },
-      );
+          {
+            id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
+            name: 'react.email',
+            created_at: '2023-04-07T23:13:20.417116+00:00',
+          },
+        ],
+      };
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -112,8 +118,14 @@ describe('Audiences', () => {
         "name": "react.email",
       },
     ],
+    "object": "list",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -122,17 +134,13 @@ describe('Audiences', () => {
   describe('get', () => {
     describe('when audience not found', () => {
       it('returns error', async () => {
-        const errorResponse: ErrorResponse = {
+        const response: ErrorResponse = {
           name: 'not_found',
           message: 'Audience not found',
         };
 
-        fetchMock.mockOnce(JSON.stringify(errorResponse), {
-          status: 404,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+        mockErrorResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -146,31 +154,33 @@ describe('Audiences', () => {
     "message": "Audience not found",
     "name": "not_found",
   },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
       });
     });
 
     it('get audience', async () => {
-      const audience: GetAudienceResponseSuccess = {
+      const response: GetAudienceResponseSuccess = {
         object: 'audience',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'resend.com',
         created_at: '2023-06-21T06:10:36.144Z',
       };
 
-      fetchMock.mockOnce(JSON.stringify(audience), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(resend.audiences.get('1234')).resolves
-        .toMatchInlineSnapshot(`
+      await expect(
+        resend.audiences.get('1234'),
+      ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "created_at": "2023-06-21T06:10:36.144Z",
@@ -179,6 +189,11 @@ describe('Audiences', () => {
     "object": "audience",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -186,22 +201,31 @@ describe('Audiences', () => {
 
   describe('remove', () => {
     it('removes a audience', async () => {
-      fetchMock.mockOnce(JSON.stringify({}), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      const response: RemoveAudiencesResponseSuccess = {
+        object: 'audience',
+        id,
+        deleted: true,
+      };
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(
-        resend.audiences.remove('5262504e-8ed7-4fac-bd16-0d4be94bc9f2'),
-      ).resolves.toMatchInlineSnapshot(`
+      await expect(resend.audiences.remove(id)).resolves.toMatchInlineSnapshot(`
 {
-  "data": {},
+  "data": {
+    "deleted": true,
+    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+    "object": "audience",
+  },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });

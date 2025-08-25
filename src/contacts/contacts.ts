@@ -1,16 +1,30 @@
-import { Resend } from '../resend';
-import {
+import type { Resend } from '../resend';
+import type {
   CreateContactOptions,
   CreateContactRequestOptions,
   CreateContactResponse,
   CreateContactResponseSuccess,
+} from './interfaces/create-contact-options.interface';
+import type {
+  GetContactOptions,
   GetContactResponse,
   GetContactResponseSuccess,
+} from './interfaces/get-contact.interface';
+import type {
+  ListContactsOptions,
   ListContactsResponse,
   ListContactsResponseSuccess,
+} from './interfaces/list-contacts.interface';
+import type {
+  RemoveContactOptions,
   RemoveContactsResponse,
   RemoveContactsResponseSuccess,
-} from './interfaces';
+} from './interfaces/remove-contact.interface';
+import type {
+  UpdateContactOptions,
+  UpdateContactResponse,
+  UpdateContactResponseSuccess,
+} from './interfaces/update-contact.interface';
 
 export class Contacts {
   constructor(private readonly resend: Resend) {}
@@ -20,46 +34,82 @@ export class Contacts {
     options: CreateContactRequestOptions = {},
   ): Promise<CreateContactResponse> {
     const data = await this.resend.post<CreateContactResponseSuccess>(
-      `/audiences/${payload.audience_id}/contacts`,
-      payload,
+      `/audiences/${payload.audienceId}/contacts`,
+      {
+        unsubscribed: payload.unsubscribed,
+        email: payload.email,
+        first_name: payload.firstName,
+        last_name: payload.lastName,
+      },
       options,
     );
     return data;
   }
 
-  async list({
-    audience_id,
-  }: {
-    audience_id: string;
-  }): Promise<ListContactsResponse> {
+  async list(options: ListContactsOptions): Promise<ListContactsResponse> {
     const data = await this.resend.get<ListContactsResponseSuccess>(
-      `/audiences/${audience_id}/contacts`,
+      `/audiences/${options.audienceId}/contacts`,
     );
     return data;
   }
 
-  async get({
-    audience_id,
-    id,
-  }: {
-    audience_id: string;
-    id: string;
-  }): Promise<GetContactResponse> {
+  async get(options: GetContactOptions): Promise<GetContactResponse> {
+    if (!options.id && !options.email) {
+      return {
+        data: null,
+        rateLimiting: null,
+        error: {
+          message: 'Missing `id` or `email` field.',
+          name: 'missing_required_field',
+        },
+      };
+    }
+
     const data = await this.resend.get<GetContactResponseSuccess>(
-      `/audiences/${audience_id}/contacts/${id}`,
+      `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
     );
     return data;
   }
 
-  async remove({
-    audience_id,
-    id,
-  }: {
-    audience_id: string;
-    id: string;
-  }): Promise<RemoveContactsResponse> {
+  async update(options: UpdateContactOptions): Promise<UpdateContactResponse> {
+    if (!options.id && !options.email) {
+      return {
+        data: null,
+        rateLimiting: null,
+        error: {
+          message: 'Missing `id` or `email` field.',
+          name: 'missing_required_field',
+        },
+      };
+    }
+
+    const data = await this.resend.patch<UpdateContactResponseSuccess>(
+      `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
+      {
+        unsubscribed: options.unsubscribed,
+        first_name: options.firstName,
+        last_name: options.lastName,
+      },
+    );
+    return data;
+  }
+
+  async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
+    if (!payload.id && !payload.email) {
+      return {
+        data: null,
+        rateLimiting: null,
+        error: {
+          message: 'Missing `id` or `email` field.',
+          name: 'missing_required_field',
+        },
+      };
+    }
+
     const data = await this.resend.delete<RemoveContactsResponseSuccess>(
-      `/audiences/${audience_id}/contacts/${id}`,
+      `/audiences/${payload.audienceId}/contacts/${
+        payload?.email ? payload?.email : payload?.id
+      }`,
     );
     return data;
   }

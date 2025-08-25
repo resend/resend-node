@@ -1,9 +1,9 @@
-import { ErrorResponse } from '../../interfaces';
-import { Audience } from './audience';
+import type { Response } from '../../interfaces';
+import type { Audience } from './audience';
 
-export type RemoveAudiencesResponseSuccess = Pick<Audience, 'id'>;
-
-export interface RemoveAudiencesResponse {
-  data: RemoveAudiencesResponseSuccess | null;
-  error: ErrorResponse | null;
+export interface RemoveAudiencesResponseSuccess extends Pick<Audience, 'id'> {
+  object: 'audience';
+  deleted: boolean;
 }
+
+export type RemoveAudiencesResponse = Response<RemoveAudiencesResponseSuccess>;

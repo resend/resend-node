@@ -1,16 +1,22 @@
-import { Resend } from '../resend';
-import {
+import type { Resend } from '../resend';
+import type {
   CreateAudienceOptions,
   CreateAudienceRequestOptions,
   CreateAudienceResponse,
   CreateAudienceResponseSuccess,
+} from './interfaces/create-audience-options.interface';
+import type {
   GetAudienceResponse,
   GetAudienceResponseSuccess,
+} from './interfaces/get-audience.interface';
+import type {
   ListAudiencesResponse,
   ListAudiencesResponseSuccess,
+} from './interfaces/list-audiences.interface';
+import type {
   RemoveAudiencesResponse,
   RemoveAudiencesResponseSuccess,
-} from './interfaces';
+} from './interfaces/remove-audience.interface';
 
 export class Audiences {
   constructor(private readonly resend: Resend) {}

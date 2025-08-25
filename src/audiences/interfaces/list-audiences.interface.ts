@@ -1,9 +1,9 @@
-import { ErrorResponse } from '../../interfaces';
-import { Audience } from './audience';
+import type { Response } from '../../interfaces';
+import type { Audience } from './audience';
 
-export type ListAudiencesResponseSuccess = Audience[];
+export type ListAudiencesResponseSuccess = {
+  object: 'list';
+  data: Audience[];
+};
 
-export interface ListAudiencesResponse {
-  data: ListAudiencesResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type ListAudiencesResponse = Response<ListAudiencesResponseSuccess>;

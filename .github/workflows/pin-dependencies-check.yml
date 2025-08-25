@@ -1,0 +1,23 @@
+name: Pin Dependencies Check
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+permissions: 
+  contents: read
+  pull-requests: read
+jobs:
+  pin-dependencies-check:
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    container:
+      image: node:22
+      # credentials:
+      #   username: ${{ vars.DOCKER_HUB_USERNAME || '' }}
+      #   password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
+      - name: Check for pinned dependencies
+        run: |
+          node .github/scripts/check-pinned-dependencies.mjs

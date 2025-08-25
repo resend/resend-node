@@ -1,10 +1,11 @@
-import { PostOptions } from '../../common/interfaces';
-import { ErrorResponse } from '../../interfaces';
-import { Domain, DomainRecords, DomainRegion } from './domain';
+import type { PostOptions } from '../../common/interfaces';
+import type { Response } from '../../interfaces';
+import type { Domain, DomainRecords, DomainRegion } from './domain';
 
 export interface CreateDomainOptions {
   name: string;
   region?: DomainRegion;
+  customReturnPath?: string;
 }
 
 export interface CreateDomainRequestOptions extends PostOptions {}
@@ -14,7 +15,4 @@ export interface CreateDomainResponseSuccess
   records: DomainRecords[];
 }
 
-export interface CreateDomainResponse {
-  data: CreateDomainResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateDomainResponse = Response<CreateDomainResponseSuccess>;

@@ -1,9 +1,8 @@
-import { ErrorResponse } from '../../interfaces';
-import { Domain } from './domain';
+import type { Response } from '../../interfaces';
+import type { Domain } from './domain';
 
-export type VerifyDomainsResponseSuccess = Domain[];
+export type VerifyDomainsResponseSuccess = Pick<Domain, 'id'> & {
+  object: 'domain';
+};
 
-export interface VerifyDomainsResponse {
-  data: VerifyDomainsResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type VerifyDomainsResponse = Response<VerifyDomainsResponseSuccess>;

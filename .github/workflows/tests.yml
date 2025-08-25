@@ -1,175 +1,29 @@
-name: rsnd
+name: Tests
 on:
   push:
     branches:
       - main
+      - canary
   pull_request:
+permissions: 
+  contents: read
+  pull-requests: read
 jobs:
-  lint:
+  tests:
     runs-on: buildjet-4vcpu-ubuntu-2204
     container:
-      image: node:18
+      image: node:22
+      # credentials:
+      #   username: ${{ vars.DOCKER_HUB_USERNAME || '' }}
+      #   password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cache node modules
-        id: npm-cache
-        uses: buildjet/cache@v3
-        with:
-          path: ~/.node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Cache yarn cache
-        id: yarn-cache
-        uses: buildjet/cache@v3
-        with:
-          path: ~/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
+      - name: pnpm setup
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda
       - name: Install packages
-        if: steps.npm-cache.outputs.cache-hit != 'true'
-        run: yarn
-      - name: Run Lint
-        run: yarn lint
-  format:
-    runs-on: buildjet-4vcpu-ubuntu-2204
-    container:
-      image: node:16
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cache node modules
-        id: npm-cache
-        uses: buildjet/cache@v3
-        with:
-          path: ~/.node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Cache yarn cache
-        id: yarn-cache
-        uses: buildjet/cache@v3
-        with:
-          path: ~/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install packages
-        if: steps.npm-cache.outputs.cache-hit != 'true'
-        run: yarn
-      - name: Run Format Check
-        run: yarn format:check
-  # test:
-  #   runs-on: buildjet-4vcpu-ubuntu-2204
-  #   container:
-  #     image: node:16
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Cache node modules
-  #       id: npm-cache
-  #       uses: buildjet/cache@v3
-  #       with:
-  #         path: ~/.node_modules
-  #         key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-node-
-  #     - name: Cache yarn cache
-  #       id: yarn-cache
-  #       uses: buildjet/cache@v3
-  #       with:
-  #         path: ~/.cache/yarn
-  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-yarn-
-  #     - name: Install packages
-  #       if: steps.npm-cache.outputs.cache-hit != 'true'
-  #       run: yarn
-  #     - name: Run Tests
-  #       run: yarn test
-  build:
-    runs-on: buildjet-4vcpu-ubuntu-2204
-    container:
-      image: node:16
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cache node modules
-        id: npm-cache
-        uses: buildjet/cache@v3
-        with:
-          path: ~/.node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Cache yarn cache
-        id: yarn-cache
-        uses: buildjet/cache@v3
-        with:
-          path: ~/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install packages
-        if: steps.npm-cache.outputs.cache-hit != 'true'
-        run: yarn
-      - name: Run Build
-        run: yarn build
-  dependencies:
-    runs-on: buildjet-4vcpu-ubuntu-2204
-    container:
-      image: node:16
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cache node modules
-        id: npm-cache
-        uses: buildjet/cache@v3
-        with:
-          path: ~/.node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Cache yarn cache
-        id: yarn-cache
-        uses: buildjet/cache@v3
-        with:
-          path: ~/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install packages
-        if: steps.npm-cache.outputs.cache-hit != 'true'
-        run: yarn
-      - name: Check for pinned dependencies
-        run: |
-          node -e '
-            const fs = require("fs");
-            const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
-            const errors = [];
-
-            function isPinned(version) {
-              return /^\d+\.\d+\.\d+$|^[a-z]+:[a-z]+@\d+$/.test(version);
-            }
-
-            for (const [dep, version] of Object.entries(pkg.dependencies || {})) {
-              if (!isPinned(version)) {
-                errors.push(`Dependency "${dep}" is not pinned: "${version}"`);
-              }
-            }
-
-            for (const [dep, version] of Object.entries(pkg.devDependencies || {})) {
-              if (!isPinned(version)) {
-                errors.push(`Dev dependency "${dep}" is not pinned: "${version}"`);
-              }
-            }
-
-            if (errors.length > 0) {
-              console.error(`\n${errors.join("\n")}\n`);
-              process.exit(1);
-            } else {
-              console.log("All dependencies are pinned.");
-            }
-          '
+        run: pnpm install
+      - name: Run Tests
+        run: pnpm test
+        env:
+          SKIP_ENV_VALIDATION: true

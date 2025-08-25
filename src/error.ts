@@ -1,4 +1,4 @@
-import { ErrorResponse, RESEND_ERROR_CODE_KEY } from './interfaces';
+import type { ErrorResponse, RESEND_ERROR_CODE_KEY } from './interfaces';
 
 export class ResendError extends Error {
   public readonly name: RESEND_ERROR_CODE_KEY;

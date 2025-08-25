@@ -1,4 +1,8 @@
-export type DomainRegion = 'us-east-1' | 'eu-west-1' | 'sa-east-1';
+export type DomainRegion =
+  | 'us-east-1'
+  | 'eu-west-1'
+  | 'sa-east-1'
+  | 'ap-northeast-1';
 
 export type DomainNameservers =
   | 'Amazon Route 53'

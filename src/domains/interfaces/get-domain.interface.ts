@@ -1,5 +1,5 @@
-import { ErrorResponse } from '../../interfaces';
-import { Domain, DomainRecords } from './domain';
+import type { Response } from '../../interfaces';
+import type { Domain, DomainRecords } from './domain';
 
 export interface GetDomainResponseSuccess
   extends Pick<Domain, 'id' | 'name' | 'created_at' | 'region' | 'status'> {
@@ -7,7 +7,4 @@ export interface GetDomainResponseSuccess
   records: DomainRecords[];
 }
 
-export interface GetDomainResponse {
-  data: GetDomainResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type GetDomainResponse = Response<GetDomainResponseSuccess>;

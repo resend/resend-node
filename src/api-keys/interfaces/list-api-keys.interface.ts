@@ -1,12 +1,9 @@
-import { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
+import type { ApiKey } from './api-key';
 
-export interface ListApiKeysResponseSuccess {
-  name: string;
-  id: string;
-  created_at: string;
-}
+export type ListApiKeysResponseSuccess = Pick<
+  ApiKey,
+  'name' | 'id' | 'created_at'
+>[];
 
-export interface ListApiKeysResponse {
-  data: ListApiKeysResponseSuccess[] | null;
-  error: ErrorResponse | null;
-}
+export type ListApiKeysResponse = Response<ListApiKeysResponseSuccess>;

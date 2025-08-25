@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Resend throws API key error 1`] = `"Missing API key. Pass it to the constructor \`new Resend("re_123")\`"`;

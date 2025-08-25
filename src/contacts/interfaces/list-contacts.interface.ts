@@ -1,9 +1,13 @@
-import { ErrorResponse } from '../../interfaces';
-import { Contact } from './contact';
+import type { Response } from '../../interfaces';
+import type { Contact } from './contact';
 
-export type ListContactsResponseSuccess = Contact[];
-
-export interface ListContactsResponse {
-  data: ListContactsResponseSuccess | null;
-  error: ErrorResponse | null;
+export interface ListContactsOptions {
+  audienceId: string;
 }
+
+export interface ListContactsResponseSuccess {
+  object: 'list';
+  data: Contact[];
+}
+
+export type ListContactsResponse = Response<ListContactsResponseSuccess>;

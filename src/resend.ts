@@ -1,17 +1,28 @@
+import { fetch } from 'undici';
 import { version } from '../package.json';
 import { ApiKeys } from './api-keys/api-keys';
 import { Audiences } from './audiences/audiences';
 import { Batch } from './batch/batch';
-import { GetOptions, PostOptions, PutOptions } from './common/interfaces';
+import { Broadcasts } from './broadcasts/broadcasts';
+import type { GetOptions, PostOptions, PutOptions } from './common/interfaces';
+import type { IdempotentRequest } from './common/interfaces/idempotent-request.interface';
+import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
-import { isResendErrorResponse } from './guards';
-import { ErrorResponse, Fetch, Options } from './interfaces';
-import { fetch } from 'undici';
+import type { ErrorResponse, Fetch, Options, Response } from './interfaces';
+import { parseRateLimit } from './rate-limiting';
 
-const baseUrl = process.env.RESEND_BASE_URL || 'https://api.resend.com';
-const userAgent = process.env.RESEND_USER_AGENT || `resend-node:${version}`;
+const defaultBaseUrl = 'https://api.resend.com';
+const defaultUserAgent = `resend-node:${version}`;
+const baseUrl =
+  typeof process !== 'undefined' && process.env
+    ? process.env.RESEND_BASE_URL || defaultBaseUrl
+    : defaultBaseUrl;
+const userAgent =
+  typeof process !== 'undefined' && process.env
+    ? process.env.RESEND_USER_AGENT || defaultUserAgent
+    : defaultUserAgent;
 
 export class Resend {
   private readonly fetch: Fetch = fetch;
@@ -20,6 +31,7 @@ export class Resend {
   readonly apiKeys = new ApiKeys(this);
   readonly audiences = new Audiences(this);
   readonly batch = new Batch(this);
+  readonly broadcasts = new Broadcasts(this);
   readonly contacts = new Contacts(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
@@ -29,7 +41,9 @@ export class Resend {
     options: Options = {},
   ) {
     if (!key) {
-      this.key = process.env.RESEND_API_KEY;
+      if (typeof process !== 'undefined' && process.env) {
+        this.key = process.env.RESEND_API_KEY;
+      }
 
       if (!this.key) {
         throw new Error(
@@ -55,29 +69,81 @@ export class Resend {
     }
   }
 
-  async fetchRequest<T>(
-    path: string,
-    options = {},
-  ): Promise<{ data: T | null; error: ErrorResponse | null }> {
-    const response = await this.fetch(`${baseUrl}${path}`, options);
+  async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
+    try {
+      const response = await this.fetch(`${baseUrl}${path}`, options);
 
-    if (!response.ok) {
-      const error = (await response.json()) as any;
-      if (isResendErrorResponse(error)) {
-        return { data: null, error };
+      const rateLimiting = parseRateLimit(response.headers);
+
+      if (!response.ok) {
+        try {
+          const rawError = await response.text();
+          const error: ErrorResponse = JSON.parse(rawError);
+          if (error.name === 'rate_limit_exceeded' && response.status === 429) {
+            const retryAfterHeader = response.headers.get('retry-after');
+            if (retryAfterHeader) {
+              error.retryAfter = Number.parseInt(retryAfterHeader, 10);
+            }
+          }
+          return { data: null, rateLimiting, error };
+        } catch (err) {
+          if (err instanceof SyntaxError) {
+            return {
+              data: null,
+              rateLimiting,
+              error: {
+                name: 'application_error',
+                message:
+                  'Internal server error. We are unable to process your request right now, please try again later.',
+              },
+            };
+          }
+
+          const error: ErrorResponse = {
+            message: response.statusText,
+            name: 'application_error',
+          };
+
+          if (err instanceof Error) {
+            return {
+              data: null,
+              rateLimiting: rateLimiting,
+              error: { ...error, message: err.message },
+            };
+          }
+
+          return { data: null, rateLimiting, error };
+        }
       }
 
-      return { data: null, error };
+      const data = await response.json();
+      return { data, rateLimiting, error: null };
+    } catch {
+      return {
+        data: null,
+        rateLimiting: null,
+        error: {
+          name: 'application_error',
+          message: 'Unable to fetch data. The request could not be resolved.',
+        },
+      };
     }
-
-    const data = (await response.json()) as any;
-    return { data, error: null };
   }
 
-  async post<T>(path: string, entity?: unknown, options: PostOptions = {}) {
+  async post<T>(
+    path: string,
+    entity?: unknown,
+    options: PostOptions & IdempotentRequest = {},
+  ) {
+    const headers = new Headers(this.headers);
+
+    if (options.idempotencyKey) {
+      headers.set('Idempotency-Key', options.idempotencyKey);
+    }
+
     const requestOptions = {
       method: 'POST',
-      headers: this.headers,
+      headers: headers,
       body: JSON.stringify(entity),
       ...options,
     };
@@ -95,9 +161,20 @@ export class Resend {
     return this.fetchRequest<T>(path, requestOptions);
   }
 
-  async put<T>(path: string, entity: any, options: PutOptions = {}) {
+  async put<T>(path: string, entity: unknown, options: PutOptions = {}) {
     const requestOptions = {
       method: 'PUT',
+      headers: this.headers,
+      body: JSON.stringify(entity),
+      ...options,
+    };
+
+    return this.fetchRequest<T>(path, requestOptions);
+  }
+
+  async patch<T>(path: string, entity: unknown, options: PatchOptions = {}) {
+    const requestOptions = {
+      method: 'PATCH',
       headers: this.headers,
       body: JSON.stringify(entity),
       ...options,

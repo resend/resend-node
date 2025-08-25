@@ -1,6 +1,6 @@
-import { PostOptions } from '../../common/interfaces';
-import { ErrorResponse } from '../../interfaces';
-import { Audience } from './audience';
+import type { PostOptions } from '../../common/interfaces';
+import type { Response } from '../../interfaces';
+import type { Audience } from './audience';
 
 export interface CreateAudienceOptions {
   name: string;
@@ -9,9 +9,8 @@ export interface CreateAudienceOptions {
 export interface CreateAudienceRequestOptions extends PostOptions {}
 
 export interface CreateAudienceResponseSuccess
-  extends Pick<Audience, 'name' | 'id' | 'created_at'> {}
-
-export interface CreateAudienceResponse {
-  data: CreateAudienceResponseSuccess | null;
-  error: ErrorResponse | null;
+  extends Pick<Audience, 'name' | 'id'> {
+  object: 'audience';
 }
+
+export type CreateAudienceResponse = Response<CreateAudienceResponseSuccess>;

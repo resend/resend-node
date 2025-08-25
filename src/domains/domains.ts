@@ -1,18 +1,32 @@
-import { Resend } from '../resend';
-import {
+import { parseDomainToApiOptions } from '../common/utils/parse-domain-to-api-options';
+import type { Resend } from '../resend';
+import type {
   CreateDomainOptions,
   CreateDomainRequestOptions,
   CreateDomainResponse,
   CreateDomainResponseSuccess,
+} from './interfaces/create-domain-options.interface';
+import type {
   GetDomainResponse,
   GetDomainResponseSuccess,
+} from './interfaces/get-domain.interface';
+import type {
   ListDomainsResponse,
   ListDomainsResponseSuccess,
+} from './interfaces/list-domains.interface';
+import type {
   RemoveDomainsResponse,
   RemoveDomainsResponseSuccess,
+} from './interfaces/remove-domain.interface';
+import type {
+  UpdateDomainsOptions,
+  UpdateDomainsResponse,
+  UpdateDomainsResponseSuccess,
+} from './interfaces/update-domain.interface';
+import type {
   VerifyDomainsResponse,
   VerifyDomainsResponseSuccess,
-} from './interfaces';
+} from './interfaces/verify-domain.interface';
 
 export class Domains {
   constructor(private readonly resend: Resend) {}
@@ -23,7 +37,7 @@ export class Domains {
   ): Promise<CreateDomainResponse> {
     const data = await this.resend.post<CreateDomainResponseSuccess>(
       '/domains',
-      payload,
+      parseDomainToApiOptions(payload),
       options,
     );
     return data;
@@ -37,6 +51,19 @@ export class Domains {
   async get(id: string): Promise<GetDomainResponse> {
     const data = await this.resend.get<GetDomainResponseSuccess>(
       `/domains/${id}`,
+    );
+
+    return data;
+  }
+
+  async update(payload: UpdateDomainsOptions): Promise<UpdateDomainsResponse> {
+    const data = await this.resend.patch<UpdateDomainsResponseSuccess>(
+      `/domains/${payload.id}`,
+      {
+        click_tracking: payload.clickTracking,
+        open_tracking: payload.openTracking,
+        tls: payload.tls,
+      },
     );
     return data;
   }
