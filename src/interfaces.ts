@@ -6,6 +6,7 @@ export type Options = {
   fetch?: Fetch;
   headers?: Record<string, string>;
 };
+
 import type { RateLimit } from './rate-limiting';
 
 export const RESEND_ERROR_CODES_BY_KEY = {
