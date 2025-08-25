@@ -1,4 +1,3 @@
-import { fetch } from 'undici';
 import { version } from '../package.json';
 import { ApiKeys } from './api-keys/api-keys';
 import { Audiences } from './audiences/audiences';

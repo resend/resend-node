@@ -1,5 +1,3 @@
-import type { fetch } from 'undici';
-
 export type Fetch = typeof fetch;
 
 export type Options = {

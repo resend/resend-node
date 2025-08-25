@@ -43,9 +43,6 @@
     "url": "https://github.com/resendlabs/resend-node/issues"
   },
   "homepage": "https://github.com/resendlabs/resend-node#readme",
-  "dependencies": {
-    "undici": "5.27.2"
-  },
   "peerDependencies": {
     "@react-email/render": "^1.1.0"
   },
