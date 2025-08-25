@@ -111,7 +111,7 @@ export class Broadcasts {
         try {
           const { renderAsync } = await import('@react-email/render');
           this.renderAsync = renderAsync;
-        } catch (error) {
+        } catch {
           throw new Error(
             'Failed to render React component. Make sure to install `@react-email/render`',
           );
@@ -122,7 +122,7 @@ export class Broadcasts {
         payload.react as React.ReactElement,
       );
     }
-    
+
     const data = await this.resend.patch<UpdateBroadcastResponseSuccess>(
       `/broadcasts/${id}`,
       {
