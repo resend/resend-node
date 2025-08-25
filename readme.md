@@ -55,13 +55,15 @@ const resend = new Resend('re_xxxx...xxxxxx');
 Send your first email:
 
 ```js
-await resend.emails.send({
+const { data } = await resend.emails.send({
   from: 'you@example.com',
   to: 'user@gmail.com',
   replyTo: 'you@example.com',
   subject: 'hello world',
   text: 'it works!',
 });
+
+console.log(`Email ${data.id} has been sent`);
 ```
 
 > [!NOTE]  
@@ -72,13 +74,15 @@ await resend.emails.send({
 Send an email custom HTML content:
 
 ```js
-await resend.emails.send({
+const { data } = await resend.emails.send({
   from: 'you@example.com',
   to: 'user@gmail.com',
   replyTo: 'you@example.com',
   subject: 'hello world',
   html: '<strong>it works!</strong>',
 });
+
+console.log(`Emaill ${data.id} with customer HTML content has been sent.`);
 ```
 
 ## Send email using React
@@ -103,13 +107,15 @@ Then import the template component and pass it to the `react` property.
 ```jsx
 import EmailTemplate from '../components/EmailTemplate';
 
-await resend.emails.send({
+const { data } = await resend.emails.send({
   from: 'you@example.com',
   to: 'user@gmail.com',
   replyTo: 'you@example.com',
   subject: 'hello world',
   react: <EmailTemplate firstName="John" product="MyApp" />,
 });
+
+console.log(`Email ${data.id} with a React template has been sent`);
 ```
 
 > [!NOTE]

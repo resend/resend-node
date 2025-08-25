@@ -1,4 +1,3 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import {
@@ -11,8 +10,6 @@ import type {
   CreateEmailResponseSuccess,
 } from './interfaces/create-email-options.interface';
 import type { GetEmailResponseSuccess } from './interfaces/get-email-options.interface';
-
-enableFetchMocks();
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -74,12 +71,11 @@ describe('Emails', () => {
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
 
-      console.log('debug:', lastCall[1]?.headers);
-      //@ts-ignore
+      //@ts-expect-error
       const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
       expect(hasIdempotencyKey).toBeFalsy();
 
-      //@ts-ignore
+      //@ts-expect-error
       const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
       expect(usedIdempotencyKey).toBeNull();
     });
@@ -113,11 +109,11 @@ describe('Emails', () => {
       // In the mock, headers is an object with key-value pairs
       expect(fetchMock.mock.calls[0][1]?.headers).toBeDefined();
 
-      //@ts-ignore
+      //@ts-expect-error
       const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
       expect(hasIdempotencyKey).toBeTruthy();
 
-      //@ts-ignore
+      //@ts-expect-error
       const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
       expect(usedIdempotencyKey).toBe(idempotencyKey);
     });

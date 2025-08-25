@@ -1,7 +1,6 @@
-import type { MockResponseInit } from 'jest-fetch-mock';
+import type { MockParams } from 'vitest-fetch-mock';
 
-export interface MockFetchOptions extends Omit<MockResponseInit, 'headers'> {
-  headers?: Record<string, string>;
+export interface MockFetchOptions extends MockParams {
   rateLimiting?: {
     limit?: number;
     remaining?: number;

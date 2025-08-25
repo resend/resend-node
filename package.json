@@ -5,7 +5,9 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "files": ["dist/**"],
+  "files": [
+    "dist/**"
+  ],
   "engines": {
     "node": ">=18"
   },
@@ -23,13 +25,13 @@
   },
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "format": "biome format --write .",
     "format:apply": "biome check --write .",
     "format:check": "biome format .",
-    "format": "biome format --write .",
     "lint": "biome check .",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "repository": {
     "type": "git",
@@ -50,16 +52,14 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/jest": "29.5.14",
-    "@types/node": "18.19.86",
-    "@types/react": "19.1.2",
-    "jest": "29.7.0",
-    "jest-fetch-mock": "3.0.3",
-    "ts-jest": "29.3.4",
-    "ts-node": "10.9.2",
-    "tsup": "7.2.0",
-    "typescript": "5.8.3"
+    "@biomejs/biome": "2.2.0",
+    "@types/node": "22.17.2",
+    "@types/react": "19.1.10",
+    "pkg-pr-new": "0.0.56",
+    "tsup": "8.5.0",
+    "typescript": "5.9.2",
+    "vitest": "3.2.4",
+    "vitest-fetch-mock": "0.4.5"
   },
-  "packageManager": "pnpm@10.14.0"
+  "packageManager": "pnpm@10.15.0"
 }

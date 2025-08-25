@@ -2,17 +2,19 @@ name: PR Title Check
 on:
   pull_request:
     types: [opened, edited, synchronize]
+permissions: 
+  pull-requests: read
 jobs:
   pr-title-check:
     runs-on: buildjet-4vcpu-ubuntu-2204
     container:
-      image: node:20
-      credentials:
-        username: ${{ vars.DOCKER_HUB_USERNAME || '' }}
-        password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
+      image: node:22
+      # credentials:
+      #   username: ${{ vars.DOCKER_HUB_USERNAME || '' }}
+      #   password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
       - name: Run PR title check
         run: |
           node .github/scripts/pr-title-check.js
