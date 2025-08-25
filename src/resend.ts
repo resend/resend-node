@@ -115,7 +115,7 @@ export class Resend {
 
       const data = await response.json();
       return { data, rateLimiting, raw: response, error: null };
-    } catch (error) {
+    } catch {
       return {
         data: null,
         rateLimiting: null,
