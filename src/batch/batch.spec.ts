@@ -1,5 +1,8 @@
 import { Resend } from '../resend';
-import { mockSuccessResponse, mockSuccessWithStatusCode } from '../test-utils/mock-fetch';
+import {
+  mockSuccessResponse,
+  mockSuccessWithStatusCode,
+} from '../test-utils/mock-fetch';
 import type {
   CreateBatchOptions,
   CreateBatchSuccessResponse,
@@ -303,9 +306,7 @@ describe('Batch', () => {
     it('handles batch response with errors field when permissive header is set', async () => {
       const response: CreateBatchSuccessResponse = {
         data: [],
-        errors: [
-          { index: 2, message: 'Invalid email address' },
-        ],
+        errors: [{ index: 2, message: 'Invalid email address' }],
       };
 
       mockSuccessWithStatusCode(response, 202, {
@@ -329,9 +330,7 @@ describe('Batch', () => {
 
       expect(result.data).toEqual({
         data: [],
-        errors: [
-          { index: 2, message: 'Invalid email address' },
-        ],
+        errors: [{ index: 2, message: 'Invalid email address' }],
       });
       expect(result.error).toBeNull();
     });

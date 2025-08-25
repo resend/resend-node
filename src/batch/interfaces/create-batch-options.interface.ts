@@ -14,12 +14,15 @@ export interface CreateBatchSuccessResponse {
     /** The ID of the newly created email. */
     id: string;
   }[];
-  errors?: { // Only present when header "x-batch-validation" is present.
-    // The index of the failed email in the batch
-    index: number;
-    // The error message for the failed email
-    message: string;
-  }[] | null;
+  errors?:
+    | {
+        // Only present when header "x-batch-validation" is present.
+        // The index of the failed email in the batch
+        index: number;
+        // The error message for the failed email
+        message: string;
+      }[]
+    | null;
 }
 
 export type CreateBatchResponse = Response<CreateBatchSuccessResponse>;

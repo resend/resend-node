@@ -54,7 +54,7 @@ export class Batch {
 
     // If the permissive header is not set, remove errors to maintain backward compatibility
     if (data.data && options.headers?.['x-batch-validation'] !== 'permissive') {
-      const { errors, ...dataWithoutErrors } = data.data;
+      const { errors: _errors, ...dataWithoutErrors } = data.data;
       return {
         ...data,
         data: dataWithoutErrors,
