@@ -27,13 +27,14 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Run Build
         run: pnpm build
-      - name: Find changed packages
-        id: changed_packages
+      - name: Find changed files
+        id: changed_files
+        if: github.event_name == 'pull_request'
         uses: tj-actions/changed-files@2036da178f85576f1940fedb74bb93a36cd89ab7
         with:
-          files: src/**
+          files: src/**,pnpm-lock.yaml
           dir_names: true
           dir_names_max_depth: 2
       - name: Publish changed packages to pkg.pr.new
-        if: steps.changed_packages.outputs.all_changed_and_modified_files != ''
+        if: github.event_name == 'push' || steps.changed_files.outputs.all_changed_and_modified_files != ''
         run: pnpm dlx pkg-pr-new publish
