@@ -106,6 +106,23 @@ export class Broadcasts {
     id: string,
     payload: UpdateBroadcastOptions,
   ): Promise<UpdateBroadcastResponse> {
+    if (payload.react) {
+      if (!this.renderAsync) {
+        try {
+          const { renderAsync } = await import('@react-email/render');
+          this.renderAsync = renderAsync;
+        } catch {
+          throw new Error(
+            'Failed to render React component. Make sure to install `@react-email/render`',
+          );
+        }
+      }
+
+      payload.html = await this.renderAsync(
+        payload.react as React.ReactElement,
+      );
+    }
+
     const data = await this.resend.patch<UpdateBroadcastResponseSuccess>(
       `/broadcasts/${id}`,
       {
