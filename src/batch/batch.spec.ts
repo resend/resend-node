@@ -1,5 +1,5 @@
 import { Resend } from '../resend';
-import { mockSuccessResponse } from '../test-utils/mock-fetch';
+import { mockSuccessResponse, mockSuccessWithStatusCode } from '../test-utils/mock-fetch';
 import type {
   CreateBatchOptions,
   CreateBatchSuccessResponse,
@@ -298,6 +298,89 @@ describe('Batch', () => {
       //@ts-expect-error
       const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
       expect(usedIdempotencyKey).toBe(idempotencyKey);
+    });
+
+    it('handles batch response with errors field when permissive header is set', async () => {
+      const response: CreateBatchSuccessResponse = {
+        data: [],
+        errors: [
+          { index: 2, message: 'Invalid email address' },
+        ],
+      };
+
+      mockSuccessWithStatusCode(response, 202, {
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const payload: CreateBatchOptions = [];
+
+      const result = await resend.batch.create(payload, {
+        headers: { 'x-batch-validation': 'permissive' },
+      });
+
+      // Verify the header was passed correctly
+      const lastCall = fetchMock.mock.calls[0];
+      expect(lastCall).toBeDefined();
+      expect(lastCall[1]?.headers).toBeDefined();
+      //@ts-expect-error: checking custom header in mock
+      expect(lastCall[1]?.headers['x-batch-validation']).toBe('permissive');
+
+      expect(result.data).toEqual({
+        data: [],
+        errors: [
+          { index: 2, message: 'Invalid email address' },
+        ],
+      });
+      expect(result.error).toBeNull();
+    });
+
+    it('removes errors field when permissive header is not set (backward compatibility)', async () => {
+      const apiResponse: CreateBatchSuccessResponse = {
+        data: [
+          { id: 'success-email-1' },
+          { id: 'success-email-2' },
+          { id: 'success-email-3' },
+        ],
+        errors: null,
+      };
+
+      mockSuccessResponse(apiResponse, {
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const payload: CreateBatchOptions = [
+        {
+          from: 'admin@resend.com',
+          to: 'user1@example.com',
+          subject: 'Test 1',
+          html: '<h1>Test 1</h1>',
+        },
+        {
+          from: 'admin@resend.com',
+          to: 'user2@example.com',
+          subject: 'Test 2',
+          html: '<h1>Test 2</h1>',
+        },
+        {
+          from: 'admin@resend.com',
+          to: 'invalid-email',
+          subject: 'Test 3',
+          html: '<h1>Test 3</h1>',
+        },
+      ];
+
+      const result = await resend.batch.create(payload);
+      // Should not have errors field for backward compatibility
+      expect(result.data?.errors).toBeUndefined();
+      expect(result.data?.data).toEqual([
+        { id: 'success-email-1' },
+        { id: 'success-email-2' },
+        { id: 'success-email-3' },
+      ]);
     });
   });
 });
