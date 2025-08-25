@@ -52,7 +52,7 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.0",
+    "@biomejs/biome": "2.2.2",
     "@types/node": "22.17.2",
     "@types/react": "19.1.10",
     "pkg-pr-new": "0.0.56",
