@@ -36,7 +36,7 @@ export class Emails {
     payload: CreateEmailOptions,
     options: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
-    if (payload.react) {
+    if ('react' in payload && payload.react) {
       if (!this.renderAsync) {
         try {
           const { renderAsync } = await import('@react-email/render');
