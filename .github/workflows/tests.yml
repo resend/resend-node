@@ -18,7 +18,7 @@ jobs:
       #   password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
       - name: pnpm setup
         uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda
       - name: Install packages
