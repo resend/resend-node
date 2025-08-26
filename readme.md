@@ -119,7 +119,7 @@ console.log(`Email ${data.id} with a React template has been sent`);
 ```
 
 > [!NOTE]
-> If your endpoint is a JS/TS file, render the template (i.e., pass `EmailTemplate({firstName="John", product="MyApp"})` instead of the component).
+> If your endpoint is a JS/TS file, render the template (i.e., pass `EmailTemplate({ firstName: "John", product: "MyApp" })` instead of the component).
 
 ## License
 
