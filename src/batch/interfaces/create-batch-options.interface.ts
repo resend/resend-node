@@ -15,7 +15,7 @@ export interface CreateBatchRequestOptions
 }
 
 export type CreateBatchSuccessResponse<
-  Options extends CreateBatchRequestOptions,
+  Options extends CreateBatchRequestOptions = CreateBatchRequestOptions,
 > = {
   data: {
     /** The ID of the newly created email. */
