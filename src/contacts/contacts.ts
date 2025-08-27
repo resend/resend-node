@@ -1,3 +1,5 @@
+import { createPaginationQuery } from '../common/utils/create-pagination-query';
+import { formatPaginatedResponse } from '../common/utils/format-paginated-response';
 import type { Resend } from '../resend';
 import type {
   CreateContactOptions,
@@ -11,9 +13,12 @@ import type {
   GetContactResponseSuccess,
 } from './interfaces/get-contact.interface';
 import type {
+  ListAudienceContactsOptions,
+  ListAudienceContactsResponse,
+  ListAudienceContactsResponseSuccess,
+  ListContactsApiResponseSuccess,
   ListContactsOptions,
   ListContactsResponse,
-  ListContactsResponseSuccess,
 } from './interfaces/list-contacts.interface';
 import type {
   RemoveContactOptions,
@@ -65,8 +70,23 @@ export class Contacts {
     return data;
   }
 
-  async list(options: ListContactsOptions): Promise<ListContactsResponse> {
-    const data = await this.resend.get<ListContactsResponseSuccess>(
+  async list(options: ListContactsOptions): Promise<ListContactsResponse>;
+  async list(
+    options: ListAudienceContactsOptions,
+  ): Promise<ListAudienceContactsResponse>;
+  async list(
+    options: ListContactsOptions | ListAudienceContactsOptions,
+  ): Promise<ListContactsResponse | ListAudienceContactsResponse> {
+    if (!('audienceId' in options)) {
+      const query = createPaginationQuery(options);
+      const data = await this.resend.get<ListContactsApiResponseSuccess>(
+        '/contacts',
+        { query },
+      );
+      return formatPaginatedResponse(data);
+    }
+
+    const data = await this.resend.get<ListAudienceContactsResponseSuccess>(
       `/audiences/${options.audienceId}/contacts`,
     );
     return data;
