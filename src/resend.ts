@@ -120,17 +120,17 @@ export class Resend {
     entity?: unknown,
     options: PostOptions & IdempotentRequest = {},
   ) {
-    const headers = new Headers(this.headers);
-
-    if (options.idempotencyKey) {
-      headers.set('Idempotency-Key', options.idempotencyKey);
-    }
-
     const requestOptions = {
       method: 'POST',
-      headers: headers,
       body: JSON.stringify(entity),
       ...options,
+      headers: new Headers({
+        ...this.headers,
+        ...options.headers,
+        ...(options.idempotencyKey && {
+          'Idempotency-Key': options.idempotencyKey,
+        }),
+      }),
     };
 
     return this.fetchRequest<T>(path, requestOptions);
@@ -139,8 +139,11 @@ export class Resend {
   async get<T>(path: string, options: GetOptions = {}) {
     const requestOptions = {
       method: 'GET',
-      headers: this.headers,
       ...options,
+      headers: new Headers({
+        ...this.headers,
+        ...options.headers,
+      }),
     };
 
     return this.fetchRequest<T>(path, requestOptions);
@@ -149,9 +152,12 @@ export class Resend {
   async put<T>(path: string, entity: unknown, options: PutOptions = {}) {
     const requestOptions = {
       method: 'PUT',
-      headers: this.headers,
       body: JSON.stringify(entity),
       ...options,
+      headers: new Headers({
+        ...this.headers,
+        ...options.headers,
+      }),
     };
 
     return this.fetchRequest<T>(path, requestOptions);
@@ -160,9 +166,12 @@ export class Resend {
   async patch<T>(path: string, entity: unknown, options: PatchOptions = {}) {
     const requestOptions = {
       method: 'PATCH',
-      headers: this.headers,
       body: JSON.stringify(entity),
       ...options,
+      headers: new Headers({
+        ...this.headers,
+        ...options.headers,
+      }),
     };
 
     return this.fetchRequest<T>(path, requestOptions);
@@ -171,7 +180,6 @@ export class Resend {
   async delete<T>(path: string, query?: unknown) {
     const requestOptions = {
       method: 'DELETE',
-      headers: this.headers,
       body: JSON.stringify(query),
     };
 
