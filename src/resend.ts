@@ -120,58 +120,70 @@ export class Resend {
     entity?: unknown,
     options: PostOptions & IdempotentRequest = {},
   ) {
+    const headers = new Headers(this.headers);
+    if (options.headers) {
+      for (const [key, value] of new Headers(options.headers).entries()) {
+        headers.set(key, value);
+      }
+    }
+    if (options.idempotencyKey) {
+      headers.set('Idempotency-Key', options.idempotencyKey);
+    }
     const requestOptions = {
       method: 'POST',
       body: JSON.stringify(entity),
       ...options,
-      headers: new Headers({
-        ...this.headers,
-        ...options.headers,
-        ...(options.idempotencyKey && {
-          'Idempotency-Key': options.idempotencyKey,
-        }),
-      }),
+      headers,
     };
 
     return this.fetchRequest<T>(path, requestOptions);
   }
 
   async get<T>(path: string, options: GetOptions = {}) {
+    const headers = new Headers(this.headers);
+    if (options.headers) {
+      for (const [key, value] of new Headers(options.headers).entries()) {
+        headers.set(key, value);
+      }
+    }
     const requestOptions = {
       method: 'GET',
       ...options,
-      headers: new Headers({
-        ...this.headers,
-        ...options.headers,
-      }),
+      headers,
     };
 
     return this.fetchRequest<T>(path, requestOptions);
   }
 
   async put<T>(path: string, entity: unknown, options: PutOptions = {}) {
+    const headers = new Headers(this.headers);
+    if (options.headers) {
+      for (const [key, value] of new Headers(options.headers).entries()) {
+        headers.set(key, value);
+      }
+    }
     const requestOptions = {
       method: 'PUT',
       body: JSON.stringify(entity),
       ...options,
-      headers: new Headers({
-        ...this.headers,
-        ...options.headers,
-      }),
+      headers,
     };
 
     return this.fetchRequest<T>(path, requestOptions);
   }
 
   async patch<T>(path: string, entity: unknown, options: PatchOptions = {}) {
+    const headers = new Headers(this.headers);
+    if (options.headers) {
+      for (const [key, value] of new Headers(options.headers).entries()) {
+        headers.set(key, value);
+      }
+    }
     const requestOptions = {
       method: 'PATCH',
       body: JSON.stringify(entity),
       ...options,
-      headers: new Headers({
-        ...this.headers,
-        ...options.headers,
-      }),
+      headers,
     };
 
     return this.fetchRequest<T>(path, requestOptions);
