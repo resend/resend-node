@@ -7,22 +7,37 @@ export type CreateBatchOptions = CreateEmailOptions[];
 
 export interface CreateBatchRequestOptions
   extends PostOptions,
-    IdempotentRequest {}
+    IdempotentRequest {
+  /**
+   * @default 'strict'
+   */
+  batchValidation?: 'strict' | 'permissive';
+}
 
-export interface CreateBatchSuccessResponse {
+export type CreateBatchSuccessResponse<
+  Options extends CreateBatchRequestOptions,
+> = {
   data: {
     /** The ID of the newly created email. */
     id: string;
   }[];
-  errors?:
-    | {
-        // Only present when header "x-batch-validation" is present.
-        // The index of the failed email in the batch
+} & (Options['batchValidation'] extends 'permissive'
+  ? {
+      /**
+       * Only present when header "x-batch-validation" is present.
+       */
+      errors: {
+        /**
+         * The index of the failed email in the batch
+         */
         index: number;
-        // The error message for the failed email
+        /**
+         * The error message for the failed email
+         */
         message: string;
-      }[]
-    | null;
-}
+      }[]; // This always being an array depends on us doing https://github.com/resend/resend-api/pull/2025/files#r2303897690
+    }
+  : Record<string, never>);
 
-export type CreateBatchResponse = Response<CreateBatchSuccessResponse>;
+export type CreateBatchResponse<Options extends CreateBatchRequestOptions> =
+  Response<CreateBatchSuccessResponse<Options>>;
