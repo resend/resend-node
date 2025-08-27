@@ -14,7 +14,7 @@ export class Batch {
 
   async send<Options extends CreateBatchRequestOptions>(
     payload: CreateBatchOptions,
-    options: CreateBatchRequestOptions = {},
+    options: Options = {} as unknown as Options,
   ): Promise<CreateBatchResponse<Options>> {
     return this.create(payload, options);
   }
