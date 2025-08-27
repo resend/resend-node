@@ -38,6 +38,20 @@ export class Contacts {
     payload: CreateContactOptions,
     options: CreateContactRequestOptions = {},
   ): Promise<CreateContactResponse> {
+    if (!payload.audienceId) {
+      const data = await this.resend.post<CreateContactResponseSuccess>(
+        '/contacts',
+        {
+          unsubscribed: payload.unsubscribed,
+          email: payload.email,
+          first_name: payload.firstName,
+          last_name: payload.lastName,
+        },
+        options,
+      );
+      return data;
+    }
+
     const data = await this.resend.post<CreateContactResponseSuccess>(
       `/audiences/${payload.audienceId}/contacts`,
       {
@@ -68,6 +82,13 @@ export class Contacts {
           name: 'missing_required_field',
         },
       };
+    }
+
+    if (!options.audienceId) {
+      const data = await this.resend.get<GetContactResponseSuccess>(
+        `/contacts/${options?.email ? options?.email : options?.id}`,
+      );
+      return data;
     }
 
     const data = await this.resend.get<GetContactResponseSuccess>(
@@ -111,11 +132,19 @@ export class Contacts {
       };
     }
 
+    if (!payload.audienceId) {
+      const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+        `/contacts/${payload?.email ? payload?.email : payload?.id}`,
+      );
+      return data;
+    }
+
     const data = await this.resend.delete<RemoveContactsResponseSuccess>(
       `/audiences/${payload.audienceId}/contacts/${
         payload?.email ? payload?.email : payload?.id
       }`,
     );
+
     return data;
   }
 }
