@@ -70,14 +70,11 @@ describe('Emails', () => {
       // Inspect the last fetch call and body
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
+      const request = lastCall[1];
+      expect(request).toBeDefined();
 
-      //@ts-expect-error
-      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
-      expect(hasIdempotencyKey).toBeFalsy();
-
-      //@ts-expect-error
-      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
-      expect(usedIdempotencyKey).toBeNull();
+      const headers = new Headers(request?.headers);
+      expect(headers.has('Idempotency-Key')).toBe(false);
     });
 
     it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
@@ -105,17 +102,9 @@ describe('Emails', () => {
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
 
-      // Check if headers contains Idempotency-Key
-      // In the mock, headers is an object with key-value pairs
-      expect(fetchMock.mock.calls[0][1]?.headers).toBeDefined();
-
-      //@ts-expect-error
-      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
-      expect(hasIdempotencyKey).toBeTruthy();
-
-      //@ts-expect-error
-      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
-      expect(usedIdempotencyKey).toBe(idempotencyKey);
+      const headers = new Headers(lastCall[1]?.headers);
+      expect(headers.has('Idempotency-Key')).toBe(true);
+      expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
     });
   });
 

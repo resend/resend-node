@@ -104,13 +104,11 @@ describe('Batch', () => {
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
 
-      //@ts-expect-error
-      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
-      expect(hasIdempotencyKey).toBeFalsy();
+      const request = lastCall[1];
+      expect(request).toBeDefined();
 
-      //@ts-expect-error
-      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
-      expect(usedIdempotencyKey).toBeNull();
+      const headers = new Headers(request?.headers);
+      expect(headers.has('Idempotency-Key')).toBeFalsy();
     });
 
     it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
@@ -253,14 +251,10 @@ describe('Batch', () => {
       // Inspect the last fetch call and body
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
-
-      //@ts-expect-error
-      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
-      expect(hasIdempotencyKey).toBeFalsy();
-
-      //@ts-expect-error
-      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
-      expect(usedIdempotencyKey).toBeNull();
+      const request = lastCall[1];
+      expect(request).toBeDefined();
+      const headers = new Headers(request?.headers);
+      expect(headers.has('Idempotency-Key')).toBe(false);
     });
 
     it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
@@ -294,15 +288,9 @@ describe('Batch', () => {
       // Inspect the last fetch call and body
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
-      console.log(lastCall[1].headers);
-
-      // Check if headers contains Idempotency-Key
-      // In the mock, headers is an object with key-value pairs
-      expect(fetchMock.mock.calls[0][1]?.headers).toBeDefined();
-
-      expect(lastCall[1]?.headers).toHaveProperty('Idempotency-Key');
-
-      expect(lastCall[1]?.headers['Idempotency-Key']).toBe(idempotencyKey);
+      const headers = new Headers(lastCall[1]?.headers);
+      expect(headers.has('Idempotency-Key')).toBeTruthy();
+      expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
     });
 
     it('handles batch response with errors field when permissive option is set', async () => {
@@ -328,9 +316,10 @@ describe('Batch', () => {
       // Verify the header was passed correctly
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
-      expect(lastCall[1]?.headers).toBeDefined();
-      //@ts-expect-error: checking custom header in mock
-      expect(lastCall[1]?.headers['x-batch-validation']).toBe('permissive');
+      const request = lastCall[1];
+      expect(request).toBeDefined();
+      const headers = new Headers(request?.headers);
+      expect(headers.get('x-batch-validation')).toBe('permissive');
 
       expect(result.data).toEqual({
         data: [],
