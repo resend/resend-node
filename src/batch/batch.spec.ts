@@ -1,13 +1,9 @@
-/** biome-ignore-all lint/style/noNonNullAssertion: <explanation> */
 import { Resend } from '../resend';
 import {
   mockSuccessResponse,
   mockSuccessWithStatusCode,
 } from '../test-utils/mock-fetch';
-import type {
-  CreateBatchOptions,
-  CreateBatchSuccessResponse,
-} from './interfaces/create-batch-options.interface';
+import type { CreateBatchOptions } from './interfaces/create-batch-options.interface';
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -185,19 +181,21 @@ describe('Batch', () => {
           html: '<h1>Hi there</h1>',
         },
       ];
-      const response: CreateBatchSuccessResponse = {
-        data: [
-          { id: 'aabeeefc-bd13-474a-a440-0ee139b3a4cc' },
-          { id: 'aebe1c6e-30ad-4257-993b-519f5affa626' },
-          { id: 'b2bc2598-f98b-4da4-86c9-7b32881ef394' },
-        ],
-      };
 
-      mockSuccessResponse(response, {
-        headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+      mockSuccessResponse(
+        {
+          data: [
+            { id: 'aabeeefc-bd13-474a-a440-0ee139b3a4cc' },
+            { id: 'aebe1c6e-30ad-4257-993b-519f5affa626' },
+            { id: 'b2bc2598-f98b-4da4-86c9-7b32881ef394' },
+          ],
         },
-      });
+        {
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
 
       const data = await resend.batch.send(payload);
       expect(data).toMatchInlineSnapshot(`
@@ -226,19 +224,20 @@ describe('Batch', () => {
     });
 
     it('does not send the Idempotency-Key header when idempotencyKey is not provided', async () => {
-      const response: CreateBatchSuccessResponse = {
-        data: [
-          {
-            id: 'not-idempotent-123',
-          },
-        ],
-      };
-
-      mockSuccessResponse(response, {
-        headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+      mockSuccessResponse(
+        {
+          data: [
+            {
+              id: 'not-idempotent-123',
+            },
+          ],
         },
-      });
+        {
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
 
       const payload: CreateBatchOptions = [
         {
@@ -265,19 +264,20 @@ describe('Batch', () => {
     });
 
     it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
-      const response: CreateBatchSuccessResponse = {
-        data: [
-          {
-            id: 'idempotent-123',
-          },
-        ],
-      };
-
-      mockSuccessResponse(response, {
-        headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+      mockSuccessResponse(
+        {
+          data: [
+            {
+              id: 'idempotent-123',
+            },
+          ],
         },
-      });
+        {
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
 
       const payload: CreateBatchOptions = [
         {
@@ -294,18 +294,15 @@ describe('Batch', () => {
       // Inspect the last fetch call and body
       const lastCall = fetchMock.mock.calls[0];
       expect(lastCall).toBeDefined();
+      console.log(lastCall[1].headers);
 
       // Check if headers contains Idempotency-Key
       // In the mock, headers is an object with key-value pairs
       expect(fetchMock.mock.calls[0][1]?.headers).toBeDefined();
 
-      //@ts-expect-error
-      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
-      expect(hasIdempotencyKey).toBeTruthy();
+      expect(lastCall[1]?.headers).toHaveProperty('Idempotency-Key');
 
-      //@ts-expect-error
-      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
-      expect(usedIdempotencyKey).toBe(idempotencyKey);
+      expect(lastCall[1]?.headers['Idempotency-Key']).toBe(idempotencyKey);
     });
 
     it('handles batch response with errors field when permissive option is set', async () => {
@@ -381,8 +378,8 @@ describe('Batch', () => {
 
       const response = await resend.batch.create(payload);
       // Should not have errors field for backward compatibility
-      expect(response.data!).not.toHaveProperty('errors');
-      expect(response.data!.data).toEqual([
+      expect(response.data).not.toHaveProperty('errors');
+      expect(response.data?.data).toEqual([
         { id: 'success-email-1' },
         { id: 'success-email-2' },
         { id: 'success-email-3' },
