@@ -121,48 +121,69 @@ export class Resend {
     options: PostOptions & IdempotentRequest = {},
   ) {
     const headers = new Headers(this.headers);
-
+    if (options.headers) {
+      for (const [key, value] of new Headers(options.headers).entries()) {
+        headers.set(key, value);
+      }
+    }
     if (options.idempotencyKey) {
       headers.set('Idempotency-Key', options.idempotencyKey);
     }
-
     const requestOptions = {
       method: 'POST',
-      headers: headers,
       body: JSON.stringify(entity),
       ...options,
+      headers,
     };
 
     return this.fetchRequest<T>(path, requestOptions);
   }
 
   async get<T>(path: string, options: GetOptions = {}) {
+    const headers = new Headers(this.headers);
+    if (options.headers) {
+      for (const [key, value] of new Headers(options.headers).entries()) {
+        headers.set(key, value);
+      }
+    }
     const requestOptions = {
       method: 'GET',
-      headers: this.headers,
       ...options,
+      headers,
     };
 
     return this.fetchRequest<T>(path, requestOptions);
   }
 
   async put<T>(path: string, entity: unknown, options: PutOptions = {}) {
+    const headers = new Headers(this.headers);
+    if (options.headers) {
+      for (const [key, value] of new Headers(options.headers).entries()) {
+        headers.set(key, value);
+      }
+    }
     const requestOptions = {
       method: 'PUT',
-      headers: this.headers,
       body: JSON.stringify(entity),
       ...options,
+      headers,
     };
 
     return this.fetchRequest<T>(path, requestOptions);
   }
 
   async patch<T>(path: string, entity: unknown, options: PatchOptions = {}) {
+    const headers = new Headers(this.headers);
+    if (options.headers) {
+      for (const [key, value] of new Headers(options.headers).entries()) {
+        headers.set(key, value);
+      }
+    }
     const requestOptions = {
       method: 'PATCH',
-      headers: this.headers,
       body: JSON.stringify(entity),
       ...options,
+      headers,
     };
 
     return this.fetchRequest<T>(path, requestOptions);
@@ -171,7 +192,6 @@ export class Resend {
   async delete<T>(path: string, query?: unknown) {
     const requestOptions = {
       method: 'DELETE',
-      headers: this.headers,
       body: JSON.stringify(query),
     };
 

@@ -1,4 +1,3 @@
-import type * as React from 'react';
 import type { EmailApiOptions } from '../common/interfaces/email-api-options.interface';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import type { Resend } from '../resend';
@@ -13,17 +12,17 @@ export class Batch {
   private renderAsync?: (component: React.ReactElement) => Promise<string>;
   constructor(private readonly resend: Resend) {}
 
-  async send(
+  async send<Options extends CreateBatchRequestOptions>(
     payload: CreateBatchOptions,
-    options: CreateBatchRequestOptions = {},
-  ): Promise<CreateBatchResponse> {
+    options?: Options,
+  ): Promise<CreateBatchResponse<Options>> {
     return this.create(payload, options);
   }
 
-  async create(
+  async create<Options extends CreateBatchRequestOptions>(
     payload: CreateBatchOptions,
-    options: CreateBatchRequestOptions = {},
-  ): Promise<CreateBatchResponse> {
+    options?: Options,
+  ): Promise<CreateBatchResponse<Options>> {
     const emails: EmailApiOptions[] = [];
 
     for (const email of payload) {
@@ -46,20 +45,17 @@ export class Batch {
       emails.push(parseEmailToApiOptions(email));
     }
 
-    const data = await this.resend.post<CreateBatchSuccessResponse>(
+    const data = await this.resend.post<CreateBatchSuccessResponse<Options>>(
       '/emails/batch',
       emails,
-      options,
+      {
+        ...options,
+        headers: {
+          'x-batch-validation': options?.batchValidation ?? 'strict',
+          ...options?.headers,
+        },
+      },
     );
-
-    // If the permissive header is not set, remove errors to maintain backward compatibility
-    if (data.data && options.headers?.['x-batch-validation'] !== 'permissive') {
-      const { errors: _errors, ...dataWithoutErrors } = data.data;
-      return {
-        ...data,
-        data: dataWithoutErrors,
-      };
-    }
 
     return data;
   }
