@@ -24,7 +24,7 @@ export type CreateBatchSuccessResponse<
 } & (Options['batchValidation'] extends 'permissive'
   ? {
       /**
-       * Only present when header "x-batch-validation" is present.
+       * Only present when header "x-batch-validation" is set to 'permissive'.
        */
       errors: {
         /**
