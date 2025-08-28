@@ -17,7 +17,6 @@ import type {
   ListAudienceContactsResponseSuccess,
   ListContactsApiResponseSuccess,
   ListContactsOptions,
-  ListContactsResponseSuccess,
 } from './interfaces/list-contacts.interface';
 import type {
   RemoveContactOptions,

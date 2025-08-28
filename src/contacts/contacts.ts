@@ -1,6 +1,7 @@
 import { createPaginationQuery } from '../common/utils/create-pagination-query';
 import { formatPaginatedResponse } from '../common/utils/format-paginated-response';
 import type { Resend } from '../resend';
+import { ContactAudiences } from './audiences/contact-audiences';
 import type {
   CreateContactOptions,
   CreateContactRequestOptions,
@@ -34,9 +35,11 @@ import { ContactTopics } from './topics/contact-topics';
 
 export class Contacts {
   readonly topics: ContactTopics;
+  readonly audiences: ContactAudiences;
 
   constructor(private readonly resend: Resend) {
     this.topics = new ContactTopics(this.resend);
+    this.audiences = new ContactAudiences(this.resend);
   }
 
   async create(
