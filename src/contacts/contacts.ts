@@ -129,6 +129,18 @@ export class Contacts {
       };
     }
 
+    if (!options.audienceId) {
+      const data = await this.resend.patch<UpdateContactResponseSuccess>(
+        `/contacts/${options?.email ? options?.email : options?.id}`,
+        {
+          unsubscribed: options.unsubscribed,
+          first_name: options.firstName,
+          last_name: options.lastName,
+        },
+      );
+      return data;
+    }
+
     const data = await this.resend.patch<UpdateContactResponseSuccess>(
       `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
       {
