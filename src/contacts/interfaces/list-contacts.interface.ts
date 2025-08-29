@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Contact } from './contact';
 
 export interface ListContactsOptions {
@@ -10,12 +10,4 @@ export interface ListContactsResponseSuccess {
   data: Contact[];
 }
 
-export type ListContactsResponse =
-  | {
-      data: ListContactsResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type ListContactsResponse = Response<ListContactsResponseSuccess>;

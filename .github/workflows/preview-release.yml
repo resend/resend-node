@@ -1,0 +1,40 @@
+
+name: Preview Release
+on: 
+  push:
+    branches: 
+      - canary
+      - preview-*
+  pull_request:
+permissions:
+  contents: read
+  pull-requests: write
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+jobs:
+  preview-release:
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    permissions: 
+      contents: write
+      pull-requests: write
+    container:
+      image: node:22
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: pnpm setup
+        uses: pnpm/action-setup@v4
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+      - name: Run Build
+        run: pnpm build
+      - name: Find changed files
+        id: changed_files
+        if: github.event_name == 'pull_request'
+        uses: tj-actions/changed-files@2036da178f85576f1940fedb74bb93a36cd89ab7
+        with:
+          files: src/**,pnpm-lock.yaml
+          dir_names: true
+          dir_names_max_depth: 2
+      - name: Publish changed packages to pkg.pr.new
+        if: github.event_name == 'push' || steps.changed_files.outputs.all_changed_and_modified_files != ''
+        run: pnpm dlx pkg-pr-new publish

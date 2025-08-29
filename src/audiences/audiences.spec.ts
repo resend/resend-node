@@ -1,6 +1,9 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
+import {
+  mockErrorResponse,
+  mockSuccessResponse,
+} from '../test-utils/mock-fetch';
 import type {
   CreateAudienceOptions,
   CreateAudienceResponseSuccess,
@@ -8,8 +11,6 @@ import type {
 import type { GetAudienceResponseSuccess } from './interfaces/get-audience.interface';
 import type { ListAudiencesResponseSuccess } from './interfaces/list-audiences.interface';
 import type { RemoveAudiencesResponseSuccess } from './interfaces/remove-audience.interface';
-
-enableFetchMocks();
 
 describe('Audiences', () => {
   afterEach(() => fetchMock.resetMocks());
@@ -23,12 +24,8 @@ describe('Audiences', () => {
         object: 'audience',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -42,6 +39,11 @@ describe('Audiences', () => {
     "object": "audience",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -53,12 +55,8 @@ describe('Audiences', () => {
         message: 'Missing "name" field',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 422,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -71,6 +69,11 @@ describe('Audiences', () => {
   "error": {
     "message": "Missing "name" field",
     "name": "missing_required_field",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -94,12 +97,8 @@ describe('Audiences', () => {
           },
         ],
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -122,6 +121,11 @@ describe('Audiences', () => {
     "object": "list",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -135,12 +139,8 @@ describe('Audiences', () => {
           message: 'Audience not found',
         };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
-          status: 404,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+        mockErrorResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -153,6 +153,11 @@ describe('Audiences', () => {
   "error": {
     "message": "Audience not found",
     "name": "not_found",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -167,12 +172,8 @@ describe('Audiences', () => {
         created_at: '2023-06-21T06:10:36.144Z',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -188,6 +189,11 @@ describe('Audiences', () => {
     "object": "audience",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -201,12 +207,8 @@ describe('Audiences', () => {
         id,
         deleted: true,
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -219,6 +221,11 @@ describe('Audiences', () => {
     "object": "audience",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });

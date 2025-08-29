@@ -1,6 +1,9 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
+import {
+  mockErrorResponse,
+  mockSuccessResponse,
+} from '../test-utils/mock-fetch';
 import type {
   CreateApiKeyOptions,
   CreateApiKeyResponseSuccess,
@@ -8,11 +11,7 @@ import type {
 import type { ListApiKeysResponseSuccess } from './interfaces/list-api-keys.interface';
 import type { RemoveApiKeyResponseSuccess } from './interfaces/remove-api-keys.interface';
 
-enableFetchMocks();
-
 describe('API Keys', () => {
-  afterEach(() => fetchMock.resetMocks());
-
   describe('create', () => {
     it('creates an api key', async () => {
       const payload: CreateApiKeyOptions = {
@@ -23,12 +22,8 @@ describe('API Keys', () => {
         id: '430eed87-632a-4ea6-90db-0aace67ec228',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 201,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -42,6 +37,11 @@ describe('API Keys', () => {
     "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -55,12 +55,8 @@ describe('API Keys', () => {
         name: 'validation_error',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 422,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -73,6 +69,11 @@ describe('API Keys', () => {
   "error": {
     "message": "String must contain at least 1 character(s)",
     "name": "validation_error",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -90,12 +91,8 @@ describe('API Keys', () => {
           id: '430eed87-632a-4ea6-90db-0aace67ec228',
         };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
-          status: 201,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -109,6 +106,11 @@ describe('API Keys', () => {
     "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
       });
@@ -123,12 +125,8 @@ describe('API Keys', () => {
           id: '430eed87-632a-4ea6-90db-0aace67ec228',
         };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
-          status: 201,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -142,6 +140,11 @@ describe('API Keys', () => {
     "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
       });
@@ -152,12 +155,8 @@ describe('API Keys', () => {
           message: 'Access must be "full_access" | "sending_access"',
         };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
-          status: 422,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
-          },
+        mockErrorResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -175,6 +174,11 @@ describe('API Keys', () => {
   "error": {
     "message": "Access must be "full_access" | "sending_access"",
     "name": "invalid_access",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -271,12 +275,8 @@ describe('API Keys', () => {
           created_at: '2023-04-06T23:09:49.093947+00:00',
         },
       ];
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -296,6 +296,11 @@ describe('API Keys', () => {
     },
   ],
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -306,12 +311,8 @@ describe('API Keys', () => {
     const response: RemoveApiKeyResponseSuccess = {};
 
     it('removes an api key', async () => {
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -320,6 +321,11 @@ describe('API Keys', () => {
 {
   "data": {},
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -330,12 +336,8 @@ describe('API Keys', () => {
         message: 'Something went wrong',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 500,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -349,6 +351,11 @@ describe('API Keys', () => {
     "message": "Something went wrong",
     "name": "application_error",
   },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -359,12 +366,8 @@ describe('API Keys', () => {
         message: 'API key not found',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 404,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -379,6 +382,11 @@ describe('API Keys', () => {
   "error": {
     "message": "API key not found",
     "name": "not_found",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);

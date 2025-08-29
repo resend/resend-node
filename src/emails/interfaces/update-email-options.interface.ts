@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 
 export interface UpdateEmailOptions {
   id: string;
@@ -10,12 +10,4 @@ export interface UpdateEmailResponseSuccess {
   object: 'email';
 }
 
-export type UpdateEmailResponse =
-  | {
-      data: UpdateEmailResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type UpdateEmailResponse = Response<UpdateEmailResponseSuccess>;
