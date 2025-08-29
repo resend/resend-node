@@ -2,7 +2,7 @@ import type { ErrorResponse } from '../../interfaces';
 import type { Contact, SelectingField } from './contact';
 
 export type GetContactOptions = {
-  audienceId: string;
+  audienceId?: string;
 } & SelectingField;
 
 export interface GetContactResponseSuccess

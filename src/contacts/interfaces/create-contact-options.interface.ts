@@ -3,7 +3,7 @@ import type { ErrorResponse } from '../../interfaces';
 import type { Contact } from './contact';
 
 export interface CreateContactOptions {
-  audienceId: string;
+  audienceId?: string;
   email: string;
   unsubscribed?: boolean;
   firstName?: string;

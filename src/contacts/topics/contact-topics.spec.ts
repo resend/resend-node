@@ -1,5 +1,5 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import { Resend } from '../../resend';
+import { mockSuccessResponse } from '../../test-utils/mock-fetch';
 import type {
   GetContactTopicsOptions,
   GetContactTopicsResponseSuccess,
@@ -8,8 +8,6 @@ import type {
   UpdateContactTopicsOptions,
   UpdateContactTopicsResponseSuccess,
 } from './interfaces/update-contact-topics.interface';
-
-enableFetchMocks();
 
 describe('ContactTopics', () => {
   afterEach(() => fetchMock.resetMocks());
@@ -29,12 +27,8 @@ describe('ContactTopics', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -46,6 +40,11 @@ describe('ContactTopics', () => {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -64,12 +63,8 @@ describe('ContactTopics', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -81,6 +76,11 @@ describe('ContactTopics', () => {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -103,12 +103,8 @@ describe('ContactTopics', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -120,6 +116,11 @@ describe('ContactTopics', () => {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -164,12 +165,8 @@ describe('ContactTopics', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -181,6 +178,11 @@ describe('ContactTopics', () => {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -209,12 +211,8 @@ describe('ContactTopics', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -240,6 +238,11 @@ describe('ContactTopics', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -260,12 +263,8 @@ describe('ContactTopics', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -285,6 +284,11 @@ describe('ContactTopics', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
