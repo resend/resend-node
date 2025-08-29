@@ -319,7 +319,7 @@ describe('Batch', () => {
       const request = lastCall[1];
       expect(request).toBeDefined();
       const headers = new Headers(request?.headers);
-      expect(headers.get('x-batch-validation')).toBe('permissive');
+      expect(headers.get('x-resend-batch-validation')).toBe('permissive');
 
       expect(result.data).toEqual({
         data: [],
