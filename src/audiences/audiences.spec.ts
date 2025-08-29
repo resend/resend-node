@@ -53,6 +53,7 @@ describe('Audiences', () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing "name" field',
+        statusCode: 422,
       };
 
       mockErrorResponse(response, {
@@ -69,6 +70,7 @@ describe('Audiences', () => {
   "error": {
     "message": "Missing "name" field",
     "name": "missing_required_field",
+    "statusCode": 422,
   },
   "rateLimiting": {
     "limit": 2,
@@ -137,6 +139,7 @@ describe('Audiences', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Audience not found',
+          statusCode: 404,
         };
 
         mockErrorResponse(response, {
@@ -153,6 +156,7 @@ describe('Audiences', () => {
   "error": {
     "message": "Audience not found",
     "name": "not_found",
+    "statusCode": 404,
   },
   "rateLimiting": {
     "limit": 2,

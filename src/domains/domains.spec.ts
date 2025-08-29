@@ -144,6 +144,7 @@ describe('Domains', () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing "name" field',
+        statusCode: 422,
       };
 
       mockErrorResponse(response, {
@@ -164,6 +165,7 @@ describe('Domains', () => {
   "error": {
     "message": "Missing "name" field",
     "name": "missing_required_field",
+    "statusCode": 422,
   },
   "rateLimiting": {
     "limit": 2,
@@ -241,6 +243,7 @@ describe('Domains', () => {
   "error": {
     "message": "Unable to fetch data. The request could not be resolved.",
     "name": "application_error",
+    "statusCode": 500,
   },
   "rateLimiting": null,
 }
@@ -251,6 +254,7 @@ describe('Domains', () => {
         const errorResponse: ErrorResponse = {
           name: 'invalid_region',
           message: 'Region must be "us-east-1" | "eu-west-1" | "sa-east-1"',
+          statusCode: 422,
         };
 
         mockErrorResponse(errorResponse, {
@@ -270,6 +274,7 @@ describe('Domains', () => {
   "error": {
     "message": "Region must be "us-east-1" | "eu-west-1" | "sa-east-1"",
     "name": "invalid_region",
+    "statusCode": 422,
   },
   "rateLimiting": {
     "limit": 2,
@@ -441,6 +446,7 @@ describe('Domains', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Domain not found',
+          statusCode: 404,
         };
 
         mockErrorResponse(response, {
@@ -457,6 +463,7 @@ describe('Domains', () => {
   "error": {
     "message": "Domain not found",
     "name": "not_found",
+    "statusCode": 404,
   },
   "rateLimiting": {
     "limit": 2,

@@ -21,6 +21,7 @@ describe('Emails', () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing `from` field.',
+        statusCode: 422,
       };
 
       mockErrorResponse(response, {
@@ -37,6 +38,7 @@ describe('Emails', () => {
   "error": {
     "message": "Missing \`from\` field.",
     "name": "missing_required_field",
+    "statusCode": 422,
   },
   "rateLimiting": {
     "limit": 2,
@@ -312,6 +314,7 @@ describe('Emails', () => {
         name: 'invalid_parameter',
         message:
           'Invalid `from` field. The email address needs to follow the `email@example.com` or `Name <email@example.com>` format',
+        statusCode: 422,
       };
 
       mockErrorResponse(response, {
@@ -334,6 +337,7 @@ describe('Emails', () => {
   "error": {
     "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
     "name": "invalid_parameter",
+    "statusCode": 422,
   },
   "rateLimiting": {
     "limit": 2,
@@ -364,6 +368,7 @@ describe('Emails', () => {
           error: {
             message: 'Unable to fetch data. The request could not be resolved.',
             name: 'application_error',
+            statusCode: 500,
           },
         }),
       );
@@ -392,6 +397,7 @@ describe('Emails', () => {
             message:
               'Internal server error. We are unable to process your request right now, please try again later.',
             name: 'application_error',
+            statusCode: 500,
           },
         }),
       );
@@ -404,6 +410,7 @@ describe('Emails', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Email not found',
+          statusCode: 404,
         };
 
         mockErrorResponse(response, {
@@ -422,6 +429,7 @@ describe('Emails', () => {
   "error": {
     "message": "Email not found",
     "name": "not_found",
+    "statusCode": 404,
   },
   "rateLimiting": {
     "limit": 2,

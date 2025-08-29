@@ -21,19 +21,43 @@ export const RESEND_ERROR_CODES_BY_KEY = {
 
 export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
-export type ErrorResponse =
-  | {
-      message: string;
-      name: Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
-    }
-  | {
-      message: string;
-      name: Extract<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
-      /**
-       * Time in seconds.
-       */
-      retryAfter: number;
-    };
+export type StandardErrorResponse = {
+  [K in Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>]: {
+    message: string;
+    name: K;
+    statusCode: (typeof RESEND_ERROR_CODES_BY_KEY)[K];
+  };
+}[Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>];
+
+export type RateLimitErrorResponse = {
+  message: string;
+  name: 'rate_limit_exceeded';
+  retryAfter: number;
+  statusCode: (typeof RESEND_ERROR_CODES_BY_KEY)['rate_limit_exceeded'];
+};
+
+/**
+ * Union type representing all possible error responses from the Resend API
+ *
+ * @example
+ * ```typescript
+ * // Standard error
+ * const error: ErrorResponse = {
+ *   message: "Invalid email address",
+ *   statusCode: 422,
+ *   name: "validation_error"
+ * };
+ *
+ * // Rate limit error
+ * const rateLimitError: ErrorResponse = {
+ *   message: "Rate limit exceeded",
+ *   statusCode: 429,
+ *   name: "rate_limit_exceeded",
+ *   retryAfter: 1
+ * };
+ * ```
+ */
+export type ErrorResponse = StandardErrorResponse | RateLimitErrorResponse;
 
 export type Response<Data> =
   | {

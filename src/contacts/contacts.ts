@@ -61,6 +61,7 @@ export class Contacts {
         error: {
           message: 'Missing `id` or `email` field.',
           name: 'missing_required_field',
+          statusCode: 422,
         },
       };
     }
@@ -79,6 +80,7 @@ export class Contacts {
         error: {
           message: 'Missing `id` or `email` field.',
           name: 'missing_required_field',
+          statusCode: 422,
         },
       };
     }
@@ -102,6 +104,7 @@ export class Contacts {
         error: {
           message: 'Missing `id` or `email` field.',
           name: 'missing_required_field',
+          statusCode: 422,
         },
       };
     }
