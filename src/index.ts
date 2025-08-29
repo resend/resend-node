@@ -21,5 +21,8 @@ export * from './domains/interfaces/update-domain.interface';
 export * from './domains/interfaces/verify-domain.interface';
 export * from './emails/interfaces/create-email-options.interface';
 export * from './emails/interfaces/get-email-options.interface';
-export { ErrorResponse } from './interfaces';
+export {
+  ErrorResponse,
+  Response,
+} from './interfaces';
 export { Resend } from './resend';
