@@ -1,10 +1,8 @@
-// @ts-expect-error: this is used in the jsdoc for `shouldResetAfter`
-// biome-ignore lint/correctness/noUnusedImports: this is used in the jsdoc for `shouldResetAfter`
-import type { Response } from './interfaces';
+import type { RateLimitExceededErrorResponse } from './interfaces';
 
 export type RateLimit = {
   /**
-   * The maximum amount of requests that can be made in the time window of {@link shouldResetAfter}.
+   * The maximum amount of requests that can be made in the time window of {@link RateLimit.shouldResetAfter}.
    */
   limit: number;
   /**
@@ -18,7 +16,7 @@ export type RateLimit = {
    * and {@link RateLimit.remainingRequests} goes back to the value of
    * {@link RateLimit.limit}.
    *
-   * @see {@link import('./interfaces').Response.retryAfter}
+   * @see {@link RateLimitExceededErrorResponse.retryAfter}
    */
   shouldResetAfter: number;
 };
