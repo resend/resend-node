@@ -56,9 +56,22 @@ export class Resend {
     });
   }
 
-  async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
+  async fetchRequest<T>(
+    path: string,
+    options: RequestInit & { query?: Record<string, unknown> } = {},
+  ): Promise<Response<T>> {
     try {
-      const response = await fetch(`${baseUrl}${path}`, options);
+      const url = new URL(path, baseUrl);
+      if (options.query) {
+        for (const [key, value] of Object.entries(options.query)) {
+          const valueString = value?.toString?.();
+          if (valueString !== undefined) {
+            url.searchParams.set(key, valueString);
+          }
+        }
+      }
+
+      const response = await fetch(url.toString(), options);
 
       const rateLimiting = parseRateLimit(response.headers);
 

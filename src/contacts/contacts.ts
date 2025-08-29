@@ -73,12 +73,12 @@ export class Contacts {
     return data;
   }
 
-  async list(options: ListContactsOptions): Promise<ListContactsResponse>;
+  async list(options?: ListContactsOptions): Promise<ListContactsResponse>;
   async list(
     options: ListAudienceContactsOptions,
   ): Promise<ListAudienceContactsResponse>;
   async list(
-    options: ListContactsOptions | ListAudienceContactsOptions,
+    options: ListContactsOptions | ListAudienceContactsOptions = {},
   ): Promise<ListContactsResponse | ListAudienceContactsResponse> {
     if (!('audienceId' in options)) {
       const query = createPaginationQuery(options);
