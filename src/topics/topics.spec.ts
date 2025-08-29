@@ -1,6 +1,9 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
+import {
+  mockErrorResponse,
+  mockSuccessResponse,
+} from '../test-utils/mock-fetch';
 import type {
   CreateTopicOptions,
   CreateTopicResponseSuccess,
@@ -9,8 +12,6 @@ import type { GetTopicResponseSuccess } from './interfaces/get-contact.interface
 import type { ListTopicsResponseSuccess } from './interfaces/list-topics.interface';
 import type { RemoveTopicResponseSuccess } from './interfaces/remove-topic.interface';
 import type { UpdateTopicOptions } from './interfaces/update-topic.interface';
-
-enableFetchMocks();
 
 describe('Topics', () => {
   afterEach(() => fetchMock.resetMocks());
@@ -26,12 +27,8 @@ describe('Topics', () => {
         id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -43,6 +40,11 @@ describe('Topics', () => {
     "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -57,11 +59,9 @@ describe('Topics', () => {
         message: 'Missing `name` field.',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 422,
+      mockErrorResponse(response, {
         headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -75,6 +75,11 @@ describe('Topics', () => {
   "error": {
     "message": "Missing \`name\` field.",
     "name": "missing_required_field",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -90,11 +95,9 @@ describe('Topics', () => {
         message: 'Missing `default_subscription` field.',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 422,
+      mockErrorResponse(response, {
         headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -108,6 +111,11 @@ describe('Topics', () => {
   "error": {
     "message": "Missing \`default_subscription\` field.",
     "name": "missing_required_field",
+  },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
   },
 }
 `);
@@ -134,12 +142,8 @@ describe('Topics', () => {
           },
         ],
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -165,6 +169,11 @@ describe('Topics', () => {
     ],
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -178,11 +187,9 @@ describe('Topics', () => {
           message: 'Topic not found',
         };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
-          status: 404,
+        mockErrorResponse(response, {
           headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -199,6 +206,11 @@ describe('Topics', () => {
     "message": "Topic not found",
     "name": "not_found",
   },
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
       });
@@ -213,12 +225,8 @@ describe('Topics', () => {
         created_at: '2024-01-16T18:12:26.514Z',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -234,6 +242,11 @@ describe('Topics', () => {
     "name": "Newsletter",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -264,12 +277,8 @@ describe('Topics', () => {
       const response = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -282,6 +291,11 @@ describe('Topics', () => {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });
@@ -313,12 +327,8 @@ describe('Topics', () => {
         object: 'topic',
         deleted: true,
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -332,6 +342,11 @@ describe('Topics', () => {
     "object": "topic",
   },
   "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
 }
 `);
     });

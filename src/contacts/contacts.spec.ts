@@ -13,8 +13,10 @@ import type {
   GetContactResponseSuccess,
 } from './interfaces/get-contact.interface';
 import type {
+  ListAudienceContactsOptions,
+  ListAudienceContactsResponseSuccess,
+  ListContactsApiResponseSuccess,
   ListContactsOptions,
-  ListContactsResponseSuccess,
 } from './interfaces/list-contacts.interface';
 import type {
   RemoveContactOptions,
@@ -95,40 +97,113 @@ describe('Contacts', () => {
   });
 
   describe('list', () => {
-    it('lists contacts', async () => {
-      const options: ListContactsOptions = {
-        audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
-      };
-      const response: ListContactsResponseSuccess = {
-        object: 'list',
-        data: [
-          {
-            id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
-            email: 'team@resend.com',
-            created_at: '2023-04-07T23:13:52.669661+00:00',
-            unsubscribed: false,
-            first_name: 'John',
-            last_name: 'Smith',
-          },
-          {
-            id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
-            email: 'team@react.email',
-            created_at: '2023-04-07T23:13:20.417116+00:00',
-            unsubscribed: false,
-            first_name: 'John',
-            last_name: 'Smith',
-          },
-        ],
-      };
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+    describe('when audienceId is not provided', () => {
+      it('lists contacts', async () => {
+        const options: ListContactsOptions = {
+          limit: 10,
+          after: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
+        };
+
+        const response: ListContactsApiResponseSuccess = {
+          object: 'list',
+          data: [
+            {
+              id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+              email: 'team@resend.com',
+              created_at: '2023-04-07T23:13:52.669661+00:00',
+              unsubscribed: false,
+              first_name: 'John',
+              last_name: 'Smith',
+            },
+            {
+              id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
+              email: 'team@react.email',
+              created_at: '2023-04-07T23:13:20.417116+00:00',
+              unsubscribed: false,
+              first_name: 'John',
+              last_name: 'Smith',
+            },
+          ],
+          has_more: false,
+        };
+
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        await expect(
+          resend.contacts.list(options),
+        ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "data": [
+      {
+        "created_at": "2023-04-07T23:13:52.669661+00:00",
+        "email": "team@resend.com",
+        "first_name": "John",
+        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+        "last_name": "Smith",
+        "unsubscribed": false,
+      },
+      {
+        "created_at": "2023-04-07T23:13:20.417116+00:00",
+        "email": "team@react.email",
+        "first_name": "John",
+        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
+        "last_name": "Smith",
+        "unsubscribed": false,
+      },
+    ],
+    "hasMore": false,
+    "object": "list",
+  },
+  "error": null,
+  "rateLimiting": {
+    "limit": 2,
+    "remainingRequests": 2,
+    "shouldResetAfter": 1,
+  },
+}
+`);
       });
+    });
+    describe('when audienceId is provided', () => {
+      it('lists contacts', async () => {
+        const options: ListAudienceContactsOptions = {
+          audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+        };
+        const response: ListAudienceContactsResponseSuccess = {
+          object: 'list',
+          data: [
+            {
+              id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+              email: 'team@resend.com',
+              created_at: '2023-04-07T23:13:52.669661+00:00',
+              unsubscribed: false,
+              first_name: 'John',
+              last_name: 'Smith',
+            },
+            {
+              id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
+              email: 'team@react.email',
+              created_at: '2023-04-07T23:13:20.417116+00:00',
+              unsubscribed: false,
+              first_name: 'John',
+              last_name: 'Smith',
+            },
+          ],
+        };
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
 
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(
-        resend.contacts.list(options),
-      ).resolves.toMatchInlineSnapshot(`
+        await expect(
+          resend.contacts.list(options),
+        ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
     "data": [
@@ -159,6 +234,7 @@ describe('Contacts', () => {
   },
 }
 `);
+      });
     });
   });
 

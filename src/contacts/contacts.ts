@@ -1,4 +1,7 @@
+import { createPaginationQuery } from '../common/utils/create-pagination-query';
+import { formatPaginatedResponse } from '../common/utils/format-paginated-response';
 import type { Resend } from '../resend';
+import { ContactAudiences } from './audiences/contact-audiences';
 import type {
   CreateContactOptions,
   CreateContactRequestOptions,
@@ -11,9 +14,12 @@ import type {
   GetContactResponseSuccess,
 } from './interfaces/get-contact.interface';
 import type {
+  ListAudienceContactsOptions,
+  ListAudienceContactsResponse,
+  ListAudienceContactsResponseSuccess,
+  ListContactsApiResponseSuccess,
   ListContactsOptions,
   ListContactsResponse,
-  ListContactsResponseSuccess,
 } from './interfaces/list-contacts.interface';
 import type {
   RemoveContactOptions,
@@ -29,15 +35,31 @@ import { ContactTopics } from './topics/contact-topics';
 
 export class Contacts {
   readonly topics: ContactTopics;
+  readonly audiences: ContactAudiences;
 
   constructor(private readonly resend: Resend) {
     this.topics = new ContactTopics(this.resend);
+    this.audiences = new ContactAudiences(this.resend);
   }
 
   async create(
     payload: CreateContactOptions,
     options: CreateContactRequestOptions = {},
   ): Promise<CreateContactResponse> {
+    if (!payload.audienceId) {
+      const data = await this.resend.post<CreateContactResponseSuccess>(
+        '/contacts',
+        {
+          unsubscribed: payload.unsubscribed,
+          email: payload.email,
+          first_name: payload.firstName,
+          last_name: payload.lastName,
+        },
+        options,
+      );
+      return data;
+    }
+
     const data = await this.resend.post<CreateContactResponseSuccess>(
       `/audiences/${payload.audienceId}/contacts`,
       {
@@ -51,8 +73,23 @@ export class Contacts {
     return data;
   }
 
-  async list(options: ListContactsOptions): Promise<ListContactsResponse> {
-    const data = await this.resend.get<ListContactsResponseSuccess>(
+  async list(options?: ListContactsOptions): Promise<ListContactsResponse>;
+  async list(
+    options: ListAudienceContactsOptions,
+  ): Promise<ListAudienceContactsResponse>;
+  async list(
+    options: ListContactsOptions | ListAudienceContactsOptions = {},
+  ): Promise<ListContactsResponse | ListAudienceContactsResponse> {
+    if (!('audienceId' in options)) {
+      const query = createPaginationQuery(options);
+      const data = await this.resend.get<ListContactsApiResponseSuccess>(
+        '/contacts',
+        { query },
+      );
+      return formatPaginatedResponse(data);
+    }
+
+    const data = await this.resend.get<ListAudienceContactsResponseSuccess>(
       `/audiences/${options.audienceId}/contacts`,
     );
     return data;
@@ -68,6 +105,13 @@ export class Contacts {
           name: 'missing_required_field',
         },
       };
+    }
+
+    if (!options.audienceId) {
+      const data = await this.resend.get<GetContactResponseSuccess>(
+        `/contacts/${options?.email ? options?.email : options?.id}`,
+      );
+      return data;
     }
 
     const data = await this.resend.get<GetContactResponseSuccess>(
@@ -86,6 +130,18 @@ export class Contacts {
           name: 'missing_required_field',
         },
       };
+    }
+
+    if (!options.audienceId) {
+      const data = await this.resend.patch<UpdateContactResponseSuccess>(
+        `/contacts/${options?.email ? options?.email : options?.id}`,
+        {
+          unsubscribed: options.unsubscribed,
+          first_name: options.firstName,
+          last_name: options.lastName,
+        },
+      );
+      return data;
     }
 
     const data = await this.resend.patch<UpdateContactResponseSuccess>(
@@ -111,11 +167,19 @@ export class Contacts {
       };
     }
 
+    if (!payload.audienceId) {
+      const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+        `/contacts/${payload?.email ? payload?.email : payload?.id}`,
+      );
+      return data;
+    }
+
     const data = await this.resend.delete<RemoveContactsResponseSuccess>(
       `/audiences/${payload.audienceId}/contacts/${
         payload?.email ? payload?.email : payload?.id
       }`,
     );
+
     return data;
   }
 }
