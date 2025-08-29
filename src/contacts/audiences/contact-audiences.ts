@@ -39,7 +39,7 @@ export class ContactAudiences {
 
     const data = await this.resend.get<ListContactAudiencesApiResponseSuccess>(
       `/contacts/${identifier}/audiences`,
-      query,
+      { query },
     );
     return formatPaginatedResponse(data);
   }

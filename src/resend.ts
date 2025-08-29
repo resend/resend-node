@@ -61,7 +61,7 @@ export class Resend {
     options: RequestInit & { query?: Record<string, unknown> } = {},
   ): Promise<Response<T>> {
     try {
-      const url = new URL(path, baseUrl);
+      const url = new URL(`${baseUrl}${path}`);
       if (options.query) {
         for (const [key, value] of Object.entries(options.query)) {
           const valueString = value?.toString?.();
