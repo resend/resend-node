@@ -63,6 +63,20 @@ export function mockSuccessResponse<T>(
 }
 
 /**
+ * Mock successful response with a custom status code
+ */
+export function mockSuccessWithStatusCode<T>(
+  data: T,
+  status: number,
+  options: MockFetchOptions = {},
+): void {
+  mockFetchWithRateLimit(JSON.stringify(data), {
+    status,
+    ...options,
+  });
+}
+
+/**
  * Mock error response with rate limiting headers
  */
 export function mockErrorResponse(
