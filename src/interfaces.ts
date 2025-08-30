@@ -38,13 +38,21 @@ export type ErrorResponse =
 export type Response<Data> =
   | {
       data: Data;
-      rateLimiting: RateLimit;
       error: null;
+      /**
+       * The raw response from the internal {@link fetch} call.
+       */
+      raw: globalThis.Response;
+      rateLimiting: RateLimit;
     }
   | {
       data: null;
-      rateLimiting: RateLimit | null;
       error: ErrorResponse;
+      /**
+       * The raw response from the internal {@link fetch} call.
+       */
+      raw: globalThis.Response | null;
+      rateLimiting: RateLimit | null;
     };
 
 export type Tag = { name: string; value: string };
