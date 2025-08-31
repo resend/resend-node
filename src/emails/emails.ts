@@ -16,6 +16,11 @@ import type {
   GetEmailResponseSuccess,
 } from './interfaces/get-email-options.interface';
 import type {
+  ListEmailsOptions,
+  ListEmailsResponse,
+  ListEmailsResponseSuccess,
+} from './interfaces/list-emails-options.interface';
+import type {
   UpdateEmailOptions,
   UpdateEmailResponse,
   UpdateEmailResponseSuccess,
@@ -66,6 +71,29 @@ export class Emails {
     const data = await this.resend.get<GetEmailResponseSuccess>(
       `/emails/${id}`,
     );
+
+    return data;
+  }
+
+  async list(options: ListEmailsOptions = {}): Promise<ListEmailsResponse> {
+    const searchParams = new URLSearchParams();
+
+    if (options.limit !== undefined) {
+      searchParams.set('limit', options.limit.toString());
+    }
+
+    if ('after' in options && options.after !== undefined) {
+      searchParams.set('after', options.after);
+    }
+
+    if ('before' in options && options.before !== undefined) {
+      searchParams.set('before', options.before);
+    }
+
+    const queryString = searchParams.toString();
+    const url = queryString ? `/emails?${queryString}` : '/emails';
+
+    const data = await this.resend.get<ListEmailsResponseSuccess>(url);
 
     return data;
   }
