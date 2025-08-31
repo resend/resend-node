@@ -10,6 +10,7 @@ import type {
   CreateEmailResponseSuccess,
 } from './interfaces/create-email-options.interface';
 import type { GetEmailResponseSuccess } from './interfaces/get-email-options.interface';
+import type { ListEmailsResponseSuccess } from './interfaces/list-emails-options.interface';
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -543,6 +544,105 @@ describe('Emails', () => {
   },
 }
 `);
+      });
+    });
+  });
+
+  describe('list', () => {
+    const response: ListEmailsResponseSuccess = {
+      object: 'list',
+      has_more: false,
+      data: [
+        {
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['zeno@resend.com'],
+          from: 'bu@resend.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: 'Test email',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          last_event: 'delivered',
+          scheduled_at: null,
+        },
+      ],
+    };
+    const headers = {
+      Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+    };
+
+    describe('when no pagination options provided', () => {
+      it('calls endpoint without query params and return the response', async () => {
+        mockSuccessResponse(response, {
+          headers,
+        });
+
+        const result = await resend.emails.list();
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails',
+        );
+      });
+    });
+
+    describe('when pagination options are provided', () => {
+      it('calls endpoint passing limit param and return the response', async () => {
+        mockSuccessResponse(response, { headers });
+        const result = await resend.emails.list({ limit: 10 });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails?limit=10',
+        );
+      });
+
+      it('calls endpoint passing after param and return the response', async () => {
+        mockSuccessResponse(response, { headers });
+        const result = await resend.emails.list({ after: 'cursor123' });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails?after=cursor123',
+        );
+      });
+
+      it('calls endpoint passing before param and return the response', async () => {
+        mockSuccessResponse(response, { headers });
+        const result = await resend.emails.list({ before: 'cursor123' });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails?before=cursor123',
+        );
       });
     });
   });
