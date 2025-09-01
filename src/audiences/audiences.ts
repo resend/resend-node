@@ -1,3 +1,4 @@
+import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
   CreateAudienceOptions,
@@ -10,6 +11,7 @@ import type {
   GetAudienceResponseSuccess,
 } from './interfaces/get-audience.interface';
 import type {
+  ListAudiencesOptions,
   ListAudiencesResponse,
   ListAudiencesResponseSuccess,
 } from './interfaces/list-audiences.interface';
@@ -33,9 +35,13 @@ export class Audiences {
     return data;
   }
 
-  async list(): Promise<ListAudiencesResponse> {
-    const data =
-      await this.resend.get<ListAudiencesResponseSuccess>('/audiences');
+  async list(
+    options: ListAudiencesOptions = {},
+  ): Promise<ListAudiencesResponse> {
+    const queryString = buildPaginationQuery(options);
+    const url = queryString ? `/audiences?${queryString}` : '/audiences';
+
+    const data = await this.resend.get<ListAudiencesResponseSuccess>(url);
     return data;
   }
 
