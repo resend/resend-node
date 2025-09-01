@@ -1,3 +1,4 @@
+import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
   CreateContactOptions,
@@ -47,9 +48,13 @@ export class Contacts {
   }
 
   async list(options: ListContactsOptions): Promise<ListContactsResponse> {
-    const data = await this.resend.get<ListContactsResponseSuccess>(
-      `/audiences/${options.audienceId}/contacts`,
-    );
+    const { audienceId, ...paginationOptions } = options;
+    const queryString = buildPaginationQuery(paginationOptions);
+    const url = queryString
+      ? `/audiences/${audienceId}/contacts?${queryString}`
+      : `/audiences/${audienceId}/contacts`;
+
+    const data = await this.resend.get<ListContactsResponseSuccess>(url);
     return data;
   }
 
