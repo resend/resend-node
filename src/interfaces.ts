@@ -32,21 +32,21 @@ export type RateLimitExceededErrorResponse = {
 
 export type ErrorResponse =
   | {
-    message: string;
-    name: Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
-  }
+      message: string;
+      name: Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
+    }
   | RateLimitExceededErrorResponse;
 
 export type Response<Data> =
   | {
-    data: Data;
-    rateLimiting: RateLimit;
-    error: null;
-  }
+      data: Data;
+      rateLimiting: RateLimit;
+      error: null;
+    }
   | {
-    data: null;
-    rateLimiting: RateLimit | null;
-    error: ErrorResponse;
-  };
+      data: null;
+      rateLimiting: RateLimit | null;
+      error: ErrorResponse;
+    };
 
 export type Tag = { name: string; value: string };
