@@ -10,11 +10,13 @@ export type PaginationOptions = {
        * Get items after this cursor (cannot be used with 'before')
        */
       after?: string;
+      before?: never;
     }
   | {
       /**
        * Get items before this cursor (cannot be used with 'after')
        */
       before?: string;
+      after?: never;
     }
 );

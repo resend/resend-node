@@ -2,7 +2,7 @@ import type { PaginationOptions } from '../interfaces/pagination-options.interfa
 
 /**
  * Builds a query string from pagination options
- * @param options - Pagination options containing limit, after, and/or before
+ * @param options - Pagination options containing limit and either after or before (but not both)
  * @returns Query string (without leading '?') or empty string if no options
  */
 export function buildPaginationQuery(options: PaginationOptions): string {
