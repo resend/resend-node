@@ -1,4 +1,5 @@
 import type * as React from 'react';
+import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
   CreateBroadcastOptions,
@@ -9,6 +10,7 @@ import type {
   GetBroadcastResponseSuccess,
 } from './interfaces/get-broadcast.interface';
 import type {
+  ListBroadcastsOptions,
   ListBroadcastsResponse,
   ListBroadcastsResponseSuccess,
 } from './interfaces/list-broadcasts.interface';
@@ -82,9 +84,13 @@ export class Broadcasts {
     return data;
   }
 
-  async list(): Promise<ListBroadcastsResponse> {
-    const data =
-      await this.resend.get<ListBroadcastsResponseSuccess>('/broadcasts');
+  async list(
+    options: ListBroadcastsOptions = {},
+  ): Promise<ListBroadcastsResponse> {
+    const queryString = buildPaginationQuery(options);
+    const url = queryString ? `/broadcasts?${queryString}` : '/broadcasts';
+
+    const data = await this.resend.get<ListBroadcastsResponseSuccess>(url);
     return data;
   }
 
