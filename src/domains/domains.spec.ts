@@ -379,59 +379,132 @@ describe('Domains', () => {
   });
 
   describe('list', () => {
-    it('lists domains', async () => {
-      const response: ListDomainsResponseSuccess = {
-        data: [
-          {
-            id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
-            name: 'resend.com',
-            status: 'not_started',
-            created_at: '2023-04-07T23:13:52.669661+00:00',
-            region: 'eu-west-1',
+    const response: ListDomainsResponseSuccess = {
+      has_more: false,
+      object: 'list',
+      data: [
+        {
+          id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+          name: 'resend.com',
+          status: 'not_started',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          region: 'eu-west-1',
+        },
+        {
+          id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
+          name: 'react.email',
+          status: 'not_started',
+          created_at: '2023-04-07T23:13:20.417116+00:00',
+          region: 'us-east-1',
+        },
+      ],
+    };
+
+    describe('when no pagination options are provided', () => {
+      it('lists domains', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = await resend.domains.list();
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
           },
-          {
-            id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
-            name: 'react.email',
-            status: 'not_started',
-            created_at: '2023-04-07T23:13:20.417116+00:00',
-            region: 'us-east-1',
+        });
+      });
+    });
+
+    describe('when pagination options are provided', () => {
+      it('passes limit param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.domains.list({ limit: 1 });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
           },
-        ],
-      };
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/domains?limit=1',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
       });
 
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      it('passes after param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
 
-      await expect(resend.domains.list()).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "created_at": "2023-04-07T23:13:52.669661+00:00",
-        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-        "name": "resend.com",
-        "region": "eu-west-1",
-        "status": "not_started",
-      },
-      {
-        "created_at": "2023-04-07T23:13:20.417116+00:00",
-        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-        "name": "react.email",
-        "region": "us-east-1",
-        "status": "not_started",
-      },
-    ],
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.domains.list({
+          limit: 1,
+          after: 'cursor-value',
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/domains?limit=1&after=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+
+      it('passes before param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.domains.list({
+          limit: 1,
+          before: 'cursor-value',
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/domains?limit=1&before=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
     });
   });
 

@@ -11,6 +11,7 @@ import type {
   GetDomainResponseSuccess,
 } from './interfaces/get-domain.interface';
 import type {
+  ListDomainsOptions,
   ListDomainsResponse,
   ListDomainsResponseSuccess,
 } from './interfaces/list-domains.interface';
@@ -43,8 +44,25 @@ export class Domains {
     return data;
   }
 
-  async list(): Promise<ListDomainsResponse> {
-    const data = await this.resend.get<ListDomainsResponseSuccess>('/domains');
+  async list(options: ListDomainsOptions = {}): Promise<ListDomainsResponse> {
+    const searchParams = new URLSearchParams();
+
+    if (options.limit !== undefined) {
+      searchParams.set('limit', options.limit.toString());
+    }
+
+    if ('after' in options && options.after !== undefined) {
+      searchParams.set('after', options.after);
+    }
+
+    if ('before' in options && options.before !== undefined) {
+      searchParams.set('before', options.before);
+    }
+
+    const queryString = searchParams.toString();
+    const url = queryString ? `/domains?${queryString}` : '/domains';
+
+    const data = await this.resend.get<ListDomainsResponseSuccess>(url);
     return data;
   }
 
