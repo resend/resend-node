@@ -297,6 +297,14 @@ describe('API Keys', () => {
             shouldResetAfter: 1,
           },
         });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/api-keys',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
       });
     });
 

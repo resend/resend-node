@@ -312,6 +312,14 @@ describe('Broadcasts', () => {
             shouldResetAfter: 1,
           },
         });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
       });
     });
 

@@ -128,40 +128,24 @@ describe('Contacts', () => {
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-        await expect(
-          resend.contacts.list(options),
-        ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "created_at": "2023-04-07T23:13:52.669661+00:00",
-        "email": "team@resend.com",
-        "first_name": "John",
-        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-        "last_name": "Smith",
-        "unsubscribed": false,
-      },
-      {
-        "created_at": "2023-04-07T23:13:20.417116+00:00",
-        "email": "team@react.email",
-        "first_name": "John",
-        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-        "last_name": "Smith",
-        "unsubscribed": false,
-      },
-    ],
-    "has_more": false,
-    "object": "list",
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        const result = await resend.contacts.list(options);
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/audiences/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
       });
     });
 

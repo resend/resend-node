@@ -116,6 +116,14 @@ describe('Audiences', () => {
             shouldResetAfter: 1,
           },
         });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/audiences',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
       });
     });
 
