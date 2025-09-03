@@ -1,4 +1,5 @@
 import type * as React from 'react';
+import { PaginatedRequest } from '../common/pagination';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import type { Resend } from '../resend';
 import type {
@@ -16,8 +17,8 @@ import type {
   GetEmailResponseSuccess,
 } from './interfaces/get-email-options.interface';
 import type {
+  ListEmail,
   ListEmailsOptions,
-  ListEmailsResponse,
   ListEmailsResponseSuccess,
 } from './interfaces/list-emails-options.interface';
 import type {
@@ -75,27 +76,28 @@ export class Emails {
     return data;
   }
 
-  async list(options: ListEmailsOptions = {}): Promise<ListEmailsResponse> {
-    const searchParams = new URLSearchParams();
+  list(options: ListEmailsOptions = {}): PaginatedRequest<ListEmail> {
+    const fetchPage = async (options: ListEmailsOptions) => {
+      const searchParams = new URLSearchParams();
 
-    if (options.limit !== undefined) {
-      searchParams.set('limit', options.limit.toString());
-    }
+      if (options.limit !== undefined) {
+        searchParams.set('limit', options.limit.toString());
+      }
 
-    if ('after' in options && options.after !== undefined) {
-      searchParams.set('after', options.after);
-    }
+      if ('after' in options && options.after !== undefined) {
+        searchParams.set('after', options.after);
+      }
 
-    if ('before' in options && options.before !== undefined) {
-      searchParams.set('before', options.before);
-    }
+      if ('before' in options && options.before !== undefined) {
+        searchParams.set('before', options.before);
+      }
 
-    const queryString = searchParams.toString();
-    const url = queryString ? `/emails?${queryString}` : '/emails';
+      const queryString = searchParams.toString();
+      const url = queryString ? `/emails?${queryString}` : '/emails';
+      return this.resend.get<ListEmailsResponseSuccess>(url);
+    };
 
-    const data = await this.resend.get<ListEmailsResponseSuccess>(url);
-
-    return data;
+    return new PaginatedRequest(fetchPage, options);
   }
 
   async update(payload: UpdateEmailOptions): Promise<UpdateEmailResponse> {

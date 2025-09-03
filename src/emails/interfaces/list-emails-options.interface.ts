@@ -22,7 +22,6 @@ export type ListEmailsOptions = {
     }
 );
 
-// Base email type for listing (subset of full email)
 export type ListEmail = Omit<
   GetEmailResponseSuccess,
   'html' | 'text' | 'tags' | 'object'
