@@ -1,4 +1,5 @@
 import type * as React from 'react';
+import { PaginatedRequest } from '../common/pagination';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import type { Resend } from '../resend';
 import type {
@@ -25,7 +26,6 @@ import type {
   UpdateEmailResponse,
   UpdateEmailResponseSuccess,
 } from './interfaces/update-email-options.interface';
-import { PaginatedRequest } from '../common/paginated-request';
 
 export class Emails {
   private renderAsync?: (component: React.ReactElement) => Promise<string>;
