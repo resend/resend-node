@@ -95,12 +95,64 @@ describe('Contacts', () => {
   });
 
   describe('list', () => {
-    it('lists contacts', async () => {
-      const options: ListContactsOptions = {
-        audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
-      };
+    describe('without pagination', () => {
+      it('lists contacts', async () => {
+        const options: ListContactsOptions = {
+          audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+        };
+        const response: ListContactsResponseSuccess = {
+          object: 'list',
+          has_more: false,
+          data: [
+            {
+              id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+              email: 'team@resend.com',
+              created_at: '2023-04-07T23:13:52.669661+00:00',
+              unsubscribed: false,
+              first_name: 'John',
+              last_name: 'Smith',
+            },
+            {
+              id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
+              email: 'team@react.email',
+              created_at: '2023-04-07T23:13:20.417116+00:00',
+              unsubscribed: false,
+              first_name: 'John',
+              last_name: 'Smith',
+            },
+          ],
+        };
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = await resend.contacts.list(options);
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/audiences/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
+
+    describe('when pagination options are provided', () => {
       const response: ListContactsResponseSuccess = {
         object: 'list',
+        has_more: true,
         data: [
           {
             id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
@@ -110,55 +162,97 @@ describe('Contacts', () => {
             first_name: 'John',
             last_name: 'Smith',
           },
-          {
-            id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
-            email: 'team@react.email',
-            created_at: '2023-04-07T23:13:20.417116+00:00',
-            unsubscribed: false,
-            first_name: 'John',
-            last_name: 'Smith',
-          },
         ],
       };
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+
+      it('passes limit param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.contacts.list({
+          audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+          limit: 1,
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/audiences/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts?limit=1',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
       });
 
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      it('passes limit and after params and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
 
-      await expect(
-        resend.contacts.list(options),
-      ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "created_at": "2023-04-07T23:13:52.669661+00:00",
-        "email": "team@resend.com",
-        "first_name": "John",
-        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-        "last_name": "Smith",
-        "unsubscribed": false,
-      },
-      {
-        "created_at": "2023-04-07T23:13:20.417116+00:00",
-        "email": "team@react.email",
-        "first_name": "John",
-        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-        "last_name": "Smith",
-        "unsubscribed": false,
-      },
-    ],
-    "object": "list",
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.contacts.list({
+          audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+          limit: 1,
+          after: 'cursor-value',
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/audiences/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts?limit=1&after=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+
+      it('passes limit and before params and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.contacts.list({
+          audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+          limit: 1,
+          before: 'cursor-value',
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/audiences/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts?limit=1&before=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
     });
   });
 

@@ -1,4 +1,5 @@
 import type * as React from 'react';
+import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import type { Resend } from '../resend';
 import type {
@@ -76,21 +77,7 @@ export class Emails {
   }
 
   async list(options: ListEmailsOptions = {}): Promise<ListEmailsResponse> {
-    const searchParams = new URLSearchParams();
-
-    if (options.limit !== undefined) {
-      searchParams.set('limit', options.limit.toString());
-    }
-
-    if ('after' in options && options.after !== undefined) {
-      searchParams.set('after', options.after);
-    }
-
-    if ('before' in options && options.before !== undefined) {
-      searchParams.set('before', options.before);
-    }
-
-    const queryString = searchParams.toString();
+    const queryString = buildPaginationQuery(options);
     const url = queryString ? `/emails?${queryString}` : '/emails';
 
     const data = await this.resend.get<ListEmailsResponseSuccess>(url);

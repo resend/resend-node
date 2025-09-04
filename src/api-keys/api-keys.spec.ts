@@ -262,8 +262,10 @@ describe('API Keys', () => {
   });
 
   describe('list', () => {
-    it('lists api keys', async () => {
-      const response: ListApiKeysResponseSuccess = [
+    const response: ListApiKeysResponseSuccess = {
+      object: 'list',
+      has_more: false,
+      data: [
         {
           id: '5262504e-8ed7-4fac-bd16-0d4be94bc9f2',
           name: 'My API Key 1',
@@ -274,35 +276,122 @@ describe('API Keys', () => {
           name: 'My API Key 2',
           created_at: '2023-04-06T23:09:49.093947+00:00',
         },
-      ];
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      ],
+    };
+
+    describe('when no pagination options are provided', () => {
+      it('lists api keys', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = await resend.apiKeys.list();
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/api-keys',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
+
+    describe('when pagination options are provided', () => {
+      it('passes limit param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.apiKeys.list({ limit: 1 });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/api-keys?limit=1',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
       });
 
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      it('passes after param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
 
-      await expect(resend.apiKeys.list()).resolves.toMatchInlineSnapshot(`
-{
-  "data": [
-    {
-      "created_at": "2023-04-07T20:29:10.666968+00:00",
-      "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-      "name": "My API Key 1",
-    },
-    {
-      "created_at": "2023-04-06T23:09:49.093947+00:00",
-      "id": "98c37b35-1473-4afe-a627-78e975a36fab",
-      "name": "My API Key 2",
-    },
-  ],
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.apiKeys.list({
+          limit: 1,
+          after: 'cursor-value',
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/api-keys?limit=1&after=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+
+      it('passes before param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.apiKeys.list({
+          limit: 1,
+          before: 'cursor-value',
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          rateLimiting: {
+            limit: 2,
+            remainingRequests: 2,
+            shouldResetAfter: 1,
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/api-keys?limit=1&before=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
     });
   });
 
