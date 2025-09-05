@@ -1,5 +1,5 @@
 import type { PaginationOptions } from '../../common/interfaces';
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 import type { Audience } from './audience';
 
 export type ListAudiencesOptions = PaginationOptions;
@@ -10,4 +10,12 @@ export type ListAudiencesResponseSuccess = {
   has_more: boolean;
 };
 
-export type ListAudiencesResponse = Response<ListAudiencesResponseSuccess>;
+export type ListAudiencesResponse =
+  | {
+      data: ListAudiencesResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

@@ -1,5 +1,5 @@
 import type { PaginationOptions } from '../../common/interfaces';
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 import type { Contact } from './contact';
 
 export type ListContactsOptions = {
@@ -12,4 +12,12 @@ export interface ListContactsResponseSuccess {
   has_more: boolean;
 }
 
-export type ListContactsResponse = Response<ListContactsResponseSuccess>;
+export type ListContactsResponse =
+  | {
+      data: ListContactsResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

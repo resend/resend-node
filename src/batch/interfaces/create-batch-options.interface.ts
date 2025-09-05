@@ -1,7 +1,7 @@
 import type { PostOptions } from '../../common/interfaces';
 import type { IdempotentRequest } from '../../common/interfaces/idempotent-request.interface';
 import type { CreateEmailOptions } from '../../emails/interfaces/create-email-options.interface';
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 
 export type CreateBatchOptions = CreateEmailOptions[];
 
@@ -40,4 +40,11 @@ export type CreateBatchSuccessResponse<
   : Record<string, never>);
 
 export type CreateBatchResponse<Options extends CreateBatchRequestOptions> =
-  Response<CreateBatchSuccessResponse<Options>>;
+  | {
+      data: CreateBatchSuccessResponse<Options>;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

@@ -1,5 +1,3 @@
-import type { RateLimit } from './rate-limiting';
-
 export const RESEND_ERROR_CODES_BY_KEY = {
   missing_required_field: 422,
   invalid_idempotency_key: 400,
@@ -21,32 +19,9 @@ export const RESEND_ERROR_CODES_BY_KEY = {
 
 export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
-export type RateLimitExceededErrorResponse = {
+export interface ErrorResponse {
   message: string;
-  name: Extract<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
-  /**
-   * Time in seconds.
-   */
-  retryAfter: number;
-};
-
-export type ErrorResponse =
-  | {
-      message: string;
-      name: Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
-    }
-  | RateLimitExceededErrorResponse;
-
-export type Response<Data> =
-  | {
-      data: Data;
-      rateLimiting: RateLimit;
-      error: null;
-    }
-  | {
-      data: null;
-      rateLimiting: RateLimit | null;
-      error: ErrorResponse;
-    };
+  name: RESEND_ERROR_CODE_KEY;
+}
 
 export type Tag = { name: string; value: string };

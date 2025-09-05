@@ -1,5 +1,5 @@
 import type { PostOptions } from '../../common/interfaces';
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 
 interface SendBroadcastBaseOptions {
   /**
@@ -21,4 +21,12 @@ export interface SendBroadcastResponseSuccess {
   id: string;
 }
 
-export type SendBroadcastResponse = Response<SendBroadcastResponseSuccess>;
+export type SendBroadcastResponse =
+  | {
+      data: SendBroadcastResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };
