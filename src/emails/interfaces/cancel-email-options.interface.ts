@@ -1,8 +1,16 @@
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 
 export interface CancelEmailResponseSuccess {
   object: 'email';
   id: string;
 }
 
-export type CancelEmailResponse = Response<CancelEmailResponseSuccess>;
+export type CancelEmailResponse =
+  | {
+      data: CancelEmailResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

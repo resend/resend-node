@@ -2,7 +2,7 @@ import type * as React from 'react';
 import type { PostOptions } from '../../common/interfaces';
 import type { IdempotentRequest } from '../../common/interfaces/idempotent-request.interface';
 import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 
 interface EmailRenderOptions {
   /**
@@ -101,7 +101,15 @@ export interface CreateEmailResponseSuccess {
   id: string;
 }
 
-export type CreateEmailResponse = Response<CreateEmailResponseSuccess>;
+export type CreateEmailResponse =
+  | {
+      data: CreateEmailResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };
 
 export interface Attachment {
   /** Content of an attached file. */

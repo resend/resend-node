@@ -1,9 +1,5 @@
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
-import {
-  mockErrorResponse,
-  mockSuccessResponse,
-} from '../test-utils/mock-fetch';
 import type {
   CreateContactOptions,
   CreateContactResponseSuccess,
@@ -36,8 +32,12 @@ describe('Contacts', () => {
         id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -50,11 +50,6 @@ describe('Contacts', () => {
     "object": "contact",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -69,8 +64,12 @@ describe('Contacts', () => {
         message: 'Missing `email` field.',
       };
 
-      mockErrorResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -83,11 +82,6 @@ describe('Contacts', () => {
   "error": {
     "message": "Missing \`email\` field.",
     "name": "missing_required_field",
-  },
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
   },
 }
 `);
@@ -264,8 +258,12 @@ describe('Contacts', () => {
           message: 'Contact not found',
         };
 
-        mockErrorResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -283,11 +281,6 @@ describe('Contacts', () => {
     "message": "Contact not found",
     "name": "not_found",
   },
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
       });
@@ -304,8 +297,12 @@ describe('Contacts', () => {
         unsubscribed: false,
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -327,11 +324,6 @@ describe('Contacts', () => {
     "unsubscribed": false,
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -347,8 +339,12 @@ describe('Contacts', () => {
         unsubscribed: false,
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -370,11 +366,6 @@ describe('Contacts', () => {
     "unsubscribed": false,
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -391,8 +382,12 @@ describe('Contacts', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
         object: 'contact',
       };
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -406,11 +401,6 @@ describe('Contacts', () => {
     "object": "contact",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -423,8 +413,12 @@ describe('Contacts', () => {
         object: 'contact',
         deleted: true,
       };
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -442,11 +436,6 @@ describe('Contacts', () => {
     "object": "contact",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -457,8 +446,12 @@ describe('Contacts', () => {
         object: 'contact',
         deleted: true,
       };
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -469,20 +462,15 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.remove(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "contact": "acme@example.com",
-    "deleted": true,
-    "object": "contact",
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+  {
+    "data": {
+      "contact": "acme@example.com",
+      "deleted": true,
+      "object": "contact",
+    },
+    "error": null,
+  }
+  `);
     });
   });
 });

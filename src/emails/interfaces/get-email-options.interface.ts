@@ -1,4 +1,4 @@
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 
 export interface GetEmailResponseSuccess {
   bcc: string[] | null;
@@ -28,4 +28,12 @@ export interface GetEmailResponseSuccess {
   object: 'email';
 }
 
-export type GetEmailResponse = Response<GetEmailResponseSuccess>;
+export type GetEmailResponse =
+  | {
+      data: GetEmailResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

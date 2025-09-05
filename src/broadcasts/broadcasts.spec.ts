@@ -1,10 +1,5 @@
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
-import {
-  mockErrorResponse,
-  mockFetchWithRateLimit,
-  mockSuccessResponse,
-} from '../test-utils/mock-fetch';
 import type {
   CreateBroadcastOptions,
   CreateBroadcastResponseSuccess,
@@ -26,8 +21,10 @@ describe('Broadcasts', () => {
         message: 'Missing `from` field.',
       };
 
-      mockErrorResponse(response, {
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 422,
         headers: {
+          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -40,11 +37,6 @@ describe('Broadcasts', () => {
     "message": "Missing \`from\` field.",
     "name": "missing_required_field",
   },
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -53,8 +45,10 @@ describe('Broadcasts', () => {
       const response: CreateBroadcastResponseSuccess = {
         id: '71cdfe68-cf79-473a-a9d7-21f91db6a526',
       };
-      mockSuccessResponse(response, {
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
         headers: {
+          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -73,11 +67,6 @@ describe('Broadcasts', () => {
     "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -87,8 +76,12 @@ describe('Broadcasts', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const payload: CreateBroadcastOptions = {
@@ -104,11 +97,6 @@ describe('Broadcasts', () => {
     "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -118,8 +106,12 @@ describe('Broadcasts', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const payload: CreateBroadcastOptions = {
@@ -137,11 +129,6 @@ describe('Broadcasts', () => {
     "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -153,8 +140,12 @@ describe('Broadcasts', () => {
           'Invalid `from` field. The email address needs to follow the `email@example.com` or `Name <email@example.com>` format',
       };
 
-      mockErrorResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const payload: CreateBroadcastOptions = {
@@ -168,19 +159,14 @@ describe('Broadcasts', () => {
       const result = resend.broadcasts.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
-    "name": "invalid_parameter",
-  },
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+  {
+    "data": null,
+    "error": {
+      "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
+      "name": "invalid_parameter",
+    },
+  }
+  `);
     });
 
     it('returns an error when fetch fails', async () => {
@@ -210,7 +196,7 @@ describe('Broadcasts', () => {
     });
 
     it('returns an error when api responds with text payload', async () => {
-      mockFetchWithRateLimit('local_rate_limited', {
+      fetchMock.mockOnce('local_rate_limited', {
         status: 422,
         headers: {
           Authorization: 'Bearer re_924b3rjh2387fbewf823',
@@ -244,8 +230,10 @@ describe('Broadcasts', () => {
         id: randomBroadcastId,
       };
 
-      mockSuccessResponse(response, {
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
         headers: {
+          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -258,11 +246,6 @@ describe('Broadcasts', () => {
     "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -418,8 +401,12 @@ describe('Broadcasts', () => {
           message: 'Broadcast not found',
         };
 
-        mockErrorResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -434,11 +421,6 @@ describe('Broadcasts', () => {
   "error": {
     "message": "Broadcast not found",
     "name": "not_found",
-  },
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
   },
 }
 `);
@@ -461,8 +443,12 @@ describe('Broadcasts', () => {
         sent_at: null,
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -486,11 +472,6 @@ describe('Broadcasts', () => {
     "subject": "hello world",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -504,8 +485,12 @@ describe('Broadcasts', () => {
         id,
         deleted: true,
       };
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -520,11 +505,6 @@ describe('Broadcasts', () => {
     "object": "broadcast",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -534,8 +514,12 @@ describe('Broadcasts', () => {
     it('updates a broadcast', async () => {
       const id = 'b01e0de9-7c27-4a53-bf38-2e3f98389a65';
       const response: UpdateBroadcastResponseSuccess = { id };
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -548,11 +532,6 @@ describe('Broadcasts', () => {
     "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
