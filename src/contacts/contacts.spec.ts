@@ -117,7 +117,7 @@ describe('Contacts', () => {
             },
           ],
         };
-      
+
         mockSuccessResponse(response, {
           headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
         });

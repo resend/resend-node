@@ -16,7 +16,7 @@ export type ListEmailsResponseSuccess = {
   data: ListEmail[];
 };
 
-export type ListEmailsResponse = 
+export type ListEmailsResponse =
   | {
       data: ListEmailsResponseSuccess;
       error: null;
@@ -25,4 +25,3 @@ export type ListEmailsResponse =
       data: null;
       error: ErrorResponse;
     };
-;

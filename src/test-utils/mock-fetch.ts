@@ -1,7 +1,6 @@
 import type { MockParams } from 'vitest-fetch-mock';
 
-export interface MockFetchOptions extends MockParams {
-}
+export interface MockFetchOptions extends MockParams {}
 
 /**
  * Mock fetch response with rate limiting headers included by default
@@ -10,11 +9,7 @@ export function mockFetchWithRateLimit(
   body: string,
   options: MockFetchOptions = {},
 ): void {
-  const {
-    headers = {},
-    status = 200,
-    ...restOptions
-  } = options;
+  const { headers = {}, status = 200, ...restOptions } = options;
 
   const allHeaders = {
     'content-type': 'application/json',
