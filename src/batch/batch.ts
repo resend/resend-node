@@ -51,7 +51,7 @@ export class Batch {
       {
         ...options,
         headers: {
-          'x-resend-batch-validation': options?.batchValidation ?? 'strict',
+          'x-batch-validation': options?.batchValidation ?? 'strict',
           ...options?.headers,
         },
       },
