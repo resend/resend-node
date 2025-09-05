@@ -8,7 +8,7 @@ export const RESEND_ERROR_CODES_BY_KEY = {
   invalid_region: 422,
   rate_limit_exceeded: 429,
   missing_api_key: 401,
-  invalid_api_Key: 403,
+  invalid_api_key: 403,
   invalid_from_address: 403,
   validation_error: 403,
   not_found: 404,
