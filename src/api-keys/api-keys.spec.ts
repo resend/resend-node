@@ -1,5 +1,6 @@
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
+import { mockSuccessResponse } from '../test-utils/mock-fetch';
 import type {
   CreateApiKeyOptions,
   CreateApiKeyResponseSuccess,
@@ -282,11 +283,6 @@ describe('API Keys', () => {
         expect(result).toEqual({
           data: response,
           error: null,
-          rateLimiting: {
-            limit: 2,
-            remainingRequests: 2,
-            shouldResetAfter: 1,
-          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -310,11 +306,6 @@ describe('API Keys', () => {
         expect(result).toEqual({
           data: response,
           error: null,
-          rateLimiting: {
-            limit: 2,
-            remainingRequests: 2,
-            shouldResetAfter: 1,
-          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -339,11 +330,6 @@ describe('API Keys', () => {
         expect(result).toEqual({
           data: response,
           error: null,
-          rateLimiting: {
-            limit: 2,
-            remainingRequests: 2,
-            shouldResetAfter: 1,
-          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -368,11 +354,6 @@ describe('API Keys', () => {
         expect(result).toEqual({
           data: response,
           error: null,
-          rateLimiting: {
-            limit: 2,
-            remainingRequests: 2,
-            shouldResetAfter: 1,
-          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(

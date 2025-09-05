@@ -1,11 +1,6 @@
 import type { MockParams } from 'vitest-fetch-mock';
 
 export interface MockFetchOptions extends MockParams {
-  rateLimiting?: {
-    limit?: number;
-    remaining?: number;
-    reset?: number;
-  };
 }
 
 /**
@@ -16,29 +11,13 @@ export function mockFetchWithRateLimit(
   options: MockFetchOptions = {},
 ): void {
   const {
-    rateLimiting = {},
     headers = {},
     status = 200,
     ...restOptions
   } = options;
 
-  const defaultRateLimit = {
-    limit: 2,
-    remaining: 2,
-    reset: 1, // Fixed timestamp for consistent tests
-  };
-
-  const rateLimitHeaders = {
-    'ratelimit-limit': String(rateLimiting.limit ?? defaultRateLimit.limit),
-    'ratelimit-remaining': String(
-      rateLimiting.remaining ?? defaultRateLimit.remaining,
-    ),
-    'ratelimit-reset': String(rateLimiting.reset ?? defaultRateLimit.reset),
-  };
-
   const allHeaders = {
     'content-type': 'application/json',
-    ...rateLimitHeaders,
     ...headers,
   };
 

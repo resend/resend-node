@@ -39,9 +39,9 @@ export type CreateBatchSuccessResponse<
   }
   : Record<string, never>);
 
-export type CreateBatchResponse =
+export type CreateBatchResponse<Options extends CreateBatchRequestOptions> =
   | {
-    data: CreateBatchSuccessResponse;
+    data: CreateBatchSuccessResponse<Options>;
     error: null;
   }
   | {
