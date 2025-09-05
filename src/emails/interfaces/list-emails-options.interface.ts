@@ -1,5 +1,5 @@
 import type { PaginationOptions } from '../../common/interfaces';
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 import type { GetEmailResponseSuccess } from './get-email-options.interface';
 
 export type ListEmailsOptions = PaginationOptions;
@@ -16,4 +16,12 @@ export type ListEmailsResponseSuccess = {
   data: ListEmail[];
 };
 
-export type ListEmailsResponse = Response<ListEmailsResponseSuccess>;
+export type ListEmailsResponse =
+  | {
+      data: ListEmailsResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

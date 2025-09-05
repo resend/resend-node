@@ -62,7 +62,6 @@ export class Contacts {
     if (!options.id && !options.email) {
       return {
         data: null,
-        rateLimiting: null,
         error: {
           message: 'Missing `id` or `email` field.',
           name: 'missing_required_field',
@@ -80,7 +79,6 @@ export class Contacts {
     if (!options.id && !options.email) {
       return {
         data: null,
-        rateLimiting: null,
         error: {
           message: 'Missing `id` or `email` field.',
           name: 'missing_required_field',
@@ -103,7 +101,6 @@ export class Contacts {
     if (!payload.id && !payload.email) {
       return {
         data: null,
-        rateLimiting: null,
         error: {
           message: 'Missing `id` or `email` field.',
           name: 'missing_required_field',

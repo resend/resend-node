@@ -1,4 +1,4 @@
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 import type { Contact, SelectingField } from './contact';
 
 export type UpdateContactOptions = {
@@ -12,4 +12,12 @@ export type UpdateContactResponseSuccess = Pick<Contact, 'id'> & {
   object: 'contact';
 };
 
-export type UpdateContactResponse = Response<UpdateContactResponseSuccess>;
+export type UpdateContactResponse =
+  | {
+      data: UpdateContactResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

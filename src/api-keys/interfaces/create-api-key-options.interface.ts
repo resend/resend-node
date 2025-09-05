@@ -1,5 +1,5 @@
 import type { PostOptions } from '../../common/interfaces';
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 
 export interface CreateApiKeyOptions {
   name: string;
@@ -14,4 +14,12 @@ export interface CreateApiKeyResponseSuccess {
   id: string;
 }
 
-export type CreateApiKeyResponse = Response<CreateApiKeyResponseSuccess>;
+export type CreateApiKeyResponse =
+  | {
+      data: CreateApiKeyResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

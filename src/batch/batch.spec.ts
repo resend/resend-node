@@ -64,11 +64,6 @@ describe('Batch', () => {
     ],
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -212,11 +207,6 @@ describe('Batch', () => {
     ],
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });

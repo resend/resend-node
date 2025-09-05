@@ -1,4 +1,4 @@
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 import type { SelectingField } from './contact';
 
 export type RemoveContactsResponseSuccess = {
@@ -11,4 +11,12 @@ export type RemoveContactOptions = SelectingField & {
   audienceId: string;
 };
 
-export type RemoveContactsResponse = Response<RemoveContactsResponseSuccess>;
+export type RemoveContactsResponse =
+  | {
+      data: RemoveContactsResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

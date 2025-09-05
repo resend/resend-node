@@ -1,4 +1,4 @@
-import type { Response } from '../../interfaces';
+import type { ErrorResponse } from '../../interfaces';
 import type { Audience } from './audience';
 
 export interface GetAudienceResponseSuccess
@@ -6,4 +6,12 @@ export interface GetAudienceResponseSuccess
   object: 'audience';
 }
 
-export type GetAudienceResponse = Response<GetAudienceResponseSuccess>;
+export type GetAudienceResponse =
+  | {
+      data: GetAudienceResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };
