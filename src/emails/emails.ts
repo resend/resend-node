@@ -1,6 +1,7 @@
 import type * as React from 'react';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
+import { render } from '../render';
 import type { Resend } from '../resend';
 import type {
   CancelEmailResponse,
@@ -26,7 +27,6 @@ import type {
   UpdateEmailResponse,
   UpdateEmailResponseSuccess,
 } from './interfaces/update-email-options.interface';
-import { render } from '../render';
 
 export class Emails {
   constructor(private readonly resend: Resend) {}
@@ -43,9 +43,7 @@ export class Emails {
     options: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
     if (payload.react) {
-      payload.html = await render(
-        payload.react as React.ReactElement,
-      );
+      payload.html = await render(payload.react as React.ReactElement);
     }
 
     const data = await this.resend.post<CreateEmailResponseSuccess>(

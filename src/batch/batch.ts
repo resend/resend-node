@@ -1,5 +1,6 @@
 import type { EmailApiOptions } from '../common/interfaces/email-api-options.interface';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
+import { render } from '../render';
 import type { Resend } from '../resend';
 import type {
   CreateBatchOptions,
@@ -7,7 +8,6 @@ import type {
   CreateBatchResponse,
   CreateBatchSuccessResponse,
 } from './interfaces/create-batch-options.interface';
-import { render } from '../render';
 
 export class Batch {
   constructor(private readonly resend: Resend) {}
