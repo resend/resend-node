@@ -1,4 +1,3 @@
-import type * as React from 'react';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { render } from '../render';
 import type { Resend } from '../resend';
@@ -38,7 +37,7 @@ export class Broadcasts {
     options: CreateBroadcastRequestOptions = {},
   ): Promise<SendBroadcastResponse> {
     if (payload.react) {
-      payload.html = await render(payload.react as React.ReactElement);
+      payload.html = await render(payload.react);
     }
 
     const data = await this.resend.post<SendBroadcastResponseSuccess>(
