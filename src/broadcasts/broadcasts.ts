@@ -1,5 +1,6 @@
 import type * as React from 'react';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { render } from '../render';
 import type { Resend } from '../resend';
 import type {
   CreateBroadcastOptions,
@@ -28,19 +29,16 @@ import type {
   UpdateBroadcastResponse,
   UpdateBroadcastResponseSuccess,
 } from './interfaces/update-broadcast.interface';
-import { render } from '../render';
 
 export class Broadcasts {
-  constructor(private readonly resend: Resend) {}
+  constructor(private readonly resend: Resend) { }
 
   async create(
     payload: CreateBroadcastOptions,
     options: CreateBroadcastRequestOptions = {},
   ): Promise<SendBroadcastResponse> {
     if (payload.react) {
-      payload.html = await render(
-        payload.react as React.ReactElement,
-      );
+      payload.html = await render(payload.react as React.ReactElement);
     }
 
     const data = await this.resend.post<SendBroadcastResponseSuccess>(
@@ -102,20 +100,7 @@ export class Broadcasts {
     payload: UpdateBroadcastOptions,
   ): Promise<UpdateBroadcastResponse> {
     if (payload.react) {
-      if (!this.renderAsync) {
-        try {
-          const { renderAsync } = await import('@react-email/render');
-          this.renderAsync = renderAsync;
-        } catch {
-          throw new Error(
-            'Failed to render React component. Make sure to install `@react-email/render`',
-          );
-        }
-      }
-
-      payload.html = await this.renderAsync(
-        payload.react as React.ReactElement,
-      );
+      payload.html = await render(payload.react);
     }
 
     const data = await this.resend.patch<UpdateBroadcastResponseSuccess>(
