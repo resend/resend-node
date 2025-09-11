@@ -26,9 +26,9 @@ import type {
   UpdateBroadcastResponse,
   UpdateBroadcastResponseSuccess,
 } from './interfaces/update-broadcast.interface';
+import { render } from '../render';
 
 export class Broadcasts {
-  private renderAsync?: (component: React.ReactElement) => Promise<string>;
   constructor(private readonly resend: Resend) {}
 
   async create(
@@ -36,18 +36,7 @@ export class Broadcasts {
     options: CreateBroadcastRequestOptions = {},
   ): Promise<SendBroadcastResponse> {
     if (payload.react) {
-      if (!this.renderAsync) {
-        try {
-          const { renderAsync } = await import('@react-email/render');
-          this.renderAsync = renderAsync;
-        } catch (error) {
-          throw new Error(
-            'Failed to render React component. Make sure to install `@react-email/render`',
-          );
-        }
-      }
-
-      payload.html = await this.renderAsync(
+      payload.html = await render(
         payload.react as React.ReactElement,
       );
     }
