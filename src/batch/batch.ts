@@ -1,4 +1,3 @@
-import type * as React from 'react';
 import type { EmailApiOptions } from '../common/interfaces/email-api-options.interface';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import type { Resend } from '../resend';
