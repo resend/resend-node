@@ -1,4 +1,5 @@
 import type * as React from 'react';
+import { render } from '../render';
 import type { Resend } from '../resend';
 import type {
   CreateBroadcastOptions,
@@ -26,7 +27,6 @@ import type {
   UpdateBroadcastResponse,
   UpdateBroadcastResponseSuccess,
 } from './interfaces/update-broadcast.interface';
-import { render } from '../render';
 
 export class Broadcasts {
   constructor(private readonly resend: Resend) {}
@@ -36,9 +36,7 @@ export class Broadcasts {
     options: CreateBroadcastRequestOptions = {},
   ): Promise<SendBroadcastResponse> {
     if (payload.react) {
-      payload.html = await render(
-        payload.react as React.ReactElement,
-      );
+      payload.html = await render(payload.react as React.ReactElement);
     }
 
     const data = await this.resend.post<SendBroadcastResponseSuccess>(
