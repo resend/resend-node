@@ -30,7 +30,7 @@ jobs:
       - name: Find changed files
         id: changed_files
         if: github.event_name == 'pull_request'
-        uses: tj-actions/changed-files@2036da178f85576f1940fedb74bb93a36cd89ab7
+        uses: tj-actions/changed-files@9a6755550a331fdcc8ec45443738933f8fa22eea
         with:
           files: src/**,pnpm-lock.yaml
           dir_names: true
