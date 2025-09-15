@@ -32,7 +32,7 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: tj-actions/changed-files@2036da178f85576f1940fedb74bb93a36cd89ab7
         with:
-          files: src/**,pnpm-lock.yaml
+          files: src/**/*
           dir_names: true
           dir_names_max_depth: 2
       - name: Publish changed packages to pkg.pr.new
