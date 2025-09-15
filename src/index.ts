@@ -1,3 +1,4 @@
+export * from './common/interfaces/pagination-options.interface';
 export * from './api-keys/interfaces/create-api-key-options.interface';
 export * from './api-keys/interfaces/list-api-keys.interface';
 export * from './api-keys/interfaces/remove-api-keys.interface';
