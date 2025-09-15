@@ -194,21 +194,25 @@ describe('ContactTopics', () => {
         email: 'carolina@resend.com',
       };
       const response: GetContactTopicsResponseSuccess = {
-        email: 'carolina@resend.com',
-        topics: [
-          {
-            id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
-            name: 'Test Topic',
-            description: 'This is a test topic',
-            subscription: 'opt_in',
-          },
-          {
-            id: 'another-topic-id',
-            name: 'Another Topic',
-            description: null,
-            subscription: 'opt_out',
-          },
-        ],
+        has_more: false,
+        object: 'list',
+        data: {
+          email: 'carolina@resend.com',
+          topics: [
+            {
+              id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+              name: 'Test Topic',
+              description: 'This is a test topic',
+              subscription: 'opt_in',
+            },
+            {
+              id: 'another-topic-id',
+              name: 'Another Topic',
+              description: null,
+              subscription: 'opt_out',
+            },
+          ],
+        },
       };
 
       mockSuccessResponse(response, {
@@ -221,21 +225,25 @@ describe('ContactTopics', () => {
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
-    "email": "carolina@resend.com",
-    "topics": [
-      {
-        "description": "This is a test topic",
-        "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
-        "name": "Test Topic",
-        "subscription": "opt_in",
-      },
-      {
-        "description": null,
-        "id": "another-topic-id",
-        "name": "Another Topic",
-        "subscription": "opt_out",
-      },
-    ],
+    "data": {
+      "email": "carolina@resend.com",
+      "topics": [
+        {
+          "description": "This is a test topic",
+          "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
+          "name": "Test Topic",
+          "subscription": "opt_in",
+        },
+        {
+          "description": null,
+          "id": "another-topic-id",
+          "name": "Another Topic",
+          "subscription": "opt_out",
+        },
+      ],
+    },
+    "hasMore": false,
+    "object": "list",
   },
   "error": null,
   "rateLimiting": {
@@ -252,6 +260,10 @@ describe('ContactTopics', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
       const response: GetContactTopicsResponseSuccess = {
+      has_more: false,
+      object: 'list',
+      data: {
+        
         email: 'carolina@resend.com',
         topics: [
           {
@@ -261,6 +273,7 @@ describe('ContactTopics', () => {
             subscription: 'opt_in',
           },
         ],
+      },
       };
 
       mockSuccessResponse(response, {
@@ -273,15 +286,19 @@ describe('ContactTopics', () => {
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
-    "email": "carolina@resend.com",
-    "topics": [
-      {
-        "description": "This is a test topic",
-        "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
-        "name": "Test Topic",
-        "subscription": "opt_in",
-      },
-    ],
+    "data": {
+      "email": "carolina@resend.com",
+      "topics": [
+        {
+          "description": "This is a test topic",
+          "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
+          "name": "Test Topic",
+          "subscription": "opt_in",
+        },
+      ],
+    },
+    "hasMore": false,
+    "object": "list",
   },
   "error": null,
   "rateLimiting": {
