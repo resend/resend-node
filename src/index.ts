@@ -1,4 +1,3 @@
-export * from './common/interfaces/pagination-options.interface';
 export * from './api-keys/interfaces/create-api-key-options.interface';
 export * from './api-keys/interfaces/list-api-keys.interface';
 export * from './api-keys/interfaces/remove-api-keys.interface';
@@ -9,6 +8,7 @@ export * from './audiences/interfaces/remove-audience.interface';
 export * from './batch/interfaces/create-batch-options.interface';
 export * from './broadcasts/interfaces/create-broadcast-options.interface';
 export * from './broadcasts/interfaces/send-broadcast-options.interface';
+export * from './common/interfaces/pagination-options.interface';
 export * from './contacts/interfaces/create-contact-options.interface';
 export * from './contacts/interfaces/get-contact.interface';
 export * from './contacts/interfaces/list-contacts.interface';
