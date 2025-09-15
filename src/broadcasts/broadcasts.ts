@@ -30,7 +30,7 @@ import type {
 } from './interfaces/update-broadcast.interface';
 
 export class Broadcasts {
-  constructor(private readonly resend: Resend) { }
+  constructor(private readonly resend: Resend) {}
 
   async create(
     payload: CreateBroadcastOptions,
