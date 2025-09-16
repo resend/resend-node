@@ -1,5 +1,7 @@
 import type * as React from 'react';
+import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
+import { render } from '../render';
 import type { Resend } from '../resend';
 import type {
   CancelEmailResponse,
@@ -16,13 +18,17 @@ import type {
   GetEmailResponseSuccess,
 } from './interfaces/get-email-options.interface';
 import type {
+  ListEmailsOptions,
+  ListEmailsResponse,
+  ListEmailsResponseSuccess,
+} from './interfaces/list-emails-options.interface';
+import type {
   UpdateEmailOptions,
   UpdateEmailResponse,
   UpdateEmailResponseSuccess,
 } from './interfaces/update-email-options.interface';
 
 export class Emails {
-  private renderAsync?: (component: React.ReactElement) => Promise<string>;
   constructor(private readonly resend: Resend) {}
 
   async send(
@@ -37,20 +43,7 @@ export class Emails {
     options: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
     if (payload.react) {
-      if (!this.renderAsync) {
-        try {
-          const { renderAsync } = await import('@react-email/render');
-          this.renderAsync = renderAsync;
-        } catch (error) {
-          throw new Error(
-            'Failed to render React component. Make sure to install `@react-email/render`',
-          );
-        }
-      }
-
-      payload.html = await this.renderAsync(
-        payload.react as React.ReactElement,
-      );
+      payload.html = await render(payload.react as React.ReactElement);
     }
 
     const data = await this.resend.post<CreateEmailResponseSuccess>(
@@ -66,6 +59,15 @@ export class Emails {
     const data = await this.resend.get<GetEmailResponseSuccess>(
       `/emails/${id}`,
     );
+
+    return data;
+  }
+
+  async list(options: ListEmailsOptions = {}): Promise<ListEmailsResponse> {
+    const queryString = buildPaginationQuery(options);
+    const url = queryString ? `/emails?${queryString}` : '/emails';
+
+    const data = await this.resend.get<ListEmailsResponseSuccess>(url);
 
     return data;
   }

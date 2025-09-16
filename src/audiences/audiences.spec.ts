@@ -1,6 +1,6 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
+import { mockSuccessResponse } from '../test-utils/mock-fetch';
 import type {
   CreateAudienceOptions,
   CreateAudienceResponseSuccess,
@@ -8,8 +8,6 @@ import type {
 import type { GetAudienceResponseSuccess } from './interfaces/get-audience.interface';
 import type { ListAudiencesResponseSuccess } from './interfaces/list-audiences.interface';
 import type { RemoveAudiencesResponseSuccess } from './interfaces/remove-audience.interface';
-
-enableFetchMocks();
 
 describe('Audiences', () => {
   afterEach(() => fetchMock.resetMocks());
@@ -78,52 +76,116 @@ describe('Audiences', () => {
   });
 
   describe('list', () => {
-    it('lists audiences', async () => {
-      const response: ListAudiencesResponseSuccess = {
-        object: 'list',
-        data: [
-          {
-            id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
-            name: 'resend.com',
-            created_at: '2023-04-07T23:13:52.669661+00:00',
-          },
-          {
-            id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
-            name: 'react.email',
-            created_at: '2023-04-07T23:13:20.417116+00:00',
-          },
-        ],
-      };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+    const response: ListAudiencesResponseSuccess = {
+      object: 'list',
+      has_more: false,
+      data: [
+        {
+          id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+          name: 'resend.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
         },
+        {
+          id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
+          name: 'react.email',
+          created_at: '2023-04-07T23:13:20.417116+00:00',
+        },
+      ],
+    };
+
+    describe('when no pagination options are provided', () => {
+      it('lists audiences', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = await resend.audiences.list();
+        expect(result).toEqual({
+          data: response,
+          error: null,
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/audiences',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
+
+    describe('when pagination options are provided', () => {
+      it('passes limit param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.audiences.list({ limit: 1 });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/audiences?limit=1',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
       });
 
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      it('passes after param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
 
-      await expect(resend.audiences.list()).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "created_at": "2023-04-07T23:13:52.669661+00:00",
-        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-        "name": "resend.com",
-      },
-      {
-        "created_at": "2023-04-07T23:13:20.417116+00:00",
-        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-        "name": "react.email",
-      },
-    ],
-    "object": "list",
-  },
-  "error": null,
-}
-`);
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.audiences.list({
+          limit: 1,
+          after: 'cursor-value',
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/audiences?limit=1&after=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+
+      it('passes before param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.audiences.list({
+          limit: 1,
+          before: 'cursor-value',
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/audiences?limit=1&before=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
     });
   });
 

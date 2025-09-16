@@ -1,4 +1,5 @@
-import type * as React from 'react';
+import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { render } from '../render';
 import type { Resend } from '../resend';
 import type {
   CreateBroadcastOptions,
@@ -9,6 +10,7 @@ import type {
   GetBroadcastResponseSuccess,
 } from './interfaces/get-broadcast.interface';
 import type {
+  ListBroadcastsOptions,
   ListBroadcastsResponse,
   ListBroadcastsResponseSuccess,
 } from './interfaces/list-broadcasts.interface';
@@ -28,7 +30,6 @@ import type {
 } from './interfaces/update-broadcast.interface';
 
 export class Broadcasts {
-  private renderAsync?: (component: React.ReactElement) => Promise<string>;
   constructor(private readonly resend: Resend) {}
 
   async create(
@@ -36,20 +37,7 @@ export class Broadcasts {
     options: CreateBroadcastRequestOptions = {},
   ): Promise<SendBroadcastResponse> {
     if (payload.react) {
-      if (!this.renderAsync) {
-        try {
-          const { renderAsync } = await import('@react-email/render');
-          this.renderAsync = renderAsync;
-        } catch (error) {
-          throw new Error(
-            'Failed to render React component. Make sure to install `@react-email/render`',
-          );
-        }
-      }
-
-      payload.html = await this.renderAsync(
-        payload.react as React.ReactElement,
-      );
+      payload.html = await render(payload.react);
     }
 
     const data = await this.resend.post<SendBroadcastResponseSuccess>(
@@ -82,9 +70,13 @@ export class Broadcasts {
     return data;
   }
 
-  async list(): Promise<ListBroadcastsResponse> {
-    const data =
-      await this.resend.get<ListBroadcastsResponseSuccess>('/broadcasts');
+  async list(
+    options: ListBroadcastsOptions = {},
+  ): Promise<ListBroadcastsResponse> {
+    const queryString = buildPaginationQuery(options);
+    const url = queryString ? `/broadcasts?${queryString}` : '/broadcasts';
+
+    const data = await this.resend.get<ListBroadcastsResponseSuccess>(url);
     return data;
   }
 
@@ -106,6 +98,10 @@ export class Broadcasts {
     id: string,
     payload: UpdateBroadcastOptions,
   ): Promise<UpdateBroadcastResponse> {
+    if (payload.react) {
+      payload.html = await render(payload.react);
+    }
+
     const data = await this.resend.patch<UpdateBroadcastResponseSuccess>(
       `/broadcasts/${id}`,
       {

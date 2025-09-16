@@ -4,24 +4,22 @@ on:
     branches:
       - main
   pull_request:
+permissions: 
+  contents: read
+  pull-requests: read
 jobs:
   lint:
     runs-on: buildjet-4vcpu-ubuntu-2204
     container:
-      image: node:20
-      credentials:
-        username: ${{ vars.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_API_KEY }}
+      image: node:22
+      # credentials:
+      #   username: ${{ vars.DOCKER_HUB_USERNAME || '' }}
+      #   password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
       - name: pnpm setup
-        uses: pnpm/action-setup@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
+        uses: pnpm/action-setup@f2b2b233b538f500472c7274c7012f57857d8ce0
       - name: Install packages
         run: pnpm install
       - name: Run Lint

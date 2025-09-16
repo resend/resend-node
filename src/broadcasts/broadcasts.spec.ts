@@ -1,6 +1,6 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
+import { mockSuccessResponse } from '../test-utils/mock-fetch';
 import type {
   CreateBroadcastOptions,
   CreateBroadcastResponseSuccess,
@@ -9,8 +9,6 @@ import type { GetBroadcastResponseSuccess } from './interfaces/get-broadcast.int
 import type { ListBroadcastsResponseSuccess } from './interfaces/list-broadcasts.interface';
 import type { RemoveBroadcastResponseSuccess } from './interfaces/remove-broadcast.interface';
 import type { UpdateBroadcastResponseSuccess } from './interfaces/update-broadcast.interface';
-
-enableFetchMocks();
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -255,68 +253,124 @@ describe('Broadcasts', () => {
   });
 
   describe('list', () => {
-    it('lists broadcasts', async () => {
-      const response: ListBroadcastsResponseSuccess = {
-        object: 'list',
-        data: [
-          {
-            id: '49a3999c-0ce1-4ea6-ab68-afcd6dc2e794',
-            audience_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
-            name: 'broadcast 1',
-            status: 'draft',
-            created_at: '2024-11-01T15:13:31.723Z',
-            scheduled_at: null,
-            sent_at: null,
-          },
-          {
-            id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
-            audience_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
-            name: 'broadcast 2',
-            status: 'sent',
-            created_at: '2024-12-01T19:32:22.980Z',
-            scheduled_at: '2024-12-02T19:32:22.980Z',
-            sent_at: '2024-12-02T19:32:22.980Z',
-          },
-        ],
-      };
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+    const response: ListBroadcastsResponseSuccess = {
+      object: 'list',
+      has_more: false,
+      data: [
+        {
+          id: '49a3999c-0ce1-4ea6-ab68-afcd6dc2e794',
+          audience_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
+          name: 'broadcast 1',
+          status: 'draft',
+          created_at: '2024-11-01T15:13:31.723Z',
+          scheduled_at: null,
+          sent_at: null,
         },
+        {
+          id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+          audience_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
+          name: 'broadcast 2',
+          status: 'sent',
+          created_at: '2024-12-01T19:32:22.980Z',
+          scheduled_at: '2024-12-02T19:32:22.980Z',
+          sent_at: '2024-12-02T19:32:22.980Z',
+        },
+      ],
+    };
+
+    describe('when no pagination options are provided', () => {
+      it('lists broadcasts', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = await resend.broadcasts.list();
+        expect(result).toEqual({
+          data: response,
+          error: null,
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
+
+    describe('when pagination options are provided', () => {
+      it('passes limit param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.broadcasts.list({ limit: 1 });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts?limit=1',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
       });
 
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      it('passes after param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
 
-      await expect(resend.broadcasts.list()).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "audience_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
-        "created_at": "2024-11-01T15:13:31.723Z",
-        "id": "49a3999c-0ce1-4ea6-ab68-afcd6dc2e794",
-        "name": "broadcast 1",
-        "scheduled_at": null,
-        "sent_at": null,
-        "status": "draft",
-      },
-      {
-        "audience_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
-        "created_at": "2024-12-01T19:32:22.980Z",
-        "id": "559ac32e-9ef5-46fb-82a1-b76b840c0f7b",
-        "name": "broadcast 2",
-        "scheduled_at": "2024-12-02T19:32:22.980Z",
-        "sent_at": "2024-12-02T19:32:22.980Z",
-        "status": "sent",
-      },
-    ],
-    "object": "list",
-  },
-  "error": null,
-}
-`);
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.broadcasts.list({
+          limit: 1,
+          after: 'cursor-value',
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts?limit=1&after=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+
+      it('passes before param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.broadcasts.list({
+          limit: 1,
+          before: 'cursor-value',
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts?limit=1&before=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
     });
   });
 

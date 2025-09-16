@@ -1,3 +1,4 @@
+import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
   CreateContactOptions,
@@ -47,9 +48,13 @@ export class Contacts {
   }
 
   async list(options: ListContactsOptions): Promise<ListContactsResponse> {
-    const data = await this.resend.get<ListContactsResponseSuccess>(
-      `/audiences/${options.audienceId}/contacts`,
-    );
+    const { audienceId, ...paginationOptions } = options;
+    const queryString = buildPaginationQuery(paginationOptions);
+    const url = queryString
+      ? `/audiences/${audienceId}/contacts?${queryString}`
+      : `/audiences/${audienceId}/contacts`;
+
+    const data = await this.resend.get<ListContactsResponseSuccess>(url);
     return data;
   }
 
@@ -70,8 +75,8 @@ export class Contacts {
     return data;
   }
 
-  async update(payload: UpdateContactOptions): Promise<UpdateContactResponse> {
-    if (!payload.id && !payload.email) {
+  async update(options: UpdateContactOptions): Promise<UpdateContactResponse> {
+    if (!options.id && !options.email) {
       return {
         data: null,
         error: {
@@ -82,11 +87,11 @@ export class Contacts {
     }
 
     const data = await this.resend.patch<UpdateContactResponseSuccess>(
-      `/audiences/${payload.audienceId}/contacts/${payload?.email ? payload?.email : payload?.id}`,
+      `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
       {
-        unsubscribed: payload.unsubscribed,
-        first_name: payload.firstName,
-        last_name: payload.lastName,
+        unsubscribed: options.unsubscribed,
+        first_name: options.firstName,
+        last_name: options.lastName,
       },
     );
     return data;
