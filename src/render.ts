@@ -6,8 +6,20 @@ export function render(node: unknown) {
     // Try to load optional peer @react-email/render without triggering bundler resolution
     try {
       const mod = req('@react-email/render');
-      if (mod && typeof mod.render === 'function') {
-        resolve(mod.render(node));
+
+      const maybeRender =
+        (mod && typeof mod.render === 'function' && mod.render) ||
+        (mod?.default && typeof mod.default.render === 'function' && mod.default.render) ||
+        (typeof mod.renderAsync === 'function' && mod.renderAsync) ||
+        (mod?.default && typeof mod.default.renderAsync === 'function' && mod.default.renderAsync);
+
+      if (maybeRender) {
+        const out = maybeRender(node);
+        if (out && typeof out.then === 'function') {
+          (out as Promise<string>).then(resolve).catch(reject);
+        } else {
+          resolve(out as string);
+        }
         return;
       }
     } catch {
