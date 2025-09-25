@@ -16,7 +16,6 @@ interface TemplateApiOptions {
   from?: string | null;
   reply_to?: string[] | string;
   variables?: TemplateVariableApiOptions[];
-  react?: React.ReactNode;
 }
 
 function parseVariables(
@@ -43,6 +42,5 @@ export function parseTemplateToApiOptions(
     from: template.from,
     reply_to: template.replyTo,
     variables: parseVariables(template.variables),
-    react: 'react' in template ? template.react : undefined,
   };
 }
