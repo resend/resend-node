@@ -20,7 +20,6 @@ describe('parseTemplateToApiOptions', () => {
       from: undefined,
       reply_to: undefined,
       variables: undefined,
-      react: undefined,
     });
   });
 
@@ -69,7 +68,6 @@ describe('parseTemplateToApiOptions', () => {
           type: 'boolean',
         },
       ],
-      react: undefined,
     });
   });
 
@@ -115,11 +113,10 @@ describe('parseTemplateToApiOptions', () => {
           type: 'string',
         },
       ],
-      react: undefined,
     });
   });
 
-  it('should handle template with React component', () => {
+  it('should not include React component in API options', () => {
     const mockReactComponent = {
       type: 'div',
       props: { children: 'Hello from React!' },
@@ -132,8 +129,18 @@ describe('parseTemplateToApiOptions', () => {
 
     const apiOptions = parseTemplateToApiOptions(templatePayload);
 
-    expect(apiOptions.react).toBe(mockReactComponent);
-    expect(apiOptions.html).toBeUndefined();
+    // React component should not be included in API options
+    expect(apiOptions).toEqual({
+      name: 'React Template',
+      subject: undefined,
+      html: undefined,
+      text: undefined,
+      alias: undefined,
+      from: undefined,
+      reply_to: undefined,
+      variables: undefined,
+    });
+    expect(apiOptions).not.toHaveProperty('react');
   });
 
   it('should handle variables with different types', () => {
