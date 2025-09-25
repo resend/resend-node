@@ -1,0 +1,48 @@
+import type { CreateTemplateOptions } from '../../templates/interfaces/create-template-options.interface';
+import type { UpdateTemplateOptions } from '../../templates/interfaces/update-template.interface';
+
+interface TemplateVariableApiOptions {
+  key: string;
+  type: 'string' | 'number' | 'boolean';
+  fallback_value?: string | number | boolean | null;
+}
+
+interface TemplateApiOptions {
+  name?: string;
+  subject?: string | null;
+  html?: string;
+  text?: string | null;
+  alias?: string | null;
+  from?: string | null;
+  reply_to?: string[] | string;
+  variables?: TemplateVariableApiOptions[];
+  react?: React.ReactNode;
+}
+
+function parseVariables(
+  variables:
+    | CreateTemplateOptions['variables']
+    | UpdateTemplateOptions['variables'],
+): TemplateVariableApiOptions[] | undefined {
+  return variables?.map((variable) => ({
+    key: variable.key,
+    type: variable.type,
+    fallback_value: variable.fallbackValue,
+  }));
+}
+
+export function parseTemplateToApiOptions(
+  template: CreateTemplateOptions | UpdateTemplateOptions,
+): TemplateApiOptions {
+  return {
+    name: 'name' in template ? template.name : undefined,
+    subject: template.subject,
+    html: template.html,
+    text: template.text,
+    alias: template.alias,
+    from: template.from,
+    reply_to: template.replyTo,
+    variables: parseVariables(template.variables),
+    react: 'react' in template ? template.react : undefined,
+  };
+}

@@ -1,5 +1,6 @@
 import type { PaginationOptions } from '../common/interfaces';
 import { getPaginationQueryProperties } from '../common/utils/get-pagination-query-properties';
+import { parseTemplateToApiOptions } from '../common/utils/parse-template-to-api-options';
 import type { Resend } from '../resend';
 import { ChainableTemplateResult } from './chainable-template-result';
 import type {
@@ -55,7 +56,7 @@ export class Templates {
         try {
           const { renderAsync } = await import('@react-email/render');
           this.renderAsync = renderAsync;
-        } catch (error) {
+        } catch {
           throw new Error(
             'Failed to render React component. Make sure to install `@react-email/render`',
           );
@@ -69,7 +70,7 @@ export class Templates {
 
     return this.resend.post<CreateTemplateResponseSuccess>(
       '/templates',
-      payload,
+      parseTemplateToApiOptions(payload),
     );
   }
 
@@ -118,7 +119,7 @@ export class Templates {
   ): Promise<UpdateTemplateResponse> {
     const data = await this.resend.patch<UpdateTemplateResponseSuccess>(
       `/templates/${identifier}`,
-      payload,
+      parseTemplateToApiOptions(payload),
     );
     return data;
   }
