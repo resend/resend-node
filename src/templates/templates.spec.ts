@@ -1,6 +1,10 @@
 import { vi } from 'vitest';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
+import {
+  mockErrorResponse,
+  mockSuccessResponse,
+} from '../test-utils/mock-fetch';
 import type {
   CreateTemplateOptions,
   CreateTemplateResponseSuccess,
@@ -31,26 +35,22 @@ describe('Templates', () => {
         id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
       await expect(
         resend.templates.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-    {
-      "data": {
-        "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
-        "object": "template",
-      },
-      "error": null,
-    }
-    `);
+        {
+          "data": {
+            "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
+            "object": "template",
+          },
+          "error": null,
+        }
+      `);
     });
 
     it('creates a template with all optional fields', async () => {
@@ -62,44 +62,40 @@ describe('Templates', () => {
         variables: [
           {
             key: 'name',
-            fallback_value: 'User',
+            fallbackValue: 'User',
             type: 'string',
           },
           {
             key: 'company',
-            fallback_value: 'Company',
+            fallbackValue: 'Company',
             type: 'string',
           },
         ],
         alias: 'welcome-email',
         from: 'noreply@example.com',
-        reply_to: ['support@example.com', 'help@example.com'],
+        replyTo: ['support@example.com', 'help@example.com'],
       };
       const response: CreateTemplateResponseSuccess = {
         object: 'template',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
       await expect(
         resend.templates.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-    {
-      "data": {
-        "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-        "object": "template",
-      },
-      "error": null,
-    }
-    `);
+        {
+          "data": {
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "object": "template",
+          },
+          "error": null,
+        }
+      `);
     });
 
     it('throws error when template validation fails', async () => {
@@ -110,7 +106,7 @@ describe('Templates', () => {
           {
             key: 'user_name',
             type: 'string',
-            fallback_value: 'Guest',
+            fallbackValue: 'Guest',
           },
         ],
       };
@@ -120,12 +116,8 @@ describe('Templates', () => {
           "Variable 'user_email' is used in the template but not defined in the variables list",
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 422,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
@@ -133,14 +125,14 @@ describe('Templates', () => {
       const result = resend.templates.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Variable 'user_email' is used in the template but not defined in the variables list",
-    "name": "validation_error",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Variable 'user_email' is used in the template but not defined in the variables list",
+            "name": "validation_error",
+          },
+        }
+      `);
     });
 
     it('creates template with React component', async () => {
@@ -161,26 +153,22 @@ describe('Templates', () => {
         id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
       await expect(
         resend.templates.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
-    "object": "template",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
+            "object": "template",
+          },
+          "error": null,
+        }
+      `);
 
       expect(mockRenderAsync).toHaveBeenCalledWith(mockReactComponent);
     });
@@ -208,18 +196,18 @@ describe('Templates', () => {
         variables: [
           {
             key: 'name',
-            fallback_value: 'User',
+            fallbackValue: 'User',
             type: 'string',
           },
           {
             key: 'company',
-            fallback_value: 'Company',
+            fallbackValue: 'Company',
             type: 'string',
           },
         ],
         alias: 'welcome-email',
         from: 'noreply@example.com',
-        reply_to: ['support@example.com', 'help@example.com'],
+        replyTo: ['support@example.com', 'help@example.com'],
       };
 
       const response: CreateTemplateResponseSuccess = {
@@ -227,26 +215,22 @@ describe('Templates', () => {
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
       await expect(
         resend.templates.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "object": "template",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "object": "template",
+          },
+          "error": null,
+        }
+      `);
 
       expect(mockRenderAsync).toHaveBeenCalledWith(mockReactComponent);
     });
@@ -286,26 +270,22 @@ describe('Templates', () => {
         deleted: true,
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
 
       await expect(resend.templates.remove(id)).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "deleted": true,
-    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-    "object": "template",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "deleted": true,
+            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+            "object": "template",
+          },
+          "error": null,
+        }
+      `);
     });
 
     it('throws error when template not found', async () => {
@@ -315,25 +295,22 @@ describe('Templates', () => {
         message: 'Template not found',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
+      mockErrorResponse(response, {
         status: 404,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
 
       await expect(resend.templates.remove(id)).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Template not found",
-    "name": "not_found",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Template not found",
+            "name": "not_found",
+          },
+        }
+      `);
     });
   });
 
@@ -345,12 +322,8 @@ describe('Templates', () => {
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
@@ -358,14 +331,14 @@ describe('Templates', () => {
       await expect(
         resend.templates.duplicate(id),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "object": "template",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "object": "template",
+          },
+          "error": null,
+        }
+      `);
     });
 
     it('throws error when template not found', async () => {
@@ -375,12 +348,9 @@ describe('Templates', () => {
         message: 'Template not found',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
+      mockErrorResponse(response, {
         status: 404,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
@@ -388,14 +358,14 @@ describe('Templates', () => {
       await expect(
         resend.templates.duplicate(id),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Template not found",
-    "name": "not_found",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Template not found",
+            "name": "not_found",
+          },
+        }
+      `);
     });
   });
 
@@ -410,10 +380,8 @@ describe('Templates', () => {
         id,
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -423,14 +391,14 @@ describe('Templates', () => {
       await expect(
         resend.templates.update(id, payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-    "object": "template",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+            "object": "template",
+          },
+          "error": null,
+        }
+      `);
     });
 
     it('updates a template with all optional fields', async () => {
@@ -443,27 +411,26 @@ describe('Templates', () => {
         variables: [
           {
             key: 'name',
-            fallback_value: 'User',
+            fallbackValue: 'User',
             type: 'string',
           },
           {
             key: 'company',
             type: 'string',
+            fallbackValue: 'User',
           },
         ],
         alias: 'updated-welcome-email',
         from: 'updated@example.com',
-        reply_to: ['updated-support@example.com'],
+        replyTo: ['updated-support@example.com'],
       };
       const response = {
         object: 'template',
         id,
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
+      mockSuccessResponse(response, {
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -473,14 +440,14 @@ describe('Templates', () => {
       await expect(
         resend.templates.update(id, payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "object": "template",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "object": "template",
+          },
+          "error": null,
+        }
+      `);
     });
 
     it('throws error when template not found', async () => {
@@ -493,10 +460,9 @@ describe('Templates', () => {
         message: 'Template not found',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
+      mockErrorResponse(response, {
         status: 404,
         headers: {
-          'content-type': 'application/json',
           Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
@@ -506,14 +472,14 @@ describe('Templates', () => {
       await expect(
         resend.templates.update(id, payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Template not found",
-    "name": "not_found",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Template not found",
+            "name": "not_found",
+          },
+        }
+      `);
     });
   });
 
@@ -525,12 +491,9 @@ describe('Templates', () => {
           message: 'Template not found',
         };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
+        mockErrorResponse(response, {
           status: 404,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: `Bearer ${TEST_API_KEY}`,
-          },
+          headers: { Authorization: `Bearer ${TEST_API_KEY}` },
         });
 
         const resend = new Resend(TEST_API_KEY);
@@ -538,14 +501,14 @@ describe('Templates', () => {
         await expect(
           resend.templates.get('non-existent-id'),
         ).resolves.toMatchInlineSnapshot(`
-  {
-    "data": null,
-    "error": {
-      "message": "Template not found",
-      "name": "not_found",
-    },
-  }
-  `);
+          {
+            "data": null,
+            "error": {
+              "message": "Template not found",
+              "name": "not_found",
+            },
+          }
+        `);
       });
     });
 
@@ -575,12 +538,8 @@ describe('Templates', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
@@ -588,36 +547,36 @@ describe('Templates', () => {
       await expect(
         resend.templates.get('fd61172c-cafc-40f5-b049-b45947779a29'),
       ).resolves.toMatchInlineSnapshot(`
-  {
-    "data": {
-      "alias": "welcome-email",
-      "created_at": "2025-08-19 19:28:27.947052+00",
-      "from": "noreply@example.com",
-      "html": "<h1>Welcome!</h1>",
-      "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-      "name": "Welcome Email",
-      "object": "template",
-      "published_at": "2025-08-19 19:28:27.947052+00",
-      "reply_to": [
-        "support@example.com",
-      ],
-      "status": "published",
-      "subject": "Welcome to our platform",
-      "text": "Welcome!",
-      "updated_at": "2025-08-19 19:28:27.947052+00",
-      "variables": [
         {
-          "created_at": "2025-08-19 19:28:27.947052+00",
-          "fallback_value": "User",
-          "key": "name",
-          "type": "string",
-          "updated_at": "2025-08-19 19:28:27.947052+00",
-        },
-      ],
-    },
-    "error": null,
-  }
-  `);
+          "data": {
+            "alias": "welcome-email",
+            "created_at": "2025-08-19 19:28:27.947052+00",
+            "from": "noreply@example.com",
+            "html": "<h1>Welcome!</h1>",
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "name": "Welcome Email",
+            "object": "template",
+            "published_at": "2025-08-19 19:28:27.947052+00",
+            "reply_to": [
+              "support@example.com",
+            ],
+            "status": "published",
+            "subject": "Welcome to our platform",
+            "text": "Welcome!",
+            "updated_at": "2025-08-19 19:28:27.947052+00",
+            "variables": [
+              {
+                "created_at": "2025-08-19 19:28:27.947052+00",
+                "fallback_value": "User",
+                "key": "name",
+                "type": "string",
+                "updated_at": "2025-08-19 19:28:27.947052+00",
+              },
+            ],
+          },
+          "error": null,
+        }
+      `);
     });
   });
 
@@ -629,12 +588,8 @@ describe('Templates', () => {
         id,
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
@@ -642,14 +597,14 @@ describe('Templates', () => {
       await expect(
         resend.templates.publish(id),
       ).resolves.toMatchInlineSnapshot(`
-  {
-    "data": {
-      "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-      "object": "template",
-    },
-    "error": null,
-  }
-  `);
+        {
+          "data": {
+            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+            "object": "template",
+          },
+          "error": null,
+        }
+      `);
     });
 
     it('throws error when template not found', async () => {
@@ -659,12 +614,8 @@ describe('Templates', () => {
         message: 'Template not found',
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockErrorResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
@@ -672,14 +623,14 @@ describe('Templates', () => {
       await expect(
         resend.templates.publish(id),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "message": "Template not found",
-    "name": "not_found",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Template not found",
+            "name": "not_found",
+          },
+        }
+      `);
     });
 
     describe('chaining with create', () => {
@@ -732,14 +683,14 @@ describe('Templates', () => {
             })
             .publish(),
         ).resolves.toMatchInlineSnapshot(`
-  {
-    "data": {
-      "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-      "object": "template",
-    },
-    "error": null,
-  }
-  `);
+          {
+            "data": {
+              "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+              "object": "template",
+            },
+            "error": null,
+          }
+        `);
       });
     });
 
@@ -786,14 +737,14 @@ describe('Templates', () => {
         await expect(
           resend.templates.duplicate('original-template-id').publish(),
         ).resolves.toMatchInlineSnapshot(`
-  {
-    "data": {
-      "id": "new-template-id-123",
-      "object": "template",
-    },
-    "error": null,
-  }
-  `);
+          {
+            "data": {
+              "id": "new-template-id-123",
+              "object": "template",
+            },
+            "error": null,
+          }
+        `);
       });
     });
   });
@@ -825,45 +776,41 @@ describe('Templates', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
 
       await expect(resend.templates.list()).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "alias": "welcome-email",
-        "created_at": "2023-04-07T23:13:52.669661+00:00",
-        "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-        "name": "Welcome Email",
-        "published_at": "2023-04-07T23:13:52.669661+00:00",
-        "status": "published",
-        "updated_at": "2023-04-07T23:13:52.669661+00:00",
-      },
-      {
-        "alias": "newsletter",
-        "created_at": "2023-04-06T20:10:30.417116+00:00",
-        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-        "name": "Newsletter Template",
-        "published_at": null,
-        "status": "draft",
-        "updated_at": "2023-04-06T20:10:30.417116+00:00",
-      },
-    ],
-    "has_more": false,
-    "object": "list",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "alias": "welcome-email",
+                "created_at": "2023-04-07T23:13:52.669661+00:00",
+                "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+                "name": "Welcome Email",
+                "published_at": "2023-04-07T23:13:52.669661+00:00",
+                "status": "published",
+                "updated_at": "2023-04-07T23:13:52.669661+00:00",
+              },
+              {
+                "alias": "newsletter",
+                "created_at": "2023-04-06T20:10:30.417116+00:00",
+                "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+                "name": "Newsletter Template",
+                "published_at": null,
+                "status": "draft",
+                "updated_at": "2023-04-06T20:10:30.417116+00:00",
+              },
+            ],
+            "has_more": false,
+            "object": "list",
+          },
+          "error": null,
+        }
+      `);
 
       // Verify the request was made without query parameters
       expect(fetchMock).toHaveBeenCalledWith(
@@ -891,12 +838,8 @@ describe('Templates', () => {
         ],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
@@ -907,25 +850,25 @@ describe('Templates', () => {
           limit: 10,
         }),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "alias": "welcome-email",
-        "created_at": "2023-04-07T23:13:52.669661+00:00",
-        "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-        "name": "Welcome Email",
-        "published_at": "2023-04-07T23:13:52.669661+00:00",
-        "status": "published",
-        "updated_at": "2023-04-07T23:13:52.669661+00:00",
-      },
-    ],
-    "has_more": true,
-    "object": "list",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "alias": "welcome-email",
+                "created_at": "2023-04-07T23:13:52.669661+00:00",
+                "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+                "name": "Welcome Email",
+                "published_at": "2023-04-07T23:13:52.669661+00:00",
+                "status": "published",
+                "updated_at": "2023-04-07T23:13:52.669661+00:00",
+              },
+            ],
+            "has_more": true,
+            "object": "list",
+          },
+          "error": null,
+        }
+      `);
 
       // Verify the request was made with correct query parameters
       const [url] = fetchMock.mock.calls[0];
@@ -943,12 +886,8 @@ describe('Templates', () => {
         data: [],
       };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${TEST_API_KEY}`,
-        },
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
