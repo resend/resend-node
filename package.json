@@ -43,13 +43,8 @@
     "url": "https://github.com/resendlabs/resend-node/issues"
   },
   "homepage": "https://github.com/resendlabs/resend-node#readme",
-  "peerDependencies": {
-    "@react-email/render": "^1.1.0"
-  },
-  "peerDependenciesMeta": {
-    "@react-email/render": {
-      "optional": true
-    }
+  "dependencies": {
+    "svix": "1.76.1"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
@@ -60,6 +55,14 @@
     "typescript": "5.9.2",
     "vitest": "3.2.4",
     "vitest-fetch-mock": "0.4.5"
+  },
+  "peerDependencies": {
+    "@react-email/render": "^1.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@react-email/render": {
+      "optional": true
+    }
   },
   "packageManager": "pnpm@10.17.1"
 }
