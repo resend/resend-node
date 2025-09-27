@@ -8,6 +8,9 @@ on:
 permissions: 
   contents: read
   pull-requests: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   tests:
     runs-on: buildjet-4vcpu-ubuntu-2204

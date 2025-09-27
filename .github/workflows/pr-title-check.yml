@@ -4,6 +4,9 @@ on:
     types: [opened, edited, synchronize]
 permissions: 
   pull-requests: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   pr-title-check:
     runs-on: buildjet-4vcpu-ubuntu-2204
