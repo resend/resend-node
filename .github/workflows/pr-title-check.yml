@@ -4,11 +4,14 @@ on:
     types: [opened, edited, synchronize]
 permissions: 
   pull-requests: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   pr-title-check:
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: buildjet-2vcpu-ubuntu-2204
     container:
-      image: node:22
+      image: node:22-slim
       # credentials:
       #   username: ${{ vars.DOCKER_HUB_USERNAME || '' }}
       #   password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
