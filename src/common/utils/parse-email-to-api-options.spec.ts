@@ -2,7 +2,7 @@ import type { CreateEmailOptions } from '../../emails/interfaces/create-email-op
 import { parseEmailToApiOptions } from './parse-email-to-api-options';
 
 describe('parseEmailToApiOptions', () => {
-  it('should handle minimal email with only required fields', () => {
+  it('handles minimal email with only required fields', () => {
     const emailPayload: CreateEmailOptions = {
       from: 'joao@resend.com',
       to: 'bu@resend.com',
@@ -20,7 +20,7 @@ describe('parseEmailToApiOptions', () => {
     });
   });
 
-  it('should properly parse camel case to snake case', () => {
+  it('parses camel case to snake case', () => {
     const emailPayload: CreateEmailOptions = {
       from: 'joao@resend.com',
       to: 'bu@resend.com',
@@ -42,7 +42,7 @@ describe('parseEmailToApiOptions', () => {
     });
   });
 
-  it('should handle template email with template id only', () => {
+  it('handles template email with template id only', () => {
     const emailPayload: CreateEmailOptions = {
       template: {
         id: 'welcome-template-123',
@@ -71,7 +71,7 @@ describe('parseEmailToApiOptions', () => {
     });
   });
 
-  it('should handle template email with template id and variables', () => {
+  it('handles template email with template id and variables', () => {
     const emailPayload: CreateEmailOptions = {
       template: {
         id: 'newsletter-template-456',
@@ -114,7 +114,7 @@ describe('parseEmailToApiOptions', () => {
     });
   });
 
-  it('should not include html/text fields for template emails', () => {
+  it('does not include html/text fields for template emails', () => {
     const emailPayload: CreateEmailOptions = {
       template: {
         id: 'test-template-789',
@@ -136,7 +136,7 @@ describe('parseEmailToApiOptions', () => {
     expect(apiOptions.text).toBeUndefined();
   });
 
-  it('should not include template fields for content emails', () => {
+  it('does not include template fields for content emails', () => {
     const emailPayload: CreateEmailOptions = {
       from: 'sender@example.com',
       to: 'user@example.com',
