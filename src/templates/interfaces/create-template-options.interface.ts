@@ -12,13 +12,13 @@ type TemplateVariableCreationOptions = Pick<
   TemplateVariable,
   'key' | 'type'
 > & {
-  fallback_value?: string | number | boolean | null;
+  fallbackValue?: string | number | boolean | null;
 };
 
 type TemplateOptionalFieldsForCreation = Partial<
-  Pick<Template, 'subject' | 'text' | 'alias' | 'from' | 'reply_to'>
+  Pick<Template, 'subject' | 'text' | 'alias' | 'from'>
 > & {
-  reply_to?: string[] | string;
+  replyTo?: string[] | string;
   variables?: TemplateVariableCreationOptions[];
 };
 
