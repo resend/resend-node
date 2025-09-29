@@ -180,6 +180,7 @@ export class Resend {
     const requestOptions = {
       method: 'DELETE',
       body: JSON.stringify(query),
+      headers: this.headers,
     };
 
     return this.fetchRequest<T>(path, requestOptions);
