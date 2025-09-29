@@ -9,8 +9,7 @@ import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
-import type { ErrorResponse, Response } from './interfaces';
-import { parseRateLimit } from './rate-limiting';
+import type { ErrorResponse } from './interfaces';
 import { Templates } from './templates/templates';
 
 const defaultBaseUrl = 'https://api.resend.com';
