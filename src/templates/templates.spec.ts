@@ -1,4 +1,4 @@
-import { enableFetchMocks } from 'jest-fetch-mock';
+import { vi } from 'vitest';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import type {
@@ -8,18 +8,15 @@ import type {
 import type { GetTemplateResponseSuccess } from './interfaces/get-template.interface';
 import type { UpdateTemplateOptions } from './interfaces/update-template.interface';
 
-enableFetchMocks();
-
-const mockRenderAsync = jest.fn();
-jest.mock('@react-email/render', () => ({
+const mockRenderAsync = vi.fn();
+vi.mock('@react-email/render', () => ({
   renderAsync: mockRenderAsync,
 }));
 
 const TEST_API_KEY = 're_test_api_key';
-
 describe('Templates', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     fetchMock.resetMocks();
   });
 
