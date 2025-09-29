@@ -1,4 +1,3 @@
-
 import type { PaginationOptions } from '../../common/interfaces';
 import type { ErrorResponse } from '../../interfaces';
 import type { Template } from './template';
