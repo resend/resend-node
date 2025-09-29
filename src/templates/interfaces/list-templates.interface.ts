@@ -1,6 +1,8 @@
-import type { PaginatedList } from '../../common/interfaces';
+import type { PaginationOptions } from '../../common/interfaces';
 import type { ErrorResponse } from '../../interfaces';
 import type { Template } from './template';
+
+export type ListTemplatesOptions = PaginationOptions;
 
 interface TemplateListItem
   extends Pick<
@@ -14,8 +16,11 @@ interface TemplateListItem
     | 'alias'
   > {}
 
-export interface ListTemplatesResponseSuccess
-  extends PaginatedList<TemplateListItem> {}
+export interface ListTemplatesResponseSuccess {
+  object: 'list';
+  data: TemplateListItem[];
+  has_more: boolean;
+}
 
 export type ListTemplatesResponse =
   | {

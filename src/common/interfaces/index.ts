@@ -2,7 +2,6 @@ export * from './domain-api-options.interface';
 export * from './email-api-options.interface';
 export * from './get-option.interface';
 export * from './idempotent-request.interface';
-export * from './list-option.interface';
 export * from './pagination-options.interface';
 export * from './patch-option.interface';
 export * from './post-option.interface';
