@@ -25,15 +25,18 @@ export function parseEmailToApiOptions(
     cc: email.cc,
     from: email.from,
     headers: email.headers,
-    html: 'html' in email ? email.html : undefined,
+    html: email.html,
     reply_to: email.replyTo,
     scheduled_at: email.scheduledAt,
     subject: email.subject,
     tags: email.tags,
-    text: 'text' in email ? email.text : undefined,
+    text: email.text,
     to: email.to,
-    template_id: 'template_id' in email ? email.template_id : undefined,
-    template_variables:
-      'template_variables' in email ? email.template_variables : undefined,
+    template: email.template
+      ? {
+          id: email.template.id,
+          variables: email.template.variables,
+        }
+      : undefined,
   };
 }

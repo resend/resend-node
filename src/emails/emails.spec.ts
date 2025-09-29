@@ -387,7 +387,7 @@ describe('Emails', () => {
     });
 
     describe('template emails', () => {
-      it('sends email with template_id only', async () => {
+      it('sends email with template id only', async () => {
         const response: CreateEmailResponseSuccess = {
           id: 'template-email-123',
         };
@@ -401,7 +401,9 @@ describe('Emails', () => {
         });
 
         const payload: CreateEmailOptions = {
-          template_id: 'welcome-template-123',
+          template: {
+            id: 'welcome-template-123',
+          },
           to: 'user@example.com',
         };
 
@@ -419,12 +421,14 @@ describe('Emails', () => {
         const lastCall = fetchMock.mock.calls[0];
         const requestBody = JSON.parse(lastCall[1]?.body as string);
         expect(requestBody).toEqual({
-          template_id: 'welcome-template-123',
+          template: {
+            id: 'welcome-template-123',
+          },
           to: 'user@example.com',
         });
       });
 
-      it('sends email with template_id and template_variables', async () => {
+      it('sends email with template id and variables', async () => {
         const response: CreateEmailResponseSuccess = {
           id: 'template-vars-email-456',
         };
@@ -438,12 +442,14 @@ describe('Emails', () => {
         });
 
         const payload: CreateEmailOptions = {
-          template_id: 'welcome-template-123',
-          template_variables: {
-            name: 'John Doe',
-            company: 'Acme Corp',
-            welcomeBonus: 100,
-            isPremium: true,
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'John Doe',
+              company: 'Acme Corp',
+              welcomeBonus: 100,
+              isPremium: true,
+            },
           },
           to: 'user@example.com',
         };
@@ -462,12 +468,14 @@ describe('Emails', () => {
         const lastCall = fetchMock.mock.calls[0];
         const requestBody = JSON.parse(lastCall[1]?.body as string);
         expect(requestBody).toEqual({
-          template_id: 'welcome-template-123',
-          template_variables: {
-            name: 'John Doe',
-            company: 'Acme Corp',
-            welcomeBonus: 100,
-            isPremium: true,
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'John Doe',
+              company: 'Acme Corp',
+              welcomeBonus: 100,
+              isPremium: true,
+            },
           },
           to: 'user@example.com',
         });
@@ -487,9 +495,11 @@ describe('Emails', () => {
         });
 
         const payload: CreateEmailOptions = {
-          template_id: 'welcome-template-123',
-          template_variables: {
-            name: 'Jane Smith',
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'Jane Smith',
+            },
           },
           from: 'custom@example.com',
           subject: 'Custom Subject Override',
@@ -510,9 +520,11 @@ describe('Emails', () => {
         const lastCall = fetchMock.mock.calls[0];
         const requestBody = JSON.parse(lastCall[1]?.body as string);
         expect(requestBody).toEqual({
-          template_id: 'welcome-template-123',
-          template_variables: {
-            name: 'Jane Smith',
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'Jane Smith',
+            },
           },
           from: 'custom@example.com',
           subject: 'Custom Subject Override',
@@ -535,7 +547,9 @@ describe('Emails', () => {
         });
 
         const payload: CreateEmailOptions = {
-          template_id: 'invalid-template-123',
+          template: {
+            id: 'invalid-template-123',
+          },
           to: 'user@example.com',
         };
 

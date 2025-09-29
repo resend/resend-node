@@ -22,6 +22,8 @@ export interface EmailApiOptions {
   scheduled_at?: string;
   tags?: Tag[];
   attachments?: EmailApiAttachment[];
-  template_id?: string;
-  template_variables?: Record<string, unknown>;
+  template?: {
+    id: string;
+    variables?: Record<string, string | number | boolean>;
+  };
 }

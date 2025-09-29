@@ -42,9 +42,11 @@ describe('parseEmailToApiOptions', () => {
     });
   });
 
-  it('should handle template email with template_id only', () => {
+  it('should handle template email with template id only', () => {
     const emailPayload: CreateEmailOptions = {
-      template_id: 'welcome-template-123',
+      template: {
+        id: 'welcome-template-123',
+      },
       to: 'user@example.com',
     };
 
@@ -63,19 +65,22 @@ describe('parseEmailToApiOptions', () => {
       tags: undefined,
       text: undefined,
       to: 'user@example.com',
-      template_id: 'welcome-template-123',
-      template_variables: undefined,
+      template: {
+        id: 'welcome-template-123',
+      },
     });
   });
 
-  it('should handle template email with template_id and template_variables', () => {
+  it('should handle template email with template id and variables', () => {
     const emailPayload: CreateEmailOptions = {
-      template_id: 'newsletter-template-456',
-      template_variables: {
-        name: 'John Doe',
-        company: 'Acme Corp',
-        count: 42,
-        isPremium: true,
+      template: {
+        id: 'newsletter-template-456',
+        variables: {
+          name: 'John Doe',
+          company: 'Acme Corp',
+          count: 42,
+          isPremium: true,
+        },
       },
       to: 'user@example.com',
       from: 'sender@example.com',
@@ -97,28 +102,34 @@ describe('parseEmailToApiOptions', () => {
       tags: undefined,
       text: undefined,
       to: 'user@example.com',
-      template_id: 'newsletter-template-456',
-      template_variables: {
-        name: 'John Doe',
-        company: 'Acme Corp',
-        count: 42,
-        isPremium: true,
+      template: {
+        id: 'newsletter-template-456',
+        variables: {
+          name: 'John Doe',
+          company: 'Acme Corp',
+          count: 42,
+          isPremium: true,
+        },
       },
     });
   });
 
   it('should not include html/text fields for template emails', () => {
     const emailPayload: CreateEmailOptions = {
-      template_id: 'test-template-789',
-      template_variables: { message: 'Hello World' },
+      template: {
+        id: 'test-template-789',
+        variables: { message: 'Hello World' },
+      },
       to: 'user@example.com',
     };
 
     const apiOptions = parseEmailToApiOptions(emailPayload);
 
     // Verify template fields are present
-    expect(apiOptions.template_id).toBe('test-template-789');
-    expect(apiOptions.template_variables).toEqual({ message: 'Hello World' });
+    expect(apiOptions.template).toEqual({
+      id: 'test-template-789',
+      variables: { message: 'Hello World' },
+    });
 
     // Verify content fields are undefined
     expect(apiOptions.html).toBeUndefined();
@@ -141,7 +152,6 @@ describe('parseEmailToApiOptions', () => {
     expect(apiOptions.text).toBe('Hello World');
 
     // Verify template fields are undefined
-    expect(apiOptions.template_id).toBeUndefined();
-    expect(apiOptions.template_variables).toBeUndefined();
+    expect(apiOptions.template).toBeUndefined();
   });
 });

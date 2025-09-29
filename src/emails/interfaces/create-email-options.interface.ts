@@ -26,8 +26,10 @@ interface EmailRenderOptions {
 }
 
 interface EmailTemplateOptions {
-  template_id: string;
-  template_variables?: Record<string, unknown>;
+  template: {
+    id: string;
+    variables?: Record<string, string | number | boolean>;
+  };
 }
 
 interface CreateEmailBaseOptionsWithTemplate
@@ -102,8 +104,7 @@ interface CreateEmailBaseOptions {
 
 export type CreateEmailOptions =
   | ((RequireAtLeastOne<EmailRenderOptions> & CreateEmailBaseOptions) & {
-      template_id?: never;
-      template_variables?: never;
+      template?: never;
     })
   | ((EmailTemplateOptions & CreateEmailBaseOptionsWithTemplate) & {
       react?: never;
