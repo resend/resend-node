@@ -867,7 +867,7 @@ describe('Templates', () => {
 
       // Verify the request was made without query parameters
       expect(fetchMock).toHaveBeenCalledWith(
-        expect.stringMatching(/^https?:\/\/[^\/]+\/templates$/),
+        expect.stringMatching(/^https?:\/\/[^/]+\/templates$/),
         expect.objectContaining({
           method: 'GET',
         }),
