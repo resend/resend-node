@@ -1,5 +1,6 @@
 import { version } from '../package.json';
 import { ApiKeys } from './api-keys/api-keys';
+import { Attachments } from './attachments/attachments';
 import { Audiences } from './audiences/audiences';
 import { Batch } from './batch/batch';
 import { Broadcasts } from './broadcasts/broadcasts';
@@ -9,6 +10,7 @@ import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
+import { Inbound } from './inbound/inbound';
 import type { ErrorResponse } from './interfaces';
 
 const defaultBaseUrl = 'https://api.resend.com';
@@ -26,12 +28,14 @@ export class Resend {
   private readonly headers: Headers;
 
   readonly apiKeys = new ApiKeys(this);
+  readonly attachments = new Attachments(this);
   readonly audiences = new Audiences(this);
   readonly batch = new Batch(this);
   readonly broadcasts = new Broadcasts(this);
   readonly contacts = new Contacts(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
+  readonly inbound = new Inbound(this);
 
   constructor(readonly key?: string) {
     if (!key) {
