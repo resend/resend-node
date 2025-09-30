@@ -9,9 +9,9 @@ export interface EmailApiAttachment {
 }
 
 export interface EmailApiOptions {
-  from: string;
+  from?: string;
   to: string | string[];
-  subject: string;
+  subject?: string;
   region?: string;
   headers?: Record<string, string>;
   html?: string;
@@ -22,4 +22,8 @@ export interface EmailApiOptions {
   scheduled_at?: string;
   tags?: Tag[];
   attachments?: EmailApiAttachment[];
+  template?: {
+    id: string;
+    variables?: Record<string, string | number | boolean>;
+  };
 }

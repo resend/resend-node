@@ -25,6 +25,19 @@ interface EmailRenderOptions {
   text: string;
 }
 
+interface EmailTemplateOptions {
+  template: {
+    id: string;
+    variables?: Record<string, string | number | boolean>;
+  };
+}
+
+interface CreateEmailBaseOptionsWithTemplate
+  extends Omit<CreateEmailBaseOptions, 'from' | 'subject'> {
+  from?: string;
+  subject?: string;
+}
+
 interface CreateEmailBaseOptions {
   /**
    * Filename and content of attachments (max 40mb per email)
@@ -89,8 +102,15 @@ interface CreateEmailBaseOptions {
   scheduledAt?: string;
 }
 
-export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions> &
-  CreateEmailBaseOptions;
+export type CreateEmailOptions =
+  | ((RequireAtLeastOne<EmailRenderOptions> & CreateEmailBaseOptions) & {
+      template?: never;
+    })
+  | ((EmailTemplateOptions & CreateEmailBaseOptionsWithTemplate) & {
+      react?: never;
+      html?: never;
+      text?: never;
+    });
 
 export interface CreateEmailRequestOptions
   extends PostOptions,
