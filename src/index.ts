@@ -1,4 +1,5 @@
 export * from './api-keys/interfaces';
+export * from './attachments/interfaces';
 export * from './audiences/interfaces';
 export * from './batch/interfaces';
 export * from './broadcasts/interfaces';
@@ -6,5 +7,6 @@ export * from './common/interfaces';
 export * from './contacts/interfaces';
 export * from './domains/interfaces';
 export * from './emails/interfaces';
+export * from './inbound/interfaces';
 export { ErrorResponse } from './interfaces';
 export { Resend } from './resend';
