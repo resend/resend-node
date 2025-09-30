@@ -365,4 +365,291 @@ describe('Batch', () => {
       ]);
     });
   });
+
+  describe('template emails in batch', () => {
+    it('sends batch with template emails only', async () => {
+      const payload: CreateBatchOptions = [
+        {
+          template: {
+            id: 'welcome-template-123',
+          },
+          to: 'user1@example.com',
+        },
+        {
+          template: {
+            id: 'newsletter-template-456',
+            variables: {
+              name: 'John Doe',
+              company: 'Acme Corp',
+              count: 42,
+              isPremium: true,
+            },
+          },
+          to: 'user2@example.com',
+        },
+      ];
+
+      mockSuccessResponse(
+        {
+          data: [{ id: 'template-batch-1' }, { id: 'template-batch-2' }],
+        },
+        {
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
+
+      const data = await resend.batch.send(payload);
+      expect(data).toMatchInlineSnapshot(`
+{
+  "data": {
+    "data": [
+      {
+        "id": "template-batch-1",
+      },
+      {
+        "id": "template-batch-2",
+      },
+    ],
+  },
+  "error": null,
+}
+`);
+
+      // Verify the correct API payload was sent
+      const lastCall = fetchMock.mock.calls[0];
+      const requestBody = JSON.parse(lastCall[1]?.body as string);
+      expect(requestBody).toEqual([
+        {
+          attachments: undefined,
+          bcc: undefined,
+          cc: undefined,
+          from: undefined,
+          headers: undefined,
+          html: undefined,
+          reply_to: undefined,
+          scheduled_at: undefined,
+          subject: undefined,
+          tags: undefined,
+          text: undefined,
+          to: 'user1@example.com',
+          template: {
+            id: 'welcome-template-123',
+          },
+        },
+        {
+          attachments: undefined,
+          bcc: undefined,
+          cc: undefined,
+          from: undefined,
+          headers: undefined,
+          html: undefined,
+          reply_to: undefined,
+          scheduled_at: undefined,
+          subject: undefined,
+          tags: undefined,
+          text: undefined,
+          to: 'user2@example.com',
+          template: {
+            id: 'newsletter-template-456',
+            variables: {
+              name: 'John Doe',
+              company: 'Acme Corp',
+              count: 42,
+              isPremium: true,
+            },
+          },
+        },
+      ]);
+    });
+
+    it('sends mixed batch with template and HTML emails', async () => {
+      const payload: CreateBatchOptions = [
+        {
+          from: 'sender@example.com',
+          to: 'user1@example.com',
+          subject: 'HTML Email',
+          html: '<h1>Hello World</h1>',
+        },
+        {
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'Jane Smith',
+            },
+          },
+          to: 'user2@example.com',
+        },
+        {
+          from: 'admin@example.com',
+          to: 'user3@example.com',
+          subject: 'Another HTML Email',
+          text: 'Plain text content',
+        },
+      ];
+
+      mockSuccessResponse(
+        {
+          data: [
+            { id: 'html-batch-1' },
+            { id: 'template-batch-2' },
+            { id: 'html-batch-3' },
+          ],
+        },
+        {
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
+
+      const data = await resend.batch.send(payload);
+      expect(data).toMatchInlineSnapshot(`
+{
+  "data": {
+    "data": [
+      {
+        "id": "html-batch-1",
+      },
+      {
+        "id": "template-batch-2",
+      },
+      {
+        "id": "html-batch-3",
+      },
+    ],
+  },
+  "error": null,
+}
+`);
+
+      // Verify the correct API payload was sent
+      const lastCall = fetchMock.mock.calls[0];
+      const requestBody = JSON.parse(lastCall[1]?.body as string);
+      expect(requestBody).toEqual([
+        {
+          attachments: undefined,
+          bcc: undefined,
+          cc: undefined,
+          from: 'sender@example.com',
+          headers: undefined,
+          html: '<h1>Hello World</h1>',
+          reply_to: undefined,
+          scheduled_at: undefined,
+          subject: 'HTML Email',
+          tags: undefined,
+          text: undefined,
+          to: 'user1@example.com',
+          template: undefined,
+        },
+        {
+          attachments: undefined,
+          bcc: undefined,
+          cc: undefined,
+          from: undefined,
+          headers: undefined,
+          html: undefined,
+          reply_to: undefined,
+          scheduled_at: undefined,
+          subject: undefined,
+          tags: undefined,
+          text: undefined,
+          to: 'user2@example.com',
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'Jane Smith',
+            },
+          },
+        },
+        {
+          attachments: undefined,
+          bcc: undefined,
+          cc: undefined,
+          from: 'admin@example.com',
+          headers: undefined,
+          html: undefined,
+          reply_to: undefined,
+          scheduled_at: undefined,
+          subject: 'Another HTML Email',
+          tags: undefined,
+          text: 'Plain text content',
+          to: 'user3@example.com',
+          template: undefined,
+        },
+      ]);
+    });
+
+    it('handles template emails with optional fields', async () => {
+      const payload: CreateBatchOptions = [
+        {
+          template: {
+            id: 'newsletter-template-456',
+            variables: {
+              title: 'Weekly Update',
+              count: 150,
+            },
+          },
+          from: 'newsletter@example.com',
+          subject: 'Custom Subject Override',
+          to: 'subscriber@example.com',
+          replyTo: 'noreply@example.com',
+          scheduledAt: 'in 1 hour',
+        },
+      ];
+
+      mockSuccessResponse(
+        {
+          data: [{ id: 'template-with-overrides-1' }],
+        },
+        {
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
+
+      const data = await resend.batch.send(payload);
+      expect(data).toMatchInlineSnapshot(`
+{
+  "data": {
+    "data": [
+      {
+        "id": "template-with-overrides-1",
+      },
+    ],
+  },
+  "error": null,
+}
+`);
+
+      // Verify the correct API payload was sent
+      const lastCall = fetchMock.mock.calls[0];
+      const requestBody = JSON.parse(lastCall[1]?.body as string);
+      expect(requestBody).toEqual([
+        {
+          attachments: undefined,
+          bcc: undefined,
+          cc: undefined,
+          from: 'newsletter@example.com',
+          headers: undefined,
+          html: undefined,
+          reply_to: 'noreply@example.com',
+          scheduled_at: 'in 1 hour',
+          subject: 'Custom Subject Override',
+          tags: undefined,
+          text: undefined,
+          to: 'subscriber@example.com',
+          template: {
+            id: 'newsletter-template-456',
+            variables: {
+              title: 'Weekly Update',
+              count: 150,
+            },
+          },
+        },
+      ]);
+    });
+  });
 });
