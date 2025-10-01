@@ -259,6 +259,71 @@ describe('Templates', () => {
         'Failed to render React component. Make sure to install `@react-email/render`',
       );
     });
+
+    it('creates a template with object and list variable types', async () => {
+      const payload: CreateTemplateOptions = {
+        name: 'Complex Variables Template',
+        html: '<h1>Welcome {{{userProfile.name}}}!</h1><p>Your tags: {{{tags}}}</p>',
+        variables: [
+          {
+            key: 'userProfile',
+            type: 'object',
+            fallbackValue: { name: 'John', age: 30 },
+          },
+          {
+            key: 'userProfileNull',
+            type: 'object',
+            fallbackValue: null,
+          },
+          {
+            key: 'tags',
+            type: 'list',
+            fallbackValue: ['premium', 'vip'],
+          },
+          {
+            key: 'scores',
+            type: 'list',
+            fallbackValue: [95, 87, 92],
+          },
+          {
+            key: 'flags',
+            type: 'list',
+            fallbackValue: [true, false, true],
+          },
+          {
+            key: 'items',
+            type: 'list',
+            fallbackValue: [{ id: 1 }, { id: 2 }],
+          },
+          {
+            key: 'emptyList',
+            type: 'list',
+            fallbackValue: null,
+          },
+        ],
+      };
+      const response: CreateTemplateResponseSuccess = {
+        object: 'template',
+        id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+      };
+
+      mockSuccessResponse(response, {
+        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
+      });
+
+      const resend = new Resend(TEST_API_KEY);
+      await expect(
+        resend.templates.create(payload),
+      ).resolves.toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "object": "template",
+          },
+          "error": null,
+        }
+      `);
+    });
   });
 
   describe('remove', () => {
@@ -478,6 +543,75 @@ describe('Templates', () => {
             "message": "Template not found",
             "name": "not_found",
           },
+        }
+      `);
+    });
+
+    it('updates a template with object and list variable types', async () => {
+      const id = 'fd61172c-cafc-40f5-b049-b45947779a29';
+      const payload: UpdateTemplateOptions = {
+        name: 'Updated Complex Variables Template',
+        html: '<h1>Updated Welcome {{{config.theme}}}!</h1><p>Permissions: {{{permissions}}}</p>',
+        variables: [
+          {
+            key: 'config',
+            type: 'object',
+            fallbackValue: { theme: 'dark', lang: 'en' },
+          },
+          {
+            key: 'configNull',
+            type: 'object',
+            fallbackValue: null,
+          },
+          {
+            key: 'permissions',
+            type: 'list',
+            fallbackValue: ['read', 'write'],
+          },
+          {
+            key: 'counts',
+            type: 'list',
+            fallbackValue: [10, 20, 30],
+          },
+          {
+            key: 'enabled',
+            type: 'list',
+            fallbackValue: [true, false],
+          },
+          {
+            key: 'metadata',
+            type: 'list',
+            fallbackValue: [{ key: 'a' }, { key: 'b' }],
+          },
+          {
+            key: 'emptyList',
+            type: 'list',
+            fallbackValue: null,
+          },
+        ],
+      };
+      const response = {
+        object: 'template',
+        id,
+      };
+
+      mockSuccessResponse(response, {
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.templates.update(id, payload),
+      ).resolves.toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "object": "template",
+          },
+          "error": null,
         }
       `);
     });

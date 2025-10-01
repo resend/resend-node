@@ -219,4 +219,171 @@ describe('parseTemplateToApiOptions', () => {
 
     expect(apiOptions.variables).toEqual([]);
   });
+
+  it('should handle object and list variable types for create template', () => {
+    const templatePayload: CreateTemplateOptions = {
+      name: 'Complex Variables Template',
+      html: '<h1>Complex template</h1>',
+      variables: [
+        {
+          key: 'userProfile',
+          type: 'object',
+          fallbackValue: { name: 'John', age: 30 },
+        },
+        {
+          key: 'userProfileNull',
+          type: 'object',
+          fallbackValue: null,
+        },
+        {
+          key: 'tags',
+          type: 'list',
+          fallbackValue: ['premium', 'vip'],
+        },
+        {
+          key: 'scores',
+          type: 'list',
+          fallbackValue: [95, 87, 92],
+        },
+        {
+          key: 'flags',
+          type: 'list',
+          fallbackValue: [true, false, true],
+        },
+        {
+          key: 'items',
+          type: 'list',
+          fallbackValue: [{ id: 1 }, { id: 2 }],
+        },
+        {
+          key: 'emptyList',
+          type: 'list',
+          fallbackValue: null,
+        },
+      ],
+    };
+
+    const apiOptions = parseTemplateToApiOptions(templatePayload);
+
+    expect(apiOptions.variables).toEqual([
+      {
+        key: 'userProfile',
+        type: 'object',
+        fallback_value: { name: 'John', age: 30 },
+      },
+      {
+        key: 'userProfileNull',
+        type: 'object',
+        fallback_value: null,
+      },
+      {
+        key: 'tags',
+        type: 'list',
+        fallback_value: ['premium', 'vip'],
+      },
+      {
+        key: 'scores',
+        type: 'list',
+        fallback_value: [95, 87, 92],
+      },
+      {
+        key: 'flags',
+        type: 'list',
+        fallback_value: [true, false, true],
+      },
+      {
+        key: 'items',
+        type: 'list',
+        fallback_value: [{ id: 1 }, { id: 2 }],
+      },
+      {
+        key: 'emptyList',
+        type: 'list',
+        fallback_value: null,
+      },
+    ]);
+  });
+
+  it('should handle object and list variable types for update template', () => {
+    const updatePayload: UpdateTemplateOptions = {
+      subject: 'Updated Complex Template',
+      variables: [
+        {
+          key: 'config',
+          type: 'object',
+          fallbackValue: { theme: 'dark', lang: 'en' },
+        },
+        {
+          key: 'configNull',
+          type: 'object',
+          fallbackValue: null,
+        },
+        {
+          key: 'permissions',
+          type: 'list',
+          fallbackValue: ['read', 'write'],
+        },
+        {
+          key: 'counts',
+          type: 'list',
+          fallbackValue: [10, 20, 30],
+        },
+        {
+          key: 'enabled',
+          type: 'list',
+          fallbackValue: [true, false],
+        },
+        {
+          key: 'metadata',
+          type: 'list',
+          fallbackValue: [{ key: 'a' }, { key: 'b' }],
+        },
+        {
+          key: 'emptyList',
+          type: 'list',
+          fallbackValue: null,
+        },
+      ],
+    };
+
+    const apiOptions = parseTemplateToApiOptions(updatePayload);
+
+    expect(apiOptions.variables).toEqual([
+      {
+        key: 'config',
+        type: 'object',
+        fallback_value: { theme: 'dark', lang: 'en' },
+      },
+      {
+        key: 'configNull',
+        type: 'object',
+        fallback_value: null,
+      },
+      {
+        key: 'permissions',
+        type: 'list',
+        fallback_value: ['read', 'write'],
+      },
+      {
+        key: 'counts',
+        type: 'list',
+        fallback_value: [10, 20, 30],
+      },
+      {
+        key: 'enabled',
+        type: 'list',
+        fallback_value: [true, false],
+      },
+      {
+        key: 'metadata',
+        type: 'list',
+        fallback_value: [{ key: 'a' }, { key: 'b' }],
+      },
+      {
+        key: 'emptyList',
+        type: 'list',
+        fallback_value: null,
+      },
+    ]);
+  });
 });
