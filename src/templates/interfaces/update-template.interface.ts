@@ -1,9 +1,33 @@
 import type { ErrorResponse } from '../../interfaces';
-import type { Template, TemplateVariable } from './template';
+import type {
+  Template,
+  TemplateVariable,
+  TemplateVariableListFallbackType,
+} from './template';
 
-type TemplateVariableUpdateOptions = Pick<TemplateVariable, 'key' | 'type'> & {
-  fallbackValue?: string | number | boolean | null;
-};
+type TemplateVariableUpdateOptions = Pick<TemplateVariable, 'key' | 'type'> &
+  (
+    | {
+        type: 'string';
+        fallbackValue?: string | null;
+      }
+    | {
+        type: 'number';
+        fallbackValue?: number | null;
+      }
+    | {
+        type: 'boolean';
+        fallbackValue?: boolean | null;
+      }
+    | {
+        type: 'object';
+        fallbackValue: object | null;
+      }
+    | {
+        type: 'list';
+        fallbackValue: TemplateVariableListFallbackType | null;
+      }
+  );
 
 export interface UpdateTemplateOptions
   extends Partial<

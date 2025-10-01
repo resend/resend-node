@@ -1,19 +1,40 @@
 import type { PostOptions } from '../../common/interfaces';
 import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
 import type { ErrorResponse } from '../../interfaces';
-import type { Template, TemplateVariable } from './template';
+import type {
+  Template,
+  TemplateVariable,
+  TemplateVariableListFallbackType,
+} from './template';
 
 type TemplateContentCreationOptions = RequireAtLeastOne<{
   html: string;
   react: React.ReactNode;
 }>;
 
-type TemplateVariableCreationOptions = Pick<
-  TemplateVariable,
-  'key' | 'type'
-> & {
-  fallbackValue?: string | number | boolean | null;
-};
+type TemplateVariableCreationOptions = Pick<TemplateVariable, 'key' | 'type'> &
+  (
+    | {
+        type: 'string';
+        fallbackValue?: string | null;
+      }
+    | {
+        type: 'number';
+        fallbackValue?: number | null;
+      }
+    | {
+        type: 'boolean';
+        fallbackValue?: boolean | null;
+      }
+    | {
+        type: 'object';
+        fallbackValue: object | null;
+      }
+    | {
+        type: 'list';
+        fallbackValue: TemplateVariableListFallbackType | null;
+      }
+  );
 
 type TemplateOptionalFieldsForCreation = Partial<
   Pick<Template, 'subject' | 'text' | 'alias' | 'from'>
