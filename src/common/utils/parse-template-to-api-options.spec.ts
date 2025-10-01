@@ -220,7 +220,7 @@ describe('parseTemplateToApiOptions', () => {
     expect(apiOptions.variables).toEqual([]);
   });
 
-  it('should handle object and list variable types for create template', () => {
+  it('handles object and list variable types for create template', () => {
     const templatePayload: CreateTemplateOptions = {
       name: 'Complex Variables Template',
       html: '<h1>Complex template</h1>',
