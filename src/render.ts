@@ -10,7 +10,7 @@ export function render(node: React.ReactNode) {
       .catch(() => {
         reject(
           Error(
-            'Failed to render React component. Make sure to install `@react-email/render`',
+            'Failed to render React component. Make sure to install `@react-email/render` or `@react-email/components`.',
           ),
         );
       });
