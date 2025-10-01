@@ -304,7 +304,7 @@ describe('parseTemplateToApiOptions', () => {
     ]);
   });
 
-  it('should handle object and list variable types for update template', () => {
+  it('handles object and list variable types for update template', () => {
     const updatePayload: UpdateTemplateOptions = {
       subject: 'Updated Complex Template',
       variables: [
