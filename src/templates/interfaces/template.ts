@@ -18,14 +18,15 @@ export type TemplateVariableListFallbackType =
   | string[]
   | number[]
   | boolean[]
-  | object[];
+  | Record<string, unknown>[];
+
 export interface TemplateVariable {
   key: string;
   fallback_value:
     | string
     | number
     | boolean
-    | object
+    | Record<string, unknown>
     | TemplateVariableListFallbackType
     | null;
   type: 'string' | 'number' | 'boolean' | 'object' | 'list';
