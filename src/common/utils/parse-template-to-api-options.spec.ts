@@ -231,11 +231,6 @@ describe('parseTemplateToApiOptions', () => {
           fallbackValue: { name: 'John', age: 30 },
         },
         {
-          key: 'userProfileNull',
-          type: 'object',
-          fallbackValue: null,
-        },
-        {
           key: 'tags',
           type: 'list',
           fallbackValue: ['premium', 'vip'],
@@ -255,11 +250,6 @@ describe('parseTemplateToApiOptions', () => {
           type: 'list',
           fallbackValue: [{ id: 1 }, { id: 2 }],
         },
-        {
-          key: 'emptyList',
-          type: 'list',
-          fallbackValue: null,
-        },
       ],
     };
 
@@ -270,11 +260,6 @@ describe('parseTemplateToApiOptions', () => {
         key: 'userProfile',
         type: 'object',
         fallback_value: { name: 'John', age: 30 },
-      },
-      {
-        key: 'userProfileNull',
-        type: 'object',
-        fallback_value: null,
       },
       {
         key: 'tags',
@@ -296,11 +281,6 @@ describe('parseTemplateToApiOptions', () => {
         type: 'list',
         fallback_value: [{ id: 1 }, { id: 2 }],
       },
-      {
-        key: 'emptyList',
-        type: 'list',
-        fallback_value: null,
-      },
     ]);
   });
 
@@ -312,11 +292,6 @@ describe('parseTemplateToApiOptions', () => {
           key: 'config',
           type: 'object',
           fallbackValue: { theme: 'dark', lang: 'en' },
-        },
-        {
-          key: 'configNull',
-          type: 'object',
-          fallbackValue: null,
         },
         {
           key: 'permissions',
@@ -338,11 +313,6 @@ describe('parseTemplateToApiOptions', () => {
           type: 'list',
           fallbackValue: [{ key: 'a' }, { key: 'b' }],
         },
-        {
-          key: 'emptyList',
-          type: 'list',
-          fallbackValue: null,
-        },
       ],
     };
 
@@ -353,11 +323,6 @@ describe('parseTemplateToApiOptions', () => {
         key: 'config',
         type: 'object',
         fallback_value: { theme: 'dark', lang: 'en' },
-      },
-      {
-        key: 'configNull',
-        type: 'object',
-        fallback_value: null,
       },
       {
         key: 'permissions',
@@ -378,11 +343,6 @@ describe('parseTemplateToApiOptions', () => {
         key: 'metadata',
         type: 'list',
         fallback_value: [{ key: 'a' }, { key: 'b' }],
-      },
-      {
-        key: 'emptyList',
-        type: 'list',
-        fallback_value: null,
       },
     ]);
   });

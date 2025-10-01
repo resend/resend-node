@@ -28,11 +28,11 @@ type TemplateVariableCreationOptions = Pick<TemplateVariable, 'key' | 'type'> &
       }
     | {
         type: 'object';
-        fallbackValue: Record<string, unknown> | null;
+        fallbackValue: Record<string, unknown>;
       }
     | {
         type: 'list';
-        fallbackValue: TemplateVariableListFallbackType | null;
+        fallbackValue: TemplateVariableListFallbackType;
       }
   );
 

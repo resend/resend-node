@@ -271,11 +271,6 @@ describe('Templates', () => {
             fallbackValue: { name: 'John', age: 30 },
           },
           {
-            key: 'userProfileNull',
-            type: 'object',
-            fallbackValue: null,
-          },
-          {
             key: 'tags',
             type: 'list',
             fallbackValue: ['premium', 'vip'],
@@ -294,11 +289,6 @@ describe('Templates', () => {
             key: 'items',
             type: 'list',
             fallbackValue: [{ id: 1 }, { id: 2 }],
-          },
-          {
-            key: 'emptyList',
-            type: 'list',
-            fallbackValue: null,
           },
         ],
       };
@@ -559,11 +549,6 @@ describe('Templates', () => {
             fallbackValue: { theme: 'dark', lang: 'en' },
           },
           {
-            key: 'configNull',
-            type: 'object',
-            fallbackValue: null,
-          },
-          {
             key: 'permissions',
             type: 'list',
             fallbackValue: ['read', 'write'],
@@ -582,11 +567,6 @@ describe('Templates', () => {
             key: 'metadata',
             type: 'list',
             fallbackValue: [{ key: 'a' }, { key: 'b' }],
-          },
-          {
-            key: 'emptyList',
-            type: 'list',
-            fallbackValue: null,
           },
         ],
       };
