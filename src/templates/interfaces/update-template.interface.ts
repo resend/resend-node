@@ -21,7 +21,7 @@ type TemplateVariableUpdateOptions = Pick<TemplateVariable, 'key' | 'type'> &
       }
     | {
         type: 'object';
-        fallbackValue: object | null;
+        fallbackValue: Record<string, unknown> | null;
       }
     | {
         type: 'list';

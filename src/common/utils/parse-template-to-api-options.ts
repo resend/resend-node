@@ -9,7 +9,7 @@ interface TemplateVariableApiOptions {
     | string
     | number
     | boolean
-    | object
+    | Record<string, unknown>
     | TemplateVariableListFallbackType
     | null;
 }
