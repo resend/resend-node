@@ -1,6 +1,6 @@
 {
   "name": "resend",
-  "version": "6.1.1-preview-templates.0",
+  "version": "6.1.2-preview-templates.0",
   "description": "Node.js library for the Resend API",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/resendlabs/resend-node#readme",
   "peerDependencies": {
-    "@react-email/render": "^1.1.0"
+    "@react-email/render": "*"
   },
   "peerDependenciesMeta": {
     "@react-email/render": {
