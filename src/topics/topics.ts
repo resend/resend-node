@@ -26,9 +26,11 @@ export class Topics {
   constructor(private readonly resend: Resend) {}
 
   async create(payload: CreateTopicOptions): Promise<CreateTopicResponse> {
+    const { defaultSubscription, ...body } = payload;
+    
     const data = await this.resend.post<CreateTopicResponseSuccess>(
       '/topics',
-      payload,
+      { ...body, default_subscription: payload.defaultSubscription },
     );
 
     return data;
