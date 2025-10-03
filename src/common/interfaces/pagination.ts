@@ -13,7 +13,7 @@ export type PaginationOptions<IdType> =
 export type PaginatedData<Data> = {
   object: 'list';
   data: Data;
-  hasMore: boolean;
+  has_more: boolean;
 };
 
 export type PaginatedApiResponse<Data> = {
