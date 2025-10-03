@@ -60,15 +60,10 @@ describe('ContactAudiences', () => {
         "name": "Another Audience",
       },
     ],
-    "hasMore": false,
+    "has_more": false,
     "object": "list",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -108,15 +103,10 @@ describe('ContactAudiences', () => {
         "name": "Test Audience",
       },
     ],
-    "hasMore": true,
+    "has_more": true,
     "object": "list",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -166,11 +156,6 @@ describe('ContactAudiences', () => {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -198,11 +183,6 @@ describe('ContactAudiences', () => {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -254,11 +234,6 @@ describe('ContactAudiences', () => {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -288,11 +263,6 @@ describe('ContactAudiences', () => {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });

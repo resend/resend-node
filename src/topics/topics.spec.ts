@@ -40,11 +40,6 @@ describe('Topics', () => {
     "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -76,11 +71,6 @@ describe('Topics', () => {
     "message": "Missing \`name\` field.",
     "name": "missing_required_field",
   },
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -111,11 +101,6 @@ describe('Topics', () => {
   "error": {
     "message": "Missing \`default_subscription\` field.",
     "name": "missing_required_field",
-  },
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
   },
 }
 `);
@@ -169,11 +154,6 @@ describe('Topics', () => {
     ],
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -206,11 +186,6 @@ describe('Topics', () => {
     "message": "Topic not found",
     "name": "not_found",
   },
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
       });
@@ -242,11 +217,6 @@ describe('Topics', () => {
     "name": "Newsletter",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -291,11 +261,6 @@ describe('Topics', () => {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
@@ -342,11 +307,6 @@ describe('Topics', () => {
     "object": "topic",
   },
   "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
 }
 `);
     });
