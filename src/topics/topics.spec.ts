@@ -92,7 +92,7 @@ describe('Topics', () => {
       };
       const response: ErrorResponse = {
         name: 'missing_required_field',
-        message: 'Missing `defaultSubscription` field.',
+        message: 'Missing `default_subscription` field.',
       };
 
       mockErrorResponse(response, {
@@ -109,7 +109,7 @@ describe('Topics', () => {
 {
   "data": null,
   "error": {
-    "message": "Missing \`defaultSubscription\` field.",
+    "message": "Missing \`default_subscription\` field.",
     "name": "missing_required_field",
   },
   "rateLimiting": {
