@@ -155,6 +155,13 @@ export class Contacts {
   }
 
   async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
+    if (typeof payload === 'string') {
+      const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+        `/contacts/${payload}`,
+      );
+      return data;
+    }
+
     if (!payload.id && !payload.email) {
       return {
         data: null,
