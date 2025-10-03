@@ -16,7 +16,7 @@ export function formatPaginatedResponse<Data>(
     data: {
       object: 'list',
       data: response.data.data,
-      hasMore: response.data.has_more,
+      has_more: response.data.has_more,
     },
   };
 }
