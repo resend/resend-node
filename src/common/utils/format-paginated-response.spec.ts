@@ -22,7 +22,7 @@ describe('formatPaginatedResponse', () => {
       data: {
         object: 'list',
         data: [],
-        hasMore: false,
+        has_more: false,
       },
       rateLimiting: {
         limit: 100,

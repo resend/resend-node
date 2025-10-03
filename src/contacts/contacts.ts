@@ -73,21 +73,18 @@ export class Contacts {
   async list(
     options: ListContactsOptions | ListAudienceContactsOptions = {},
   ): Promise<ListContactsResponse> {
-
     if (!('audienceId' in options)) {
       const queryString = buildPaginationQuery(options);
-      const url = queryString
-      ? `/contacts?${queryString}`
-      : '/contacts';
+      const url = queryString ? `/contacts?${queryString}` : '/contacts';
       const data = await this.resend.get<ListContactsResponseSuccess>(url);
       return data;
     }
-  
+
     const { audienceId, ...paginationOptions } = options;
     const queryString = buildPaginationQuery(paginationOptions);
     const url = queryString
-    ? `/audiences/${audienceId}/contacts?${queryString}`
-    : `/audiences/${audienceId}/contacts`;
+      ? `/audiences/${audienceId}/contacts?${queryString}`
+      : `/audiences/${audienceId}/contacts`;
     const data = await this.resend.get<ListContactsResponseSuccess>(url);
     return data;
   }
