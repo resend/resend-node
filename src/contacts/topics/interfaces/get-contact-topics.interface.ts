@@ -1,5 +1,9 @@
 import type { GetOptions } from '../../../common/interfaces';
-import { PaginatedApiResponse, PaginatedData, PaginationOptions } from '../../../common/interfaces/pagination';
+import type {
+  PaginatedApiResponse,
+  PaginatedData,
+  PaginationOptions,
+} from '../../../common/interfaces/pagination';
 import type { ErrorResponse } from '../../../interfaces';
 
 interface GetContactTopicsBaseOptions {
@@ -7,7 +11,8 @@ interface GetContactTopicsBaseOptions {
   email?: string;
 }
 
-export type GetContactTopicsOptions = GetContactTopicsBaseOptions & PaginationOptions<string>;
+export type GetContactTopicsOptions = GetContactTopicsBaseOptions &
+  PaginationOptions<string>;
 
 export interface GetContactTopicsRequestOptions extends GetOptions {}
 
@@ -21,10 +26,9 @@ export interface ContactTopic {
 export type GetContactTopicsResponseSuccess = PaginatedApiResponse<{
   email: string;
   topics: ContactTopic[];
-}>
+}>;
 
-
-export type GetContactTopicsResponse = 
+export type GetContactTopicsResponse =
   | {
       data: PaginatedData<{
         email: string;
@@ -36,4 +40,3 @@ export type GetContactTopicsResponse =
       data: null;
       error: ErrorResponse;
     };
-

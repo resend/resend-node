@@ -1,4 +1,4 @@
-import { PaginationOptions } from '../interfaces/pagination';
+import type { PaginationOptions } from '../interfaces/pagination';
 import { createPaginationQuery } from './create-pagination-query';
 
 describe('createPaginationQuery', () => {

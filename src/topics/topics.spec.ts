@@ -21,7 +21,7 @@ describe('Topics', () => {
       const payload: CreateTopicOptions = {
         name: 'Newsletter',
         description: 'Weekly newsletter updates',
-        default_subscription: 'opt_in',
+        defaultSubscription: 'opt_in',
       };
       const response: CreateTopicResponseSuccess = {
         id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
@@ -52,7 +52,7 @@ describe('Topics', () => {
     it('throws error when missing name', async () => {
       const payload: CreateTopicOptions = {
         name: '',
-        default_subscription: 'opt_in',
+        defaultSubscription: 'opt_in',
       };
       const response: ErrorResponse = {
         name: 'missing_required_field',
@@ -85,7 +85,7 @@ describe('Topics', () => {
 `);
     });
 
-    it('throws error when missing default_subscription', async () => {
+    it('throws error when missing defaultSubscription', async () => {
       const payload = {
         name: 'Newsletter',
         description: 'Weekly newsletter updates',
@@ -221,7 +221,7 @@ describe('Topics', () => {
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'Newsletter',
         description: 'Weekly newsletter updates',
-        default_subscription: 'opt_in',
+        defaultSubscription: 'opt_in',
         created_at: '2024-01-16T18:12:26.514Z',
       };
 
@@ -236,7 +236,7 @@ describe('Topics', () => {
 {
   "data": {
     "created_at": "2024-01-16T18:12:26.514Z",
-    "default_subscription": "opt_in",
+    "defaultSubscription": "opt_in",
     "description": "Weekly newsletter updates",
     "id": "fd61172c-cafc-40f5-b049-b45947779a29",
     "name": "Newsletter",

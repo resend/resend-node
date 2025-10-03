@@ -75,7 +75,7 @@ describe('Emails', () => {
         '{"from":"admin@resend.com","html":"<h1>Test</h1>","subject":"Not Idempotent Test","to":"user@resend.com","topic_id":"9f31e56e-3083-46cf-8e96-c6995e0e576a"}',
       );
 
-      //@ts-ignore
+      //@ts-expect-error
       const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
       expect(hasIdempotencyKey).toBeFalsy();
 
