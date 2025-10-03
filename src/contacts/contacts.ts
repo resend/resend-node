@@ -90,6 +90,13 @@ export class Contacts {
   }
 
   async get(options: GetContactOptions): Promise<GetContactResponse> {
+    if (typeof options === 'string') {
+      const data = await this.resend.get<GetContactResponseSuccess>(
+        `/contacts/${options}`,
+      );
+      return data;
+    }
+
     if (!options.id && !options.email) {
       return {
         data: null,
