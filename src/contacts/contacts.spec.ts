@@ -419,6 +419,181 @@ describe('Contacts', () => {
 }
 `);
     });
+
+    describe('when audienceId is not provided', () => {
+      it('get contact by id', async () => {
+        const response: GetContactResponseSuccess = {
+          object: 'contact',
+          id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+          email: 'team@resend.com',
+          first_name: '',
+          last_name: '',
+          created_at: '2024-01-16T18:12:26.514Z',
+          unsubscribed: false,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const options: GetContactOptions = {
+          id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+        };
+        await expect(
+          resend.contacts.get(options),
+        ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "created_at": "2024-01-16T18:12:26.514Z",
+    "email": "team@resend.com",
+    "first_name": "",
+    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+    "last_name": "",
+    "object": "contact",
+    "unsubscribed": false,
+  },
+  "error": null,
+}
+`);
+      });
+
+      it('get contact by email', async () => {
+        const response: GetContactResponseSuccess = {
+          object: 'contact',
+          id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+          email: 'team@resend.com',
+          first_name: '',
+          last_name: '',
+          created_at: '2024-01-16T18:12:26.514Z',
+          unsubscribed: false,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const options: GetContactOptions = {
+          email: 'team@resend.com',
+        };
+        await expect(
+          resend.contacts.get(options),
+        ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "created_at": "2024-01-16T18:12:26.514Z",
+    "email": "team@resend.com",
+    "first_name": "",
+    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+    "last_name": "",
+    "object": "contact",
+    "unsubscribed": false,
+  },
+  "error": null,
+}
+`);
+      });
+      it('get contact by string id', async () => {
+        const response: GetContactResponseSuccess = {
+          object: 'contact',
+          id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+          email: 'team@resend.com',
+          first_name: '',
+          last_name: '',
+          created_at: '2024-01-16T18:12:26.514Z',
+          unsubscribed: false,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        await expect(
+          resend.contacts.get('fd61172c-cafc-40f5-b049-b45947779a29'),
+        ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "created_at": "2024-01-16T18:12:26.514Z",
+    "email": "team@resend.com",
+    "first_name": "",
+    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+    "last_name": "",
+    "object": "contact",
+    "unsubscribed": false,
+  },
+  "error": null,
+}
+`);
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/contacts/fd61172c-cafc-40f5-b049-b45947779a29',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+
+      it('get contact by string email', async () => {
+        const response: GetContactResponseSuccess = {
+          object: 'contact',
+          id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+          email: 'team@resend.com',
+          first_name: '',
+          last_name: '',
+          created_at: '2024-01-16T18:12:26.514Z',
+          unsubscribed: false,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        await expect(
+          resend.contacts.get('team@resend.com'),
+        ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "created_at": "2024-01-16T18:12:26.514Z",
+    "email": "team@resend.com",
+    "first_name": "",
+    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+    "last_name": "",
+    "object": "contact",
+    "unsubscribed": false,
+  },
+  "error": null,
+}
+`);
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/contacts/team@resend.com',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
   });
 
   describe('update', () => {
@@ -521,6 +696,35 @@ describe('Contacts', () => {
     "error": null,
   }
   `);
+    });
+
+    it('removes a contact by string id', async () => {
+      const response: RemoveContactsResponseSuccess = {
+        contact: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+        object: 'contact',
+        deleted: true,
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      await expect(
+        resend.contacts.remove('3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223'),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "contact": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+    "deleted": true,
+    "object": "contact",
+  },
+  "error": null,
+}
+`);
     });
   });
 });
