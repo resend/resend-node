@@ -1,9 +1,8 @@
 import type { GetOptions } from '../../../common/interfaces';
 import type {
-  PaginatedApiResponse,
   PaginatedData,
   PaginationOptions,
-} from '../../../common/interfaces/pagination';
+} from '../../../common/interfaces/pagination-options.interface';
 import type { ErrorResponse } from '../../../interfaces';
 
 interface GetContactTopicsBaseOptions {
@@ -12,7 +11,7 @@ interface GetContactTopicsBaseOptions {
 }
 
 export type GetContactTopicsOptions = GetContactTopicsBaseOptions &
-  PaginationOptions<string>;
+  PaginationOptions;
 
 export interface GetContactTopicsRequestOptions extends GetOptions {}
 
@@ -23,7 +22,7 @@ export interface ContactTopic {
   subscription: 'opt_in' | 'opt_out';
 }
 
-export type GetContactTopicsResponseSuccess = PaginatedApiResponse<{
+export type GetContactTopicsResponseSuccess = PaginatedData<{
   email: string;
   topics: ContactTopic[];
 }>;

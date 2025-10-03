@@ -7,7 +7,9 @@ export type ListAudienceContactsOptions = {
   audienceId: string;
 } & PaginationOptions;
 
-export type ListContactsOptions = PaginationOptions;
+export type ListContactsOptions = PaginationOptions & {
+  audienceId?: string;
+};
 
 export interface ListContactsResponseSuccess {
   object: 'list';

@@ -1,13 +1,20 @@
-import type { Response } from '../../../interfaces';
+import type { ErrorResponse } from '../../../interfaces';
 import type { ContactAudiencesBaseOptions } from './contact-audiences.interface';
 
-export type AddContactAudiencesResponse =
-  Response<AddContactAudiencesResponseSuccess>;
+export type AddContactAudiencesOptions = ContactAudiencesBaseOptions & {
+  audienceId: string;
+};
 
 export interface AddContactAudiencesResponseSuccess {
   id: string;
 }
 
-export type AddContactAudiencesOptions = ContactAudiencesBaseOptions & {
-  audienceId: string;
-};
+export type AddContactAudiencesResponse =
+  | {
+      data: AddContactAudiencesResponseSuccess;
+      error: null;
+    }
+  | {
+      data: null;
+      error: ErrorResponse;
+    };

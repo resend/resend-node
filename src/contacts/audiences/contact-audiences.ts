@@ -1,5 +1,4 @@
-import { createPaginationQuery } from '../../common/utils/create-pagination-query';
-import { formatPaginatedResponse } from '../../common/utils/format-paginated-response';
+import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import type {
   AddContactAudiencesOptions,
@@ -7,9 +6,9 @@ import type {
   AddContactAudiencesResponseSuccess,
 } from './interfaces/add-contact-audience.interface';
 import type {
-  ListContactAudiencesApiResponseSuccess,
   ListContactAudiencesOptions,
   ListContactAudiencesResponse,
+  ListContactAudiencesResponseSuccess,
 } from './interfaces/list-contact-audiences.interface';
 import type {
   RemoveContactAudiencesOptions,
@@ -26,7 +25,6 @@ export class ContactAudiences {
     if (!options.contactId && !options.email) {
       return {
         data: null,
-        rateLimiting: null,
         error: {
           message: 'Missing `id` or `email` field.',
           name: 'missing_required_field',
@@ -35,13 +33,14 @@ export class ContactAudiences {
     }
 
     const identifier = options.email ? options.email : options.contactId;
-    const query = createPaginationQuery(options);
+    const queryString = buildPaginationQuery(options);
+    const url = queryString
+      ? `/contacts/${identifier}/audiences?${queryString}`
+      : `/contacts/${identifier}/audiences`;
 
-    const data = await this.resend.get<ListContactAudiencesApiResponseSuccess>(
-      `/contacts/${identifier}/audiences`,
-      { query },
-    );
-    return formatPaginatedResponse(data);
+    const data =
+      await this.resend.get<ListContactAudiencesResponseSuccess>(url);
+    return data;
   }
 
   async add(
@@ -50,7 +49,6 @@ export class ContactAudiences {
     if (!options.contactId && !options.email) {
       return {
         data: null,
-        rateLimiting: null,
         error: {
           message: 'Missing `id` or `email` field.',
           name: 'missing_required_field',
@@ -70,7 +68,6 @@ export class ContactAudiences {
     if (!options.contactId && !options.email) {
       return {
         data: null,
-        rateLimiting: null,
         error: {
           message: 'Missing `id` or `email` field.',
           name: 'missing_required_field',

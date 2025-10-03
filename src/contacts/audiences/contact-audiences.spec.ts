@@ -5,8 +5,8 @@ import type {
   AddContactAudiencesResponseSuccess,
 } from './interfaces/add-contact-audience.interface';
 import type {
-  ListContactAudiencesApiResponseSuccess,
   ListContactAudiencesOptions,
+  ListContactAudiencesResponseSuccess,
 } from './interfaces/list-contact-audiences.interface';
 import type {
   RemoveContactAudiencesOptions,
@@ -21,7 +21,7 @@ describe('ContactAudiences', () => {
       const options: ListContactAudiencesOptions = {
         email: 'carolina@resend.com',
       };
-      const response: ListContactAudiencesApiResponseSuccess = {
+      const response: ListContactAudiencesResponseSuccess = {
         object: 'list',
         data: [
           {
@@ -74,7 +74,7 @@ describe('ContactAudiences', () => {
         limit: 1,
         after: '584a472d-bc6d-4dd2-aa9d-d3d50ce87222',
       };
-      const response: ListContactAudiencesApiResponseSuccess = {
+      const response: ListContactAudiencesResponseSuccess = {
         object: 'list',
         data: [
           {
@@ -126,7 +126,6 @@ describe('ContactAudiences', () => {
     "message": "Missing \`id\` or \`email\` field.",
     "name": "missing_required_field",
   },
-  "rateLimiting": null,
 }
 `);
     });
@@ -202,7 +201,6 @@ describe('ContactAudiences', () => {
     "message": "Missing \`id\` or \`email\` field.",
     "name": "missing_required_field",
   },
-  "rateLimiting": null,
 }
 `);
     });
@@ -282,7 +280,6 @@ describe('ContactAudiences', () => {
     "message": "Missing \`id\` or \`email\` field.",
     "name": "missing_required_field",
   },
-  "rateLimiting": null,
 }
 `);
     });
