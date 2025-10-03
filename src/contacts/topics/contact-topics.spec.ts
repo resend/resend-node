@@ -260,20 +260,19 @@ describe('ContactTopics', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
       const response: GetContactTopicsResponseSuccess = {
-      has_more: false,
-      object: 'list',
-      data: {
-        
-        email: 'carolina@resend.com',
-        topics: [
-          {
-            id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
-            name: 'Test Topic',
-            description: 'This is a test topic',
-            subscription: 'opt_in',
-          },
-        ],
-      },
+        has_more: false,
+        object: 'list',
+        data: {
+          email: 'carolina@resend.com',
+          topics: [
+            {
+              id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+              name: 'Test Topic',
+              description: 'This is a test topic',
+              subscription: 'opt_in',
+            },
+          ],
+        },
       };
 
       mockSuccessResponse(response, {
