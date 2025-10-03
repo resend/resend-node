@@ -146,7 +146,7 @@ describe('Contacts', () => {
             after: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
           };
 
-          const response: ListContactsApiResponseSuccess = {
+          const response: ListContactsResponseSuccess = {
             object: 'list',
             data: [
               {

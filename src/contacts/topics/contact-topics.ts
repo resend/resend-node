@@ -1,5 +1,4 @@
-import { createPaginationQuery } from '../../common/utils/create-pagination-query';
-import { formatPaginatedResponse } from '../../common/utils/format-paginated-response';
+import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import type {
   GetContactTopicsOptions,
@@ -51,12 +50,12 @@ export class ContactTopics {
     }
 
     const identifier = options.email ? options.email : options.id;
-    const query = createPaginationQuery(options);
-    const data = await this.resend.get<GetContactTopicsResponseSuccess>(
-      `/contacts/${identifier}/topics`,
-      { query },
-    );
+    const queryString = buildPaginationQuery(options);
+    const url = queryString
+      ? `/contacts/${identifier}/topics?${queryString}`
+      : `/contacts/${identifier}/topics`;
 
-    return formatPaginatedResponse(data);
+    const data = await this.resend.get<GetContactTopicsResponseSuccess>(url);
+    return data;
   }
 }
