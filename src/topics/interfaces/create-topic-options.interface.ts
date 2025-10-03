@@ -4,7 +4,7 @@ import type { Topic } from './topic';
 export interface CreateTopicOptions {
   name: string;
   description?: string;
-  default_subscription: 'opt_in' | 'opt_out';
+  defaultSubscription: 'opt_in' | 'opt_out';
 }
 
 export type CreateTopicResponseSuccess = Pick<Topic, 'id'>;
