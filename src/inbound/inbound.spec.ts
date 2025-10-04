@@ -52,6 +52,9 @@ describe('Inbound', () => {
           bcc: null,
           cc: ['cc@example.com'],
           reply_to: ['reply@example.com'],
+          headers: {
+            example: 'value',
+          },
           attachments: [
             {
               id: 'att_123',
@@ -93,6 +96,9 @@ describe('Inbound', () => {
     ],
     "createdAt": "2023-04-07T23:13:52.669661+00:00",
     "from": "sender@example.com",
+    "headers": {
+      "example": "value",
+    },
     "html": "<p>hello world</p>",
     "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
     "object": "inbound",
@@ -123,6 +129,7 @@ describe('Inbound', () => {
           bcc: null,
           cc: null,
           reply_to: null,
+          headers: {},
           attachments: [],
         };
 
@@ -146,6 +153,7 @@ describe('Inbound', () => {
     "cc": null,
     "createdAt": "2023-04-07T23:13:52.669661+00:00",
     "from": "sender@example.com",
+    "headers": {},
     "html": null,
     "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
     "object": "inbound",

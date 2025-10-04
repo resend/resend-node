@@ -14,6 +14,7 @@ export interface GetInboundEmailApiResponse {
   reply_to: string[] | null;
   html: string | null;
   text: string | null;
+  headers: Record<string, string>;
   attachments: Array<{
     id: string;
     filename: string;
