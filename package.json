@@ -1,6 +1,6 @@
 {
   "name": "resend",
-  "version": "6.2.0-canary.1",
+  "version": "6.2.0-canary.2",
   "description": "Node.js library for the Resend API",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
