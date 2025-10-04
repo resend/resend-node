@@ -9,6 +9,7 @@ export interface InboundEmail {
   replyTo: string[] | null;
   html: string | null;
   text: string | null;
+  headers: Record<string, string>;
   attachments: InboundEmailAttachment[];
 }
 
