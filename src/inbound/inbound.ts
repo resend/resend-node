@@ -35,6 +35,7 @@ export class Inbound {
       replyTo: apiResponse.reply_to,
       html: apiResponse.html,
       text: apiResponse.text,
+      headers: apiResponse.headers,
       attachments: apiResponse.attachments.map((attachment) => ({
         id: attachment.id,
         filename: attachment.filename,
