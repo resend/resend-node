@@ -13,6 +13,7 @@ const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
 describe('Batch', () => {
   afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
     it('sends multiple emails', async () => {

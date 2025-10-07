@@ -25,6 +25,7 @@ fetchMocker.enableMocks();
 
 describe('Contacts', () => {
   afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
     it('creates a contact', async () => {

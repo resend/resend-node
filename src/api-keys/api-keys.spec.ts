@@ -13,6 +13,9 @@ const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
 
 describe('API Keys', () => {
+  afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
+
   describe('create', () => {
     it('creates an api key', async () => {
       const payload: CreateApiKeyOptions = {

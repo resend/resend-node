@@ -18,6 +18,7 @@ fetchMocker.enableMocks();
 
 describe('Domains', () => {
   afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
     it('creates a domain', async () => {

@@ -15,6 +15,7 @@ fetchMocker.enableMocks();
 
 describe('Audiences', () => {
   afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
     it('creates a audience', async () => {
