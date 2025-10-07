@@ -1,3 +1,4 @@
+import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import { mockSuccessResponse } from '../test-utils/mock-fetch';
@@ -7,6 +8,9 @@ import type {
 } from './interfaces/create-email-options.interface';
 import type { GetEmailResponseSuccess } from './interfaces/get-email-options.interface';
 import type { ListEmailsResponseSuccess } from './interfaces/list-emails-options.interface';
+
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 

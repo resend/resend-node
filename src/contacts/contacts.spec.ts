@@ -1,3 +1,4 @@
+import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import { mockSuccessResponse } from '../test-utils/mock-fetch';
@@ -18,6 +19,9 @@ import type {
   RemoveContactsResponseSuccess,
 } from './interfaces/remove-contact.interface';
 import type { UpdateContactOptions } from './interfaces/update-contact.interface';
+
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
 
 describe('Contacts', () => {
   afterEach(() => fetchMock.resetMocks());

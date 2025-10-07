@@ -1,3 +1,4 @@
+import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import { mockSuccessResponse } from '../test-utils/mock-fetch';
@@ -7,6 +8,9 @@ import type {
 } from './interfaces/create-api-key-options.interface';
 import type { ListApiKeysResponseSuccess } from './interfaces/list-api-keys.interface';
 import type { RemoveApiKeyResponseSuccess } from './interfaces/remove-api-keys.interface';
+
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
 
 describe('API Keys', () => {
   describe('create', () => {
