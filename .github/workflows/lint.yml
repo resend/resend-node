@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
       - name: pnpm setup
-        uses: pnpm/action-setup@f2b2b233b538f500472c7274c7012f57857d8ce0
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
       - name: Install packages
         run: pnpm install
       - name: Run Lint
