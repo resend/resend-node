@@ -1,8 +1,6 @@
-import type { ErrorResponse } from '../../interfaces';
-import type { InboundEmail } from './inbound-email';
+import type { ErrorResponse } from '../../../interfaces';
 
-// API response type (snake_case from API)
-export interface GetInboundEmailApiResponse {
+export interface GetInboundEmailResponseSuccess {
   object: 'inbound';
   id: string;
   to: string[];
@@ -22,11 +20,6 @@ export interface GetInboundEmailApiResponse {
     content_id: string;
     content_disposition: string;
   }>;
-}
-
-// SDK response type (camelCase for users)
-export interface GetInboundEmailResponseSuccess extends InboundEmail {
-  object: 'inbound';
 }
 
 export type GetInboundEmailResponse =
