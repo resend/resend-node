@@ -1,9 +1,9 @@
-import type { ErrorResponse } from '../interfaces';
-import { Resend } from '../resend';
+import type { ErrorResponse } from '../../interfaces';
+import { Resend } from '../../resend';
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-describe('Attachments', () => {
+describe('Receiving', () => {
   afterEach(() => fetchMock.resetMocks());
 
   describe('get', () => {
@@ -22,8 +22,8 @@ describe('Attachments', () => {
           },
         });
 
-        const result = await resend.attachments.get({
-          inboundId: '61cda979-919d-4b9d-9638-c148b93ff410',
+        const result = await resend.attachments.receiving.get({
+          emailId: '61cda979-919d-4b9d-9638-c148b93ff410',
           id: 'att_123',
         });
 
@@ -61,8 +61,8 @@ describe('Attachments', () => {
           },
         });
 
-        const result = await resend.attachments.get({
-          inboundId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+        const result = await resend.attachments.receiving.get({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           id: 'att_123',
         });
 
@@ -71,9 +71,9 @@ describe('Attachments', () => {
   "data": {
     "data": {
       "content": "base64encodedcontent==",
-      "contentDisposition": "attachment",
-      "contentId": "cid_123",
-      "contentType": "application/pdf",
+      "content_disposition": "attachment",
+      "content_id": "cid_123",
+      "content_type": "application/pdf",
       "filename": "document.pdf",
       "id": "att_123",
     },
@@ -106,8 +106,8 @@ describe('Attachments', () => {
           },
         });
 
-        const result = await resend.attachments.get({
-          inboundId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+        const result = await resend.attachments.receiving.get({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           id: 'att_456',
         });
 
@@ -116,9 +116,9 @@ describe('Attachments', () => {
   "data": {
     "data": {
       "content": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
-      "contentDisposition": "inline",
-      "contentId": "cid_456",
-      "contentType": "image/png",
+      "content_disposition": "inline",
+      "content_id": "cid_456",
+      "content_type": "image/png",
       "filename": "image.png",
       "id": "att_456",
     },
@@ -150,8 +150,8 @@ describe('Attachments', () => {
           },
         });
 
-        const result = await resend.attachments.get({
-          inboundId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+        const result = await resend.attachments.receiving.get({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           id: 'att_789',
         });
 
@@ -160,10 +160,8 @@ describe('Attachments', () => {
   "data": {
     "data": {
       "content": "base64content",
-      "contentDisposition": "attachment",
-      "contentId": undefined,
-      "contentType": "text/plain",
-      "filename": undefined,
+      "content_disposition": "attachment",
+      "content_type": "text/plain",
       "id": "att_789",
     },
     "object": "attachment",
@@ -180,7 +178,7 @@ describe('Attachments', () => {
       it('returns error', async () => {
         const response: ErrorResponse = {
           name: 'not_found',
-          message: 'Inbound email not found',
+          message: 'Email not found',
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -191,24 +189,16 @@ describe('Attachments', () => {
           },
         });
 
-        const result = await resend.attachments.list({
-          inboundId: '61cda979-919d-4b9d-9638-c148b93ff410',
+        const result = await resend.attachments.receiving.list({
+          emailId: '61cda979-919d-4b9d-9638-c148b93ff410',
         });
 
-        expect(result).toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Inbound email not found",
-    "name": "not_found",
-  },
-}
-`);
+        expect(result).toEqual({ data: null, error: response });
       });
     });
 
     describe('when attachments found', () => {
-      it('returns multiple attachments with transformed fields', async () => {
+      it('returns multiple attachments', async () => {
         const apiResponse = {
           object: 'attachment' as const,
           data: [
@@ -239,33 +229,11 @@ describe('Attachments', () => {
           },
         });
 
-        const result = await resend.attachments.list({
-          inboundId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+        const result = await resend.attachments.receiving.list({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
         });
 
-        expect(result).toMatchInlineSnapshot(`
-{
-  "data": [
-    {
-      "content": "base64encodedcontent==",
-      "contentDisposition": "attachment",
-      "contentId": "cid_123",
-      "contentType": "application/pdf",
-      "filename": "document.pdf",
-      "id": "att_123",
-    },
-    {
-      "content": "imagebase64==",
-      "contentDisposition": "inline",
-      "contentId": "cid_456",
-      "contentType": "image/png",
-      "filename": "image.png",
-      "id": "att_456",
-    },
-  ],
-  "error": null,
-}
-`);
+        expect(result).toEqual({ data: apiResponse, error: null });
       });
 
       it('returns empty array when no attachments', async () => {
@@ -282,16 +250,11 @@ describe('Attachments', () => {
           },
         });
 
-        const result = await resend.attachments.list({
-          inboundId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+        const result = await resend.attachments.receiving.list({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
         });
 
-        expect(result).toMatchInlineSnapshot(`
-{
-  "data": [],
-  "error": null,
-}
-`);
+        expect(result).toEqual({ data: apiResponse, error: null });
       });
     });
   });
