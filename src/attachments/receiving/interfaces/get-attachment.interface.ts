@@ -1,8 +1,8 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { ErrorResponse } from '../../../interfaces';
 import type { InboundAttachment } from './attachment';
 
 export interface GetAttachmentOptions {
-  inboundId: string;
+  emailId: string;
   id: string;
 }
 
