@@ -10,12 +10,10 @@ const isValidType = (title) =>
 const validateTitle = (title) => {
   if (!isValidType(title)) {
     console.error(
-      `PR title does not follow the required format.
-      example: "type: My PR Title"
-
-      - type: "feat", "fix", "chore", or "refactor"
-      - First letter of the PR title needs to be lowercased
-      `,
+      `PR title does not follow the required format "[type]: [title]".
+- Example: "fix: email compatibility issue"
+- Allowed types: 'feat', 'fix', 'chore', 'refactor'
+- First letter of the title portion (after the colon) must be lowercased`,
     );
     process.exit(1);
   }
