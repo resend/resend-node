@@ -8,6 +8,6 @@ export * from './contacts/interfaces';
 export * from './domains/interfaces';
 export * from './emails/interfaces';
 export * from './webhooks/interfaces';
-export * from './inbound/interfaces';
+export * from './emails/receiving/interfaces';
 export { ErrorResponse } from './interfaces';
 export { Resend } from './resend';

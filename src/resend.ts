@@ -10,7 +10,6 @@ import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
-import { Inbound } from './inbound/inbound';
 import type { ErrorResponse } from './interfaces';
 import { Webhooks } from './webhooks/webhooks';
 
@@ -37,7 +36,6 @@ export class Resend {
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
   readonly webhooks = new Webhooks(this);
-  readonly inbound = new Inbound(this);
 
   constructor(readonly key?: string) {
     if (!key) {
