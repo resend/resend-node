@@ -1,9 +1,9 @@
-import type { ErrorResponse } from '../interfaces';
-import { Resend } from '../resend';
+import type { ErrorResponse } from '../../interfaces';
+import { Resend } from '../../resend';
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-describe('Inbound', () => {
+describe('Receiving', () => {
   afterEach(() => fetchMock.resetMocks());
 
   describe('get', () => {
@@ -22,7 +22,7 @@ describe('Inbound', () => {
           },
         });
 
-        const result = resend.inbound.get(
+        const result = resend.emails.receiving.get(
           '61cda979-919d-4b9d-9638-c148b93ff410',
         );
 
@@ -39,7 +39,7 @@ describe('Inbound', () => {
     });
 
     describe('when inbound email found', () => {
-      it('returns inbound email with transformed fields', async () => {
+      it('returns inbound email', async () => {
         const apiResponse = {
           object: 'inbound' as const,
           id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
@@ -74,7 +74,7 @@ describe('Inbound', () => {
           },
         });
 
-        const result = await resend.inbound.get(
+        const result = await resend.emails.receiving.get(
           '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
         );
 
@@ -83,9 +83,9 @@ describe('Inbound', () => {
   "data": {
     "attachments": [
       {
-        "contentDisposition": "attachment",
-        "contentId": "cid_123",
-        "contentType": "application/pdf",
+        "content_disposition": "attachment",
+        "content_id": "cid_123",
+        "content_type": "application/pdf",
         "filename": "document.pdf",
         "id": "att_123",
       },
@@ -94,7 +94,7 @@ describe('Inbound', () => {
     "cc": [
       "cc@example.com",
     ],
-    "createdAt": "2023-04-07T23:13:52.669661+00:00",
+    "created_at": "2023-04-07T23:13:52.669661+00:00",
     "from": "sender@example.com",
     "headers": {
       "example": "value",
@@ -102,7 +102,7 @@ describe('Inbound', () => {
     "html": "<p>hello world</p>",
     "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
     "object": "inbound",
-    "replyTo": [
+    "reply_to": [
       "reply@example.com",
     ],
     "subject": "Test inbound email",
@@ -141,7 +141,7 @@ describe('Inbound', () => {
           },
         });
 
-        const result = await resend.inbound.get(
+        const result = await resend.emails.receiving.get(
           '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
         );
 
@@ -151,13 +151,13 @@ describe('Inbound', () => {
     "attachments": [],
     "bcc": null,
     "cc": null,
-    "createdAt": "2023-04-07T23:13:52.669661+00:00",
+    "created_at": "2023-04-07T23:13:52.669661+00:00",
     "from": "sender@example.com",
     "headers": {},
     "html": null,
     "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
     "object": "inbound",
-    "replyTo": null,
+    "reply_to": null,
     "subject": "Test inbound email",
     "text": "hello world",
     "to": [
