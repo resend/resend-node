@@ -31,7 +31,9 @@
     "lint": "biome check .",
     "prepublishOnly": "pnpm run build",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:record": "rimraf --glob \"**/__recordings__\" && cross-env TEST_MODE=record vitest run",
+    "test:dev": "cross-env TEST_MODE=dev vitest run"
   },
   "repository": {
     "type": "git",
@@ -53,9 +55,15 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.5",
+    "@pollyjs/adapter-fetch": "6.0.7",
+    "@pollyjs/core": "6.0.6",
+    "@pollyjs/persister-fs": "6.0.6",
     "@types/node": "22.18.9",
     "@types/react": "19.2.0",
+    "cross-env": "10.1.0",
+    "dotenv": "17.2.3",
     "pkg-pr-new": "0.0.60",
+    "rimraf": "6.0.1",
     "tsup": "8.5.0",
     "typescript": "5.9.3",
     "vitest": "3.2.4",

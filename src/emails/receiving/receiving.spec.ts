@@ -1,9 +1,13 @@
+import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
 import type {
   GetInboundEmailResponseSuccess,
   ListInboundEmailsResponseSuccess,
 } from './interfaces';
+
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 

@@ -1,6 +1,6 @@
-import { vi } from 'vitest';
-import createFetchMock from 'vitest-fetch-mock';
+import { config } from 'dotenv';
 
-const fetchMocker = createFetchMock(vi);
-
-fetchMocker.enableMocks();
+config({
+  path: '.env.test',
+  quiet: true,
+});
