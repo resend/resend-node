@@ -1,5 +1,8 @@
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
+import { mockSuccessResponse } from '../../test-utils/mock-fetch';
+import type { GetAttachmentResponseSuccess } from './interfaces';
+import type { ListAttachmentsResponseSuccess } from './interfaces/list-attachments.interface';
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -41,7 +44,7 @@ describe('Receiving', () => {
 
     describe('when attachment found', () => {
       it('returns attachment with transformed fields', async () => {
-        const apiResponse = {
+        const apiResponse: GetAttachmentResponseSuccess = {
           object: 'attachment' as const,
           data: {
             id: 'att_123',
@@ -174,6 +177,33 @@ describe('Receiving', () => {
   });
 
   describe('list', () => {
+    const apiResponse: ListAttachmentsResponseSuccess = {
+      object: 'list' as const,
+      has_more: false,
+      data: [
+        {
+          id: 'att_123',
+          filename: 'document.pdf',
+          content_type: 'application/pdf',
+          content_id: 'cid_123',
+          content_disposition: 'attachment' as const,
+          content: 'base64encodedcontent==',
+        },
+        {
+          id: 'att_456',
+          filename: 'image.png',
+          content_type: 'image/png',
+          content_id: 'cid_456',
+          content_disposition: 'inline' as const,
+          content: 'imagebase64==',
+        },
+      ],
+    };
+
+    const headers = {
+      Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+    };
+
     describe('when inbound email not found', () => {
       it('returns error', async () => {
         const response: ErrorResponse = {
@@ -199,28 +229,6 @@ describe('Receiving', () => {
 
     describe('when attachments found', () => {
       it('returns multiple attachments', async () => {
-        const apiResponse = {
-          object: 'attachment' as const,
-          data: [
-            {
-              id: 'att_123',
-              filename: 'document.pdf',
-              content_type: 'application/pdf',
-              content_id: 'cid_123',
-              content_disposition: 'attachment' as const,
-              content: 'base64encodedcontent==',
-            },
-            {
-              id: 'att_456',
-              filename: 'image.png',
-              content_type: 'image/png',
-              content_id: 'cid_456',
-              content_disposition: 'inline' as const,
-              content: 'imagebase64==',
-            },
-          ],
-        };
-
         fetchMock.mockOnce(JSON.stringify(apiResponse), {
           status: 200,
           headers: {
@@ -237,12 +245,12 @@ describe('Receiving', () => {
       });
 
       it('returns empty array when no attachments', async () => {
-        const apiResponse = {
+        const emptyResponse = {
           object: 'attachment' as const,
           data: [],
         };
 
-        fetchMock.mockOnce(JSON.stringify(apiResponse), {
+        fetchMock.mockOnce(JSON.stringify(emptyResponse), {
           status: 200,
           headers: {
             'content-type': 'application/json',
@@ -254,7 +262,74 @@ describe('Receiving', () => {
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
         });
 
-        expect(result).toEqual({ data: apiResponse, error: null });
+        expect(result).toEqual({ data: emptyResponse, error: null });
+      });
+    });
+
+    describe('when no pagination options provided', () => {
+      it('calls endpoint without query params and return the response', async () => {
+        mockSuccessResponse(apiResponse, {
+          headers,
+        });
+
+        const result = await resend.attachments.receiving.list({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+        });
+
+        expect(result).toEqual({
+          data: apiResponse,
+          error: null,
+        });
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments',
+        );
+      });
+    });
+
+    describe('when pagination options are provided', () => {
+      it('calls endpoint passing limit param and return the response', async () => {
+        mockSuccessResponse(apiResponse, { headers });
+        const result = await resend.attachments.receiving.list({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          limit: 10,
+        });
+        expect(result).toEqual({
+          data: apiResponse,
+          error: null,
+        });
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments?limit=10',
+        );
+      });
+
+      it('calls endpoint passing after param and return the response', async () => {
+        mockSuccessResponse(apiResponse, { headers });
+        const result = await resend.attachments.receiving.list({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          after: 'cursor123',
+        });
+        expect(result).toEqual({
+          data: apiResponse,
+          error: null,
+        });
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments?after=cursor123',
+        );
+      });
+
+      it('calls endpoint passing before param and return the response', async () => {
+        mockSuccessResponse(apiResponse, { headers });
+        const result = await resend.attachments.receiving.list({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          before: 'cursor123',
+        });
+        expect(result).toEqual({
+          data: apiResponse,
+          error: null,
+        });
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments?before=cursor123',
+        );
       });
     });
   });
