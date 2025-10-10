@@ -1,5 +1,9 @@
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
+import type {
+  GetInboundEmailResponseSuccess,
+  ListInboundEmailsResponseSuccess,
+} from './interfaces';
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -40,7 +44,7 @@ describe('Receiving', () => {
 
     describe('when inbound email found', () => {
       it('returns inbound email', async () => {
-        const apiResponse = {
+        const apiResponse: GetInboundEmailResponseSuccess = {
           object: 'inbound' as const,
           id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           to: ['received@example.com'],
@@ -117,7 +121,7 @@ describe('Receiving', () => {
       });
 
       it('returns inbound email with no attachments', async () => {
-        const apiResponse = {
+        const apiResponse: GetInboundEmailResponseSuccess = {
           object: 'inbound' as const,
           id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           to: ['received@example.com'],
@@ -205,7 +209,7 @@ describe('Receiving', () => {
 
     describe('when inbound emails found', () => {
       it('returns list of inbound emails with transformed fields', async () => {
-        const apiResponse = {
+        const apiResponse: ListInboundEmailsResponseSuccess = {
           object: 'list' as const,
           has_more: true,
           data: [
@@ -225,7 +229,6 @@ describe('Receiving', () => {
                   content_type: 'application/pdf',
                   content_id: 'cid_123',
                   content_disposition: 'attachment' as const,
-                  size: 12345,
                 },
               ],
             },
@@ -265,7 +268,6 @@ describe('Receiving', () => {
             "content_type": "application/pdf",
             "filename": "document.pdf",
             "id": "att_123",
-            "size": 12345,
           },
         ],
         "bcc": null,
