@@ -2,7 +2,6 @@ import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
 import { mockSuccessResponse } from '../../test-utils/mock-fetch';
-import type { GetAttachmentResponseSuccess } from './interfaces';
 import type { ListAttachmentsResponseSuccess } from './interfaces/list-attachments.interface';
 
 const fetchMocker = createFetchMock(vi);
@@ -49,7 +48,7 @@ describe('Receiving', () => {
 
     describe('when attachment found', () => {
       it('returns attachment with transformed fields', async () => {
-        const apiResponse: GetAttachmentResponseSuccess = {
+        const apiResponse = {
           object: 'attachment' as const,
           data: {
             id: 'att_123',
@@ -57,17 +56,32 @@ describe('Receiving', () => {
             content_type: 'application/pdf',
             content_id: 'cid_123',
             content_disposition: 'attachment' as const,
-            content: 'base64encodedcontent==',
+            download_url: 'https://example.com/download/att_123',
           },
         };
 
-        fetchMock.mockOnce(JSON.stringify(apiResponse), {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        // Mock the API response
+        fetchMock.mockOnceIf(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments/att_123',
+          JSON.stringify(apiResponse),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
           },
-        });
+        );
+
+        // Mock the download URL response
+        const binaryData = Buffer.from('base64encodedcontent==', 'base64');
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_123',
+          async () =>
+            new Response(binaryData, {
+              status: 200,
+            }),
+        );
 
         const result = await resend.attachments.receiving.get({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
@@ -78,7 +92,7 @@ describe('Receiving', () => {
 {
   "data": {
     "data": {
-      "content": "base64encodedcontent==",
+      "content": "base64encodedcontent",
       "content_disposition": "attachment",
       "content_id": "cid_123",
       "content_type": "application/pdf",
@@ -101,18 +115,35 @@ describe('Receiving', () => {
             content_type: 'image/png',
             content_id: 'cid_456',
             content_disposition: 'inline' as const,
-            content:
-              'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+            download_url: 'https://example.com/download/att_456',
           },
         };
 
-        fetchMock.mockOnce(JSON.stringify(apiResponse), {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        // Mock the API response
+        fetchMock.mockOnceIf(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments/att_456',
+          JSON.stringify(apiResponse),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
           },
-        });
+        );
+
+        // Mock the download URL response
+        const binaryData = Buffer.from(
+          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+          'base64',
+        );
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_456',
+          async () =>
+            new Response(binaryData, {
+              status: 200,
+            }),
+        );
 
         const result = await resend.attachments.receiving.get({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
@@ -145,18 +176,33 @@ describe('Receiving', () => {
             id: 'att_789',
             content_type: 'text/plain',
             content_disposition: 'attachment' as const,
-            content: 'base64content',
+            download_url: 'https://example.com/download/att_789',
             // Optional fields (filename, content_id) omitted
           },
         };
 
-        fetchMock.mockOnce(JSON.stringify(apiResponse), {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        // Mock the API response
+        fetchMock.mockOnceIf(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments/att_789',
+          JSON.stringify(apiResponse),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
           },
-        });
+        );
+
+        // Mock the download URL response
+        const binaryData = Buffer.from('base64content', 'base64');
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_789',
+          async () =>
+            new Response(binaryData, {
+              status: 200,
+            }),
+        );
 
         const result = await resend.attachments.receiving.get({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
@@ -167,7 +213,7 @@ describe('Receiving', () => {
 {
   "data": {
     "data": {
-      "content": "base64content",
+      "content": "base64conten",
       "content_disposition": "attachment",
       "content_type": "text/plain",
       "id": "att_789",

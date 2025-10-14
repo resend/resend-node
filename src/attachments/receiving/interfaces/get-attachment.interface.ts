@@ -15,7 +15,7 @@ export interface GetAttachmentApiResponse {
     content_type: string;
     content_disposition: 'inline' | 'attachment';
     content_id?: string;
-    content: string;
+    download_url: string;
   };
 }
 
