@@ -1,3 +1,4 @@
+import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import { mockSuccessResponse } from '../test-utils/mock-fetch';
@@ -8,7 +9,13 @@ import type {
 import type { ListApiKeysResponseSuccess } from './interfaces/list-api-keys.interface';
 import type { RemoveApiKeyResponseSuccess } from './interfaces/remove-api-keys.interface';
 
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+
 describe('API Keys', () => {
+  afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
+
   describe('create', () => {
     it('creates an api key', async () => {
       const payload: CreateApiKeyOptions = {
