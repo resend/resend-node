@@ -12,6 +12,8 @@ export interface Template {
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  has_unpublished_versions: boolean;
+  current_version_id: string;
 }
 
 export type TemplateVariableListFallbackType =

@@ -641,6 +641,8 @@ describe('Templates', () => {
         from: 'noreply@example.com',
         reply_to: ['support@example.com'],
         published_at: '2025-08-19 19:28:27.947052+00',
+        has_unpublished_versions: false,
+        current_version_id: 'ver_123456',
         variables: [
           {
             key: 'name',
@@ -665,7 +667,9 @@ describe('Templates', () => {
           "data": {
             "alias": "welcome-email",
             "created_at": "2025-08-19 19:28:27.947052+00",
+            "current_version_id": "ver_123456",
             "from": "noreply@example.com",
+            "has_unpublished_versions": false,
             "html": "<h1>Welcome!</h1>",
             "id": "fd61172c-cafc-40f5-b049-b45947779a29",
             "name": "Welcome Email",
