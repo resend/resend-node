@@ -1,5 +1,6 @@
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
+import { ContactAudiences } from './audiences/contact-audiences';
 import type {
   CreateContactOptions,
   CreateContactRequestOptions,
@@ -12,6 +13,7 @@ import type {
   GetContactResponseSuccess,
 } from './interfaces/get-contact.interface';
 import type {
+  ListAudienceContactsOptions,
   ListContactsOptions,
   ListContactsResponse,
   ListContactsResponseSuccess,
@@ -26,14 +28,35 @@ import type {
   UpdateContactResponse,
   UpdateContactResponseSuccess,
 } from './interfaces/update-contact.interface';
+import { ContactTopics } from './topics/contact-topics';
 
 export class Contacts {
-  constructor(private readonly resend: Resend) {}
+  readonly topics: ContactTopics;
+  readonly audiences: ContactAudiences;
+
+  constructor(private readonly resend: Resend) {
+    this.topics = new ContactTopics(this.resend);
+    this.audiences = new ContactAudiences(this.resend);
+  }
 
   async create(
     payload: CreateContactOptions,
     options: CreateContactRequestOptions = {},
   ): Promise<CreateContactResponse> {
+    if (!payload.audienceId) {
+      const data = await this.resend.post<CreateContactResponseSuccess>(
+        '/contacts',
+        {
+          unsubscribed: payload.unsubscribed,
+          email: payload.email,
+          first_name: payload.firstName,
+          last_name: payload.lastName,
+        },
+        options,
+      );
+      return data;
+    }
+
     const data = await this.resend.post<CreateContactResponseSuccess>(
       `/audiences/${payload.audienceId}/contacts`,
       {
@@ -47,18 +70,33 @@ export class Contacts {
     return data;
   }
 
-  async list(options: ListContactsOptions): Promise<ListContactsResponse> {
+  async list(
+    options: ListContactsOptions | ListAudienceContactsOptions = {},
+  ): Promise<ListContactsResponse> {
+    if (!('audienceId' in options) || options.audienceId === undefined) {
+      const queryString = buildPaginationQuery(options);
+      const url = queryString ? `/contacts?${queryString}` : '/contacts';
+      const data = await this.resend.get<ListContactsResponseSuccess>(url);
+      return data;
+    }
+
     const { audienceId, ...paginationOptions } = options;
     const queryString = buildPaginationQuery(paginationOptions);
     const url = queryString
       ? `/audiences/${audienceId}/contacts?${queryString}`
       : `/audiences/${audienceId}/contacts`;
-
     const data = await this.resend.get<ListContactsResponseSuccess>(url);
     return data;
   }
 
   async get(options: GetContactOptions): Promise<GetContactResponse> {
+    if (typeof options === 'string') {
+      const data = await this.resend.get<GetContactResponseSuccess>(
+        `/contacts/${options}`,
+      );
+      return data;
+    }
+
     if (!options.id && !options.email) {
       return {
         data: null,
@@ -68,6 +106,13 @@ export class Contacts {
           name: 'missing_required_field',
         },
       };
+    }
+
+    if (!options.audienceId) {
+      const data = await this.resend.get<GetContactResponseSuccess>(
+        `/contacts/${options?.email ? options?.email : options?.id}`,
+      );
+      return data;
     }
 
     const data = await this.resend.get<GetContactResponseSuccess>(
@@ -88,6 +133,18 @@ export class Contacts {
       };
     }
 
+    if (!options.audienceId) {
+      const data = await this.resend.patch<UpdateContactResponseSuccess>(
+        `/contacts/${options?.email ? options?.email : options?.id}`,
+        {
+          unsubscribed: options.unsubscribed,
+          first_name: options.firstName,
+          last_name: options.lastName,
+        },
+      );
+      return data;
+    }
+
     const data = await this.resend.patch<UpdateContactResponseSuccess>(
       `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
       {
@@ -100,6 +157,13 @@ export class Contacts {
   }
 
   async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
+    if (typeof payload === 'string') {
+      const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+        `/contacts/${payload}`,
+      );
+      return data;
+    }
+
     if (!payload.id && !payload.email) {
       return {
         data: null,
@@ -111,11 +175,19 @@ export class Contacts {
       };
     }
 
+    if (!payload.audienceId) {
+      const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+        `/contacts/${payload?.email ? payload?.email : payload?.id}`,
+      );
+      return data;
+    }
+
     const data = await this.resend.delete<RemoveContactsResponseSuccess>(
       `/audiences/${payload.audienceId}/contacts/${
         payload?.email ? payload?.email : payload?.id
       }`,
     );
+
     return data;
   }
 }
