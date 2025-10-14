@@ -73,7 +73,7 @@ export class Contacts {
   async list(
     options: ListContactsOptions | ListAudienceContactsOptions = {},
   ): Promise<ListContactsResponse> {
-    if (!('audienceId' in options)) {
+    if (!('audienceId' in options) || options.audienceId === undefined) {
       const queryString = buildPaginationQuery(options);
       const url = queryString ? `/contacts?${queryString}` : '/contacts';
       const data = await this.resend.get<ListContactsResponseSuccess>(url);

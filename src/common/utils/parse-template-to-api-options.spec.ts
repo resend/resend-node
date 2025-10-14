@@ -3,7 +3,7 @@ import type { UpdateTemplateOptions } from '../../templates/interfaces/update-te
 import { parseTemplateToApiOptions } from './parse-template-to-api-options';
 
 describe('parseTemplateToApiOptions', () => {
-  it('should handle minimal template with only required fields', () => {
+  it('handles minimal template with only required fields', () => {
     const templatePayload: CreateTemplateOptions = {
       name: 'Welcome Template',
       html: '<h1>Welcome!</h1>',
@@ -23,7 +23,7 @@ describe('parseTemplateToApiOptions', () => {
     });
   });
 
-  it('should properly convert camelCase to snake_case for all fields', () => {
+  it('properly converts camelCase to snake_case for all fields', () => {
     const templatePayload: CreateTemplateOptions = {
       name: 'Newsletter Template',
       subject: 'Weekly Newsletter',
@@ -71,7 +71,7 @@ describe('parseTemplateToApiOptions', () => {
     });
   });
 
-  it('should handle single replyTo email', () => {
+  it('handles single replyTo email', () => {
     const templatePayload: CreateTemplateOptions = {
       name: 'Single Reply Template',
       html: '<h1>Test</h1>',
@@ -83,7 +83,7 @@ describe('parseTemplateToApiOptions', () => {
     expect(apiOptions.reply_to).toBe('support@example.com');
   });
 
-  it('should handle update template options', () => {
+  it('handles update template options', () => {
     const updatePayload: UpdateTemplateOptions = {
       subject: 'Updated Subject',
       replyTo: 'updated@example.com',
@@ -116,7 +116,7 @@ describe('parseTemplateToApiOptions', () => {
     });
   });
 
-  it('should not include React component in API options', () => {
+  it('excludes React component from API options', () => {
     const mockReactComponent = {
       type: 'div',
       props: { children: 'Hello from React!' },
@@ -143,7 +143,7 @@ describe('parseTemplateToApiOptions', () => {
     expect(apiOptions).not.toHaveProperty('react');
   });
 
-  it('should handle variables with different types', () => {
+  it('handles variables with different types', () => {
     const templatePayload: CreateTemplateOptions = {
       name: 'Multi-type Template',
       html: '<h1>Test</h1>',
@@ -197,7 +197,7 @@ describe('parseTemplateToApiOptions', () => {
     ]);
   });
 
-  it('should handle undefined variables', () => {
+  it('handles undefined variables', () => {
     const templatePayload: CreateTemplateOptions = {
       name: 'No Variables Template',
       html: '<h1>Simple template</h1>',
@@ -208,7 +208,7 @@ describe('parseTemplateToApiOptions', () => {
     expect(apiOptions.variables).toBeUndefined();
   });
 
-  it('should handle empty variables array', () => {
+  it('handles empty variables array', () => {
     const templatePayload: CreateTemplateOptions = {
       name: 'Empty Variables Template',
       html: '<h1>Template with empty variables</h1>',
