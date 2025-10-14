@@ -1,3 +1,4 @@
+import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import { mockSuccessResponse } from '../test-utils/mock-fetch';
@@ -10,10 +11,14 @@ import type { ListBroadcastsResponseSuccess } from './interfaces/list-broadcasts
 import type { RemoveBroadcastResponseSuccess } from './interfaces/remove-broadcast.interface';
 import type { UpdateBroadcastResponseSuccess } from './interfaces/update-broadcast.interface';
 
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
 describe('Broadcasts', () => {
   afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
     it('missing `from`', async () => {
