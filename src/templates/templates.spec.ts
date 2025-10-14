@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import {
@@ -12,6 +13,9 @@ import type {
 import type { GetTemplateResponseSuccess } from './interfaces/get-template.interface';
 import type { UpdateTemplateOptions } from './interfaces/update-template.interface';
 
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+
 const mockRenderAsync = vi.fn();
 vi.mock('@react-email/render', () => ({
   renderAsync: mockRenderAsync,
@@ -23,6 +27,7 @@ describe('Templates', () => {
     vi.resetAllMocks();
     fetchMock.resetMocks();
   });
+  afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
     it('creates a template with minimal required fields', async () => {

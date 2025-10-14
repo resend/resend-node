@@ -1,3 +1,4 @@
+import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import {
@@ -13,8 +14,12 @@ import type { ListTopicsResponseSuccess } from './interfaces/list-topics.interfa
 import type { RemoveTopicResponseSuccess } from './interfaces/remove-topic.interface';
 import type { UpdateTopicOptions } from './interfaces/update-topic.interface';
 
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+
 describe('Topics', () => {
   afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
     it('creates a topic', async () => {

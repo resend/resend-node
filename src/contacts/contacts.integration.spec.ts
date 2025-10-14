@@ -44,6 +44,7 @@ describe('Contacts Integration Tests', () => {
     it('handles validation errors', async () => {
       // @ts-expect-error: Testing invalid input
       const result = await resend.contacts.create({});
+      console.log(result);
 
       expect(result.error?.name).toBe('validation_error');
     });

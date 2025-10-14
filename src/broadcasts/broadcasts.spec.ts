@@ -460,8 +460,8 @@ describe('Broadcasts', () => {
     "sent_at": null,
     "status": "draft",
     "subject": "hello world",
-    "topic_id": "9f31e56e-3083-46cf-8e96-c6995e0e576a",
     "text": "Hello world",
+    "topic_id": "9f31e56e-3083-46cf-8e96-c6995e0e576a",
   },
   "error": null,
 }

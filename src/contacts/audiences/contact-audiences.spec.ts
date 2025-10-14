@@ -1,3 +1,4 @@
+import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from '../../resend';
 import { mockSuccessResponse } from '../../test-utils/mock-fetch';
 import type {
@@ -13,9 +14,12 @@ import type {
   RemoveContactAudiencesResponseSuccess,
 } from './interfaces/remove-contact-audience.interface';
 
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+
 describe('ContactAudiences', () => {
   afterEach(() => fetchMock.resetMocks());
-
+  afterAll(() => fetchMocker.disableMocks());
   describe('list', () => {
     it('gets contact audiences by email', async () => {
       const options: ListContactAudiencesOptions = {

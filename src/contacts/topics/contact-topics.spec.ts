@@ -1,3 +1,4 @@
+import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from '../../resend';
 import { mockSuccessResponse } from '../../test-utils/mock-fetch';
 import type {
@@ -9,8 +10,12 @@ import type {
   UpdateContactTopicsResponseSuccess,
 } from './interfaces/update-contact-topics.interface';
 
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+
 describe('ContactTopics', () => {
   afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
 
   describe('update', () => {
     it('updates contact topics with opt_in', async () => {
