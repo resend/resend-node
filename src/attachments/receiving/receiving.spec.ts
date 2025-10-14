@@ -12,6 +12,18 @@ fetchMocker.enableMocks();
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
+const pdfContent = 'PDF document content';
+const pdfBuffer = Buffer.from(pdfContent);
+const pdfBase64 = pdfBuffer.toString('base64');
+
+const imageContent = 'PNG image data';
+const imageBuffer = Buffer.from(imageContent);
+const imageBase64 = imageBuffer.toString('base64');
+
+const textContent = 'Plain text content';
+const textBuffer = Buffer.from(textContent);
+const textBase64 = textBuffer.toString('base64');
+
 describe('Receiving', () => {
   afterEach(() => fetchMock.resetMocks());
   afterAll(() => fetchMocker.disableMocks());
@@ -63,7 +75,6 @@ describe('Receiving', () => {
           },
         };
 
-        // Mock the API response
         fetchMock.mockOnceIf(
           'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments/att_123',
           JSON.stringify(apiResponse),
@@ -76,14 +87,10 @@ describe('Receiving', () => {
           },
         );
 
-        const fileContent = 'This is a PDF document content';
-        const fileBuffer = Buffer.from(fileContent);
-        const expectedBase64 = fileBuffer.toString('base64');
-
         fetchMock.mockOnceIf(
           'https://example.com/download/att_123',
           async () =>
-            new Response(fileBuffer, {
+            new Response(pdfBuffer, {
               status: 200,
             }),
         );
@@ -96,7 +103,7 @@ describe('Receiving', () => {
         expect(result).toEqual({
           data: {
             data: {
-              content: expectedBase64,
+              content: pdfBase64,
               content_disposition: 'attachment',
               content_id: 'cid_123',
               content_type: 'application/pdf',
@@ -122,7 +129,6 @@ describe('Receiving', () => {
           },
         };
 
-        // Mock the API response
         fetchMock.mockOnceIf(
           'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments/att_456',
           JSON.stringify(apiResponse),
@@ -134,11 +140,6 @@ describe('Receiving', () => {
             },
           },
         );
-
-        // Mock the download URL response
-        const imageContent = 'PNG image binary data';
-        const imageBuffer = Buffer.from(imageContent);
-        const expectedBase64 = imageBuffer.toString('base64');
 
         fetchMock.mockOnceIf(
           'https://example.com/download/att_456',
@@ -156,7 +157,7 @@ describe('Receiving', () => {
         expect(result).toEqual({
           data: {
             data: {
-              content: expectedBase64,
+              content: imageBase64,
               content_disposition: 'inline',
               content_id: 'cid_456',
               content_type: 'image/png',
@@ -182,7 +183,6 @@ describe('Receiving', () => {
           },
         };
 
-        // Mock the API response
         fetchMock.mockOnceIf(
           'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments/att_789',
           JSON.stringify(apiResponse),
@@ -194,11 +194,6 @@ describe('Receiving', () => {
             },
           },
         );
-
-        // Mock the download URL response
-        const textContent = 'Plain text content';
-        const textBuffer = Buffer.from(textContent);
-        const expectedBase64 = textBuffer.toString('base64');
 
         fetchMock.mockOnceIf(
           'https://example.com/download/att_789',
@@ -216,7 +211,7 @@ describe('Receiving', () => {
         expect(result).toEqual({
           data: {
             data: {
-              content: expectedBase64,
+              content: textBase64,
               content_disposition: 'attachment',
               content_type: 'text/plain',
               id: 'att_789',
@@ -282,7 +277,6 @@ describe('Receiving', () => {
 
     describe('when attachments found', () => {
       it('returns multiple attachments', async () => {
-        // Mock the API response
         fetchMock.mockOnceIf(
           'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments',
           JSON.stringify(apiResponse),
@@ -294,15 +288,6 @@ describe('Receiving', () => {
             },
           },
         );
-
-        // Mock download URLs
-        const pdfContent = 'PDF document content';
-        const pdfBuffer = Buffer.from(pdfContent);
-        const pdfBase64 = pdfBuffer.toString('base64');
-
-        const imageContent = 'PNG image data';
-        const imageBuffer = Buffer.from(imageContent);
-        const imageBase64 = imageBuffer.toString('base64');
 
         fetchMock.mockOnceIf(
           'https://example.com/download/att_123',
@@ -382,15 +367,6 @@ describe('Receiving', () => {
           headers,
         });
 
-        // Mock download URLs
-        const pdfContent = 'PDF document content';
-        const pdfBuffer = Buffer.from(pdfContent);
-        const pdfBase64 = pdfBuffer.toString('base64');
-
-        const imageContent = 'PNG image data';
-        const imageBuffer = Buffer.from(imageContent);
-        const imageBase64 = imageBuffer.toString('base64');
-
         fetchMock.mockOnceIf(
           'https://example.com/download/att_123',
           async () =>
@@ -447,15 +423,6 @@ describe('Receiving', () => {
       it('calls endpoint passing limit param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
 
-        // Mock download URLs
-        const pdfContent = 'PDF document content';
-        const pdfBuffer = Buffer.from(pdfContent);
-        const pdfBase64 = pdfBuffer.toString('base64');
-
-        const imageContent = 'PNG image data';
-        const imageBuffer = Buffer.from(imageContent);
-        const imageBase64 = imageBuffer.toString('base64');
-
         fetchMock.mockOnceIf(
           'https://example.com/download/att_123',
           async () =>
@@ -511,15 +478,6 @@ describe('Receiving', () => {
       it('calls endpoint passing after param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
 
-        // Mock download URLs
-        const pdfContent = 'PDF document content';
-        const pdfBuffer = Buffer.from(pdfContent);
-        const pdfBase64 = pdfBuffer.toString('base64');
-
-        const imageContent = 'PNG image data';
-        const imageBuffer = Buffer.from(imageContent);
-        const imageBase64 = imageBuffer.toString('base64');
-
         fetchMock.mockOnceIf(
           'https://example.com/download/att_123',
           async () =>
@@ -574,15 +532,6 @@ describe('Receiving', () => {
 
       it('calls endpoint passing before param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
-
-        // Mock download URLs
-        const pdfContent = 'PDF document content';
-        const pdfBuffer = Buffer.from(pdfContent);
-        const pdfBase64 = pdfBuffer.toString('base64');
-
-        const imageContent = 'PNG image data';
-        const imageBuffer = Buffer.from(imageContent);
-        const imageBase64 = imageBuffer.toString('base64');
 
         fetchMock.mockOnceIf(
           'https://example.com/download/att_123',
