@@ -12,8 +12,44 @@ import type {
   ListAttachmentsResponse,
 } from './interfaces/list-attachments.interface';
 
+type DownloadAttachmentResult =
+  | {
+      type: 'error';
+      message: string;
+    }
+  | {
+      type: 'success';
+      base64Content: string;
+    };
+
 export class Receiving {
   constructor(private readonly resend: Resend) {}
+
+  private async downloadAttachment(
+    url: string,
+  ): Promise<DownloadAttachmentResult> {
+    try {
+      const content = await fetch(url);
+      if (!content.ok) {
+        return {
+          type: 'error',
+          message: 'Failed to download attachment content',
+        };
+      }
+
+      const arrayBuffer = await content.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      return {
+        type: 'success',
+        base64Content: buffer.toString('base64'),
+      };
+    } catch {
+      return {
+        type: 'error',
+        message: 'An error occurred while downloading attachment content',
+      };
+    }
+  }
 
   async get(options: GetAttachmentOptions): Promise<GetAttachmentResponse> {
     const { emailId, id } = options;
@@ -26,27 +62,23 @@ export class Receiving {
       return apiResponse;
     }
 
-    const downloadResponse = await fetch(apiResponse.data.data.download_url);
-    if (!downloadResponse.ok) {
+    const { download_url, ...otherFields } = apiResponse.data.data;
+    const downloadResult = await this.downloadAttachment(download_url);
+    if (downloadResult.type === 'error') {
       return {
         data: null,
         error: {
           name: 'application_error',
-          message: 'Failed to download attachment content',
+          message: downloadResult.message,
         },
       };
     }
 
-    const arrayBuffer = await downloadResponse.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const base64Content = buffer.toString('base64');
-
-    const { download_url, ...otherFields } = apiResponse.data.data;
     const responseData: GetAttachmentResponseSuccess = {
       object: 'attachment',
       data: {
         ...otherFields,
-        content: base64Content,
+        content: downloadResult.base64Content,
       },
     };
 
@@ -74,25 +106,21 @@ export class Receiving {
 
     const attachmentsWithContent = [];
     for (const attachment of apiResponse.data.data) {
-      const downloadResponse = await fetch(attachment.download_url);
-      if (!downloadResponse.ok) {
+      const { download_url, ...otherFields } = attachment;
+      const downloadResult = await this.downloadAttachment(download_url);
+      if (downloadResult.type === 'error') {
         return {
           data: null,
           error: {
             name: 'application_error',
-            message: `Failed to download attachment ${attachment.id}`,
+            message: downloadResult.message,
           },
         };
       }
 
-      const arrayBuffer = await downloadResponse.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const base64Content = buffer.toString('base64');
-
-      const { download_url, ...otherFields } = attachment;
       attachmentsWithContent.push({
         ...otherFields,
-        content: base64Content,
+        content: downloadResult.base64Content,
       });
     }
 
