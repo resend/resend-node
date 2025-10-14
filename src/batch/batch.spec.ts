@@ -1,3 +1,4 @@
+import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from '../resend';
 import {
   mockSuccessResponse,
@@ -5,10 +6,14 @@ import {
 } from '../test-utils/mock-fetch';
 import type { CreateBatchOptions } from './interfaces/create-batch-options.interface';
 
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
 describe('Batch', () => {
   afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
     it('sends multiple emails', async () => {
