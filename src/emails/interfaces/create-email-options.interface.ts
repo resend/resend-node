@@ -25,6 +25,19 @@ interface EmailRenderOptions {
   text: string;
 }
 
+interface EmailTemplateOptions {
+  template: {
+    id: string;
+    variables?: Record<string, string | number | boolean>;
+  };
+}
+
+interface CreateEmailBaseOptionsWithTemplate
+  extends Omit<CreateEmailBaseOptions, 'from' | 'subject'> {
+  from?: string;
+  subject?: string;
+}
+
 interface CreateEmailBaseOptions {
   /**
    * Filename and content of attachments (max 40mb per email)
@@ -81,6 +94,12 @@ interface CreateEmailBaseOptions {
    */
   to: string | string[];
   /**
+   * The id of the topic you want to send to
+   *
+   * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
+   */
+  topicId?: string | null;
+  /**
    * Schedule email to be sent later.
    * The date should be in ISO 8601 format (e.g: 2024-08-05T11:52:01.858Z).
    *
@@ -89,8 +108,15 @@ interface CreateEmailBaseOptions {
   scheduledAt?: string;
 }
 
-export type CreateEmailOptions = RequireAtLeastOne<EmailRenderOptions> &
-  CreateEmailBaseOptions;
+export type CreateEmailOptions =
+  | ((RequireAtLeastOne<EmailRenderOptions> & CreateEmailBaseOptions) & {
+      template?: never;
+    })
+  | ((EmailTemplateOptions & CreateEmailBaseOptionsWithTemplate) & {
+      react?: never;
+      html?: never;
+      text?: never;
+    });
 
 export interface CreateEmailRequestOptions
   extends PostOptions,
