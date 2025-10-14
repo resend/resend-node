@@ -2,7 +2,7 @@ import type { ErrorResponse } from '../../interfaces';
 import type { Contact, SelectingField } from './contact';
 
 export type UpdateContactOptions = {
-  audienceId: string;
+  audienceId?: string;
   unsubscribed?: boolean;
   firstName?: string;
   lastName?: string;
