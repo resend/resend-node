@@ -2,7 +2,10 @@ import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
 import { mockSuccessResponse } from '../../test-utils/mock-fetch';
-import type { ListAttachmentsResponseSuccess } from './interfaces/list-attachments.interface';
+import type {
+  ListAttachmentsApiResponse,
+  ListAttachmentsResponseSuccess,
+} from './interfaces/list-attachments.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -73,12 +76,14 @@ describe('Receiving', () => {
           },
         );
 
-        // Mock the download URL response
-        const binaryData = Buffer.from('base64encodedcontent==', 'base64');
+        const fileContent = 'This is a PDF document content';
+        const fileBuffer = Buffer.from(fileContent);
+        const expectedBase64 = fileBuffer.toString('base64');
+
         fetchMock.mockOnceIf(
           'https://example.com/download/att_123',
           async () =>
-            new Response(binaryData, {
+            new Response(fileBuffer, {
               status: 200,
             }),
         );
@@ -88,22 +93,20 @@ describe('Receiving', () => {
           id: 'att_123',
         });
 
-        expect(result).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": {
-      "content": "base64encodedcontent",
-      "content_disposition": "attachment",
-      "content_id": "cid_123",
-      "content_type": "application/pdf",
-      "filename": "document.pdf",
-      "id": "att_123",
-    },
-    "object": "attachment",
-  },
-  "error": null,
-}
-`);
+        expect(result).toEqual({
+          data: {
+            data: {
+              content: expectedBase64,
+              content_disposition: 'attachment',
+              content_id: 'cid_123',
+              content_type: 'application/pdf',
+              filename: 'document.pdf',
+              id: 'att_123',
+            },
+            object: 'attachment',
+          },
+          error: null,
+        });
       });
 
       it('returns inline attachment', async () => {
@@ -133,14 +136,14 @@ describe('Receiving', () => {
         );
 
         // Mock the download URL response
-        const binaryData = Buffer.from(
-          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
-          'base64',
-        );
+        const imageContent = 'PNG image binary data';
+        const imageBuffer = Buffer.from(imageContent);
+        const expectedBase64 = imageBuffer.toString('base64');
+
         fetchMock.mockOnceIf(
           'https://example.com/download/att_456',
           async () =>
-            new Response(binaryData, {
+            new Response(imageBuffer, {
               status: 200,
             }),
         );
@@ -150,22 +153,20 @@ describe('Receiving', () => {
           id: 'att_456',
         });
 
-        expect(result).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": {
-      "content": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
-      "content_disposition": "inline",
-      "content_id": "cid_456",
-      "content_type": "image/png",
-      "filename": "image.png",
-      "id": "att_456",
-    },
-    "object": "attachment",
-  },
-  "error": null,
-}
-`);
+        expect(result).toEqual({
+          data: {
+            data: {
+              content: expectedBase64,
+              content_disposition: 'inline',
+              content_id: 'cid_456',
+              content_type: 'image/png',
+              filename: 'image.png',
+              id: 'att_456',
+            },
+            object: 'attachment',
+          },
+          error: null,
+        });
       });
 
       it('handles attachment without optional fields (filename, contentId)', async () => {
@@ -195,11 +196,14 @@ describe('Receiving', () => {
         );
 
         // Mock the download URL response
-        const binaryData = Buffer.from('base64content', 'base64');
+        const textContent = 'Plain text content';
+        const textBuffer = Buffer.from(textContent);
+        const expectedBase64 = textBuffer.toString('base64');
+
         fetchMock.mockOnceIf(
           'https://example.com/download/att_789',
           async () =>
-            new Response(binaryData, {
+            new Response(textBuffer, {
               status: 200,
             }),
         );
@@ -209,26 +213,24 @@ describe('Receiving', () => {
           id: 'att_789',
         });
 
-        expect(result).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": {
-      "content": "base64conten",
-      "content_disposition": "attachment",
-      "content_type": "text/plain",
-      "id": "att_789",
-    },
-    "object": "attachment",
-  },
-  "error": null,
-}
-`);
+        expect(result).toEqual({
+          data: {
+            data: {
+              content: expectedBase64,
+              content_disposition: 'attachment',
+              content_type: 'text/plain',
+              id: 'att_789',
+            },
+            object: 'attachment',
+          },
+          error: null,
+        });
       });
     });
   });
 
   describe('list', () => {
-    const apiResponse: ListAttachmentsResponseSuccess = {
+    const apiResponse: ListAttachmentsApiResponse = {
       object: 'list' as const,
       has_more: false,
       data: [
@@ -238,7 +240,7 @@ describe('Receiving', () => {
           content_type: 'application/pdf',
           content_id: 'cid_123',
           content_disposition: 'attachment' as const,
-          content: 'base64encodedcontent==',
+          download_url: 'https://example.com/download/att_123',
         },
         {
           id: 'att_456',
@@ -246,7 +248,7 @@ describe('Receiving', () => {
           content_type: 'image/png',
           content_id: 'cid_456',
           content_disposition: 'inline' as const,
-          content: 'imagebase64==',
+          download_url: 'https://example.com/download/att_456',
         },
       ],
     };
@@ -280,34 +282,91 @@ describe('Receiving', () => {
 
     describe('when attachments found', () => {
       it('returns multiple attachments', async () => {
-        fetchMock.mockOnce(JSON.stringify(apiResponse), {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        // Mock the API response
+        fetchMock.mockOnceIf(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments',
+          JSON.stringify(apiResponse),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
           },
-        });
+        );
+
+        // Mock download URLs
+        const pdfContent = 'PDF document content';
+        const pdfBuffer = Buffer.from(pdfContent);
+        const pdfBase64 = pdfBuffer.toString('base64');
+
+        const imageContent = 'PNG image data';
+        const imageBuffer = Buffer.from(imageContent);
+        const imageBase64 = imageBuffer.toString('base64');
+
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_123',
+          async () =>
+            new Response(pdfBuffer, {
+              status: 200,
+            }),
+        );
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_456',
+          async () =>
+            new Response(imageBuffer, {
+              status: 200,
+            }),
+        );
 
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
         });
 
-        expect(result).toEqual({ data: apiResponse, error: null });
+        const expectedResponse: ListAttachmentsResponseSuccess = {
+          object: 'list',
+          has_more: false,
+          data: [
+            {
+              id: 'att_123',
+              filename: 'document.pdf',
+              content_type: 'application/pdf',
+              content_id: 'cid_123',
+              content_disposition: 'attachment',
+              content: pdfBase64,
+            },
+            {
+              id: 'att_456',
+              filename: 'image.png',
+              content_type: 'image/png',
+              content_id: 'cid_456',
+              content_disposition: 'inline',
+              content: imageBase64,
+            },
+          ],
+        };
+
+        expect(result).toEqual({ data: expectedResponse, error: null });
       });
 
       it('returns empty array when no attachments', async () => {
         const emptyResponse = {
-          object: 'attachment' as const,
+          object: 'list' as const,
+          has_more: false,
           data: [],
         };
 
-        fetchMock.mockOnce(JSON.stringify(emptyResponse), {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        fetchMock.mockOnceIf(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments',
+          JSON.stringify(emptyResponse),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
           },
-        });
+        );
 
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
@@ -323,12 +382,59 @@ describe('Receiving', () => {
           headers,
         });
 
+        // Mock download URLs
+        const pdfContent = 'PDF document content';
+        const pdfBuffer = Buffer.from(pdfContent);
+        const pdfBase64 = pdfBuffer.toString('base64');
+
+        const imageContent = 'PNG image data';
+        const imageBuffer = Buffer.from(imageContent);
+        const imageBase64 = imageBuffer.toString('base64');
+
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_123',
+          async () =>
+            new Response(pdfBuffer, {
+              status: 200,
+            }),
+        );
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_456',
+          async () =>
+            new Response(imageBuffer, {
+              status: 200,
+            }),
+        );
+
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
         });
 
+        const expectedResponse: ListAttachmentsResponseSuccess = {
+          object: 'list',
+          has_more: false,
+          data: [
+            {
+              id: 'att_123',
+              filename: 'document.pdf',
+              content_type: 'application/pdf',
+              content_id: 'cid_123',
+              content_disposition: 'attachment',
+              content: pdfBase64,
+            },
+            {
+              id: 'att_456',
+              filename: 'image.png',
+              content_type: 'image/png',
+              content_id: 'cid_456',
+              content_disposition: 'inline',
+              content: imageBase64,
+            },
+          ],
+        };
+
         expect(result).toEqual({
-          data: apiResponse,
+          data: expectedResponse,
           error: null,
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
@@ -340,12 +446,61 @@ describe('Receiving', () => {
     describe('when pagination options are provided', () => {
       it('calls endpoint passing limit param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
+
+        // Mock download URLs
+        const pdfContent = 'PDF document content';
+        const pdfBuffer = Buffer.from(pdfContent);
+        const pdfBase64 = pdfBuffer.toString('base64');
+
+        const imageContent = 'PNG image data';
+        const imageBuffer = Buffer.from(imageContent);
+        const imageBase64 = imageBuffer.toString('base64');
+
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_123',
+          async () =>
+            new Response(pdfBuffer, {
+              status: 200,
+            }),
+        );
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_456',
+          async () =>
+            new Response(imageBuffer, {
+              status: 200,
+            }),
+        );
+
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           limit: 10,
         });
+
+        const expectedResponse: ListAttachmentsResponseSuccess = {
+          object: 'list',
+          has_more: false,
+          data: [
+            {
+              id: 'att_123',
+              filename: 'document.pdf',
+              content_type: 'application/pdf',
+              content_id: 'cid_123',
+              content_disposition: 'attachment',
+              content: pdfBase64,
+            },
+            {
+              id: 'att_456',
+              filename: 'image.png',
+              content_type: 'image/png',
+              content_id: 'cid_456',
+              content_disposition: 'inline',
+              content: imageBase64,
+            },
+          ],
+        };
+
         expect(result).toEqual({
-          data: apiResponse,
+          data: expectedResponse,
           error: null,
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
@@ -355,12 +510,61 @@ describe('Receiving', () => {
 
       it('calls endpoint passing after param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
+
+        // Mock download URLs
+        const pdfContent = 'PDF document content';
+        const pdfBuffer = Buffer.from(pdfContent);
+        const pdfBase64 = pdfBuffer.toString('base64');
+
+        const imageContent = 'PNG image data';
+        const imageBuffer = Buffer.from(imageContent);
+        const imageBase64 = imageBuffer.toString('base64');
+
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_123',
+          async () =>
+            new Response(pdfBuffer, {
+              status: 200,
+            }),
+        );
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_456',
+          async () =>
+            new Response(imageBuffer, {
+              status: 200,
+            }),
+        );
+
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           after: 'cursor123',
         });
+
+        const expectedResponse: ListAttachmentsResponseSuccess = {
+          object: 'list',
+          has_more: false,
+          data: [
+            {
+              id: 'att_123',
+              filename: 'document.pdf',
+              content_type: 'application/pdf',
+              content_id: 'cid_123',
+              content_disposition: 'attachment',
+              content: pdfBase64,
+            },
+            {
+              id: 'att_456',
+              filename: 'image.png',
+              content_type: 'image/png',
+              content_id: 'cid_456',
+              content_disposition: 'inline',
+              content: imageBase64,
+            },
+          ],
+        };
+
         expect(result).toEqual({
-          data: apiResponse,
+          data: expectedResponse,
           error: null,
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
@@ -370,12 +574,61 @@ describe('Receiving', () => {
 
       it('calls endpoint passing before param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
+
+        // Mock download URLs
+        const pdfContent = 'PDF document content';
+        const pdfBuffer = Buffer.from(pdfContent);
+        const pdfBase64 = pdfBuffer.toString('base64');
+
+        const imageContent = 'PNG image data';
+        const imageBuffer = Buffer.from(imageContent);
+        const imageBase64 = imageBuffer.toString('base64');
+
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_123',
+          async () =>
+            new Response(pdfBuffer, {
+              status: 200,
+            }),
+        );
+        fetchMock.mockOnceIf(
+          'https://example.com/download/att_456',
+          async () =>
+            new Response(imageBuffer, {
+              status: 200,
+            }),
+        );
+
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           before: 'cursor123',
         });
+
+        const expectedResponse: ListAttachmentsResponseSuccess = {
+          object: 'list',
+          has_more: false,
+          data: [
+            {
+              id: 'att_123',
+              filename: 'document.pdf',
+              content_type: 'application/pdf',
+              content_id: 'cid_123',
+              content_disposition: 'attachment',
+              content: pdfBase64,
+            },
+            {
+              id: 'att_456',
+              filename: 'image.png',
+              content_type: 'image/png',
+              content_id: 'cid_456',
+              content_disposition: 'inline',
+              content: imageBase64,
+            },
+          ],
+        };
+
         expect(result).toEqual({
-          data: apiResponse,
+          data: expectedResponse,
           error: null,
         });
         expect(fetchMock.mock.calls[0][0]).toBe(

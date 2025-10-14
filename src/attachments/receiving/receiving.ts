@@ -7,9 +7,9 @@ import type {
   GetAttachmentResponseSuccess,
 } from './interfaces/get-attachment.interface';
 import type {
+  ListAttachmentsApiResponse,
   ListAttachmentsOptions,
   ListAttachmentsResponse,
-  ListAttachmentsResponseSuccess,
 } from './interfaces/list-attachments.interface';
 
 export class Receiving {
@@ -66,8 +66,43 @@ export class Receiving {
       ? `/emails/receiving/${emailId}/attachments?${queryString}`
       : `/emails/receiving/${emailId}/attachments`;
 
-    const data = await this.resend.get<ListAttachmentsResponseSuccess>(url);
+    const apiResponse = await this.resend.get<ListAttachmentsApiResponse>(url);
 
-    return data;
+    if ('error' in apiResponse && apiResponse.error) {
+      return apiResponse;
+    }
+
+    const attachmentsWithContent = [];
+    for (const attachment of apiResponse.data.data) {
+      const downloadResponse = await fetch(attachment.download_url);
+      if (!downloadResponse.ok) {
+        return {
+          data: null,
+          error: {
+            name: 'application_error',
+            message: `Failed to download attachment ${attachment.id}`,
+          },
+        };
+      }
+
+      const arrayBuffer = await downloadResponse.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const base64Content = buffer.toString('base64');
+
+      const { download_url, ...otherFields } = attachment;
+      attachmentsWithContent.push({
+        ...otherFields,
+        content: base64Content,
+      });
+    }
+
+    return {
+      data: {
+        object: 'list',
+        has_more: apiResponse.data.has_more,
+        data: attachmentsWithContent,
+      },
+      error: null,
+    };
   }
 }
