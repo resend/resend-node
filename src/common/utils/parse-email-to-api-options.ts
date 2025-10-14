@@ -32,5 +32,12 @@ export function parseEmailToApiOptions(
     tags: email.tags,
     text: email.text,
     to: email.to,
+    template: email.template
+      ? {
+          id: email.template.id,
+          variables: email.template.variables,
+        }
+      : undefined,
+    topic_id: email.topicId,
   };
 }
