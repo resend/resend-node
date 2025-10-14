@@ -62,7 +62,11 @@ export class Receiving {
       return apiResponse;
     }
 
-    const { download_url, ...otherFields } = apiResponse.data.data;
+    const {
+      expires_at: _expires_at,
+      download_url,
+      ...otherFields
+    } = apiResponse.data.data;
     const downloadResult = await this.downloadAttachment(download_url);
     if (downloadResult.type === 'error') {
       return {
@@ -106,7 +110,11 @@ export class Receiving {
 
     const attachmentsWithContent = [];
     for (const attachment of apiResponse.data.data) {
-      const { download_url, ...otherFields } = attachment;
+      const {
+        expires_at: _expires_at,
+        download_url,
+        ...otherFields
+      } = attachment;
       const downloadResult = await this.downloadAttachment(download_url);
       if (downloadResult.type === 'error') {
         return {
