@@ -11,6 +11,8 @@ import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import type { ErrorResponse } from './interfaces';
+import { Templates } from './templates/templates';
+import { Topics } from './topics/topics';
 import { Webhooks } from './webhooks/webhooks';
 
 const defaultBaseUrl = 'https://api.resend.com';
@@ -36,6 +38,8 @@ export class Resend {
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
   readonly webhooks = new Webhooks(this);
+  readonly templates = new Templates(this);
+  readonly topics = new Topics(this);
 
   constructor(readonly key?: string) {
     if (!key) {

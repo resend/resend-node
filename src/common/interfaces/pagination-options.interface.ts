@@ -20,3 +20,9 @@ export type PaginationOptions = {
       after?: never;
     }
 );
+
+export type PaginatedData<Data> = {
+  object: 'list';
+  data: Data;
+  has_more: boolean;
+};
