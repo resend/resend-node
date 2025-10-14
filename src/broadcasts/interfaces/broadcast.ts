@@ -11,4 +11,6 @@ export interface Broadcast {
   scheduled_at: string | null;
   sent_at: string | null;
   topic_id?: string | null;
+  html: string | null;
+  text: string | null;
 }

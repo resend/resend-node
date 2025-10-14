@@ -1,6 +1,6 @@
 {
   "name": "resend",
-  "version": "6.2.1-preview-contacts.1",
+  "version": "6.3.0-canary.0",
   "description": "Node.js library for the Resend API",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -32,7 +32,9 @@
     "prepublishOnly": "pnpm run build",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:record": "rimraf --glob \"**/__recordings__\" && cross-env TEST_MODE=record vitest run",
+    "test:dev": "cross-env TEST_MODE=dev vitest run"
   },
   "repository": {
     "type": "git",
@@ -54,13 +56,19 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.5",
-    "@types/node": "22.18.8",
+    "@pollyjs/adapter-fetch": "6.0.7",
+    "@pollyjs/core": "6.0.6",
+    "@pollyjs/persister-fs": "6.0.6",
+    "@types/node": "22.18.9",
     "@types/react": "19.2.0",
+    "cross-env": "10.1.0",
+    "dotenv": "17.2.3",
     "pkg-pr-new": "0.0.60",
+    "rimraf": "6.0.1",
     "tsup": "8.5.0",
     "typescript": "5.9.3",
     "vitest": "3.2.4",
     "vitest-fetch-mock": "0.4.5"
   },
-  "packageManager": "pnpm@10.18.0"
+  "packageManager": "pnpm@10.18.2"
 }

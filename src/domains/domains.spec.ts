@@ -1,3 +1,4 @@
+import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import { mockSuccessResponse } from '../test-utils/mock-fetch';
@@ -12,8 +13,12 @@ import type { RemoveDomainsResponseSuccess } from './interfaces/remove-domain.in
 import type { UpdateDomainsResponseSuccess } from './interfaces/update-domain.interface';
 import type { VerifyDomainsResponseSuccess } from './interfaces/verify-domain.interface';
 
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+
 describe('Domains', () => {
   afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
     it('creates a domain', async () => {

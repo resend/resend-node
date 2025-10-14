@@ -27,9 +27,14 @@ import type {
   UpdateEmailResponse,
   UpdateEmailResponseSuccess,
 } from './interfaces/update-email-options.interface';
+import { Receiving } from './receiving/receiving';
 
 export class Emails {
-  constructor(private readonly resend: Resend) {}
+  readonly receiving: Receiving;
+
+  constructor(private readonly resend: Resend) {
+    this.receiving = new Receiving(resend);
+  }
 
   async send(
     payload: CreateEmailOptions,
