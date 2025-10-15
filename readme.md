@@ -36,10 +36,10 @@ yarn add resend
 
 Send email with:
 
-- [Node.js](https://github.com/resendlabs/resend-node-example)
-- [Next.js (App Router)](https://github.com/resendlabs/resend-nextjs-app-router-example)
-- [Next.js (Pages Router)](https://github.com/resendlabs/resend-nextjs-pages-router-example)
-- [Express](https://github.com/resendlabs/resend-express-example)
+- [Node.js](https://github.com/resend/resend-node-example)
+- [Next.js (App Router)](https://github.com/resend/resend-nextjs-app-router-example)
+- [Next.js (Pages Router)](https://github.com/resend/resend-nextjs-pages-router-example)
+- [Express](https://github.com/resend/resend-express-example)
 
 ## Setup
 
