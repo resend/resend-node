@@ -38,14 +38,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/resendlabs/resend-node.git"
+    "url": "git+https://github.com/resend/resend-node.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/resendlabs/resend-node/issues"
+    "url": "https://github.com/resend/resend-node/issues"
   },
-  "homepage": "https://github.com/resendlabs/resend-node#readme",
+  "homepage": "https://github.com/resend/resend-node#readme",
   "peerDependencies": {
     "@react-email/render": "*"
   },
