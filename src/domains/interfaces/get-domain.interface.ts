@@ -2,7 +2,10 @@ import type { ErrorResponse } from '../../interfaces';
 import type { Domain, DomainRecords } from './domain';
 
 export interface GetDomainResponseSuccess
-  extends Pick<Domain, 'id' | 'name' | 'created_at' | 'region' | 'status'> {
+  extends Pick<
+    Domain,
+    'id' | 'name' | 'created_at' | 'region' | 'status' | 'capability'
+  > {
   object: 'domain';
   records: DomainRecords[];
 }
