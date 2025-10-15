@@ -21,7 +21,10 @@ export type DomainStatus =
   | 'temporary_failure'
   | 'not_started';
 
-export type DomainRecords = DomainSpfRecord | DomainDkimRecord;
+export type DomainRecords =
+  | DomainSpfRecord
+  | DomainDkimRecord
+  | ReceivingRecord;
 
 export interface DomainSpfRecord {
   record: 'SPF';
@@ -45,6 +48,16 @@ export interface DomainDkimRecord {
   routing_policy?: string;
   priority?: number;
   proxy_status?: 'enable' | 'disable';
+}
+
+export interface ReceivingRecord {
+  record: 'Receiving';
+  name: string;
+  value: string;
+  type: 'MX';
+  ttl: string;
+  status: DomainStatus;
+  priority: number;
 }
 
 export interface Domain {
