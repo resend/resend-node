@@ -1,11 +1,7 @@
 import type { PostOptions } from '../../common/interfaces';
 import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
 import type { ErrorResponse } from '../../interfaces';
-import type {
-  Template,
-  TemplateVariable,
-  TemplateVariableListFallbackType,
-} from './template';
+import type { Template, TemplateVariable } from './template';
 
 type TemplateContentCreationOptions = RequireAtLeastOne<{
   html: string;
@@ -21,18 +17,6 @@ type TemplateVariableCreationOptions = Pick<TemplateVariable, 'key' | 'type'> &
     | {
         type: 'number';
         fallbackValue?: number | null;
-      }
-    | {
-        type: 'boolean';
-        fallbackValue?: boolean | null;
-      }
-    | {
-        type: 'object';
-        fallbackValue: Record<string, unknown>;
-      }
-    | {
-        type: 'list';
-        fallbackValue: TemplateVariableListFallbackType;
       }
   );
 
