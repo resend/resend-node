@@ -12,18 +12,6 @@ fetchMocker.enableMocks();
 
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-const pdfContent = 'PDF document content';
-const pdfBuffer = Buffer.from(pdfContent);
-const pdfBase64 = pdfBuffer.toString('base64');
-
-const imageContent = 'PNG image data';
-const imageBuffer = Buffer.from(imageContent);
-const imageBase64 = imageBuffer.toString('base64');
-
-const textContent = 'Plain text content';
-const textBuffer = Buffer.from(textContent);
-const textBase64 = textBuffer.toString('base64');
-
 describe('Receiving', () => {
   afterEach(() => fetchMock.resetMocks());
   afterAll(() => fetchMocker.disableMocks());
@@ -62,7 +50,7 @@ describe('Receiving', () => {
     });
 
     describe('when attachment found', () => {
-      it('returns attachment with transformed fields', async () => {
+      it('returns attachment with download URL', async () => {
         const apiResponse = {
           object: 'attachment' as const,
           data: {
@@ -72,6 +60,7 @@ describe('Receiving', () => {
             content_id: 'cid_123',
             content_disposition: 'attachment' as const,
             download_url: 'https://example.com/download/att_123',
+            expires_at: '2025-10-18T12:00:00Z',
           },
         };
 
@@ -87,14 +76,6 @@ describe('Receiving', () => {
           },
         );
 
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_123',
-          async () =>
-            new Response(pdfBuffer, {
-              status: 200,
-            }),
-        );
-
         const result = await resend.attachments.receiving.get({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           id: 'att_123',
@@ -103,10 +84,11 @@ describe('Receiving', () => {
         expect(result).toEqual({
           data: {
             data: {
-              content: pdfBase64,
               content_disposition: 'attachment',
               content_id: 'cid_123',
               content_type: 'application/pdf',
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
               filename: 'document.pdf',
               id: 'att_123',
             },
@@ -116,7 +98,7 @@ describe('Receiving', () => {
         });
       });
 
-      it('returns inline attachment', async () => {
+      it('returns inline attachment with download URL', async () => {
         const apiResponse = {
           object: 'attachment' as const,
           data: {
@@ -126,6 +108,7 @@ describe('Receiving', () => {
             content_id: 'cid_456',
             content_disposition: 'inline' as const,
             download_url: 'https://example.com/download/att_456',
+            expires_at: '2025-10-18T12:00:00Z',
           },
         };
 
@@ -141,14 +124,6 @@ describe('Receiving', () => {
           },
         );
 
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_456',
-          async () =>
-            new Response(imageBuffer, {
-              status: 200,
-            }),
-        );
-
         const result = await resend.attachments.receiving.get({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           id: 'att_456',
@@ -157,10 +132,11 @@ describe('Receiving', () => {
         expect(result).toEqual({
           data: {
             data: {
-              content: imageBase64,
               content_disposition: 'inline',
               content_id: 'cid_456',
               content_type: 'image/png',
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
               filename: 'image.png',
               id: 'att_456',
             },
@@ -179,6 +155,7 @@ describe('Receiving', () => {
             content_type: 'text/plain',
             content_disposition: 'attachment' as const,
             download_url: 'https://example.com/download/att_789',
+            expires_at: '2025-10-18T12:00:00Z',
             // Optional fields (filename, content_id) omitted
           },
         };
@@ -195,14 +172,6 @@ describe('Receiving', () => {
           },
         );
 
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_789',
-          async () =>
-            new Response(textBuffer, {
-              status: 200,
-            }),
-        );
-
         const result = await resend.attachments.receiving.get({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           id: 'att_789',
@@ -211,9 +180,10 @@ describe('Receiving', () => {
         expect(result).toEqual({
           data: {
             data: {
-              content: textBase64,
               content_disposition: 'attachment',
               content_type: 'text/plain',
+              download_url: 'https://example.com/download/att_789',
+              expires_at: '2025-10-18T12:00:00Z',
               id: 'att_789',
             },
             object: 'attachment',
@@ -236,6 +206,7 @@ describe('Receiving', () => {
           content_id: 'cid_123',
           content_disposition: 'attachment' as const,
           download_url: 'https://example.com/download/att_123',
+          expires_at: '2025-10-18T12:00:00Z',
         },
         {
           id: 'att_456',
@@ -244,6 +215,7 @@ describe('Receiving', () => {
           content_id: 'cid_456',
           content_disposition: 'inline' as const,
           download_url: 'https://example.com/download/att_456',
+          expires_at: '2025-10-18T12:00:00Z',
         },
       ],
     };
@@ -276,7 +248,7 @@ describe('Receiving', () => {
     });
 
     describe('when attachments found', () => {
-      it('returns multiple attachments', async () => {
+      it('returns multiple attachments with download URLs', async () => {
         fetchMock.mockOnceIf(
           'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments',
           JSON.stringify(apiResponse),
@@ -287,21 +259,6 @@ describe('Receiving', () => {
               Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             },
           },
-        );
-
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_123',
-          async () =>
-            new Response(pdfBuffer, {
-              status: 200,
-            }),
-        );
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_456',
-          async () =>
-            new Response(imageBuffer, {
-              status: 200,
-            }),
         );
 
         const result = await resend.attachments.receiving.list({
@@ -318,7 +275,8 @@ describe('Receiving', () => {
               content_type: 'application/pdf',
               content_id: 'cid_123',
               content_disposition: 'attachment',
-              content: pdfBase64,
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
             },
             {
               id: 'att_456',
@@ -326,7 +284,8 @@ describe('Receiving', () => {
               content_type: 'image/png',
               content_id: 'cid_456',
               content_disposition: 'inline',
-              content: imageBase64,
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
             },
           ],
         };
@@ -367,21 +326,6 @@ describe('Receiving', () => {
           headers,
         });
 
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_123',
-          async () =>
-            new Response(pdfBuffer, {
-              status: 200,
-            }),
-        );
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_456',
-          async () =>
-            new Response(imageBuffer, {
-              status: 200,
-            }),
-        );
-
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
         });
@@ -396,7 +340,8 @@ describe('Receiving', () => {
               content_type: 'application/pdf',
               content_id: 'cid_123',
               content_disposition: 'attachment',
-              content: pdfBase64,
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
             },
             {
               id: 'att_456',
@@ -404,7 +349,8 @@ describe('Receiving', () => {
               content_type: 'image/png',
               content_id: 'cid_456',
               content_disposition: 'inline',
-              content: imageBase64,
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
             },
           ],
         };
@@ -423,21 +369,6 @@ describe('Receiving', () => {
       it('calls endpoint passing limit param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
 
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_123',
-          async () =>
-            new Response(pdfBuffer, {
-              status: 200,
-            }),
-        );
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_456',
-          async () =>
-            new Response(imageBuffer, {
-              status: 200,
-            }),
-        );
-
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           limit: 10,
@@ -453,7 +384,8 @@ describe('Receiving', () => {
               content_type: 'application/pdf',
               content_id: 'cid_123',
               content_disposition: 'attachment',
-              content: pdfBase64,
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
             },
             {
               id: 'att_456',
@@ -461,7 +393,8 @@ describe('Receiving', () => {
               content_type: 'image/png',
               content_id: 'cid_456',
               content_disposition: 'inline',
-              content: imageBase64,
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
             },
           ],
         };
@@ -478,21 +411,6 @@ describe('Receiving', () => {
       it('calls endpoint passing after param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
 
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_123',
-          async () =>
-            new Response(pdfBuffer, {
-              status: 200,
-            }),
-        );
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_456',
-          async () =>
-            new Response(imageBuffer, {
-              status: 200,
-            }),
-        );
-
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           after: 'cursor123',
@@ -508,7 +426,8 @@ describe('Receiving', () => {
               content_type: 'application/pdf',
               content_id: 'cid_123',
               content_disposition: 'attachment',
-              content: pdfBase64,
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
             },
             {
               id: 'att_456',
@@ -516,7 +435,8 @@ describe('Receiving', () => {
               content_type: 'image/png',
               content_id: 'cid_456',
               content_disposition: 'inline',
-              content: imageBase64,
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
             },
           ],
         };
@@ -533,21 +453,6 @@ describe('Receiving', () => {
       it('calls endpoint passing before param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
 
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_123',
-          async () =>
-            new Response(pdfBuffer, {
-              status: 200,
-            }),
-        );
-        fetchMock.mockOnceIf(
-          'https://example.com/download/att_456',
-          async () =>
-            new Response(imageBuffer, {
-              status: 200,
-            }),
-        );
-
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           before: 'cursor123',
@@ -563,7 +468,8 @@ describe('Receiving', () => {
               content_type: 'application/pdf',
               content_id: 'cid_123',
               content_disposition: 'attachment',
-              content: pdfBase64,
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
             },
             {
               id: 'att_456',
@@ -571,7 +477,8 @@ describe('Receiving', () => {
               content_type: 'image/png',
               content_id: 'cid_456',
               content_disposition: 'inline',
-              content: imageBase64,
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
             },
           ],
         };
