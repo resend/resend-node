@@ -45,7 +45,7 @@ describe('Contacts Integration Tests', () => {
       // @ts-expect-error: Testing invalid input
       const result = await resend.contacts.create({});
 
-      expect(result.error?.name).toBe('validation_error');
+      expect(result.error?.name).toBe('missing_required_field');
     });
   });
 

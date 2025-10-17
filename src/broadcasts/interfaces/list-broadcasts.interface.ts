@@ -12,6 +12,7 @@ export type ListBroadcastsResponseSuccess = {
     | 'id'
     | 'name'
     | 'audience_id'
+    | 'segment_id'
     | 'status'
     | 'created_at'
     | 'scheduled_at'
