@@ -580,6 +580,85 @@ describe('Emails', () => {
 }
 `);
       });
+
+      it('sends email with template using object and list variables', async () => {
+        const response: CreateEmailResponseSuccess = {
+          id: 'template-complex-vars-999',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const payload: CreateEmailOptions = {
+          template: {
+            id: 'complex-template-123',
+            variables: {
+              userName: 'John Doe',
+              age: 30,
+              isPremium: true,
+              userProfile: {
+                firstName: 'John',
+                lastName: 'Doe',
+                preferences: {
+                  theme: 'dark',
+                },
+              },
+              tags: ['premium', 'vip', 'early-adopter'],
+              scores: [95, 87, 92],
+              flags: [true, false, true],
+              items: [
+                { id: 1, name: 'Item 1' },
+                { id: 2, name: 'Item 2' },
+              ],
+            },
+          },
+          to: 'user@example.com',
+        };
+
+        const data = await resend.emails.send(payload);
+        expect(data).toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "template-complex-vars-999",
+  },
+  "error": null,
+}
+`);
+
+        // Verify the correct API payload was sent
+        const lastCall = fetchMock.mock.calls[0];
+        const requestBody = JSON.parse(lastCall[1]?.body as string);
+        expect(requestBody).toEqual({
+          template: {
+            id: 'complex-template-123',
+            variables: {
+              userName: 'John Doe',
+              age: 30,
+              isPremium: true,
+              userProfile: {
+                firstName: 'John',
+                lastName: 'Doe',
+                preferences: {
+                  theme: 'dark',
+                },
+              },
+              tags: ['premium', 'vip', 'early-adopter'],
+              scores: [95, 87, 92],
+              flags: [true, false, true],
+              items: [
+                { id: 1, name: 'Item 1' },
+                { id: 2, name: 'Item 2' },
+              ],
+            },
+          },
+          to: 'user@example.com',
+        });
+      });
     });
   });
 

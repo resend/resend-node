@@ -1,4 +1,5 @@
 import type { Tag } from '../../interfaces';
+import type { TemplateVariableListFallbackType } from '../../templates/interfaces/template';
 
 export interface EmailApiAttachment {
   content?: string | Buffer;
@@ -25,6 +26,13 @@ export interface EmailApiOptions {
   attachments?: EmailApiAttachment[];
   template?: {
     id: string;
-    variables?: Record<string, string | number | boolean>;
+    variables?: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | Record<string, unknown>
+      | TemplateVariableListFallbackType
+    >;
   };
 }

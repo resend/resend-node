@@ -3,6 +3,7 @@ import type { PostOptions } from '../../common/interfaces';
 import type { IdempotentRequest } from '../../common/interfaces/idempotent-request.interface';
 import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
 import type { ErrorResponse } from '../../interfaces';
+import type { TemplateVariableListFallbackType } from '../../templates/interfaces/template';
 
 interface EmailRenderOptions {
   /**
@@ -28,7 +29,14 @@ interface EmailRenderOptions {
 interface EmailTemplateOptions {
   template: {
     id: string;
-    variables?: Record<string, string | number | boolean>;
+    variables?: Record<
+      string,
+      | string
+      | number
+      | boolean
+      | Record<string, unknown>
+      | TemplateVariableListFallbackType
+    >;
   };
 }
 
