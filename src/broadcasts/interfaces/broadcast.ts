@@ -10,10 +10,7 @@ export interface Broadcast {
   created_at: string;
   scheduled_at: string | null;
   sent_at: string | null;
-<<<<<<< HEAD
-=======
   topic_id?: string | null;
->>>>>>> ea92c297d479eeed8692962eeff4739cce9bf05f
   html: string | null;
   text: string | null;
 }
