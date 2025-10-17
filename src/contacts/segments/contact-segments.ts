@@ -1,27 +1,27 @@
 import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import type {
-  AddContactAudiencesOptions,
-  AddContactAudiencesResponse,
-  AddContactAudiencesResponseSuccess,
-} from './interfaces/add-contact-audience.interface';
+  AddContactSegmentOptions,
+  AddContactSegmentResponse,
+  AddContactSegmentResponseSuccess,
+} from './interfaces/add-contact-segment.interface';
 import type {
-  ListContactAudiencesOptions,
-  ListContactAudiencesResponse,
-  ListContactAudiencesResponseSuccess,
-} from './interfaces/list-contact-audiences.interface';
+  ListContactSegmentsOptions,
+  ListContactSegmentsResponse,
+  ListContactSegmentsResponseSuccess,
+} from './interfaces/list-contact-segments.interface';
 import type {
-  RemoveContactAudiencesOptions,
-  RemoveContactAudiencesResponse,
-  RemoveContactAudiencesResponseSuccess,
-} from './interfaces/remove-contact-audience.interface';
+  RemoveContactSegmentOptions,
+  RemoveContactSegmentResponse,
+  RemoveContactSegmentResponseSuccess,
+} from './interfaces/remove-contact-segment.interface';
 
-export class ContactAudiences {
+export class ContactSegments {
   constructor(private readonly resend: Resend) {}
 
   async list(
-    options: ListContactAudiencesOptions,
-  ): Promise<ListContactAudiencesResponse> {
+    options: ListContactSegmentsOptions,
+  ): Promise<ListContactSegmentsResponse> {
     if (!options.contactId && !options.email) {
       return {
         data: null,
@@ -36,17 +36,16 @@ export class ContactAudiences {
     const identifier = options.email ? options.email : options.contactId;
     const queryString = buildPaginationQuery(options);
     const url = queryString
-      ? `/contacts/${identifier}/audiences?${queryString}`
-      : `/contacts/${identifier}/audiences`;
+      ? `/contacts/${identifier}/segments?${queryString}`
+      : `/contacts/${identifier}/segments`;
 
-    const data =
-      await this.resend.get<ListContactAudiencesResponseSuccess>(url);
+    const data = await this.resend.get<ListContactSegmentsResponseSuccess>(url);
     return data;
   }
 
   async add(
-    options: AddContactAudiencesOptions,
-  ): Promise<AddContactAudiencesResponse> {
+    options: AddContactSegmentOptions,
+  ): Promise<AddContactSegmentResponse> {
     if (!options.contactId && !options.email) {
       return {
         data: null,
@@ -59,14 +58,14 @@ export class ContactAudiences {
     }
 
     const identifier = options.email ? options.email : options.contactId;
-    return this.resend.post<AddContactAudiencesResponseSuccess>(
-      `/contacts/${identifier}/audiences/${options.audienceId}`,
+    return this.resend.post<AddContactSegmentResponseSuccess>(
+      `/contacts/${identifier}/segments/${options.segmentId}`,
     );
   }
 
   async remove(
-    options: RemoveContactAudiencesOptions,
-  ): Promise<RemoveContactAudiencesResponse> {
+    options: RemoveContactSegmentOptions,
+  ): Promise<RemoveContactSegmentResponse> {
     if (!options.contactId && !options.email) {
       return {
         data: null,
@@ -79,8 +78,8 @@ export class ContactAudiences {
     }
 
     const identifier = options.email ? options.email : options.contactId;
-    return this.resend.delete<RemoveContactAudiencesResponseSuccess>(
-      `/contacts/${identifier}/audiences/${options.audienceId}`,
+    return this.resend.delete<RemoveContactSegmentResponseSuccess>(
+      `/contacts/${identifier}/segments/${options.segmentId}`,
     );
   }
 }

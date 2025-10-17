@@ -1,18 +1,18 @@
 import type { PaginationOptions } from '../../common/interfaces';
 import type { ErrorResponse } from '../../interfaces';
-import type { Audience } from './audience';
+import type { Segment } from './segment';
 
-export type ListAudiencesOptions = PaginationOptions;
+export type ListSegmentsOptions = PaginationOptions;
 
-export type ListAudiencesResponseSuccess = {
+export type ListSegmentsResponseSuccess = {
   object: 'list';
-  data: Audience[];
+  data: Segment[];
   has_more: boolean;
 };
 
-export type ListAudiencesResponse =
+export type ListSegmentsResponse =
   | {
-      data: ListAudiencesResponseSuccess;
+      data: ListSegmentsResponseSuccess;
       error: null;
     }
   | {

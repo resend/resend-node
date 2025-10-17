@@ -1,4 +1,4 @@
-export type ContactAudiencesBaseOptions =
+export type ContactSegmentsBaseOptions =
   | {
       contactId: string;
       email?: never;

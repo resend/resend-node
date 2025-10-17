@@ -2,40 +2,40 @@ import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from '../../resend';
 import { mockSuccessResponse } from '../../test-utils/mock-fetch';
 import type {
-  AddContactAudiencesOptions,
-  AddContactAudiencesResponseSuccess,
-} from './interfaces/add-contact-audience.interface';
+  AddContactSegmentOptions,
+  AddContactSegmentResponseSuccess,
+} from './interfaces/add-contact-segment.interface';
 import type {
-  ListContactAudiencesOptions,
-  ListContactAudiencesResponseSuccess,
-} from './interfaces/list-contact-audiences.interface';
+  ListContactSegmentsOptions,
+  ListContactSegmentsResponseSuccess,
+} from './interfaces/list-contact-segments.interface';
 import type {
-  RemoveContactAudiencesOptions,
-  RemoveContactAudiencesResponseSuccess,
-} from './interfaces/remove-contact-audience.interface';
+  RemoveContactSegmentOptions,
+  RemoveContactSegmentResponseSuccess,
+} from './interfaces/remove-contact-segment.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
 
-describe('ContactAudiences', () => {
+describe('ContactSegments', () => {
   afterEach(() => fetchMock.resetMocks());
   afterAll(() => fetchMocker.disableMocks());
   describe('list', () => {
-    it('gets contact audiences by email', async () => {
-      const options: ListContactAudiencesOptions = {
+    it('gets contact segments by email', async () => {
+      const options: ListContactSegmentsOptions = {
         email: 'carolina@resend.com',
       };
-      const response: ListContactAudiencesResponseSuccess = {
+      const response: ListContactSegmentsResponseSuccess = {
         object: 'list',
         data: [
           {
             id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
-            name: 'Test Audience',
+            name: 'Test Segment',
             created_at: '2021-01-01T00:00:00.000Z',
           },
           {
             id: 'd7e1e488-ae2c-4255-a40c-a4db3af7ed0c',
-            name: 'Another Audience',
+            name: 'Another Segment',
             created_at: '2021-01-02T00:00:00.000Z',
           },
         ],
@@ -48,7 +48,7 @@ describe('ContactAudiences', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
-        resend.contacts.audiences.list(options),
+        resend.contacts.segments.list(options),
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
@@ -56,12 +56,12 @@ describe('ContactAudiences', () => {
       {
         "created_at": "2021-01-01T00:00:00.000Z",
         "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
-        "name": "Test Audience",
+        "name": "Test Segment",
       },
       {
         "created_at": "2021-01-02T00:00:00.000Z",
         "id": "d7e1e488-ae2c-4255-a40c-a4db3af7ed0c",
-        "name": "Another Audience",
+        "name": "Another Segment",
       },
     ],
     "has_more": false,
@@ -72,18 +72,18 @@ describe('ContactAudiences', () => {
 `);
     });
 
-    it('gets contact audiences by ID', async () => {
-      const options: ListContactAudiencesOptions = {
+    it('gets contact segments by ID', async () => {
+      const options: ListContactSegmentsOptions = {
         contactId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
         limit: 1,
         after: '584a472d-bc6d-4dd2-aa9d-d3d50ce87222',
       };
-      const response: ListContactAudiencesResponseSuccess = {
+      const response: ListContactSegmentsResponseSuccess = {
         object: 'list',
         data: [
           {
             id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
-            name: 'Test Audience',
+            name: 'Test Segment',
             created_at: '2021-01-01T00:00:00.000Z',
           },
         ],
@@ -96,7 +96,7 @@ describe('ContactAudiences', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
-        resend.contacts.audiences.list(options),
+        resend.contacts.segments.list(options),
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
@@ -104,7 +104,7 @@ describe('ContactAudiences', () => {
       {
         "created_at": "2021-01-01T00:00:00.000Z",
         "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
-        "name": "Test Audience",
+        "name": "Test Segment",
       },
     ],
     "has_more": true,
@@ -119,8 +119,8 @@ describe('ContactAudiences', () => {
       const options = {};
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const result = resend.contacts.audiences.list(
-        options as ListContactAudiencesOptions,
+      const result = resend.contacts.segments.list(
+        options as ListContactSegmentsOptions,
       );
 
       await expect(result).resolves.toMatchInlineSnapshot(`
@@ -138,12 +138,12 @@ describe('ContactAudiences', () => {
 
   describe('add', () => {
     it('adds a contact to an audience', async () => {
-      const options: AddContactAudiencesOptions = {
+      const options: AddContactSegmentOptions = {
         email: 'carolina@resend.com',
-        audienceId: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+        segmentId: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
       };
 
-      const response: AddContactAudiencesResponseSuccess = {
+      const response: AddContactSegmentResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
@@ -153,7 +153,7 @@ describe('ContactAudiences', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
-        resend.contacts.audiences.add(options),
+        resend.contacts.segments.add(options),
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
@@ -165,12 +165,12 @@ describe('ContactAudiences', () => {
     });
 
     it('adds a contact to an audience by ID', async () => {
-      const options: AddContactAudiencesOptions = {
+      const options: AddContactSegmentOptions = {
         contactId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
-        audienceId: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+        segmentId: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
       };
 
-      const response: AddContactAudiencesResponseSuccess = {
+      const response: AddContactSegmentResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
@@ -180,7 +180,7 @@ describe('ContactAudiences', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
-        resend.contacts.audiences.add(options),
+        resend.contacts.segments.add(options),
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
@@ -195,8 +195,8 @@ describe('ContactAudiences', () => {
       const options = {};
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const result = resend.contacts.audiences.add(
-        options as AddContactAudiencesOptions,
+      const result = resend.contacts.segments.add(
+        options as AddContactSegmentOptions,
       );
 
       await expect(result).resolves.toMatchInlineSnapshot(`
@@ -214,12 +214,12 @@ describe('ContactAudiences', () => {
 
   describe('remove', () => {
     it('removes a contact from an audience', async () => {
-      const options: RemoveContactAudiencesOptions = {
+      const options: RemoveContactSegmentOptions = {
         email: 'carolina@resend.com',
-        audienceId: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+        segmentId: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
       };
 
-      const response: RemoveContactAudiencesResponseSuccess = {
+      const response: RemoveContactSegmentResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
         deleted: true,
       };
@@ -230,7 +230,7 @@ describe('ContactAudiences', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
-        resend.contacts.audiences.remove(options),
+        resend.contacts.segments.remove(options),
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
@@ -243,12 +243,12 @@ describe('ContactAudiences', () => {
     });
 
     it('removes a contact from an audience by ID', async () => {
-      const options: RemoveContactAudiencesOptions = {
+      const options: RemoveContactSegmentOptions = {
         contactId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
-        audienceId: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+        segmentId: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
       };
 
-      const response: RemoveContactAudiencesResponseSuccess = {
+      const response: RemoveContactSegmentResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
         deleted: true,
       };
@@ -259,7 +259,7 @@ describe('ContactAudiences', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
-        resend.contacts.audiences.remove(options),
+        resend.contacts.segments.remove(options),
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
@@ -275,8 +275,8 @@ describe('ContactAudiences', () => {
       const options = {};
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const result = resend.contacts.audiences.remove(
-        options as RemoveContactAudiencesOptions,
+      const result = resend.contacts.segments.remove(
+        options as RemoveContactSegmentOptions,
       );
 
       await expect(result).resolves.toMatchInlineSnapshot(`

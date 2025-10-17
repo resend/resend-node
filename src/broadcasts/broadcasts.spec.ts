@@ -63,7 +63,7 @@ describe('Broadcasts', () => {
 
       const payload: CreateBroadcastOptions = {
         from: 'bu@resend.com',
-        audienceId: '0192f4ed-c2e9-7112-9c13-b04a043e23ee',
+        segmentId: '0192f4ed-c2e9-7112-9c13-b04a043e23ee',
         subject: 'Hello World',
         html: '<h1>Hello world</h1>',
       };
@@ -94,7 +94,7 @@ describe('Broadcasts', () => {
 
       const payload: CreateBroadcastOptions = {
         from: 'admin@resend.com',
-        audienceId: '0192f4f1-d5f9-7110-8eb5-370552515917',
+        segmentId: '0192f4f1-d5f9-7110-8eb5-370552515917',
         subject: 'Hello World',
         text: 'Hello world',
       };
@@ -124,7 +124,7 @@ describe('Broadcasts', () => {
 
       const payload: CreateBroadcastOptions = {
         from: 'admin@resend.com',
-        audienceId: '0192f4f1-d5f9-7110-8eb5-370552515917',
+        segmentId: '0192f4f1-d5f9-7110-8eb5-370552515917',
         replyTo: ['foo@resend.com', 'bar@resend.com'],
         subject: 'Hello World',
         text: 'Hello world',
@@ -159,7 +159,7 @@ describe('Broadcasts', () => {
 
       const payload: CreateBroadcastOptions = {
         from: 'resend.com', // Invalid from address
-        audienceId: '0192f4f1-d5f9-7110-8eb5-370552515917',
+        segmentId: '0192f4f1-d5f9-7110-8eb5-370552515917',
         replyTo: ['foo@resend.com', 'bar@resend.com'],
         subject: 'Hello World',
         text: 'Hello world',
@@ -188,7 +188,7 @@ describe('Broadcasts', () => {
 
       const result = await resend.broadcasts.create({
         from: 'example@resend.com',
-        audienceId: '0192f4f1-d5f9-7110-8eb5-370552515917',
+        segmentId: '0192f4f1-d5f9-7110-8eb5-370552515917',
         subject: 'Hello World',
         text: 'Hello world',
       });
@@ -216,7 +216,7 @@ describe('Broadcasts', () => {
 
       const result = await resend.broadcasts.create({
         from: 'example@resend.com',
-        audienceId: '0192f4f1-d5f9-7110-8eb5-370552515917',
+        segmentId: '0192f4f1-d5f9-7110-8eb5-370552515917',
         subject: 'Hello World',
         text: 'Hello world',
       });
@@ -271,6 +271,7 @@ describe('Broadcasts', () => {
         {
           id: '49a3999c-0ce1-4ea6-ab68-afcd6dc2e794',
           audience_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
+          segment_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
           name: 'broadcast 1',
           status: 'draft',
           created_at: '2024-11-01T15:13:31.723Z',
@@ -280,6 +281,7 @@ describe('Broadcasts', () => {
         {
           id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
           audience_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
+          segment_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
           name: 'broadcast 2',
           status: 'sent',
           created_at: '2024-12-01T19:32:22.980Z',
@@ -426,6 +428,7 @@ describe('Broadcasts', () => {
         object: 'broadcast',
         id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
         name: 'Announcements',
+        segment_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
         audience_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
         from: 'Acme <onboarding@resend.dev>',
         html: '<h1>Hello world</h1>',

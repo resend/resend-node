@@ -1,7 +1,6 @@
 import { version } from '../package.json';
 import { ApiKeys } from './api-keys/api-keys';
 import { Attachments } from './attachments/attachments';
-import { Audiences } from './audiences/audiences';
 import { Batch } from './batch/batch';
 import { Broadcasts } from './broadcasts/broadcasts';
 import type { GetOptions, PostOptions, PutOptions } from './common/interfaces';
@@ -11,6 +10,7 @@ import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import type { ErrorResponse } from './interfaces';
+import { Segments } from './segments/segments';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
 import { Webhooks } from './webhooks/webhooks';
@@ -31,7 +31,8 @@ export class Resend {
 
   readonly apiKeys = new ApiKeys(this);
   readonly attachments = new Attachments(this);
-  readonly audiences = new Audiences(this);
+  readonly segments = new Segments(this);
+  readonly audiences = this.segments; // Kept for backwards compatibility
   readonly batch = new Batch(this);
   readonly broadcasts = new Broadcasts(this);
   readonly contacts = new Contacts(this);

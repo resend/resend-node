@@ -19,7 +19,7 @@ describe('Audiences Integration Tests', () => {
   describe('create', () => {
     it('creates an audience', async () => {
       const result = await resend.audiences.create({
-        name: 'Test Audience',
+        name: 'Test Segment',
       });
 
       expect(result.data?.id).toBeTruthy();
