@@ -468,6 +468,7 @@ describe('Broadcasts', () => {
     "preview_text": "Check out our latest announcements",
     "reply_to": null,
     "scheduled_at": null,
+    "segment_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
     "sent_at": null,
     "status": "draft",
     "subject": "hello world",
