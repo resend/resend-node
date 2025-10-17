@@ -1,9 +1,5 @@
 import type { ErrorResponse } from '../../interfaces';
-import type {
-  Template,
-  TemplateVariable,
-  TemplateVariableListFallbackType,
-} from './template';
+import type { Template, TemplateVariable } from './template';
 
 type TemplateVariableUpdateOptions = Pick<TemplateVariable, 'key' | 'type'> &
   (
@@ -14,18 +10,6 @@ type TemplateVariableUpdateOptions = Pick<TemplateVariable, 'key' | 'type'> &
     | {
         type: 'number';
         fallbackValue?: number | null;
-      }
-    | {
-        type: 'boolean';
-        fallbackValue?: boolean | null;
-      }
-    | {
-        type: 'object';
-        fallbackValue: Record<string, unknown>;
-      }
-    | {
-        type: 'list';
-        fallbackValue: TemplateVariableListFallbackType;
       }
   );
 
