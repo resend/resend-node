@@ -911,7 +911,7 @@ describe('Templates', () => {
       const [firstUrl] = fetchMock.mock.calls[0];
       const firstParsedUrl = new URL(firstUrl as string);
 
-      expect(secondParsedUrl.pathname).toBe('/templates');
+      expect(firstParsedUrl.pathname).toBe('/templates');
       expect(firstParsedUrl.searchParams.get('before')).toBe('cursor1');
       expect(firstParsedUrl.searchParams.get('limit')).toBe('25');
 
@@ -925,7 +925,7 @@ describe('Templates', () => {
       const [secondUrl] = fetchMock.mock.calls[1];
       const secondParsedUrl = new URL(secondUrl as string);
 
-      expect(firstParsedUrl.pathname).toBe('/templates');
+      expect(secondParsedUrl.pathname).toBe('/templates');
       expect(secondParsedUrl.searchParams.get('after')).toBe('cursor2');
       expect(secondParsedUrl.searchParams.get('limit')).toBe('25');
     });
