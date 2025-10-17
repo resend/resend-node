@@ -40,6 +40,7 @@ export class Resend {
   readonly webhooks = new Webhooks();
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
+  readonly webhooks = new Webhooks();
 
   constructor(readonly key?: string) {
     if (!key) {
