@@ -16,22 +16,10 @@ export interface Template {
   current_version_id: string;
 }
 
-export type TemplateVariableListFallbackType =
-  | string[]
-  | number[]
-  | boolean[]
-  | Record<string, unknown>[];
-
 export interface TemplateVariable {
   key: string;
-  fallback_value:
-    | string
-    | number
-    | boolean
-    | Record<string, unknown>
-    | TemplateVariableListFallbackType
-    | null;
-  type: 'string' | 'number' | 'boolean' | 'object' | 'list';
+  fallback_value: string | number | null;
+  type: 'string' | 'number';
   created_at: string;
   updated_at: string;
 }

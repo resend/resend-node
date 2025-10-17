@@ -264,61 +264,6 @@ describe('Templates', () => {
         'Failed to render React component. Make sure to install `@react-email/render`',
       );
     });
-
-    it('creates a template with object and list variable types', async () => {
-      const payload: CreateTemplateOptions = {
-        name: 'Complex Variables Template',
-        html: '<h1>Welcome {{{userProfile.name}}}!</h1><p>Your tags: {{{tags}}}</p>',
-        variables: [
-          {
-            key: 'userProfile',
-            type: 'object',
-            fallbackValue: { name: 'John', age: 30 },
-          },
-          {
-            key: 'tags',
-            type: 'list',
-            fallbackValue: ['premium', 'vip'],
-          },
-          {
-            key: 'scores',
-            type: 'list',
-            fallbackValue: [95, 87, 92],
-          },
-          {
-            key: 'flags',
-            type: 'list',
-            fallbackValue: [true, false, true],
-          },
-          {
-            key: 'items',
-            type: 'list',
-            fallbackValue: [{ id: 1 }, { id: 2 }],
-          },
-        ],
-      };
-      const response: CreateTemplateResponseSuccess = {
-        object: 'template',
-        id: 'fd61172c-cafc-40f5-b049-b45947779a29',
-      };
-
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
-
-      const resend = new Resend(TEST_API_KEY);
-      await expect(
-        resend.templates.create(payload),
-      ).resolves.toMatchInlineSnapshot(`
-        {
-          "data": {
-            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-            "object": "template",
-          },
-          "error": null,
-        }
-      `);
-    });
   });
 
   describe('remove', () => {
@@ -538,65 +483,6 @@ describe('Templates', () => {
             "message": "Template not found",
             "name": "not_found",
           },
-        }
-      `);
-    });
-
-    it('updates a template with object and list variable types', async () => {
-      const id = 'fd61172c-cafc-40f5-b049-b45947779a29';
-      const payload: UpdateTemplateOptions = {
-        name: 'Updated Complex Variables Template',
-        html: '<h1>Updated Welcome {{{config.theme}}}!</h1><p>Permissions: {{{permissions}}}</p>',
-        variables: [
-          {
-            key: 'config',
-            type: 'object',
-            fallbackValue: { theme: 'dark', lang: 'en' },
-          },
-          {
-            key: 'permissions',
-            type: 'list',
-            fallbackValue: ['read', 'write'],
-          },
-          {
-            key: 'counts',
-            type: 'list',
-            fallbackValue: [10, 20, 30],
-          },
-          {
-            key: 'enabled',
-            type: 'list',
-            fallbackValue: [true, false],
-          },
-          {
-            key: 'metadata',
-            type: 'list',
-            fallbackValue: [{ key: 'a' }, { key: 'b' }],
-          },
-        ],
-      };
-      const response = {
-        object: 'template',
-        id,
-      };
-
-      mockSuccessResponse(response, {
-        headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-        },
-      });
-
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-
-      await expect(
-        resend.templates.update(id, payload),
-      ).resolves.toMatchInlineSnapshot(`
-        {
-          "data": {
-            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-            "object": "template",
-          },
-          "error": null,
         }
       `);
     });
@@ -1015,20 +901,33 @@ describe('Templates', () => {
 
       const resend = new Resend(TEST_API_KEY);
 
+      // Test before and limit together
       await resend.templates.list({
         before: 'cursor1',
+        limit: 25,
+      });
+
+      // Verify before and limit pagination parameters are included
+      const [firstUrl] = fetchMock.mock.calls[0];
+      const firstParsedUrl = new URL(firstUrl as string);
+
+      expect(firstParsedUrl.pathname).toBe('/templates');
+      expect(firstParsedUrl.searchParams.get('before')).toBe('cursor1');
+      expect(firstParsedUrl.searchParams.get('limit')).toBe('25');
+
+      // Test after and limit together
+      await resend.templates.list({
         after: 'cursor2',
         limit: 25,
       });
 
-      // Verify all pagination parameters are included
-      const [url] = fetchMock.mock.calls[0];
-      const parsedUrl = new URL(url as string);
+      // Verify after and limit pagination parameters are included
+      const [secondUrl] = fetchMock.mock.calls[1];
+      const secondParsedUrl = new URL(secondUrl as string);
 
-      expect(parsedUrl.pathname).toBe('/templates');
-      expect(parsedUrl.searchParams.get('before')).toBe('cursor1');
-      expect(parsedUrl.searchParams.get('after')).toBe('cursor2');
-      expect(parsedUrl.searchParams.get('limit')).toBe('25');
+      expect(secondParsedUrl.pathname).toBe('/templates');
+      expect(secondParsedUrl.searchParams.get('after')).toBe('cursor2');
+      expect(secondParsedUrl.searchParams.get('limit')).toBe('25');
     });
   });
 });
