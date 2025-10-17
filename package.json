@@ -43,6 +43,9 @@
     "url": "https://github.com/resendlabs/resend-node/issues"
   },
   "homepage": "https://github.com/resendlabs/resend-node#readme",
+  "dependencies": {
+    "svix": "1.76.1"
+  },
   "peerDependencies": {
     "@react-email/render": "*"
   },
