@@ -11,7 +11,6 @@ import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import type { ErrorResponse } from './interfaces';
-import { Webhooks } from './webhooks/webhooks';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
 import { Webhooks } from './webhooks/webhooks';
@@ -41,7 +40,6 @@ export class Resend {
   readonly webhooks = new Webhooks();
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
-  readonly webhooks = new Webhooks();
 
   constructor(readonly key?: string) {
     if (!key) {
