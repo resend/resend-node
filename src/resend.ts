@@ -14,6 +14,7 @@ import type { ErrorResponse } from './interfaces';
 import { Webhooks } from './webhooks/webhooks';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
+import { Webhooks } from './webhooks/webhooks';
 
 const defaultBaseUrl = 'https://api.resend.com';
 const defaultUserAgent = `resend-node:${version}`;
@@ -40,6 +41,7 @@ export class Resend {
   readonly webhooks = new Webhooks();
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
+  readonly webhooks = new Webhooks();
 
   constructor(readonly key?: string) {
     if (!key) {
