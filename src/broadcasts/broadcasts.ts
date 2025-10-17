@@ -44,6 +44,7 @@ export class Broadcasts {
       '/broadcasts',
       {
         name: payload.name,
+        segment_id: payload.segmentId,
         audience_id: payload.audienceId,
         preview_text: payload.previewText,
         from: payload.from,
@@ -107,6 +108,7 @@ export class Broadcasts {
       `/broadcasts/${id}`,
       {
         name: payload.name,
+        segment_id: payload.segmentId,
         audience_id: payload.audienceId,
         from: payload.from,
         html: payload.html,

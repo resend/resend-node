@@ -1,6 +1,7 @@
 export interface Broadcast {
   id: string;
   name: string;
+  segment_id: string | null;
   audience_id: string | null;
   from: string | null;
   subject: string | null;

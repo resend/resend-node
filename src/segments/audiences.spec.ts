@@ -3,12 +3,12 @@ import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import { mockSuccessResponse } from '../test-utils/mock-fetch';
 import type {
-  CreateAudienceOptions,
-  CreateAudienceResponseSuccess,
-} from './interfaces/create-audience-options.interface';
-import type { GetAudienceResponseSuccess } from './interfaces/get-audience.interface';
-import type { ListAudiencesResponseSuccess } from './interfaces/list-audiences.interface';
-import type { RemoveAudiencesResponseSuccess } from './interfaces/remove-audience.interface';
+  CreateSegmentOptions,
+  CreateSegmentResponseSuccess,
+} from './interfaces/create-segment-options.interface';
+import type { GetSegmentResponseSuccess } from './interfaces/get-segment.interface';
+import type { ListSegmentsResponseSuccess } from './interfaces/list-segments.interface';
+import type { RemoveSegmentResponseSuccess } from './interfaces/remove-segment.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -19,8 +19,8 @@ describe('Audiences', () => {
 
   describe('create', () => {
     it('creates a audience', async () => {
-      const payload: CreateAudienceOptions = { name: 'resend.com' };
-      const response: CreateAudienceResponseSuccess = {
+      const payload: CreateSegmentOptions = { name: 'resend.com' };
+      const response: CreateSegmentResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
         name: 'Resend',
         object: 'audience',
@@ -50,7 +50,7 @@ describe('Audiences', () => {
     });
 
     it('throws error when missing name', async () => {
-      const payload: CreateAudienceOptions = { name: '' };
+      const payload: CreateSegmentOptions = { name: '' };
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing "name" field',
@@ -81,7 +81,7 @@ describe('Audiences', () => {
   });
 
   describe('list', () => {
-    const response: ListAudiencesResponseSuccess = {
+    const response: ListSegmentsResponseSuccess = {
       object: 'list',
       has_more: false,
       data: [
@@ -113,7 +113,7 @@ describe('Audiences', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/audiences',
+          'https://api.resend.com/segments',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
@@ -136,7 +136,7 @@ describe('Audiences', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/audiences?limit=1',
+          'https://api.resend.com/segments?limit=1',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
@@ -160,7 +160,7 @@ describe('Audiences', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/audiences?limit=1&after=cursor-value',
+          'https://api.resend.com/segments?limit=1&after=cursor-value',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
@@ -184,7 +184,7 @@ describe('Audiences', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/audiences?limit=1&before=cursor-value',
+          'https://api.resend.com/segments?limit=1&before=cursor-value',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
@@ -227,7 +227,7 @@ describe('Audiences', () => {
     });
 
     it('get audience', async () => {
-      const response: GetAudienceResponseSuccess = {
+      const response: GetSegmentResponseSuccess = {
         object: 'audience',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'resend.com',
@@ -263,7 +263,7 @@ describe('Audiences', () => {
   describe('remove', () => {
     it('removes a audience', async () => {
       const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
-      const response: RemoveAudiencesResponseSuccess = {
+      const response: RemoveSegmentResponseSuccess = {
         object: 'audience',
         id,
         deleted: true,
