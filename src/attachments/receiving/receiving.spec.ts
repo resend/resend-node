@@ -368,6 +368,7 @@ describe('Receiving', () => {
     describe('when pagination options are provided', () => {
       it('calls endpoint passing limit param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
+
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           limit: 10,
@@ -409,6 +410,7 @@ describe('Receiving', () => {
 
       it('calls endpoint passing after param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
+
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           after: 'cursor123',
@@ -450,6 +452,7 @@ describe('Receiving', () => {
 
       it('calls endpoint passing before param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
+
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           before: 'cursor123',
