@@ -2,8 +2,10 @@ import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
 import { mockSuccessResponse } from '../../test-utils/mock-fetch';
-import type { GetAttachmentResponseSuccess } from './interfaces';
-import type { ListAttachmentsResponseSuccess } from './interfaces/list-attachments.interface';
+import type {
+  ListAttachmentsApiResponse,
+  ListAttachmentsResponseSuccess,
+} from './interfaces/list-attachments.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -48,8 +50,8 @@ describe('Receiving', () => {
     });
 
     describe('when attachment found', () => {
-      it('returns attachment with transformed fields', async () => {
-        const apiResponse: GetAttachmentResponseSuccess = {
+      it('returns attachment with download URL', async () => {
+        const apiResponse = {
           object: 'attachment' as const,
           data: {
             id: 'att_123',
@@ -57,42 +59,46 @@ describe('Receiving', () => {
             content_type: 'application/pdf',
             content_id: 'cid_123',
             content_disposition: 'attachment' as const,
-            content: 'base64encodedcontent==',
+            download_url: 'https://example.com/download/att_123',
+            expires_at: '2025-10-18T12:00:00Z',
           },
         };
 
-        fetchMock.mockOnce(JSON.stringify(apiResponse), {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        fetchMock.mockOnceIf(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments/att_123',
+          JSON.stringify(apiResponse),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
           },
-        });
+        );
 
         const result = await resend.attachments.receiving.get({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           id: 'att_123',
         });
 
-        expect(result).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": {
-      "content": "base64encodedcontent==",
-      "content_disposition": "attachment",
-      "content_id": "cid_123",
-      "content_type": "application/pdf",
-      "filename": "document.pdf",
-      "id": "att_123",
-    },
-    "object": "attachment",
-  },
-  "error": null,
-}
-`);
+        expect(result).toEqual({
+          data: {
+            data: {
+              content_disposition: 'attachment',
+              content_id: 'cid_123',
+              content_type: 'application/pdf',
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
+              filename: 'document.pdf',
+              id: 'att_123',
+            },
+            object: 'attachment',
+          },
+          error: null,
+        });
       });
 
-      it('returns inline attachment', async () => {
+      it('returns inline attachment with download URL', async () => {
         const apiResponse = {
           object: 'attachment' as const,
           data: {
@@ -101,40 +107,43 @@ describe('Receiving', () => {
             content_type: 'image/png',
             content_id: 'cid_456',
             content_disposition: 'inline' as const,
-            content:
-              'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+            download_url: 'https://example.com/download/att_456',
+            expires_at: '2025-10-18T12:00:00Z',
           },
         };
 
-        fetchMock.mockOnce(JSON.stringify(apiResponse), {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        fetchMock.mockOnceIf(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments/att_456',
+          JSON.stringify(apiResponse),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
           },
-        });
+        );
 
         const result = await resend.attachments.receiving.get({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           id: 'att_456',
         });
 
-        expect(result).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": {
-      "content": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
-      "content_disposition": "inline",
-      "content_id": "cid_456",
-      "content_type": "image/png",
-      "filename": "image.png",
-      "id": "att_456",
-    },
-    "object": "attachment",
-  },
-  "error": null,
-}
-`);
+        expect(result).toEqual({
+          data: {
+            data: {
+              content_disposition: 'inline',
+              content_id: 'cid_456',
+              content_type: 'image/png',
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
+              filename: 'image.png',
+              id: 'att_456',
+            },
+            object: 'attachment',
+          },
+          error: null,
+        });
       });
 
       it('handles attachment without optional fields (filename, contentId)', async () => {
@@ -145,44 +154,48 @@ describe('Receiving', () => {
             id: 'att_789',
             content_type: 'text/plain',
             content_disposition: 'attachment' as const,
-            content: 'base64content',
+            download_url: 'https://example.com/download/att_789',
+            expires_at: '2025-10-18T12:00:00Z',
             // Optional fields (filename, content_id) omitted
           },
         };
 
-        fetchMock.mockOnce(JSON.stringify(apiResponse), {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        fetchMock.mockOnceIf(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments/att_789',
+          JSON.stringify(apiResponse),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
           },
-        });
+        );
 
         const result = await resend.attachments.receiving.get({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           id: 'att_789',
         });
 
-        expect(result).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": {
-      "content": "base64content",
-      "content_disposition": "attachment",
-      "content_type": "text/plain",
-      "id": "att_789",
-    },
-    "object": "attachment",
-  },
-  "error": null,
-}
-`);
+        expect(result).toEqual({
+          data: {
+            data: {
+              content_disposition: 'attachment',
+              content_type: 'text/plain',
+              download_url: 'https://example.com/download/att_789',
+              expires_at: '2025-10-18T12:00:00Z',
+              id: 'att_789',
+            },
+            object: 'attachment',
+          },
+          error: null,
+        });
       });
     });
   });
 
   describe('list', () => {
-    const apiResponse: ListAttachmentsResponseSuccess = {
+    const apiResponse: ListAttachmentsApiResponse = {
       object: 'list' as const,
       has_more: false,
       data: [
@@ -192,7 +205,8 @@ describe('Receiving', () => {
           content_type: 'application/pdf',
           content_id: 'cid_123',
           content_disposition: 'attachment' as const,
-          content: 'base64encodedcontent==',
+          download_url: 'https://example.com/download/att_123',
+          expires_at: '2025-10-18T12:00:00Z',
         },
         {
           id: 'att_456',
@@ -200,7 +214,8 @@ describe('Receiving', () => {
           content_type: 'image/png',
           content_id: 'cid_456',
           content_disposition: 'inline' as const,
-          content: 'imagebase64==',
+          download_url: 'https://example.com/download/att_456',
+          expires_at: '2025-10-18T12:00:00Z',
         },
       ],
     };
@@ -233,35 +248,69 @@ describe('Receiving', () => {
     });
 
     describe('when attachments found', () => {
-      it('returns multiple attachments', async () => {
-        fetchMock.mockOnce(JSON.stringify(apiResponse), {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+      it('returns multiple attachments with download URLs', async () => {
+        fetchMock.mockOnceIf(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments',
+          JSON.stringify(apiResponse),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
           },
-        });
+        );
 
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
         });
 
-        expect(result).toEqual({ data: apiResponse, error: null });
+        const expectedResponse: ListAttachmentsResponseSuccess = {
+          object: 'list',
+          has_more: false,
+          data: [
+            {
+              id: 'att_123',
+              filename: 'document.pdf',
+              content_type: 'application/pdf',
+              content_id: 'cid_123',
+              content_disposition: 'attachment',
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
+            },
+            {
+              id: 'att_456',
+              filename: 'image.png',
+              content_type: 'image/png',
+              content_id: 'cid_456',
+              content_disposition: 'inline',
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
+            },
+          ],
+        };
+
+        expect(result).toEqual({ data: expectedResponse, error: null });
       });
 
       it('returns empty array when no attachments', async () => {
         const emptyResponse = {
-          object: 'attachment' as const,
+          object: 'list' as const,
+          has_more: false,
           data: [],
         };
 
-        fetchMock.mockOnce(JSON.stringify(emptyResponse), {
-          status: 200,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        fetchMock.mockOnceIf(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments',
+          JSON.stringify(emptyResponse),
+          {
+            status: 200,
+            headers: {
+              'content-type': 'application/json',
+              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            },
           },
-        });
+        );
 
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
@@ -281,8 +330,33 @@ describe('Receiving', () => {
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
         });
 
+        const expectedResponse: ListAttachmentsResponseSuccess = {
+          object: 'list',
+          has_more: false,
+          data: [
+            {
+              id: 'att_123',
+              filename: 'document.pdf',
+              content_type: 'application/pdf',
+              content_id: 'cid_123',
+              content_disposition: 'attachment',
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
+            },
+            {
+              id: 'att_456',
+              filename: 'image.png',
+              content_type: 'image/png',
+              content_id: 'cid_456',
+              content_disposition: 'inline',
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
+            },
+          ],
+        };
+
         expect(result).toEqual({
-          data: apiResponse,
+          data: expectedResponse,
           error: null,
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
@@ -294,12 +368,39 @@ describe('Receiving', () => {
     describe('when pagination options are provided', () => {
       it('calls endpoint passing limit param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
+
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           limit: 10,
         });
+
+        const expectedResponse: ListAttachmentsResponseSuccess = {
+          object: 'list',
+          has_more: false,
+          data: [
+            {
+              id: 'att_123',
+              filename: 'document.pdf',
+              content_type: 'application/pdf',
+              content_id: 'cid_123',
+              content_disposition: 'attachment',
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
+            },
+            {
+              id: 'att_456',
+              filename: 'image.png',
+              content_type: 'image/png',
+              content_id: 'cid_456',
+              content_disposition: 'inline',
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
+            },
+          ],
+        };
+
         expect(result).toEqual({
-          data: apiResponse,
+          data: expectedResponse,
           error: null,
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
@@ -309,12 +410,39 @@ describe('Receiving', () => {
 
       it('calls endpoint passing after param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
+
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           after: 'cursor123',
         });
+
+        const expectedResponse: ListAttachmentsResponseSuccess = {
+          object: 'list',
+          has_more: false,
+          data: [
+            {
+              id: 'att_123',
+              filename: 'document.pdf',
+              content_type: 'application/pdf',
+              content_id: 'cid_123',
+              content_disposition: 'attachment',
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
+            },
+            {
+              id: 'att_456',
+              filename: 'image.png',
+              content_type: 'image/png',
+              content_id: 'cid_456',
+              content_disposition: 'inline',
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
+            },
+          ],
+        };
+
         expect(result).toEqual({
-          data: apiResponse,
+          data: expectedResponse,
           error: null,
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
@@ -324,12 +452,39 @@ describe('Receiving', () => {
 
       it('calls endpoint passing before param and return the response', async () => {
         mockSuccessResponse(apiResponse, { headers });
+
         const result = await resend.attachments.receiving.list({
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           before: 'cursor123',
         });
+
+        const expectedResponse: ListAttachmentsResponseSuccess = {
+          object: 'list',
+          has_more: false,
+          data: [
+            {
+              id: 'att_123',
+              filename: 'document.pdf',
+              content_type: 'application/pdf',
+              content_id: 'cid_123',
+              content_disposition: 'attachment',
+              download_url: 'https://example.com/download/att_123',
+              expires_at: '2025-10-18T12:00:00Z',
+            },
+            {
+              id: 'att_456',
+              filename: 'image.png',
+              content_type: 'image/png',
+              content_id: 'cid_456',
+              content_disposition: 'inline',
+              download_url: 'https://example.com/download/att_456',
+              expires_at: '2025-10-18T12:00:00Z',
+            },
+          ],
+        };
+
         expect(result).toEqual({
-          data: apiResponse,
+          data: expectedResponse,
           error: null,
         });
         expect(fetchMock.mock.calls[0][0]).toBe(

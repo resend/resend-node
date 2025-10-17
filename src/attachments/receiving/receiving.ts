@@ -6,9 +6,9 @@ import type {
   GetAttachmentResponseSuccess,
 } from './interfaces/get-attachment.interface';
 import type {
+  ListAttachmentsApiResponse,
   ListAttachmentsOptions,
   ListAttachmentsResponse,
-  ListAttachmentsResponseSuccess,
 } from './interfaces/list-attachments.interface';
 
 export class Receiving {
@@ -34,7 +34,7 @@ export class Receiving {
       ? `/emails/receiving/${emailId}/attachments?${queryString}`
       : `/emails/receiving/${emailId}/attachments`;
 
-    const data = await this.resend.get<ListAttachmentsResponseSuccess>(url);
+    const data = await this.resend.get<ListAttachmentsApiResponse>(url);
 
     return data;
   }
