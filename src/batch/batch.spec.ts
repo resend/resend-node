@@ -656,5 +656,135 @@ describe('Batch', () => {
         },
       ]);
     });
+
+    it('sends batch emails with object and list template variables', async () => {
+      const payload: CreateBatchOptions = [
+        {
+          template: {
+            id: 'complex-template-123',
+            variables: {
+              userName: 'Alice Johnson',
+              userProfile: {
+                role: 'admin',
+                department: 'Engineering',
+              },
+              permissions: ['read', 'write', 'delete'],
+            },
+          },
+          to: 'alice@example.com',
+        },
+        {
+          template: {
+            id: 'complex-template-123',
+            variables: {
+              userName: 'Bob Smith',
+              userProfile: {
+                role: 'user',
+                department: 'Sales',
+              },
+              permissions: ['read'],
+              scores: [85, 92, 78],
+              settings: [
+                { key: 'notifications', value: true },
+                { key: 'theme', value: 'dark' },
+              ],
+            },
+          },
+          to: 'bob@example.com',
+        },
+      ];
+
+      mockSuccessResponse(
+        {
+          data: [
+            { id: 'batch-complex-vars-1' },
+            { id: 'batch-complex-vars-2' },
+          ],
+        },
+        {
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
+        },
+      );
+
+      const data = await resend.batch.send(payload);
+      expect(data).toMatchInlineSnapshot(`
+{
+  "data": {
+    "data": [
+      {
+        "id": "batch-complex-vars-1",
+      },
+      {
+        "id": "batch-complex-vars-2",
+      },
+    ],
+  },
+  "error": null,
+}
+`);
+
+      // Verify the correct API payload was sent
+      const lastCall = fetchMock.mock.calls[0];
+      const requestBody = JSON.parse(lastCall[1]?.body as string);
+      expect(requestBody).toEqual([
+        {
+          attachments: undefined,
+          bcc: undefined,
+          cc: undefined,
+          from: undefined,
+          headers: undefined,
+          html: undefined,
+          reply_to: undefined,
+          scheduled_at: undefined,
+          subject: undefined,
+          tags: undefined,
+          text: undefined,
+          to: 'alice@example.com',
+          template: {
+            id: 'complex-template-123',
+            variables: {
+              userName: 'Alice Johnson',
+              userProfile: {
+                role: 'admin',
+                department: 'Engineering',
+              },
+              permissions: ['read', 'write', 'delete'],
+            },
+          },
+        },
+        {
+          attachments: undefined,
+          bcc: undefined,
+          cc: undefined,
+          from: undefined,
+          headers: undefined,
+          html: undefined,
+          reply_to: undefined,
+          scheduled_at: undefined,
+          subject: undefined,
+          tags: undefined,
+          text: undefined,
+          to: 'bob@example.com',
+          template: {
+            id: 'complex-template-123',
+            variables: {
+              userName: 'Bob Smith',
+              userProfile: {
+                role: 'user',
+                department: 'Sales',
+              },
+              permissions: ['read'],
+              scores: [85, 92, 78],
+              settings: [
+                { key: 'notifications', value: true },
+                { key: 'theme', value: 'dark' },
+              ],
+            },
+          },
+        },
+      ]);
+    });
   });
 });
