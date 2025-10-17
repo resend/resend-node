@@ -1,14 +1,9 @@
 import type { ErrorResponse } from '../../../interfaces';
-import type { ApiInboundAttachment, InboundAttachment } from './attachment';
+import type { InboundAttachment } from './attachment';
 
 export interface GetAttachmentOptions {
   emailId: string;
   id: string;
-}
-
-export interface GetAttachmentApiResponse {
-  object: 'attachment';
-  data: ApiInboundAttachment;
 }
 
 export interface GetAttachmentResponseSuccess {
