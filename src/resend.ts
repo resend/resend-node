@@ -32,7 +32,10 @@ export class Resend {
   readonly apiKeys = new ApiKeys(this);
   readonly attachments = new Attachments(this);
   readonly segments = new Segments(this);
-  readonly audiences = this.segments; // Kept for backwards compatibility
+  /**
+   * @deprecated Use segments instead
+   */
+  readonly audiences = this.segments;
   readonly batch = new Batch(this);
   readonly broadcasts = new Broadcasts(this);
   readonly contacts = new Contacts(this);
