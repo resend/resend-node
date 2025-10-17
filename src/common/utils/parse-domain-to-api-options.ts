@@ -7,6 +7,7 @@ export function parseDomainToApiOptions(
   return {
     name: domain.name,
     region: domain.region,
+    capability: domain.capability,
     custom_return_path: domain.customReturnPath,
   };
 }

@@ -64,6 +64,7 @@ describe('Emails', () => {
         to: 'user@resend.com',
         subject: 'Not Idempotent Test',
         html: '<h1>Test</h1>',
+        topicId: '9f31e56e-3083-46cf-8e96-c6995e0e576a',
       };
 
       await resend.emails.create(payload);
@@ -74,8 +75,18 @@ describe('Emails', () => {
       const request = lastCall[1];
       expect(request).toBeDefined();
 
-      const headers = new Headers(request?.headers);
-      expect(headers.has('Idempotency-Key')).toBe(false);
+      // Make sure the topic_id is included in the body
+      expect(lastCall[1]?.body).toEqual(
+        '{"from":"admin@resend.com","html":"<h1>Test</h1>","subject":"Not Idempotent Test","to":"user@resend.com","topic_id":"9f31e56e-3083-46cf-8e96-c6995e0e576a"}',
+      );
+
+      //@ts-expect-error
+      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
+      expect(hasIdempotencyKey).toBeFalsy();
+
+      //@ts-expect-error
+      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
+      expect(usedIdempotencyKey).toBeNull();
     });
 
     it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
@@ -389,6 +400,186 @@ describe('Emails', () => {
           },
         }),
       );
+    });
+
+    describe('template emails', () => {
+      it('sends email with template id only', async () => {
+        const response: CreateEmailResponseSuccess = {
+          id: 'template-email-123',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const payload: CreateEmailOptions = {
+          template: {
+            id: 'welcome-template-123',
+          },
+          to: 'user@example.com',
+        };
+
+        const data = await resend.emails.send(payload);
+        expect(data).toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "template-email-123",
+  },
+  "error": null,
+}
+`);
+
+        // Verify the correct API payload was sent
+        const lastCall = fetchMock.mock.calls[0];
+        const requestBody = JSON.parse(lastCall[1]?.body as string);
+        expect(requestBody).toEqual({
+          template: {
+            id: 'welcome-template-123',
+          },
+          to: 'user@example.com',
+        });
+      });
+
+      it('sends email with template id and variables', async () => {
+        const response: CreateEmailResponseSuccess = {
+          id: 'template-vars-email-456',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const payload: CreateEmailOptions = {
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'John Doe',
+              company: 'Acme Corp',
+              welcomeBonus: 100,
+              isPremium: true,
+            },
+          },
+          to: 'user@example.com',
+        };
+
+        const data = await resend.emails.send(payload);
+        expect(data).toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "template-vars-email-456",
+  },
+  "error": null,
+}
+`);
+
+        // Verify the correct API payload was sent
+        const lastCall = fetchMock.mock.calls[0];
+        const requestBody = JSON.parse(lastCall[1]?.body as string);
+        expect(requestBody).toEqual({
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'John Doe',
+              company: 'Acme Corp',
+              welcomeBonus: 100,
+              isPremium: true,
+            },
+          },
+          to: 'user@example.com',
+        });
+      });
+
+      it('sends template email with optional from and subject', async () => {
+        const response: CreateEmailResponseSuccess = {
+          id: 'template-with-overrides-789',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const payload: CreateEmailOptions = {
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'Jane Smith',
+            },
+          },
+          from: 'custom@example.com',
+          subject: 'Custom Subject Override',
+          to: 'user@example.com',
+        };
+
+        const data = await resend.emails.send(payload);
+        expect(data).toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "template-with-overrides-789",
+  },
+  "error": null,
+}
+`);
+
+        // Verify the correct API payload was sent
+        const lastCall = fetchMock.mock.calls[0];
+        const requestBody = JSON.parse(lastCall[1]?.body as string);
+        expect(requestBody).toEqual({
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'Jane Smith',
+            },
+          },
+          from: 'custom@example.com',
+          subject: 'Custom Subject Override',
+          to: 'user@example.com',
+        });
+      });
+
+      it('handles template email errors correctly', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          message: 'Template not found',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const payload: CreateEmailOptions = {
+          template: {
+            id: 'invalid-template-123',
+          },
+          to: 'user@example.com',
+        };
+
+        const result = await resend.emails.send(payload);
+        expect(result).toMatchInlineSnapshot(`
+{
+  "data": null,
+  "error": {
+    "message": "Template not found",
+    "name": "not_found",
+  },
+}
+`);
+      });
     });
   });
 
