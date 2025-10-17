@@ -25,9 +25,9 @@ describe('Segments Integration Tests', () => {
       expect(result.data?.id).toBeTruthy();
       expect(result.data?.name).toBeTruthy();
       expect(result.data?.object).toBe('audience');
-      const audienceId = result.data!.id;
+      const segmentId = result.data!.id;
 
-      const removeResult = await resend.segments.remove(audienceId);
+      const removeResult = await resend.segments.remove(segmentId);
       expect(removeResult.data?.deleted).toBe(true);
     });
 
@@ -39,19 +39,19 @@ describe('Segments Integration Tests', () => {
     });
   });
 
-  // Needs to be run with an account that can have multiple audiences
+  // Needs to be run with an account that can have multiple segments
   describe.todo('list', () => {
-    it('lists audiences without pagination', async () => {
-      const audienceIds: string[] = [];
+    it('lists segments without pagination', async () => {
+      const segmentIds: string[] = [];
 
       try {
         for (let i = 0; i < 6; i++) {
           const createResult = await resend.segments.create({
-            name: `Test audience ${i} for listing`,
+            name: `Test segment ${i} for listing`,
           });
 
           expect(createResult.data?.id).toBeTruthy();
-          audienceIds.push(createResult.data!.id);
+          segmentIds.push(createResult.data!.id);
         }
 
         const result = await resend.segments.list();
@@ -60,24 +60,24 @@ describe('Segments Integration Tests', () => {
         expect(result.data?.data.length).toBeGreaterThanOrEqual(6);
         expect(result.data?.has_more).toBe(false);
       } finally {
-        for (const id of audienceIds) {
+        for (const id of segmentIds) {
           const removeResult = await resend.segments.remove(id);
           expect(removeResult.data?.deleted).toBe(true);
         }
       }
     });
 
-    it('lists audiences with limit', async () => {
-      const audienceIds: string[] = [];
+    it('lists segments with limit', async () => {
+      const segmentIds: string[] = [];
 
       try {
         for (let i = 0; i < 6; i++) {
           const createResult = await resend.segments.create({
-            name: `Test audience ${i} for listing with limit`,
+            name: `Test segment ${i} for listing with limit`,
           });
 
           expect(createResult.data?.id).toBeTruthy();
-          audienceIds.push(createResult.data!.id);
+          segmentIds.push(createResult.data!.id);
         }
 
         const result = await resend.segments.list({ limit: 5 });
@@ -85,7 +85,7 @@ describe('Segments Integration Tests', () => {
         expect(result.data?.data.length).toBe(5);
         expect(result.data?.has_more).toBe(true);
       } finally {
-        for (const id of audienceIds) {
+        for (const id of segmentIds) {
           const removeResult = await resend.segments.remove(id);
           expect(removeResult.data?.deleted).toBe(true);
         }
@@ -94,27 +94,27 @@ describe('Segments Integration Tests', () => {
   });
 
   describe('get', () => {
-    it('retrieves an audience by id', async () => {
+    it('retrieves a segment by id', async () => {
       const createResult = await resend.segments.create({
-        name: 'Test Audience for Get',
+        name: 'Test Segment for Get',
       });
 
       expect(createResult.data?.id).toBeTruthy();
-      const audienceId = createResult.data!.id;
+      const segmentId = createResult.data!.id;
 
       try {
-        const getResult = await resend.segments.get(audienceId);
+        const getResult = await resend.segments.get(segmentId);
 
-        expect(getResult.data?.id).toBe(audienceId);
-        expect(getResult.data?.name).toBe('Test Audience for Get');
+        expect(getResult.data?.id).toBe(segmentId);
+        expect(getResult.data?.name).toBe('Test Segment for Get');
         expect(getResult.data?.object).toBe('audience');
       } finally {
-        const removeResult = await resend.segments.remove(audienceId);
+        const removeResult = await resend.segments.remove(segmentId);
         expect(removeResult.data?.deleted).toBe(true);
       }
     });
 
-    it('returns error for non-existent audience', async () => {
+    it('returns error for non-existent segment', async () => {
       const result = await resend.segments.get(
         '00000000-0000-0000-0000-000000000000',
       );
@@ -124,23 +124,23 @@ describe('Segments Integration Tests', () => {
   });
 
   describe('remove', () => {
-    it('removes an audience', async () => {
+    it('removes a segment', async () => {
       const createResult = await resend.segments.create({
-        name: 'Test Audience to Remove',
+        name: 'Test Segment to Remove',
       });
 
       expect(createResult.data?.id).toBeTruthy();
-      const audienceId = createResult.data!.id;
+      const segmentId = createResult.data!.id;
 
-      const removeResult = await resend.segments.remove(audienceId);
+      const removeResult = await resend.segments.remove(segmentId);
 
       expect(removeResult.data?.deleted).toBe(true);
 
-      const getResult = await resend.segments.get(audienceId);
+      const getResult = await resend.segments.get(segmentId);
       expect(getResult.error?.name).toBe('not_found');
     });
 
-    it('appears to remove an audience that never existed', async () => {
+    it('appears to remove a segment that never existed', async () => {
       const result = await resend.segments.remove(
         '00000000-0000-0000-0000-000000000000',
       );
