@@ -72,6 +72,7 @@ export class Resend {
               data: null,
               error: {
                 name: 'application_error',
+                statusCode: response.status,
                 message:
                   'Internal server error. We are unable to process your request right now, please try again later.',
               },
@@ -80,6 +81,7 @@ export class Resend {
 
           const error: ErrorResponse = {
             message: response.statusText,
+            statusCode: response.status,
             name: 'application_error',
           };
 
@@ -98,6 +100,7 @@ export class Resend {
         data: null,
         error: {
           name: 'application_error',
+          statusCode: null,
           message: 'Unable to fetch data. The request could not be resolved.',
         },
       };
