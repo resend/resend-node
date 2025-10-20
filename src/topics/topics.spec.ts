@@ -57,6 +57,7 @@ describe('Topics', () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing `name` field.',
+        statusCode: 422,
       };
 
       mockErrorResponse(response, {
@@ -75,6 +76,7 @@ describe('Topics', () => {
   "error": {
     "message": "Missing \`name\` field.",
     "name": "missing_required_field",
+    "statusCode": 422,
   },
 }
 `);
@@ -88,6 +90,7 @@ describe('Topics', () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing `defaultSubscription` field.',
+        statusCode: 422,
       };
 
       mockErrorResponse(response, {
@@ -106,6 +109,7 @@ describe('Topics', () => {
   "error": {
     "message": "Missing \`defaultSubscription\` field.",
     "name": "missing_required_field",
+    "statusCode": 422,
   },
 }
 `);
@@ -170,6 +174,7 @@ describe('Topics', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Topic not found',
+          statusCode: 404,
         };
 
         mockErrorResponse(response, {
@@ -190,6 +195,7 @@ describe('Topics', () => {
   "error": {
     "message": "Topic not found",
     "name": "not_found",
+    "statusCode": 404,
   },
 }
 `);
@@ -236,6 +242,7 @@ describe('Topics', () => {
   "error": {
     "message": "Missing \`id\` field.",
     "name": "missing_required_field",
+    "statusCode": null,
   },
 }
 `);
@@ -284,6 +291,7 @@ describe('Topics', () => {
   "error": {
     "message": "Missing \`id\` field.",
     "name": "missing_required_field",
+    "statusCode": null,
   },
 }
 `);
@@ -326,6 +334,7 @@ describe('Topics', () => {
   "error": {
     "message": "Missing \`id\` field.",
     "name": "missing_required_field",
+    "statusCode": null,
   },
 }
 `);

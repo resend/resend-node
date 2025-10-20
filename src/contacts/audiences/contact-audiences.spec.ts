@@ -129,6 +129,7 @@ describe('ContactAudiences', () => {
   "error": {
     "message": "Missing \`id\` or \`email\` field.",
     "name": "missing_required_field",
+    "statusCode": null,
   },
 }
 `);
@@ -204,6 +205,7 @@ describe('ContactAudiences', () => {
   "error": {
     "message": "Missing \`id\` or \`email\` field.",
     "name": "missing_required_field",
+    "statusCode": null,
   },
 }
 `);
@@ -283,6 +285,7 @@ describe('ContactAudiences', () => {
   "error": {
     "message": "Missing \`id\` or \`email\` field.",
     "name": "missing_required_field",
+    "statusCode": null,
   },
 }
 `);
