@@ -558,6 +558,7 @@ describe('Emails', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Template not found',
+          statusCode: 404,
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -582,6 +583,7 @@ describe('Emails', () => {
   "error": {
     "message": "Template not found",
     "name": "not_found",
+    "statusCode": 404,
   },
 }
 `);

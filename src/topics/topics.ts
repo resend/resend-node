@@ -48,6 +48,7 @@ export class Topics {
         data: null,
         error: {
           message: 'Missing `id` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
@@ -65,6 +66,7 @@ export class Topics {
         data: null,
         error: {
           message: 'Missing `id` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
@@ -84,6 +86,7 @@ export class Topics {
         data: null,
         error: {
           message: 'Missing `id` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
