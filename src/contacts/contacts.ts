@@ -1,6 +1,5 @@
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
-import { ContactAudiences } from './audiences/contact-audiences';
 import type {
   CreateContactOptions,
   CreateContactRequestOptions,
