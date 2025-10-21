@@ -58,7 +58,7 @@ describe('integrations', () => {
     return temporaryIntegrationPath;
   }
 
-  test.sequential('nextjs', { timeout: 30_000 }, async () => {
+  test('nextjs', { timeout: 30_000 }, async () => {
     const temporaryNextApp = await prepareTemporaryIntegrationCopy('./nextjs');
 
     const buildInstall = spawnSync(
@@ -74,7 +74,7 @@ describe('integrations', () => {
     }
   });
 
-  test.sequential('esbuild', { timeout: 30_000 }, async () => {
+  test('esbuild', { timeout: 30_000 }, async () => {
     const temporaryIntegration =
       await prepareTemporaryIntegrationCopy('./esbuild');
 
