@@ -23,7 +23,7 @@ describe('Segments', () => {
       const response: CreateSegmentResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
         name: 'Resend',
-        object: 'audience',
+        object: 'segment',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -42,7 +42,7 @@ describe('Segments', () => {
   "data": {
     "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
     "name": "Resend",
-    "object": "audience",
+    "object": "segment",
   },
   "error": null,
 }
@@ -228,7 +228,7 @@ describe('Segments', () => {
 
     it('get audience', async () => {
       const response: GetSegmentResponseSuccess = {
-        object: 'audience',
+        object: 'segment',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'resend.com',
         created_at: '2023-06-21T06:10:36.144Z',
@@ -250,7 +250,7 @@ describe('Segments', () => {
     "created_at": "2023-06-21T06:10:36.144Z",
     "id": "fd61172c-cafc-40f5-b049-b45947779a29",
     "name": "resend.com",
-    "object": "audience",
+    "object": "segment",
   },
   "error": null,
 }
@@ -262,7 +262,7 @@ describe('Segments', () => {
     it('removes a audience', async () => {
       const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
       const response: RemoveSegmentResponseSuccess = {
-        object: 'audience',
+        object: 'segment',
         id,
         deleted: true,
       };
@@ -281,7 +281,7 @@ describe('Segments', () => {
   "data": {
     "deleted": true,
     "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-    "object": "audience",
+    "object": "segment",
   },
   "error": null,
 }

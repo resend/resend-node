@@ -2,7 +2,7 @@ import type { ErrorResponse } from '../../interfaces';
 import type { Segment } from './segment';
 
 export interface RemoveSegmentResponseSuccess extends Pick<Segment, 'id'> {
-  object: 'audience';
+  object: 'segment';
   deleted: boolean;
 }
 

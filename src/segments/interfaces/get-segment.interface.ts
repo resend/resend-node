@@ -3,7 +3,7 @@ import type { Segment } from './segment';
 
 export interface GetSegmentResponseSuccess
   extends Pick<Segment, 'id' | 'name' | 'created_at'> {
-  object: 'audience';
+  object: 'segment';
 }
 
 export type GetSegmentResponse =

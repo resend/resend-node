@@ -24,7 +24,7 @@ describe('Segments Integration Tests', () => {
 
       expect(result.data?.id).toBeTruthy();
       expect(result.data?.name).toBeTruthy();
-      expect(result.data?.object).toBe('audience');
+      expect(result.data?.object).toBe('segment');
       const segmentId = result.data!.id;
 
       const removeResult = await resend.segments.remove(segmentId);
@@ -107,7 +107,7 @@ describe('Segments Integration Tests', () => {
 
         expect(getResult.data?.id).toBe(segmentId);
         expect(getResult.data?.name).toBe('Test Segment for Get');
-        expect(getResult.data?.object).toBe('audience');
+        expect(getResult.data?.object).toBe('segment');
       } finally {
         const removeResult = await resend.segments.remove(segmentId);
         expect(removeResult.data?.deleted).toBe(true);

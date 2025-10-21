@@ -10,7 +10,7 @@ export interface CreateSegmentRequestOptions extends PostOptions {}
 
 export interface CreateSegmentResponseSuccess
   extends Pick<Segment, 'name' | 'id'> {
-  object: 'audience';
+  object: 'segment';
 }
 
 export type CreateSegmentResponse =
