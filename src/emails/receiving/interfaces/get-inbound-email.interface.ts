@@ -17,6 +17,7 @@ export interface GetInboundEmailResponseSuccess {
   attachments: Array<{
     id: string;
     filename: string;
+    size: number;
     content_type: string;
     content_id: string;
     content_disposition: string;
