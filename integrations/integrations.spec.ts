@@ -25,11 +25,13 @@ describe('integrations', () => {
    * Also modifies the package.json to point to the SDK with an absolute path.
    */
   async function prepareTemporaryIntegrationCopy(integrationPath: string) {
-    const uuid = randomUUID();
     const temporaryIntegrationPath = path.resolve(
       os.tmpdir(),
-      `resend-integration-${uuid}`,
+      `resend-node-integration-${path.basename(integrationPath)}`,
     );
+    if (fs.existsSync(temporaryIntegrationPath)) {
+      await fs.promises.rm(temporaryIntegrationPath, { recursive: true, force: true });
+    }
     await fs.promises.mkdir(temporaryIntegrationPath, { recursive: true });
     await fs.promises.cp(
       path.resolve(__dirname, integrationPath),
@@ -66,10 +68,8 @@ describe('integrations', () => {
       },
     );
     if (buildInstall.status !== 0) {
-      await fs.promises.rm(temporaryNextApp, { recursive: true, force: true });
       throw new Error('next.js build failed');
     }
-    await fs.promises.rm(temporaryNextApp, { recursive: true, force: true });
   });
 
   test.sequential('esbuild', { timeout: 30_000 }, async () => {
