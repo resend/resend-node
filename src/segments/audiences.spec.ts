@@ -13,9 +13,6 @@ import type { RemoveSegmentResponseSuccess } from './interfaces/remove-segment.i
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
 
-const fetchMocker = createFetchMock(vi);
-fetchMocker.enableMocks();
-
 describe('Audiences', () => {
   afterEach(() => fetchMock.resetMocks());
   afterAll(() => fetchMocker.disableMocks());
