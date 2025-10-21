@@ -28,15 +28,16 @@ import type {
   UpdateContactResponse,
   UpdateContactResponseSuccess,
 } from './interfaces/update-contact.interface';
+import { ContactSegments } from './segments/contact-segments';
 import { ContactTopics } from './topics/contact-topics';
 
 export class Contacts {
   readonly topics: ContactTopics;
-  readonly audiences: ContactAudiences;
+  readonly segments: ContactSegments;
 
   constructor(private readonly resend: Resend) {
     this.topics = new ContactTopics(this.resend);
-    this.audiences = new ContactAudiences(this.resend);
+    this.segments = new ContactSegments(this.resend);
   }
 
   async create(

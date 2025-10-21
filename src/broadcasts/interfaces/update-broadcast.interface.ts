@@ -6,6 +6,10 @@ export interface UpdateBroadcastResponseSuccess {
 
 export type UpdateBroadcastOptions = {
   name?: string;
+  segmentId?: string;
+  /**
+   * @deprecated Use segmentId instead
+   */
   audienceId?: string;
   from?: string;
   html?: string;
