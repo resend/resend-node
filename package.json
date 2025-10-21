@@ -31,7 +31,7 @@
   },
   "scripts": {
     "build": "tsdown src/index.ts --format esm,cjs --dts",
-    "integration:nextjs": "cd ./integrations/nextjs && next build",
+    "integration:nextjs": "cd ./integrations/nextjs && next build --turbopack",
     "lint": "biome check .",
     "lint:fix": "biome check . --write",
     "prepublishOnly": "pnpm run build",
@@ -72,8 +72,6 @@
     "@types/react": "19.2.0",
     "cross-env": "10.1.0",
     "dotenv": "17.2.3",
-    "esbuild": "0.25.11",
-    "next": "15.5.6",
     "pkg-pr-new": "0.0.60",
     "rimraf": "6.1.0",
     "tsdown": "0.16.5",
