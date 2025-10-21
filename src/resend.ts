@@ -6,6 +6,7 @@ import { Broadcasts } from './broadcasts/broadcasts';
 import type { GetOptions, PostOptions, PutOptions } from './common/interfaces';
 import type { IdempotentRequest } from './common/interfaces/idempotent-request.interface';
 import type { PatchOptions } from './common/interfaces/patch-option.interface';
+import { ContactProperties } from './contact-properties/contact-properties';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
@@ -39,6 +40,7 @@ export class Resend {
   readonly batch = new Batch(this);
   readonly broadcasts = new Broadcasts(this);
   readonly contacts = new Contacts(this);
+  readonly contactProperties = new ContactProperties(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
   readonly webhooks = new Webhooks();
