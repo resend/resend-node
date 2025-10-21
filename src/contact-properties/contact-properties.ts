@@ -69,6 +69,16 @@ export class ContactProperties {
   }
 
   async get(id: string): Promise<GetContactPropertyResponse> {
+    if (!id) {
+      return {
+        data: null,
+        error: {
+          message: 'Missing `id` field.',
+          statusCode: null,
+          name: 'missing_required_field',
+        },
+      };
+    }
     const response = await this.resend.get<GetContactPropertyResponseSuccess>(
       `/contact-properties/${id}`,
     );
@@ -105,7 +115,17 @@ export class ContactProperties {
     return data;
   }
 
-  async delete(id: string): Promise<RemoveContactPropertyResponse> {
+  async remove(id: string): Promise<RemoveContactPropertyResponse> {
+    if (!id) {
+      return {
+        data: null,
+        error: {
+          message: 'Missing `id` field.',
+          statusCode: null,
+          name: 'missing_required_field',
+        },
+      };
+    }
     const data = await this.resend.delete<RemoveContactPropertyResponseSuccess>(
       `/contact-properties/${id}`,
     );

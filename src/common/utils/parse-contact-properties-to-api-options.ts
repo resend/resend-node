@@ -11,16 +11,6 @@ import type {
   UpdateContactPropertyOptions,
 } from '../../contact-properties/interfaces/update-contact-property-options.interface';
 
-export function parseContactPropertyToApi(
-  contactProperty: ContactProperty,
-): ApiContactProperty {
-  return {
-    key: contactProperty.key,
-    type: contactProperty.type,
-    fallback_value: contactProperty.fallbackValue,
-  } as ApiContactProperty;
-}
-
 export function parseContactPropertyFromApi(
   contactProperty: ApiContactProperty,
 ): ContactProperty {
