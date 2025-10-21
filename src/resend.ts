@@ -41,7 +41,7 @@ export class Resend {
   readonly contacts = new Contacts(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
-  readonly webhooks = new Webhooks();
+  readonly webhooks = new Webhooks(this);
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
 
