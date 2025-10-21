@@ -9,15 +9,7 @@ export type ListAttachmentsOptions = PaginationOptions & {
 export interface ListAttachmentsApiResponse {
   object: 'list';
   has_more: boolean;
-  data: Array<{
-    id: string;
-    filename?: string;
-    content_type: string;
-    content_disposition: 'inline' | 'attachment';
-    content_id?: string;
-    download_url: string;
-    expires_at: string;
-  }>;
+  data: InboundAttachment[];
 }
 
 export interface ListAttachmentsResponseSuccess {
