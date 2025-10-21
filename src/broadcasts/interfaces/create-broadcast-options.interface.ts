@@ -24,6 +24,19 @@ interface EmailRenderOptions {
   text: string;
 }
 
+interface SegmentOptions {
+  /**
+   * The id of the segment you want to send to
+   *
+   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   */
+  segmentId: string;
+  /**
+   * @deprecated Use segmentId instead
+   */
+  audienceId: string;
+}
+
 interface CreateBroadcastBaseOptions {
   /**
    * The name of the broadcast
@@ -31,12 +44,6 @@ interface CreateBroadcastBaseOptions {
    * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
    */
   name?: string;
-  /**
-   * The id of the audience you want to send to
-   *
-   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
-   */
-  audienceId: string;
   /**
    * A short snippet of text displayed as a preview in recipients' inboxes, often shown below or beside the subject line.
    *
@@ -70,6 +77,7 @@ interface CreateBroadcastBaseOptions {
 }
 
 export type CreateBroadcastOptions = RequireAtLeastOne<EmailRenderOptions> &
+  RequireAtLeastOne<SegmentOptions> &
   CreateBroadcastBaseOptions;
 
 export interface CreateBroadcastRequestOptions extends PostOptions {}
