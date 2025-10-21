@@ -1,4 +1,4 @@
-export interface InboundAttachment {
+export interface Attachment {
   id: string;
   filename?: string;
   size: number;

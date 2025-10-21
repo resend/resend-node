@@ -1,6 +1,6 @@
-import type { PaginationOptions } from '../../../common/interfaces';
-import type { ErrorResponse } from '../../../interfaces';
-import type { InboundAttachment } from './attachment';
+import type { PaginationOptions } from '../../common/interfaces';
+import type { ErrorResponse } from '../../interfaces';
+import type { Attachment } from './attachment';
 
 export type ListAttachmentsOptions = PaginationOptions & {
   emailId: string;
@@ -9,13 +9,13 @@ export type ListAttachmentsOptions = PaginationOptions & {
 export interface ListAttachmentsApiResponse {
   object: 'list';
   has_more: boolean;
-  data: InboundAttachment[];
+  data: Attachment[];
 }
 
 export interface ListAttachmentsResponseSuccess {
   object: 'list';
   has_more: boolean;
-  data: InboundAttachment[];
+  data: Attachment[];
 }
 
 export type ListAttachmentsResponse =
