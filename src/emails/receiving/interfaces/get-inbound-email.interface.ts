@@ -13,6 +13,7 @@ export interface GetInboundEmailResponseSuccess {
   html: string | null;
   text: string | null;
   headers: Record<string, string>;
+  message_id: string;
   attachments: Array<{
     id: string;
     filename: string;
