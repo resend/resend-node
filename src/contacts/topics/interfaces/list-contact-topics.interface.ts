@@ -5,15 +5,15 @@ import type {
 } from '../../../common/interfaces/pagination-options.interface';
 import type { ErrorResponse } from '../../../interfaces';
 
-interface GetContactTopicsBaseOptions {
+interface ListContactTopicsBaseOptions {
   id?: string;
   email?: string;
 }
 
-export type GetContactTopicsOptions = GetContactTopicsBaseOptions &
+export type ListContactTopicsOptions = ListContactTopicsBaseOptions &
   PaginationOptions;
 
-export interface GetContactTopicsRequestOptions extends GetOptions {}
+export interface ListContactTopicsRequestOptions extends GetOptions {}
 
 export interface ContactTopic {
   id: string;
@@ -22,17 +22,11 @@ export interface ContactTopic {
   subscription: 'opt_in' | 'opt_out';
 }
 
-export type GetContactTopicsResponseSuccess = PaginatedData<{
-  email: string;
-  topics: ContactTopic[];
-}>;
+export type ListContactTopicsResponseSuccess = PaginatedData<ContactTopic[]>;
 
-export type GetContactTopicsResponse =
+export type ListContactTopicsResponse =
   | {
-      data: PaginatedData<{
-        email: string;
-        topics: ContactTopic[];
-      }>;
+      data: ListContactTopicsResponseSuccess;
       error: null;
     }
   | {
