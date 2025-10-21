@@ -1,9 +1,7 @@
 import { spawnSync } from 'node:child_process';
-import { randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { build } from 'esbuild';
 
 describe('integrations', () => {
   const sdkPath = path.resolve(__dirname, '..');
