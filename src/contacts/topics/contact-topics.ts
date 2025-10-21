@@ -1,10 +1,10 @@
 import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import type {
-  GetContactTopicsOptions,
-  GetContactTopicsResponse,
-  GetContactTopicsResponseSuccess,
-} from './interfaces/get-contact-topics.interface';
+  ListContactTopicsOptions,
+  ListContactTopicsResponse,
+  ListContactTopicsResponseSuccess,
+} from './interfaces/list-contact-topics.interface';
 import type {
   UpdateContactTopicsOptions,
   UpdateContactTopicsResponse,
@@ -37,9 +37,9 @@ export class ContactTopics {
     return data;
   }
 
-  async get(
-    options: GetContactTopicsOptions,
-  ): Promise<GetContactTopicsResponse> {
+  async list(
+    options: ListContactTopicsOptions,
+  ): Promise<ListContactTopicsResponse> {
     if (!options.id && !options.email) {
       return {
         data: null,
@@ -57,7 +57,7 @@ export class ContactTopics {
       ? `/contacts/${identifier}/topics?${queryString}`
       : `/contacts/${identifier}/topics`;
 
-    const data = await this.resend.get<GetContactTopicsResponseSuccess>(url);
+    const data = await this.resend.get<ListContactTopicsResponseSuccess>(url);
     return data;
   }
 }

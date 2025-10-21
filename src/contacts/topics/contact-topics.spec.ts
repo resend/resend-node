@@ -2,9 +2,9 @@ import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from '../../resend';
 import { mockSuccessResponse } from '../../test-utils/mock-fetch';
 import type {
-  GetContactTopicsOptions,
-  GetContactTopicsResponseSuccess,
-} from './interfaces/get-contact-topics.interface';
+  ListContactTopicsOptions,
+  ListContactTopicsResponseSuccess,
+} from './interfaces/list-contact-topics.interface';
 import type {
   UpdateContactTopicsOptions,
   UpdateContactTopicsResponseSuccess,
@@ -174,31 +174,28 @@ describe('ContactTopics', () => {
     });
   });
 
-  describe('get', () => {
+  describe('list', () => {
     it('gets contact topics by email', async () => {
-      const options: GetContactTopicsOptions = {
+      const options: ListContactTopicsOptions = {
         email: 'carolina@resend.com',
       };
-      const response: GetContactTopicsResponseSuccess = {
+      const response: ListContactTopicsResponseSuccess = {
         has_more: false,
         object: 'list',
-        data: {
-          email: 'carolina@resend.com',
-          topics: [
-            {
-              id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
-              name: 'Test Topic',
-              description: 'This is a test topic',
-              subscription: 'opt_in',
-            },
-            {
-              id: 'another-topic-id',
-              name: 'Another Topic',
-              description: null,
-              subscription: 'opt_out',
-            },
-          ],
-        },
+        data: [
+          {
+            id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+            name: 'Test Topic',
+            description: 'This is a test topic',
+            subscription: 'opt_in',
+          },
+          {
+            id: 'another-topic-id',
+            name: 'Another Topic',
+            description: null,
+            subscription: 'opt_out',
+          },
+        ],
       };
 
       mockSuccessResponse(response, {
@@ -207,27 +204,24 @@ describe('ContactTopics', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
-        resend.contacts.topics.get(options),
+        resend.contacts.topics.list(options),
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
-    "data": {
-      "email": "carolina@resend.com",
-      "topics": [
-        {
-          "description": "This is a test topic",
-          "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
-          "name": "Test Topic",
-          "subscription": "opt_in",
-        },
-        {
-          "description": null,
-          "id": "another-topic-id",
-          "name": "Another Topic",
-          "subscription": "opt_out",
-        },
-      ],
-    },
+    "data": [
+      {
+        "description": "This is a test topic",
+        "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
+        "name": "Test Topic",
+        "subscription": "opt_in",
+      },
+      {
+        "description": null,
+        "id": "another-topic-id",
+        "name": "Another Topic",
+        "subscription": "opt_out",
+      },
+    ],
     "has_more": false,
     "object": "list",
   },
@@ -237,23 +231,20 @@ describe('ContactTopics', () => {
     });
 
     it('gets contact topics by ID', async () => {
-      const options: GetContactTopicsOptions = {
+      const options: ListContactTopicsOptions = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
-      const response: GetContactTopicsResponseSuccess = {
+      const response: ListContactTopicsResponseSuccess = {
         has_more: false,
         object: 'list',
-        data: {
-          email: 'carolina@resend.com',
-          topics: [
-            {
-              id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
-              name: 'Test Topic',
-              description: 'This is a test topic',
-              subscription: 'opt_in',
-            },
-          ],
-        },
+        data: [
+          {
+            id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
+            name: 'Test Topic',
+            description: 'This is a test topic',
+            subscription: 'opt_in',
+          },
+        ],
       };
 
       mockSuccessResponse(response, {
@@ -262,21 +253,18 @@ describe('ContactTopics', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
-        resend.contacts.topics.get(options),
+        resend.contacts.topics.list(options),
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
-    "data": {
-      "email": "carolina@resend.com",
-      "topics": [
-        {
-          "description": "This is a test topic",
-          "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
-          "name": "Test Topic",
-          "subscription": "opt_in",
-        },
-      ],
-    },
+    "data": [
+      {
+        "description": "This is a test topic",
+        "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
+        "name": "Test Topic",
+        "subscription": "opt_in",
+      },
+    ],
     "has_more": false,
     "object": "list",
   },
@@ -289,8 +277,8 @@ describe('ContactTopics', () => {
       const options = {};
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      const result = resend.contacts.topics.get(
-        options as GetContactTopicsOptions,
+      const result = resend.contacts.topics.list(
+        options as ListContactTopicsOptions,
       );
 
       await expect(result).resolves.toMatchInlineSnapshot(`
