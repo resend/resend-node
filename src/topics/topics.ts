@@ -30,7 +30,7 @@ export class Topics {
 
     const data = await this.resend.post<CreateTopicResponseSuccess>('/topics', {
       ...body,
-      defaultSubscription: defaultSubscription,
+      default_subscription: defaultSubscription,
     });
 
     return data;
