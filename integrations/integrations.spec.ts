@@ -1,9 +1,9 @@
 import { spawnSync } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
-import { build } from 'esbuild';
 import path from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { build } from 'esbuild';
 
 describe('integrations', () => {
   const sdkPath = path.resolve(__dirname, '..');
@@ -30,7 +30,10 @@ describe('integrations', () => {
       `resend-node-integration-${path.basename(integrationPath)}`,
     );
     if (fs.existsSync(temporaryIntegrationPath)) {
-      await fs.promises.rm(temporaryIntegrationPath, { recursive: true, force: true });
+      await fs.promises.rm(temporaryIntegrationPath, {
+        recursive: true,
+        force: true,
+      });
     }
     await fs.promises.mkdir(temporaryIntegrationPath, { recursive: true });
     await fs.promises.cp(
@@ -41,12 +44,13 @@ describe('integrations', () => {
       },
     );
 
-    const testingLockPackageJson: { dependencies: Record<string, string> } = JSON.parse(
-      await fs.promises.readFile(
-        path.resolve(temporaryIntegrationPath, 'package.json'),
-        'utf8',
-      ),
-    );
+    const testingLockPackageJson: { dependencies: Record<string, string> } =
+      JSON.parse(
+        await fs.promises.readFile(
+          path.resolve(temporaryIntegrationPath, 'package.json'),
+          'utf8',
+        ),
+      );
     testingLockPackageJson.dependencies.resend = sdkPath;
     await fs.promises.writeFile(
       path.resolve(temporaryIntegrationPath, 'package.json'),
