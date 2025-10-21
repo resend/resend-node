@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "esbuild": "0.25.11",
+    "resend": "../.."
+  },
+  "scripts": {
+    "build": "esbuild ./index.ts --bundle --platform=node --target=node18 --outfile=./index.js"
+  }
+}

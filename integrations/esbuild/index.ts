@@ -1,3 +1,3 @@
-import { Resend } from '../../';
+import { Resend } from 'resend';
 
 new Resend('');
