@@ -4,8 +4,8 @@ import type { Contact, SelectingField } from './contact';
 export type UpdateContactOptions = {
   audienceId?: string;
   unsubscribed?: boolean;
-  firstName?: string;
-  lastName?: string;
+  firstName: string | null;
+  lastName: string | null;
 } & SelectingField;
 
 export type UpdateContactResponseSuccess = Pick<Contact, 'id'> & {
