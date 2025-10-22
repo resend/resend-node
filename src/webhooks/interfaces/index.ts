@@ -14,3 +14,7 @@ export type {
   ListWebhooksResponseSuccess,
   Webhook,
 } from './list-webhooks.interface';
+export type {
+  RemoveWebhookResponse,
+  RemoveWebhookResponseSuccess,
+} from './remove-webhook.interface';
