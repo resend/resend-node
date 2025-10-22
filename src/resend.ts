@@ -33,7 +33,7 @@ export class Resend {
   readonly contacts = new Contacts(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
-  readonly webhooks = new Webhooks();
+  readonly webhooks = new Webhooks(this);
 
   constructor(readonly key?: string) {
     if (!key) {
