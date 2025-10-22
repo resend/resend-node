@@ -16,6 +16,10 @@ import type {
   ListWebhooksResponse,
   ListWebhooksResponseSuccess,
 } from './interfaces/list-webhooks.interface';
+import type {
+  RemoveWebhookResponse,
+  RemoveWebhookResponseSuccess,
+} from './interfaces/remove-webhook.interface';
 
 interface Headers {
   id: string;
@@ -57,6 +61,13 @@ export class Webhooks {
     const url = queryString ? `/webhooks?${queryString}` : '/webhooks';
 
     const data = await this.resend.get<ListWebhooksResponseSuccess>(url);
+    return data;
+  }
+
+  async remove(id: string): Promise<RemoveWebhookResponse> {
+    const data = await this.resend.delete<RemoveWebhookResponseSuccess>(
+      `/webhooks/${id}`,
+    );
     return data;
   }
 

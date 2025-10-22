@@ -10,6 +10,7 @@ import type {
 } from './interfaces/create-webhook-options.interface';
 import type { GetWebhookResponseSuccess } from './interfaces/get-webhook.interface';
 import type { ListWebhooksResponseSuccess } from './interfaces/list-webhooks.interface';
+import type { RemoveWebhookResponseSuccess } from './interfaces/remove-webhook.interface';
 
 const mocks = vi.hoisted(() => {
   const verify = vi.fn();
@@ -214,6 +215,71 @@ describe('Webhooks', () => {
             headers: expect.any(Headers),
           }),
         );
+      });
+    });
+  });
+
+  describe('remove', () => {
+    it('removes a webhook', async () => {
+      const id = '430eed87-632a-4ea6-90db-0aace67ec228';
+      const response: RemoveWebhookResponseSuccess = {
+        object: 'webhook',
+        id,
+        deleted: true,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(resend.webhooks.remove(id)).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "deleted": true,
+    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+    "object": "webhook",
+  },
+  "error": null,
+}
+`);
+    });
+
+    describe('when webhook not found', () => {
+      it('returns error', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          message: 'Webhook not found',
+          statusCode: 404,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = resend.webhooks.remove('1234');
+
+        await expect(result).resolves.toMatchInlineSnapshot(`
+{
+  "data": null,
+  "error": {
+    "message": "Webhook not found",
+    "name": "not_found",
+    "statusCode": 404,
+  },
+}
+`);
       });
     });
   });
