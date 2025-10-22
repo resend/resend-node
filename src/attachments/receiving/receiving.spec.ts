@@ -53,15 +53,14 @@ describe('Receiving', () => {
       it('returns attachment with download URL', async () => {
         const apiResponse = {
           object: 'attachment' as const,
-          data: {
-            id: 'att_123',
-            filename: 'document.pdf',
-            content_type: 'application/pdf',
-            content_id: 'cid_123',
-            content_disposition: 'attachment' as const,
-            download_url: 'https://example.com/download/att_123',
-            expires_at: '2025-10-18T12:00:00Z',
-          },
+          id: 'att_123',
+          filename: 'document.pdf',
+          size: 2048,
+          content_type: 'application/pdf',
+          content_id: 'cid_123',
+          content_disposition: 'attachment' as const,
+          download_url: 'https://example.com/download/att_123',
+          expires_at: '2025-10-18T12:00:00Z',
         };
 
         fetchMock.mockOnceIf(
@@ -83,16 +82,15 @@ describe('Receiving', () => {
 
         expect(result).toEqual({
           data: {
-            data: {
-              content_disposition: 'attachment',
-              content_id: 'cid_123',
-              content_type: 'application/pdf',
-              download_url: 'https://example.com/download/att_123',
-              expires_at: '2025-10-18T12:00:00Z',
-              filename: 'document.pdf',
-              id: 'att_123',
-            },
             object: 'attachment',
+            id: 'att_123',
+            filename: 'document.pdf',
+            size: 2048,
+            content_type: 'application/pdf',
+            content_disposition: 'attachment',
+            content_id: 'cid_123',
+            download_url: 'https://example.com/download/att_123',
+            expires_at: '2025-10-18T12:00:00Z',
           },
           error: null,
         });
@@ -101,15 +99,14 @@ describe('Receiving', () => {
       it('returns inline attachment with download URL', async () => {
         const apiResponse = {
           object: 'attachment' as const,
-          data: {
-            id: 'att_456',
-            filename: 'image.png',
-            content_type: 'image/png',
-            content_id: 'cid_456',
-            content_disposition: 'inline' as const,
-            download_url: 'https://example.com/download/att_456',
-            expires_at: '2025-10-18T12:00:00Z',
-          },
+          id: 'att_456',
+          filename: 'image.png',
+          size: 1536,
+          content_type: 'image/png',
+          content_id: 'cid_456',
+          content_disposition: 'inline' as const,
+          download_url: 'https://example.com/download/att_456',
+          expires_at: '2025-10-18T12:00:00Z',
         };
 
         fetchMock.mockOnceIf(
@@ -131,16 +128,15 @@ describe('Receiving', () => {
 
         expect(result).toEqual({
           data: {
-            data: {
-              content_disposition: 'inline',
-              content_id: 'cid_456',
-              content_type: 'image/png',
-              download_url: 'https://example.com/download/att_456',
-              expires_at: '2025-10-18T12:00:00Z',
-              filename: 'image.png',
-              id: 'att_456',
-            },
             object: 'attachment',
+            id: 'att_456',
+            filename: 'image.png',
+            size: 1536,
+            content_type: 'image/png',
+            content_disposition: 'inline',
+            content_id: 'cid_456',
+            download_url: 'https://example.com/download/att_456',
+            expires_at: '2025-10-18T12:00:00Z',
           },
           error: null,
         });
@@ -149,15 +145,12 @@ describe('Receiving', () => {
       it('handles attachment without optional fields (filename, contentId)', async () => {
         const apiResponse = {
           object: 'attachment' as const,
-          data: {
-            // Required fields based on DB schema
-            id: 'att_789',
-            content_type: 'text/plain',
-            content_disposition: 'attachment' as const,
-            download_url: 'https://example.com/download/att_789',
-            expires_at: '2025-10-18T12:00:00Z',
-            // Optional fields (filename, content_id) omitted
-          },
+          id: 'att_789',
+          size: 512,
+          content_type: 'text/plain',
+          content_disposition: 'attachment' as const,
+          download_url: 'https://example.com/download/att_789',
+          expires_at: '2025-10-18T12:00:00Z',
         };
 
         fetchMock.mockOnceIf(
@@ -179,14 +172,13 @@ describe('Receiving', () => {
 
         expect(result).toEqual({
           data: {
-            data: {
-              content_disposition: 'attachment',
-              content_type: 'text/plain',
-              download_url: 'https://example.com/download/att_789',
-              expires_at: '2025-10-18T12:00:00Z',
-              id: 'att_789',
-            },
             object: 'attachment',
+            id: 'att_789',
+            size: 512,
+            content_type: 'text/plain',
+            content_disposition: 'attachment',
+            download_url: 'https://example.com/download/att_789',
+            expires_at: '2025-10-18T12:00:00Z',
           },
           error: null,
         });
@@ -202,6 +194,7 @@ describe('Receiving', () => {
         {
           id: 'att_123',
           filename: 'document.pdf',
+          size: 2048,
           content_type: 'application/pdf',
           content_id: 'cid_123',
           content_disposition: 'attachment' as const,
@@ -211,6 +204,7 @@ describe('Receiving', () => {
         {
           id: 'att_456',
           filename: 'image.png',
+          size: 1536,
           content_type: 'image/png',
           content_id: 'cid_456',
           content_disposition: 'inline' as const,
@@ -272,6 +266,7 @@ describe('Receiving', () => {
             {
               id: 'att_123',
               filename: 'document.pdf',
+              size: 2048,
               content_type: 'application/pdf',
               content_id: 'cid_123',
               content_disposition: 'attachment',
@@ -281,6 +276,7 @@ describe('Receiving', () => {
             {
               id: 'att_456',
               filename: 'image.png',
+              size: 1536,
               content_type: 'image/png',
               content_id: 'cid_456',
               content_disposition: 'inline',
@@ -337,6 +333,7 @@ describe('Receiving', () => {
             {
               id: 'att_123',
               filename: 'document.pdf',
+              size: 2048,
               content_type: 'application/pdf',
               content_id: 'cid_123',
               content_disposition: 'attachment',
@@ -346,6 +343,7 @@ describe('Receiving', () => {
             {
               id: 'att_456',
               filename: 'image.png',
+              size: 1536,
               content_type: 'image/png',
               content_id: 'cid_456',
               content_disposition: 'inline',
@@ -381,6 +379,7 @@ describe('Receiving', () => {
             {
               id: 'att_123',
               filename: 'document.pdf',
+              size: 2048,
               content_type: 'application/pdf',
               content_id: 'cid_123',
               content_disposition: 'attachment',
@@ -390,6 +389,7 @@ describe('Receiving', () => {
             {
               id: 'att_456',
               filename: 'image.png',
+              size: 1536,
               content_type: 'image/png',
               content_id: 'cid_456',
               content_disposition: 'inline',
@@ -423,6 +423,7 @@ describe('Receiving', () => {
             {
               id: 'att_123',
               filename: 'document.pdf',
+              size: 2048,
               content_type: 'application/pdf',
               content_id: 'cid_123',
               content_disposition: 'attachment',
@@ -432,6 +433,7 @@ describe('Receiving', () => {
             {
               id: 'att_456',
               filename: 'image.png',
+              size: 1536,
               content_type: 'image/png',
               content_id: 'cid_456',
               content_disposition: 'inline',
@@ -465,6 +467,7 @@ describe('Receiving', () => {
             {
               id: 'att_123',
               filename: 'document.pdf',
+              size: 2048,
               content_type: 'application/pdf',
               content_id: 'cid_123',
               content_disposition: 'attachment',
@@ -474,6 +477,7 @@ describe('Receiving', () => {
             {
               id: 'att_456',
               filename: 'image.png',
+              size: 1536,
               content_type: 'image/png',
               content_id: 'cid_456',
               content_disposition: 'inline',

@@ -6,10 +6,9 @@ export interface GetAttachmentOptions {
   id: string;
 }
 
-export interface GetAttachmentResponseSuccess {
+export type GetAttachmentResponseSuccess = {
   object: 'attachment';
-  data: InboundAttachment;
-}
+} & InboundAttachment;
 
 export type GetAttachmentResponse =
   | {
