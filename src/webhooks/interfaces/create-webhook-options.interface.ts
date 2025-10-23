@@ -1,9 +1,10 @@
 import type { PostOptions } from '../../common/interfaces';
 import type { ErrorResponse } from '../../interfaces';
+import type { WebhookEvent } from './webhook-event.interface';
 
 export interface CreateWebhookOptions {
   endpoint: string;
-  events: string[];
+  events: WebhookEvent[];
 }
 
 export interface CreateWebhookRequestOptions extends PostOptions {}

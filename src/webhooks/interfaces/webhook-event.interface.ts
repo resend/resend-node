@@ -1,0 +1,16 @@
+export type WebhookEvent =
+  | 'email.sent'
+  | 'email.delivered'
+  | 'email.delivery_delayed'
+  | 'email.complained'
+  | 'email.bounced'
+  | 'email.opened'
+  | 'email.clicked'
+  | 'email.received'
+  | 'email.failed'
+  | 'contact.created'
+  | 'contact.updated'
+  | 'contact.deleted'
+  | 'domain.created'
+  | 'domain.updated'
+  | 'domain.deleted';
