@@ -1,12 +1,13 @@
 import type { ErrorResponse } from '../../interfaces';
+import type { WebhookEvent } from './webhook-event.interface';
 
 export interface GetWebhookResponseSuccess {
   object: 'webhook';
   id: string;
   created_at: string;
-  status: string;
+  status: 'enabled' | 'disabled';
   endpoint: string;
-  events: string[] | null;
+  events: WebhookEvent[] | null;
   signing_secret: string;
 }
 
