@@ -7,6 +7,7 @@ export interface GetWebhookResponseSuccess {
   status: string;
   endpoint: string;
   events: string[] | null;
+  signing_secret: string;
 }
 
 export type GetWebhookResponse =

@@ -11,6 +11,7 @@ export interface CreateWebhookRequestOptions extends PostOptions {}
 export interface CreateWebhookResponseSuccess {
   object: 'webhook';
   id: string;
+  signing_secret: string;
 }
 
 export type CreateWebhookResponse =
