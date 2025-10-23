@@ -7,7 +7,7 @@ export interface Webhook {
   id: string;
   endpoint: string;
   created_at: string;
-  status: string;
+  status: 'enabled' | 'disabled';
   events: string[] | null;
 }
 

@@ -4,7 +4,7 @@ export interface GetWebhookResponseSuccess {
   object: 'webhook';
   id: string;
   created_at: string;
-  status: string;
+  status: 'enabled' | 'disabled';
   endpoint: string;
   events: string[] | null;
   signing_secret: string;

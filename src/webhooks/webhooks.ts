@@ -20,6 +20,11 @@ import type {
   RemoveWebhookResponse,
   RemoveWebhookResponseSuccess,
 } from './interfaces/remove-webhook.interface';
+import type {
+  UpdateWebhookOptions,
+  UpdateWebhookResponse,
+  UpdateWebhookResponseSuccess,
+} from './interfaces/update-webhook.interface';
 
 interface Headers {
   id: string;
@@ -61,6 +66,17 @@ export class Webhooks {
     const url = queryString ? `/webhooks?${queryString}` : '/webhooks';
 
     const data = await this.resend.get<ListWebhooksResponseSuccess>(url);
+    return data;
+  }
+
+  async update(
+    id: string,
+    payload: UpdateWebhookOptions,
+  ): Promise<UpdateWebhookResponse> {
+    const data = await this.resend.patch<UpdateWebhookResponseSuccess>(
+      `/webhooks/${id}`,
+      payload,
+    );
     return data;
   }
 

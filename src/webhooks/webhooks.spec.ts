@@ -11,6 +11,10 @@ import type {
 import type { GetWebhookResponseSuccess } from './interfaces/get-webhook.interface';
 import type { ListWebhooksResponseSuccess } from './interfaces/list-webhooks.interface';
 import type { RemoveWebhookResponseSuccess } from './interfaces/remove-webhook.interface';
+import type {
+  UpdateWebhookOptions,
+  UpdateWebhookResponseSuccess,
+} from './interfaces/update-webhook.interface';
 
 const mocks = vi.hoisted(() => {
   const verify = vi.fn();
@@ -219,6 +223,237 @@ describe('Webhooks', () => {
             headers: expect.any(Headers),
           }),
         );
+      });
+    });
+  });
+
+  describe('update', () => {
+    const webhookId = '430eed87-632a-4ea6-90db-0aace67ec228';
+
+    it('updates all webhook fields', async () => {
+      const payload: UpdateWebhookOptions = {
+        endpoint: 'https://new.com/webhook',
+        events: ['email.sent', 'email.delivered', 'email.bounced'],
+        status: 'disabled',
+      };
+      const response: UpdateWebhookResponseSuccess = {
+        object: 'webhook',
+        id: webhookId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.webhooks.update(webhookId, payload),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+    "object": "webhook",
+  },
+  "error": null,
+}
+`);
+    });
+
+    it('updates only endpoint field', async () => {
+      const payload: UpdateWebhookOptions = {
+        endpoint: 'https://new.com/webhook',
+      };
+      const response: UpdateWebhookResponseSuccess = {
+        object: 'webhook',
+        id: webhookId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.webhooks.update(webhookId, payload),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+    "object": "webhook",
+  },
+  "error": null,
+}
+`);
+    });
+
+    it('updates only events field', async () => {
+      const payload: UpdateWebhookOptions = {
+        events: ['email.sent', 'email.delivered'],
+      };
+      const response: UpdateWebhookResponseSuccess = {
+        object: 'webhook',
+        id: webhookId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.webhooks.update(webhookId, payload),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+    "object": "webhook",
+  },
+  "error": null,
+}
+`);
+    });
+
+    it('updates only status field to disabled', async () => {
+      const payload: UpdateWebhookOptions = {
+        status: 'disabled',
+      };
+      const response: UpdateWebhookResponseSuccess = {
+        object: 'webhook',
+        id: webhookId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.webhooks.update(webhookId, payload),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+    "object": "webhook",
+  },
+  "error": null,
+}
+`);
+    });
+
+    it('updates only status field to enabled', async () => {
+      const payload: UpdateWebhookOptions = {
+        status: 'enabled',
+      };
+      const response: UpdateWebhookResponseSuccess = {
+        object: 'webhook',
+        id: webhookId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.webhooks.update(webhookId, payload),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+    "object": "webhook",
+  },
+  "error": null,
+}
+`);
+    });
+
+    it('handles empty payload', async () => {
+      const payload: UpdateWebhookOptions = {};
+      const response: UpdateWebhookResponseSuccess = {
+        object: 'webhook',
+        id: webhookId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.webhooks.update(webhookId, payload),
+      ).resolves.toMatchInlineSnapshot(`
+{
+  "data": {
+    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+    "object": "webhook",
+  },
+  "error": null,
+}
+`);
+    });
+
+    describe('when webhook not found', () => {
+      it('returns error', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          message: 'Failed to update webhook endpoint',
+          statusCode: 404,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = resend.webhooks.update(webhookId, {
+          endpoint: 'https://new.com/webhook',
+        });
+
+        await expect(result).resolves.toMatchInlineSnapshot(`
+{
+  "data": null,
+  "error": {
+    "message": "Failed to update webhook endpoint",
+    "name": "not_found",
+    "statusCode": 404,
+  },
+}
+`);
       });
     });
   });
