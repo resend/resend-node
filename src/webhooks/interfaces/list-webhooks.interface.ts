@@ -1,5 +1,6 @@
 import type { PaginationOptions } from '../../common/interfaces';
 import type { ErrorResponse } from '../../interfaces';
+import type { WebhookEvent } from './webhook-event.interface';
 
 export type ListWebhooksOptions = PaginationOptions;
 
@@ -8,7 +9,7 @@ export interface Webhook {
   endpoint: string;
   created_at: string;
   status: 'enabled' | 'disabled';
-  events: string[] | null;
+  events: WebhookEvent[] | null;
 }
 
 export type ListWebhooksResponseSuccess = {

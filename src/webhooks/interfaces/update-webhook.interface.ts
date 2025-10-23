@@ -1,8 +1,9 @@
 import type { ErrorResponse } from '../../interfaces';
+import type { WebhookEvent } from './webhook-event.interface';
 
 export interface UpdateWebhookOptions {
   endpoint?: string;
-  events?: string[];
+  events?: WebhookEvent[];
   status?: 'enabled' | 'disabled';
 }
 

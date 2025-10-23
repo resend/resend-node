@@ -23,3 +23,4 @@ export type {
   UpdateWebhookResponse,
   UpdateWebhookResponseSuccess,
 } from './update-webhook.interface';
+export type { WebhookEvent } from './webhook-event.interface';
