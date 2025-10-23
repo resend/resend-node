@@ -49,6 +49,7 @@ describe('Webhooks', () => {
       const response: CreateWebhookResponseSuccess = {
         object: 'webhook',
         id: '430eed87-632a-4ea6-90db-0aace67ec228',
+        signing_secret: 'whsec_test_secret_key_123',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -68,6 +69,7 @@ describe('Webhooks', () => {
   "data": {
     "id": "430eed87-632a-4ea6-90db-0aace67ec228",
     "object": "webhook",
+    "signing_secret": "whsec_test_secret_key_123",
   },
   "error": null,
 }
@@ -117,6 +119,7 @@ describe('Webhooks', () => {
         status: 'enabled',
         endpoint: 'https://example.com/webhook',
         events: ['email.sent', 'email.delivered'],
+        signing_secret: 'whsec_test_secret_key_123',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -140,6 +143,7 @@ describe('Webhooks', () => {
     ],
     "id": "430eed87-632a-4ea6-90db-0aace67ec228",
     "object": "webhook",
+    "signing_secret": "whsec_test_secret_key_123",
     "status": "enabled",
   },
   "error": null,
