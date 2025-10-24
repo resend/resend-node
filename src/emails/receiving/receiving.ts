@@ -1,5 +1,6 @@
 import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
+import { Attachments } from './attachments/attachments';
 import type {
   GetInboundEmailResponse,
   GetInboundEmailResponseSuccess,
@@ -11,7 +12,11 @@ import type {
 } from './interfaces/list-inbound-emails.interface';
 
 export class Receiving {
-  constructor(private readonly resend: Resend) {}
+  readonly attachments: Attachments;
+
+  constructor(private readonly resend: Resend) {
+    this.attachments = new Attachments(resend);
+  }
 
   async get(id: string): Promise<GetInboundEmailResponse> {
     const data = await this.resend.get<GetInboundEmailResponseSuccess>(

@@ -1,5 +1,4 @@
 export * from './api-keys/interfaces';
-export * from './attachments/interfaces';
 export * from './batch/interfaces';
 export * from './broadcasts/interfaces';
 export * from './common/interfaces';

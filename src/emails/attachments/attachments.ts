@@ -7,16 +7,16 @@ import type {
   ListAttachmentsApiResponse,
   ListAttachmentsOptions,
   ListAttachmentsResponse,
-} from '../interfaces';
+} from './interfaces';
 
-export class Receiving {
+export class Attachments {
   constructor(private readonly resend: Resend) {}
 
   async get(options: GetAttachmentOptions): Promise<GetAttachmentResponse> {
     const { emailId, id } = options;
 
     const data = await this.resend.get<GetAttachmentResponseSuccess>(
-      `/emails/receiving/${emailId}/attachments/${id}`,
+      `/emails/${emailId}/attachments/${id}`,
     );
 
     return data;
@@ -29,8 +29,8 @@ export class Receiving {
 
     const queryString = buildPaginationQuery(options);
     const url = queryString
-      ? `/emails/receiving/${emailId}/attachments?${queryString}`
-      : `/emails/receiving/${emailId}/attachments`;
+      ? `/emails/${emailId}/attachments?${queryString}`
+      : `/emails/${emailId}/attachments`;
 
     const data = await this.resend.get<ListAttachmentsApiResponse>(url);
 

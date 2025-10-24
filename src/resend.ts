@@ -1,6 +1,5 @@
 import { version } from '../package.json';
 import { ApiKeys } from './api-keys/api-keys';
-import { Attachments } from './attachments/attachments';
 import { Batch } from './batch/batch';
 import { Broadcasts } from './broadcasts/broadcasts';
 import type { GetOptions, PostOptions, PutOptions } from './common/interfaces';
@@ -31,7 +30,6 @@ export class Resend {
   private readonly headers: Headers;
 
   readonly apiKeys = new ApiKeys(this);
-  readonly attachments = new Attachments(this);
   readonly segments = new Segments(this);
   /**
    * @deprecated Use segments instead
