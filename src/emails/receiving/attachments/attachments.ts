@@ -1,5 +1,5 @@
-import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
-import type { Resend } from '../../resend';
+import { buildPaginationQuery } from '../../../common/utils/build-pagination-query';
+import type { Resend } from '../../../resend';
 import type {
   GetAttachmentOptions,
   GetAttachmentResponse,
@@ -7,16 +7,16 @@ import type {
   ListAttachmentsApiResponse,
   ListAttachmentsOptions,
   ListAttachmentsResponse,
-} from '../interfaces';
+} from './interfaces';
 
-export class Sending {
+export class Attachments {
   constructor(private readonly resend: Resend) {}
 
   async get(options: GetAttachmentOptions): Promise<GetAttachmentResponse> {
     const { emailId, id } = options;
 
     const data = await this.resend.get<GetAttachmentResponseSuccess>(
-      `/emails/sending/${emailId}/attachments/${id}`,
+      `/emails/receiving/${emailId}/attachments/${id}`,
     );
 
     return data;
@@ -29,8 +29,8 @@ export class Sending {
 
     const queryString = buildPaginationQuery(options);
     const url = queryString
-      ? `/emails/sending/${emailId}/attachments?${queryString}`
-      : `/emails/sending/${emailId}/attachments`;
+      ? `/emails/receiving/${emailId}/attachments?${queryString}`
+      : `/emails/receiving/${emailId}/attachments`;
 
     const data = await this.resend.get<ListAttachmentsApiResponse>(url);
 

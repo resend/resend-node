@@ -3,6 +3,7 @@ import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import { render } from '../render';
 import type { Resend } from '../resend';
+import { Attachments } from './attachments/attachments';
 import type {
   CancelEmailResponse,
   CancelEmailResponseSuccess,
@@ -30,9 +31,11 @@ import type {
 import { Receiving } from './receiving/receiving';
 
 export class Emails {
+  readonly attachments: Attachments;
   readonly receiving: Receiving;
 
   constructor(private readonly resend: Resend) {
+    this.attachments = new Attachments(resend);
     this.receiving = new Receiving(resend);
   }
 
