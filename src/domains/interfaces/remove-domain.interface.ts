@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Domain } from './domain';
 
 export type RemoveDomainsResponseSuccess = Pick<Domain, 'id'> & {
@@ -6,12 +6,4 @@ export type RemoveDomainsResponseSuccess = Pick<Domain, 'id'> & {
   deleted: boolean;
 };
 
-export type RemoveDomainsResponse =
-  | {
-      data: RemoveDomainsResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type RemoveDomainsResponse = Response<RemoveDomainsResponseSuccess>;

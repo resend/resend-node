@@ -1,5 +1,5 @@
 import type { PostOptions } from '../../common/interfaces';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Domain, DomainRecords, DomainRegion } from './domain';
 
 export interface CreateDomainOptions {
@@ -19,12 +19,4 @@ export interface CreateDomainResponseSuccess
   records: DomainRecords[];
 }
 
-export type CreateDomainResponse =
-  | {
-      data: CreateDomainResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type CreateDomainResponse = Response<CreateDomainResponseSuccess>;

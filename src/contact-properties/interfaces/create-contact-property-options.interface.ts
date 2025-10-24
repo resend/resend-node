@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { ContactProperty } from './contact-property';
 
 // SDK options
@@ -28,7 +28,5 @@ export type CreateContactPropertyResponseSuccess = Pick<
   'id' | 'object'
 >;
 
-export interface CreateContactPropertyResponse {
-  data: CreateContactPropertyResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateContactPropertyResponse =
+  Response<CreateContactPropertyResponseSuccess>;

@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Template, TemplateVariable } from './template';
 
 type TemplateVariableUpdateOptions = Pick<TemplateVariable, 'key' | 'type'> &
@@ -25,12 +25,4 @@ export interface UpdateTemplateResponseSuccess extends Pick<Template, 'id'> {
   object: 'template';
 }
 
-export type UpdateTemplateResponse =
-  | {
-      data: UpdateTemplateResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type UpdateTemplateResponse = Response<UpdateTemplateResponseSuccess>;

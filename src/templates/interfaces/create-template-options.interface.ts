@@ -1,6 +1,6 @@
 import type { PostOptions } from '../../common/interfaces';
 import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Template, TemplateVariable } from './template';
 
 type TemplateContentCreationOptions = RequireAtLeastOne<{
@@ -37,12 +37,4 @@ export interface CreateTemplateResponseSuccess extends Pick<Template, 'id'> {
   object: 'template';
 }
 
-export type CreateTemplateResponse =
-  | {
-      data: CreateTemplateResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type CreateTemplateResponse = Response<CreateTemplateResponseSuccess>;

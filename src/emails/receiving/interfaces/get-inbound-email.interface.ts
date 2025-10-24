@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../../interfaces';
+import type { Response } from '../../../interfaces';
 
 export interface GetInboundEmailResponseSuccess {
   object: 'inbound';
@@ -24,12 +24,4 @@ export interface GetInboundEmailResponseSuccess {
   }>;
 }
 
-export type GetInboundEmailResponse =
-  | {
-      data: GetInboundEmailResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type GetInboundEmailResponse = Response<GetInboundEmailResponseSuccess>;
