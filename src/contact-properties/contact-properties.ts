@@ -29,7 +29,7 @@ import type {
 } from './interfaces/update-contact-property-options.interface';
 
 export class ContactProperties {
-  constructor(private readonly resend: Resend) {}
+  constructor(private readonly resend: Resend) { }
 
   async create(
     options: CreateContactPropertyOptions,
@@ -61,6 +61,7 @@ export class ContactProperties {
             parseContactPropertyFromApi(apiContactProperty),
           ),
         },
+        headers: response.headers,
         error: null,
       };
     }
@@ -72,6 +73,7 @@ export class ContactProperties {
     if (!id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
           statusCode: null,
@@ -86,6 +88,7 @@ export class ContactProperties {
     if (response.data) {
       return {
         data: parseContactPropertyFromApi(response.data),
+        headers: response.headers,
         error: null,
       };
     }
@@ -99,6 +102,7 @@ export class ContactProperties {
     if (!payload.id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
           statusCode: null,
@@ -119,6 +123,7 @@ export class ContactProperties {
     if (!id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
           statusCode: null,

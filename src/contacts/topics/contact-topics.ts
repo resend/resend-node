@@ -20,6 +20,7 @@ export class ContactTopics {
     if (!payload.id && !payload.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
           statusCode: null,
@@ -29,12 +30,10 @@ export class ContactTopics {
     }
 
     const identifier = payload.email ? payload.email : payload.id;
-    const data = await this.resend.patch<UpdateContactTopicsResponseSuccess>(
+    return this.resend.patch<UpdateContactTopicsResponseSuccess>(
       `/contacts/${identifier}/topics`,
       payload.topics,
     );
-
-    return data;
   }
 
   async list(
@@ -43,6 +42,7 @@ export class ContactTopics {
     if (!options.id && !options.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
           statusCode: null,
@@ -57,7 +57,6 @@ export class ContactTopics {
       ? `/contacts/${identifier}/topics?${queryString}`
       : `/contacts/${identifier}/topics`;
 
-    const data = await this.resend.get<ListContactTopicsResponseSuccess>(url);
-    return data;
+    return this.resend.get<ListContactTopicsResponseSuccess>(url);
   }
 }

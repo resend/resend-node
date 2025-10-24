@@ -46,6 +46,7 @@ export class Topics {
     if (!id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
           statusCode: null,
@@ -64,6 +65,7 @@ export class Topics {
     if (!payload.id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
           statusCode: null,
@@ -84,6 +86,7 @@ export class Topics {
     if (!id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
           statusCode: null,

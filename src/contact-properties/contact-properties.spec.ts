@@ -37,7 +37,7 @@ describe('ContactProperties', () => {
       };
 
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -50,7 +50,7 @@ describe('ContactProperties', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -117,7 +117,7 @@ describe('ContactProperties', () => {
         has_more: false,
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -147,6 +147,10 @@ describe('ContactProperties', () => {
     "object": "list",
   },
   "error": null,
+  "headers": {
+    "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+    "content-type": "application/json",
+  },
 }
 `);
     });
@@ -163,7 +167,7 @@ describe('ContactProperties', () => {
         created_at: '2021-01-01T00:00:00.000Z',
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -179,6 +183,10 @@ describe('ContactProperties', () => {
     "type": "string",
   },
   "error": null,
+  "headers": {
+    "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+    "content-type": "application/json",
+  },
 }
 `);
     });
@@ -203,6 +211,7 @@ describe('ContactProperties', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -247,7 +256,7 @@ describe('ContactProperties', () => {
         object: 'contact_property',
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -260,7 +269,7 @@ describe('ContactProperties', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -290,6 +299,7 @@ describe('ContactProperties', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -303,7 +313,7 @@ describe('ContactProperties', () => {
         object: 'contact_property',
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -317,7 +327,7 @@ describe('ContactProperties', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -344,6 +354,7 @@ describe('ContactProperties', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
