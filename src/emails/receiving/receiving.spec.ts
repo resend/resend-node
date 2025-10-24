@@ -35,14 +35,18 @@ describe('Receiving', () => {
         );
 
         await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Email not found",
-    "name": "not_found",
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Email not found",
+              "name": "not_found",
+            },
+            "headers": {
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -87,41 +91,45 @@ describe('Receiving', () => {
         );
 
         expect(result).toMatchInlineSnapshot(`
-{
-  "data": {
-    "attachments": [
-      {
-        "content_disposition": "attachment",
-        "content_id": "cid_123",
-        "content_type": "application/pdf",
-        "filename": "document.pdf",
-        "id": "att_123",
-      },
-    ],
-    "bcc": null,
-    "cc": [
-      "cc@example.com",
-    ],
-    "created_at": "2023-04-07T23:13:52.669661+00:00",
-    "from": "sender@example.com",
-    "headers": {
-      "example": "value",
-    },
-    "html": "<p>hello world</p>",
-    "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
-    "object": "email",
-    "reply_to": [
-      "reply@example.com",
-    ],
-    "subject": "Test inbound email",
-    "text": "hello world",
-    "to": [
-      "received@example.com",
-    ],
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "attachments": [
+                {
+                  "content_disposition": "attachment",
+                  "content_id": "cid_123",
+                  "content_type": "application/pdf",
+                  "filename": "document.pdf",
+                  "id": "att_123",
+                },
+              ],
+              "bcc": null,
+              "cc": [
+                "cc@example.com",
+              ],
+              "created_at": "2023-04-07T23:13:52.669661+00:00",
+              "from": "sender@example.com",
+              "headers": {
+                "example": "value",
+              },
+              "html": "<p>hello world</p>",
+              "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
+              "object": "email",
+              "reply_to": [
+                "reply@example.com",
+              ],
+              "subject": "Test inbound email",
+              "text": "hello world",
+              "to": [
+                "received@example.com",
+              ],
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
 
       it('returns inbound email with no attachments', async () => {
@@ -154,27 +162,31 @@ describe('Receiving', () => {
         );
 
         expect(result).toMatchInlineSnapshot(`
-{
-  "data": {
-    "attachments": [],
-    "bcc": null,
-    "cc": null,
-    "created_at": "2023-04-07T23:13:52.669661+00:00",
-    "from": "sender@example.com",
-    "headers": {},
-    "html": null,
-    "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
-    "object": "email",
-    "reply_to": null,
-    "subject": "Test inbound email",
-    "text": "hello world",
-    "to": [
-      "received@example.com",
-    ],
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "attachments": [],
+              "bcc": null,
+              "cc": null,
+              "created_at": "2023-04-07T23:13:52.669661+00:00",
+              "from": "sender@example.com",
+              "headers": {},
+              "html": null,
+              "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
+              "object": "email",
+              "reply_to": null,
+              "subject": "Test inbound email",
+              "text": "hello world",
+              "to": [
+                "received@example.com",
+              ],
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
   });
@@ -199,15 +211,19 @@ describe('Receiving', () => {
         const result = await resend.emails.receiving.list();
 
         expect(result).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [],
-    "has_more": false,
-    "object": "list",
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "data": [],
+              "has_more": false,
+              "object": "list",
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -261,56 +277,60 @@ describe('Receiving', () => {
         const result = await resend.emails.receiving.list();
 
         expect(result).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "attachments": [
           {
-            "content_disposition": "attachment",
-            "content_id": "cid_123",
-            "content_type": "application/pdf",
-            "filename": "document.pdf",
-            "id": "att_123",
-          },
-        ],
-        "bcc": null,
-        "cc": [
-          "cc@example.com",
-        ],
-        "created_at": "2023-04-07T23:13:52.669661+00:00",
-        "from": "sender@example.com",
-        "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
-        "reply_to": [
-          "reply@example.com",
-        ],
-        "subject": "Test inbound email 1",
-        "to": [
-          "received@example.com",
-        ],
-      },
-      {
-        "attachments": [],
-        "bcc": [
-          "bcc@example.com",
-        ],
-        "cc": null,
-        "created_at": "2023-04-08T10:20:30.123456+00:00",
-        "from": "sender2@example.com",
-        "id": "87e9bcdb-6b03-43e8-9ea0-1e7gffa19d00",
-        "reply_to": null,
-        "subject": "Test inbound email 2",
-        "to": [
-          "another@example.com",
-        ],
-      },
-    ],
-    "has_more": true,
-    "object": "list",
-  },
-  "error": null,
-}
-`);
+            "data": {
+              "data": [
+                {
+                  "attachments": [
+                    {
+                      "content_disposition": "attachment",
+                      "content_id": "cid_123",
+                      "content_type": "application/pdf",
+                      "filename": "document.pdf",
+                      "id": "att_123",
+                    },
+                  ],
+                  "bcc": null,
+                  "cc": [
+                    "cc@example.com",
+                  ],
+                  "created_at": "2023-04-07T23:13:52.669661+00:00",
+                  "from": "sender@example.com",
+                  "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
+                  "reply_to": [
+                    "reply@example.com",
+                  ],
+                  "subject": "Test inbound email 1",
+                  "to": [
+                    "received@example.com",
+                  ],
+                },
+                {
+                  "attachments": [],
+                  "bcc": [
+                    "bcc@example.com",
+                  ],
+                  "cc": null,
+                  "created_at": "2023-04-08T10:20:30.123456+00:00",
+                  "from": "sender2@example.com",
+                  "id": "87e9bcdb-6b03-43e8-9ea0-1e7gffa19d00",
+                  "reply_to": null,
+                  "subject": "Test inbound email 2",
+                  "to": [
+                    "another@example.com",
+                  ],
+                },
+              ],
+              "has_more": true,
+              "object": "list",
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
 
       it('supports pagination with limit parameter', async () => {
