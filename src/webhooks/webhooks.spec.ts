@@ -60,7 +60,7 @@ describe('Webhooks', () => {
         status: 201,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -77,7 +77,7 @@ describe('Webhooks', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -98,7 +98,7 @@ describe('Webhooks', () => {
           status: 404,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -115,7 +115,7 @@ describe('Webhooks', () => {
               "statusCode": 404,
             },
             "headers": {
-              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
@@ -138,7 +138,7 @@ describe('Webhooks', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -160,7 +160,7 @@ describe('Webhooks', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -265,7 +265,7 @@ describe('Webhooks', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -280,6 +280,10 @@ describe('Webhooks', () => {
     "object": "webhook",
   },
   "error": null,
+  "headers": {
+    "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+    "content-type": "application/json",
+  },
 }
 `);
     });
@@ -297,7 +301,7 @@ describe('Webhooks', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -312,6 +316,10 @@ describe('Webhooks', () => {
     "object": "webhook",
   },
   "error": null,
+  "headers": {
+    "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+    "content-type": "application/json",
+  },
 }
 `);
     });
@@ -329,7 +337,7 @@ describe('Webhooks', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -344,6 +352,10 @@ describe('Webhooks', () => {
     "object": "webhook",
   },
   "error": null,
+  "headers": {
+    "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+    "content-type": "application/json",
+  },
 }
 `);
     });
@@ -361,7 +373,7 @@ describe('Webhooks', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -376,6 +388,10 @@ describe('Webhooks', () => {
     "object": "webhook",
   },
   "error": null,
+  "headers": {
+    "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+    "content-type": "application/json",
+  },
 }
 `);
     });
@@ -393,7 +409,7 @@ describe('Webhooks', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -408,6 +424,10 @@ describe('Webhooks', () => {
     "object": "webhook",
   },
   "error": null,
+  "headers": {
+    "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+    "content-type": "application/json",
+  },
 }
 `);
     });
@@ -423,7 +443,7 @@ describe('Webhooks', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -438,6 +458,10 @@ describe('Webhooks', () => {
     "object": "webhook",
   },
   "error": null,
+  "headers": {
+    "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+    "content-type": "application/json",
+  },
 }
 `);
     });
@@ -471,6 +495,10 @@ describe('Webhooks', () => {
     "message": "Failed to update webhook endpoint",
     "name": "not_found",
     "statusCode": 404,
+  },
+  "headers": {
+    "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+    "content-type": "application/json",
   },
 }
 `);
@@ -525,7 +553,7 @@ describe('Webhooks', () => {
           status: 404,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -542,7 +570,7 @@ describe('Webhooks', () => {
               "statusCode": 404,
             },
             "headers": {
-              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
