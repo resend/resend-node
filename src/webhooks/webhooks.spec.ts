@@ -69,15 +69,19 @@ describe('Webhooks', () => {
       await expect(
         resend.webhooks.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
-    "object": "webhook",
-    "signing_secret": "whsec_test_secret_key_123",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+            "object": "webhook",
+            "signing_secret": "whsec_test_secret_key_123",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -103,15 +107,19 @@ describe('Webhooks', () => {
         const result = resend.webhooks.get('1234');
 
         await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Webhook endpoint not found",
-    "name": "not_found",
-    "statusCode": 404,
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Webhook endpoint not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -137,22 +145,26 @@ describe('Webhooks', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.webhooks.get('1234')).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "created_at": "2023-06-21T06:10:36.144Z",
-    "endpoint": "https://example.com/webhook",
-    "events": [
-      "email.sent",
-      "email.delivered",
-    ],
-    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
-    "object": "webhook",
-    "signing_secret": "whsec_test_secret_key_123",
-    "status": "enabled",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "created_at": "2023-06-21T06:10:36.144Z",
+            "endpoint": "https://example.com/webhook",
+            "events": [
+              "email.sent",
+              "email.delivered",
+            ],
+            "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+            "object": "webhook",
+            "signing_secret": "whsec_test_secret_key_123",
+            "status": "enabled",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -181,7 +193,7 @@ describe('Webhooks', () => {
     describe('when no pagination options are provided', () => {
       it('lists webhooks', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -190,6 +202,10 @@ describe('Webhooks', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -205,7 +221,7 @@ describe('Webhooks', () => {
     describe('when pagination options are provided', () => {
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -214,6 +230,10 @@ describe('Webhooks', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -478,15 +498,19 @@ describe('Webhooks', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.webhooks.remove(id)).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "deleted": true,
-    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
-    "object": "webhook",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "deleted": true,
+            "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+            "object": "webhook",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     describe('when webhook not found', () => {
@@ -510,15 +534,19 @@ describe('Webhooks', () => {
         const result = resend.webhooks.remove('1234');
 
         await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Webhook not found",
-    "name": "not_found",
-    "statusCode": 404,
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Webhook not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
   });
