@@ -22,10 +22,10 @@ export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
 
 export type Response<T> = (
   | {
-    data: T;
-    error: null;
-  }
-  | { error: ErrorResponse; data: null; }
+      data: T;
+      error: null;
+    }
+  | { error: ErrorResponse; data: null }
 ) & {
   headers: Record<string, string> | null;
 };

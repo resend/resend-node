@@ -301,7 +301,9 @@ describe('API Keys', () => {
     describe('when no pagination options are provided', () => {
       it('lists api keys', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -329,7 +331,9 @@ describe('API Keys', () => {
     describe('when pagination options are provided', () => {
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -354,7 +358,9 @@ describe('API Keys', () => {
 
       it('passes after param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -382,7 +388,9 @@ describe('API Keys', () => {
 
       it('passes before param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
