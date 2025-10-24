@@ -1,5 +1,5 @@
 import type { PaginationOptions } from '../../../common/interfaces';
-import type { ErrorResponse } from '../../../interfaces';
+import type { Response } from '../../../interfaces';
 import type { GetInboundEmailResponseSuccess } from './get-inbound-email.interface';
 
 export type ListInboundEmailsOptions = PaginationOptions;
@@ -16,11 +16,4 @@ export interface ListInboundEmailsResponseSuccess {
 }
 
 export type ListInboundEmailsResponse =
-  | {
-      data: ListInboundEmailsResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+  Response<ListInboundEmailsResponseSuccess>;

@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Topic } from './topic';
 
 export interface CreateTopicOptions {
@@ -9,7 +9,4 @@ export interface CreateTopicOptions {
 
 export type CreateTopicResponseSuccess = Pick<Topic, 'id'>;
 
-export interface CreateTopicResponse {
-  data: CreateTopicResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type CreateTopicResponse = Response<CreateTopicResponseSuccess>;

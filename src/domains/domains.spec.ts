@@ -95,70 +95,74 @@ describe('Domains', () => {
       await expect(
         resend.domains.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "capability": "send-and-receive",
-    "created_at": "2023-04-07T22:48:33.420498+00:00",
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
-    "name": "resend.com",
-    "records": [
-      {
-        "name": "bounces",
-        "priority": 10,
-        "record": "SPF",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "MX",
-        "value": "feedback-smtp.us-east-1.com",
-      },
-      {
-        "name": "bounces",
-        "record": "SPF",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "TXT",
-        "value": ""v=spf1 include:com ~all"",
-      },
-      {
-        "name": "nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey",
-        "record": "DKIM",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "CNAME",
-        "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
-      },
-      {
-        "name": "qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey",
-        "record": "DKIM",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "CNAME",
-        "value": "qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.",
-      },
-      {
-        "name": "eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey",
-        "record": "DKIM",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "CNAME",
-        "value": "eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.",
-      },
-      {
-        "name": "resend.com",
-        "priority": 10,
-        "record": "Receiving",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "MX",
-        "value": "inbound-mx.resend.com",
-      },
-    ],
-    "region": "us-east-1",
-    "status": "not_started",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "capability": "send-and-receive",
+            "created_at": "2023-04-07T22:48:33.420498+00:00",
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
+            "name": "resend.com",
+            "records": [
+              {
+                "name": "bounces",
+                "priority": 10,
+                "record": "SPF",
+                "status": "not_started",
+                "ttl": "Auto",
+                "type": "MX",
+                "value": "feedback-smtp.us-east-1.com",
+              },
+              {
+                "name": "bounces",
+                "record": "SPF",
+                "status": "not_started",
+                "ttl": "Auto",
+                "type": "TXT",
+                "value": ""v=spf1 include:com ~all"",
+              },
+              {
+                "name": "nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey",
+                "record": "DKIM",
+                "status": "not_started",
+                "ttl": "Auto",
+                "type": "CNAME",
+                "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
+              },
+              {
+                "name": "qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey",
+                "record": "DKIM",
+                "status": "not_started",
+                "ttl": "Auto",
+                "type": "CNAME",
+                "value": "qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.",
+              },
+              {
+                "name": "eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey",
+                "record": "DKIM",
+                "status": "not_started",
+                "ttl": "Auto",
+                "type": "CNAME",
+                "value": "eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.",
+              },
+              {
+                "name": "resend.com",
+                "priority": 10,
+                "record": "Receiving",
+                "status": "not_started",
+                "ttl": "Auto",
+                "type": "MX",
+                "value": "inbound-mx.resend.com",
+              },
+            ],
+            "region": "us-east-1",
+            "status": "not_started",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws error when missing name', async () => {
@@ -184,14 +188,18 @@ describe('Domains', () => {
       const result = resend.domains.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Missing "name" field",
-    "name": "missing_required_field",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Missing "name" field",
+            "name": "missing_required_field",
+          },
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     describe('with region', () => {
@@ -257,61 +265,64 @@ describe('Domains', () => {
         await expect(
           resend.domains.create(payload),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "capability": "send",
-    "created_at": "2023-04-07T22:48:33.420498+00:00",
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
-    "name": "resend.com",
-    "records": [
-      {
-        "name": "bounces",
-        "priority": 10,
-        "record": "SPF",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "MX",
-        "value": "feedback-smtp.eu-west-1.com",
-      },
-      {
-        "name": "bounces",
-        "record": "SPF",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "TXT",
-        "value": ""v=spf1 include:com ~all"",
-      },
-      {
-        "name": "nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey",
-        "record": "DKIM",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "CNAME",
-        "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
-      },
-      {
-        "name": "qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey",
-        "record": "DKIM",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "CNAME",
-        "value": "qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.",
-      },
-      {
-        "name": "eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey",
-        "record": "DKIM",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "CNAME",
-        "value": "eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.",
-      },
-    ],
-    "region": "eu-west-1",
-    "status": "not_started",
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "capability": "send",
+              "created_at": "2023-04-07T22:48:33.420498+00:00",
+              "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
+              "name": "resend.com",
+              "records": [
+                {
+                  "name": "bounces",
+                  "priority": 10,
+                  "record": "SPF",
+                  "status": "not_started",
+                  "ttl": "Auto",
+                  "type": "MX",
+                  "value": "feedback-smtp.eu-west-1.com",
+                },
+                {
+                  "name": "bounces",
+                  "record": "SPF",
+                  "status": "not_started",
+                  "ttl": "Auto",
+                  "type": "TXT",
+                  "value": ""v=spf1 include:com ~all"",
+                },
+                {
+                  "name": "nu22pfdfqaxdybogtw3ebaokmalv5mxg._domainkey",
+                  "record": "DKIM",
+                  "status": "not_started",
+                  "ttl": "Auto",
+                  "type": "CNAME",
+                  "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
+                },
+                {
+                  "name": "qklz5ozk742hhql3vmekdu3pr4f5ggsj._domainkey",
+                  "record": "DKIM",
+                  "status": "not_started",
+                  "ttl": "Auto",
+                  "type": "CNAME",
+                  "value": "qklz5ozk742hhql3vmekdu3pr4f5ggsj.dkim.com.",
+                },
+                {
+                  "name": "eeaemodxoao5hxwjvhywx4bo5mswjw6v._domainkey",
+                  "record": "DKIM",
+                  "status": "not_started",
+                  "ttl": "Auto",
+                  "type": "CNAME",
+                  "value": "eeaemodxoao5hxwjvhywx4bo5mswjw6v.dkim.com.",
+                },
+              ],
+              "region": "eu-west-1",
+              "status": "not_started",
+            },
+            "error": null,
+            "headers": {
+              "content-type": "text/plain;charset=UTF-8",
+            },
+          }
+        `);
       });
 
       it('throws error with wrong region', async () => {
@@ -336,14 +347,18 @@ describe('Domains', () => {
         });
 
         await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Region must be "us-east-1" | "eu-west-1" | "sa-east-1"",
-    "name": "invalid_region",
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Region must be "us-east-1" | "eu-west-1" | "sa-east-1"",
+              "name": "invalid_region",
+            },
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -402,45 +417,49 @@ describe('Domains', () => {
         await expect(
           resend.domains.create(payload),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "capability": "send",
-    "created_at": "2023-04-07T22:48:33.420498+00:00",
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
-    "name": "resend.com",
-    "records": [
-      {
-        "name": "custom",
-        "priority": 10,
-        "record": "SPF",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "MX",
-        "value": "feedback-smtp.us-east-1.com",
-      },
-      {
-        "name": "custom",
-        "record": "SPF",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "TXT",
-        "value": ""v=spf1 include:com ~all"",
-      },
-      {
-        "name": "resend._domainkey",
-        "record": "DKIM",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "CNAME",
-        "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
-      },
-    ],
-    "region": "us-east-1",
-    "status": "not_started",
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "capability": "send",
+              "created_at": "2023-04-07T22:48:33.420498+00:00",
+              "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
+              "name": "resend.com",
+              "records": [
+                {
+                  "name": "custom",
+                  "priority": 10,
+                  "record": "SPF",
+                  "status": "not_started",
+                  "ttl": "Auto",
+                  "type": "MX",
+                  "value": "feedback-smtp.us-east-1.com",
+                },
+                {
+                  "name": "custom",
+                  "record": "SPF",
+                  "status": "not_started",
+                  "ttl": "Auto",
+                  "type": "TXT",
+                  "value": ""v=spf1 include:com ~all"",
+                },
+                {
+                  "name": "resend._domainkey",
+                  "record": "DKIM",
+                  "status": "not_started",
+                  "ttl": "Auto",
+                  "type": "CNAME",
+                  "value": "nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.",
+                },
+              ],
+              "region": "us-east-1",
+              "status": "not_started",
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
   });
@@ -472,7 +491,9 @@ describe('Domains', () => {
     describe('when no pagination options are provided', () => {
       it('lists domains', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -481,6 +502,10 @@ describe('Domains', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -496,7 +521,9 @@ describe('Domains', () => {
     describe('when pagination options are provided', () => {
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -504,6 +531,10 @@ describe('Domains', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -517,7 +548,9 @@ describe('Domains', () => {
 
       it('passes after param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -528,6 +561,10 @@ describe('Domains', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -541,7 +578,9 @@ describe('Domains', () => {
 
       it('passes before param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -552,6 +591,10 @@ describe('Domains', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -586,14 +629,18 @@ describe('Domains', () => {
         const result = resend.domains.get('1234');
 
         await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Domain not found",
-    "name": "not_found",
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Domain not found",
+              "name": "not_found",
+            },
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -656,55 +703,59 @@ describe('Domains', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.domains.get('1234')).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "capability": "send-and-receive",
-    "created_at": "2023-06-21T06:10:36.144Z",
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "name": "resend.com",
-    "object": "domain",
-    "records": [
-      {
-        "name": "bounces.resend.com",
-        "priority": 10,
-        "record": "SPF",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "MX",
-        "value": "feedback-smtp.us-east-1.amazonses.com",
-      },
-      {
-        "name": "bounces.resend.com",
-        "record": "SPF",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "TXT",
-        "value": ""v=spf1 include:amazonses.com ~all"",
-      },
-      {
-        "name": "resend._domainkey",
-        "record": "DKIM",
-        "status": "verified",
-        "ttl": "Auto",
-        "type": "TXT",
-        "value": "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDZDhdsAKs5xdSj7h3v22wjx3WMWWADCHwxfef8U03JUbVM/sNSVuY5mbrdJKUoG6QBdfxsOGzhINmQnT89idjp5GdAUhx/KNpt8hcLXMID4nB0Gbcafn03/z5zEPxPfzVJqQd/UqOtZQcfxN9OrIhLiBsYTbcTBB7EvjCb3wEaBwIDAQAB",
-      },
-      {
-        "name": "resend.com",
-        "priority": 10,
-        "record": "Receiving",
-        "status": "not_started",
-        "ttl": "Auto",
-        "type": "MX",
-        "value": "inbound-mx.resend.com",
-      },
-    ],
-    "region": "us-east-1",
-    "status": "not_started",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "capability": "send-and-receive",
+            "created_at": "2023-06-21T06:10:36.144Z",
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "name": "resend.com",
+            "object": "domain",
+            "records": [
+              {
+                "name": "bounces.resend.com",
+                "priority": 10,
+                "record": "SPF",
+                "status": "not_started",
+                "ttl": "Auto",
+                "type": "MX",
+                "value": "feedback-smtp.us-east-1.amazonses.com",
+              },
+              {
+                "name": "bounces.resend.com",
+                "record": "SPF",
+                "status": "not_started",
+                "ttl": "Auto",
+                "type": "TXT",
+                "value": ""v=spf1 include:amazonses.com ~all"",
+              },
+              {
+                "name": "resend._domainkey",
+                "record": "DKIM",
+                "status": "verified",
+                "ttl": "Auto",
+                "type": "TXT",
+                "value": "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDZDhdsAKs5xdSj7h3v22wjx3WMWWADCHwxfef8U03JUbVM/sNSVuY5mbrdJKUoG6QBdfxsOGzhINmQnT89idjp5GdAUhx/KNpt8hcLXMID4nB0Gbcafn03/z5zEPxPfzVJqQd/UqOtZQcfxN9OrIhLiBsYTbcTBB7EvjCb3wEaBwIDAQAB",
+              },
+              {
+                "name": "resend.com",
+                "priority": 10,
+                "record": "Receiving",
+                "status": "not_started",
+                "ttl": "Auto",
+                "type": "MX",
+                "value": "inbound-mx.resend.com",
+              },
+            ],
+            "region": "us-east-1",
+            "status": "not_started",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -732,14 +783,18 @@ describe('Domains', () => {
           clickTracking: true,
         }),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-    "object": "domain",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+            "object": "domain",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -761,14 +816,18 @@ describe('Domains', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.domains.verify(id)).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-    "object": "domain",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+            "object": "domain",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -791,15 +850,19 @@ describe('Domains', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.domains.remove(id)).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "deleted": true,
-    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-    "object": "domain",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "deleted": true,
+            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+            "object": "domain",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 });

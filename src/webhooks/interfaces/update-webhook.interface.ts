@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { WebhookEvent } from './webhook-event.interface';
 
 export interface UpdateWebhookOptions {
@@ -12,12 +12,4 @@ export interface UpdateWebhookResponseSuccess {
   id: string;
 }
 
-export type UpdateWebhookResponse =
-  | {
-      data: UpdateWebhookResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type UpdateWebhookResponse = Response<UpdateWebhookResponseSuccess>;

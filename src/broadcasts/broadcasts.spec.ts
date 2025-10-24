@@ -38,15 +38,19 @@ describe('Broadcasts', () => {
 
       const data = await resend.broadcasts.create({} as CreateBroadcastOptions);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Missing \`from\` field.",
-    "name": "missing_required_field",
-    "statusCode": 422,
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Missing \`from\` field.",
+            "name": "missing_required_field",
+            "statusCode": 422,
+          },
+          "headers": {
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('creates broadcast', async () => {
@@ -70,13 +74,17 @@ describe('Broadcasts', () => {
 
       const data = await resend.broadcasts.create(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('creates broadcast with multiple recipients', async () => {
@@ -100,13 +108,17 @@ describe('Broadcasts', () => {
       };
       const data = await resend.broadcasts.create(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('creates broadcast with multiple replyTo emails', async () => {
@@ -132,13 +144,17 @@ describe('Broadcasts', () => {
 
       const data = await resend.broadcasts.create(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws an error when an ErrorResponse is returned', async () => {
@@ -168,15 +184,19 @@ describe('Broadcasts', () => {
       const result = resend.broadcasts.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-  {
-    "data": null,
-    "error": {
-      "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
-      "name": "invalid_parameter",
-      "statusCode": 422,
-    },
-  }
-  `);
+        {
+          "data": null,
+          "error": {
+            "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
+            "name": "invalid_parameter",
+            "statusCode": 422,
+          },
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns an error when fetch fails', async () => {
@@ -253,13 +273,17 @@ describe('Broadcasts', () => {
       const data = await resend.broadcasts.send(randomBroadcastId);
 
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -294,7 +318,9 @@ describe('Broadcasts', () => {
     describe('when no pagination options are provided', () => {
       it('lists broadcasts', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -303,6 +329,10 @@ describe('Broadcasts', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -318,7 +348,9 @@ describe('Broadcasts', () => {
     describe('when pagination options are provided', () => {
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -326,6 +358,10 @@ describe('Broadcasts', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -339,7 +375,9 @@ describe('Broadcasts', () => {
 
       it('passes after param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -350,6 +388,10 @@ describe('Broadcasts', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -363,7 +405,9 @@ describe('Broadcasts', () => {
 
       it('passes before param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -374,6 +418,10 @@ describe('Broadcasts', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -411,15 +459,19 @@ describe('Broadcasts', () => {
         );
 
         await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Broadcast not found",
-    "name": "not_found",
-    "statusCode": 404,
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Broadcast not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -456,28 +508,32 @@ describe('Broadcasts', () => {
       await expect(
         resend.broadcasts.get('559ac32e-9ef5-46fb-82a1-b76b840c0f7b'),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "audience_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
-    "created_at": "2024-12-01T19:32:22.980Z",
-    "from": "Acme <onboarding@resend.dev>",
-    "html": "<h1>Hello world</h1>",
-    "id": "559ac32e-9ef5-46fb-82a1-b76b840c0f7b",
-    "name": "Announcements",
-    "object": "broadcast",
-    "preview_text": "Check out our latest announcements",
-    "reply_to": null,
-    "scheduled_at": null,
-    "segment_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
-    "sent_at": null,
-    "status": "draft",
-    "subject": "hello world",
-    "text": "Hello world",
-    "topic_id": "9f31e56e-3083-46cf-8e96-c6995e0e576a",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "audience_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
+            "created_at": "2024-12-01T19:32:22.980Z",
+            "from": "Acme <onboarding@resend.dev>",
+            "html": "<h1>Hello world</h1>",
+            "id": "559ac32e-9ef5-46fb-82a1-b76b840c0f7b",
+            "name": "Announcements",
+            "object": "broadcast",
+            "preview_text": "Check out our latest announcements",
+            "reply_to": null,
+            "scheduled_at": null,
+            "segment_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
+            "sent_at": null,
+            "status": "draft",
+            "subject": "hello world",
+            "text": "Hello world",
+            "topic_id": "9f31e56e-3083-46cf-8e96-c6995e0e576a",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -502,15 +558,19 @@ describe('Broadcasts', () => {
       await expect(
         resend.broadcasts.remove(id),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "deleted": true,
-    "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
-    "object": "broadcast",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "deleted": true,
+            "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
+            "object": "broadcast",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -531,13 +591,17 @@ describe('Broadcasts', () => {
       await expect(
         resend.broadcasts.update(id, { name: 'New Name' }),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 });

@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Attachment } from './attachment';
 
 export interface GetAttachmentOptions {
@@ -10,12 +10,4 @@ export type GetAttachmentResponseSuccess = {
   object: 'attachment';
 } & Attachment;
 
-export type GetAttachmentResponse =
-  | {
-      data: GetAttachmentResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type GetAttachmentResponse = Response<GetAttachmentResponseSuccess>;

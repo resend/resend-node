@@ -50,14 +50,18 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
-    "object": "contact",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
+            "object": "contact",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws error when missing name', async () => {
@@ -83,14 +87,18 @@ describe('Contacts', () => {
       const result = resend.contacts.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Missing \`email\` field.",
-    "name": "missing_required_field",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Missing \`email\` field.",
+            "name": "missing_required_field",
+          },
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -124,7 +132,9 @@ describe('Contacts', () => {
         };
 
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -133,6 +143,10 @@ describe('Contacts', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -182,32 +196,36 @@ describe('Contacts', () => {
           await expect(
             resend.contacts.list(options),
           ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "created_at": "2023-04-07T23:13:52.669661+00:00",
-        "email": "team@resend.com",
-        "first_name": "John",
-        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-        "last_name": "Smith",
-        "unsubscribed": false,
-      },
-      {
-        "created_at": "2023-04-07T23:13:20.417116+00:00",
-        "email": "team@react.email",
-        "first_name": "John",
-        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-        "last_name": "Smith",
-        "unsubscribed": false,
-      },
-    ],
-    "has_more": false,
-    "object": "list",
-  },
-  "error": null,
-}
-`);
+            {
+              "data": {
+                "data": [
+                  {
+                    "created_at": "2023-04-07T23:13:52.669661+00:00",
+                    "email": "team@resend.com",
+                    "first_name": "John",
+                    "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+                    "last_name": "Smith",
+                    "unsubscribed": false,
+                  },
+                  {
+                    "created_at": "2023-04-07T23:13:20.417116+00:00",
+                    "email": "team@react.email",
+                    "first_name": "John",
+                    "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
+                    "last_name": "Smith",
+                    "unsubscribed": false,
+                  },
+                ],
+                "has_more": false,
+                "object": "list",
+              },
+              "error": null,
+              "headers": {
+                "authorization": "Bearer re_924b3rjh2387fbewf823",
+                "content-type": "application/json",
+              },
+            }
+          `);
         });
       });
     });
@@ -230,7 +248,9 @@ describe('Contacts', () => {
 
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -241,6 +261,10 @@ describe('Contacts', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -254,7 +278,9 @@ describe('Contacts', () => {
 
       it('passes limit and after params and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -266,6 +292,10 @@ describe('Contacts', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -279,7 +309,9 @@ describe('Contacts', () => {
 
       it('passes limit and before params and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -291,6 +323,10 @@ describe('Contacts', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -329,14 +365,18 @@ describe('Contacts', () => {
         const result = resend.contacts.get(options);
 
         await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Contact not found",
-    "name": "not_found",
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Contact not found",
+              "name": "not_found",
+            },
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -367,19 +407,23 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.get(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "created_at": "2024-01-16T18:12:26.514Z",
-    "email": "team@resend.com",
-    "first_name": "",
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "last_name": "",
-    "object": "contact",
-    "unsubscribed": false,
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "created_at": "2024-01-16T18:12:26.514Z",
+            "email": "team@resend.com",
+            "first_name": "",
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "last_name": "",
+            "object": "contact",
+            "unsubscribed": false,
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('get contact by email', async () => {
@@ -409,19 +453,23 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.get(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "created_at": "2024-01-16T18:12:26.514Z",
-    "email": "team@resend.com",
-    "first_name": "",
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "last_name": "",
-    "object": "contact",
-    "unsubscribed": false,
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "created_at": "2024-01-16T18:12:26.514Z",
+            "email": "team@resend.com",
+            "first_name": "",
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "last_name": "",
+            "object": "contact",
+            "unsubscribed": false,
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     describe('when audienceId is not provided', () => {
@@ -451,19 +499,23 @@ describe('Contacts', () => {
         await expect(
           resend.contacts.get(options),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "created_at": "2024-01-16T18:12:26.514Z",
-    "email": "team@resend.com",
-    "first_name": "",
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "last_name": "",
-    "object": "contact",
-    "unsubscribed": false,
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "created_at": "2024-01-16T18:12:26.514Z",
+              "email": "team@resend.com",
+              "first_name": "",
+              "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+              "last_name": "",
+              "object": "contact",
+              "unsubscribed": false,
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
 
       it('get contact by email', async () => {
@@ -492,19 +544,23 @@ describe('Contacts', () => {
         await expect(
           resend.contacts.get(options),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "created_at": "2024-01-16T18:12:26.514Z",
-    "email": "team@resend.com",
-    "first_name": "",
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "last_name": "",
-    "object": "contact",
-    "unsubscribed": false,
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "created_at": "2024-01-16T18:12:26.514Z",
+              "email": "team@resend.com",
+              "first_name": "",
+              "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+              "last_name": "",
+              "object": "contact",
+              "unsubscribed": false,
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
       it('get contact by string id', async () => {
         const response: GetContactResponseSuccess = {
@@ -529,19 +585,23 @@ describe('Contacts', () => {
         await expect(
           resend.contacts.get('fd61172c-cafc-40f5-b049-b45947779a29'),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "created_at": "2024-01-16T18:12:26.514Z",
-    "email": "team@resend.com",
-    "first_name": "",
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "last_name": "",
-    "object": "contact",
-    "unsubscribed": false,
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "created_at": "2024-01-16T18:12:26.514Z",
+              "email": "team@resend.com",
+              "first_name": "",
+              "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+              "last_name": "",
+              "object": "contact",
+              "unsubscribed": false,
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
 
         expect(fetchMock).toHaveBeenCalledWith(
           'https://api.resend.com/contacts/fd61172c-cafc-40f5-b049-b45947779a29',
@@ -575,19 +635,23 @@ describe('Contacts', () => {
         await expect(
           resend.contacts.get('team@resend.com'),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "created_at": "2024-01-16T18:12:26.514Z",
-    "email": "team@resend.com",
-    "first_name": "",
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "last_name": "",
-    "object": "contact",
-    "unsubscribed": false,
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "created_at": "2024-01-16T18:12:26.514Z",
+              "email": "team@resend.com",
+              "first_name": "",
+              "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+              "last_name": "",
+              "object": "contact",
+              "unsubscribed": false,
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
 
         expect(fetchMock).toHaveBeenCalledWith(
           'https://api.resend.com/contacts/team@resend.com',
@@ -624,14 +688,18 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.update(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-    "object": "contact",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+            "object": "contact",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -658,15 +726,19 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.remove(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "contact": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-    "deleted": true,
-    "object": "contact",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "contact": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+            "deleted": true,
+            "object": "contact",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('removes a contact by email', async () => {
@@ -691,15 +763,19 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.remove(options),
       ).resolves.toMatchInlineSnapshot(`
-  {
-    "data": {
-      "contact": "acme@example.com",
-      "deleted": true,
-      "object": "contact",
-    },
-    "error": null,
-  }
-  `);
+        {
+          "data": {
+            "contact": "acme@example.com",
+            "deleted": true,
+            "object": "contact",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('removes a contact by string id', async () => {
@@ -720,15 +796,19 @@ describe('Contacts', () => {
       await expect(
         resend.contacts.remove('3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223'),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "contact": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-    "deleted": true,
-    "object": "contact",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "contact": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+            "deleted": true,
+            "object": "contact",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 });
