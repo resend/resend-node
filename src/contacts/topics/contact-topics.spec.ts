@@ -150,6 +150,7 @@ describe('ContactTopics', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -313,6 +314,7 @@ describe('ContactTopics', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });

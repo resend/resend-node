@@ -91,15 +91,13 @@ export class Contacts {
 
   async get(options: GetContactOptions): Promise<GetContactResponse> {
     if (typeof options === 'string') {
-      const data = await this.resend.get<GetContactResponseSuccess>(
-        `/contacts/${options}`,
-      );
-      return data;
+      return this.resend.get<GetContactResponseSuccess>(`/contacts/${options}`);
     }
 
     if (!options.id && !options.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
           statusCode: null,
@@ -109,22 +107,21 @@ export class Contacts {
     }
 
     if (!options.audienceId) {
-      const data = await this.resend.get<GetContactResponseSuccess>(
+      return this.resend.get<GetContactResponseSuccess>(
         `/contacts/${options?.email ? options?.email : options?.id}`,
       );
-      return data;
     }
 
-    const data = await this.resend.get<GetContactResponseSuccess>(
+    return this.resend.get<GetContactResponseSuccess>(
       `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
     );
-    return data;
   }
 
   async update(options: UpdateContactOptions): Promise<UpdateContactResponse> {
     if (!options.id && !options.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
           statusCode: null,
@@ -158,15 +155,15 @@ export class Contacts {
 
   async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
     if (typeof payload === 'string') {
-      const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+      return this.resend.delete<RemoveContactsResponseSuccess>(
         `/contacts/${payload}`,
       );
-      return data;
     }
 
     if (!payload.id && !payload.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
           statusCode: null,
@@ -176,18 +173,14 @@ export class Contacts {
     }
 
     if (!payload.audienceId) {
-      const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+      return this.resend.delete<RemoveContactsResponseSuccess>(
         `/contacts/${payload?.email ? payload?.email : payload?.id}`,
       );
-      return data;
     }
 
-    const data = await this.resend.delete<RemoveContactsResponseSuccess>(
-      `/audiences/${payload.audienceId}/contacts/${
-        payload?.email ? payload?.email : payload?.id
+    return this.resend.delete<RemoveContactsResponseSuccess>(
+      `/audiences/${payload.audienceId}/contacts/${payload?.email ? payload?.email : payload?.id
       }`,
     );
-
-    return data;
   }
 }

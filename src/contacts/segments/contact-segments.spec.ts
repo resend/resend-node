@@ -139,6 +139,7 @@ describe('ContactSegments', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -223,6 +224,7 @@ describe('ContactSegments', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -311,6 +313,7 @@ describe('ContactSegments', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });

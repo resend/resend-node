@@ -268,6 +268,7 @@ describe('Topics', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -321,6 +322,7 @@ describe('Topics', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -368,6 +370,7 @@ describe('Topics', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });

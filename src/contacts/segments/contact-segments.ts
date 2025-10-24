@@ -25,6 +25,7 @@ export class ContactSegments {
     if (!options.contactId && !options.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
           statusCode: null,
@@ -49,6 +50,7 @@ export class ContactSegments {
     if (!options.contactId && !options.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
           statusCode: null,
@@ -69,6 +71,7 @@ export class ContactSegments {
     if (!options.contactId && !options.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
           statusCode: null,
