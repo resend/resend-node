@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { ErrorResponse } from '../../../../interfaces';
 import type { Attachment } from './attachment';
 
 export interface GetAttachmentOptions {
