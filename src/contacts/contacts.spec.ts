@@ -132,7 +132,9 @@ describe('Contacts', () => {
         };
 
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -246,7 +248,9 @@ describe('Contacts', () => {
 
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -274,7 +278,9 @@ describe('Contacts', () => {
 
       it('passes limit and after params and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -303,7 +309,9 @@ describe('Contacts', () => {
 
       it('passes limit and before params and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+          headers: {
+            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          },
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
