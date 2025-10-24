@@ -179,7 +179,8 @@ export class Contacts {
     }
 
     return this.resend.delete<RemoveContactsResponseSuccess>(
-      `/audiences/${payload.audienceId}/contacts/${payload?.email ? payload?.email : payload?.id
+      `/audiences/${payload.audienceId}/contacts/${
+        payload?.email ? payload?.email : payload?.id
       }`,
     );
   }

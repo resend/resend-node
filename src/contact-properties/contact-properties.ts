@@ -29,7 +29,7 @@ import type {
 } from './interfaces/update-contact-property-options.interface';
 
 export class ContactProperties {
-  constructor(private readonly resend: Resend) { }
+  constructor(private readonly resend: Resend) {}
 
   async create(
     options: CreateContactPropertyOptions,

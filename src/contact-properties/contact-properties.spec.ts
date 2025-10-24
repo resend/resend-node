@@ -37,7 +37,9 @@ describe('ContactProperties', () => {
       };
 
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -117,7 +119,9 @@ describe('ContactProperties', () => {
         has_more: false,
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -167,7 +171,9 @@ describe('ContactProperties', () => {
         created_at: '2021-01-01T00:00:00.000Z',
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -256,7 +262,9 @@ describe('ContactProperties', () => {
         object: 'contact_property',
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -313,7 +321,9 @@ describe('ContactProperties', () => {
         object: 'contact_property',
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop' },
+        headers: {
+          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        },
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
