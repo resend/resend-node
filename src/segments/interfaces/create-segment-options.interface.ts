@@ -1,5 +1,5 @@
 import type { PostOptions } from '../../common/interfaces';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Segment } from './segment';
 
 export interface CreateSegmentOptions {
@@ -13,12 +13,4 @@ export interface CreateSegmentResponseSuccess
   object: 'segment';
 }
 
-export type CreateSegmentResponse =
-  | {
-      data: CreateSegmentResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type CreateSegmentResponse = Response<CreateSegmentResponseSuccess>;

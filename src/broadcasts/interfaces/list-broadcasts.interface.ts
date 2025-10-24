@@ -1,5 +1,5 @@
 import type { PaginationOptions } from '../../common/interfaces';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Broadcast } from './broadcast';
 
 export type ListBroadcastsOptions = PaginationOptions;
@@ -20,12 +20,4 @@ export type ListBroadcastsResponseSuccess = {
   >[];
 };
 
-export type ListBroadcastsResponse =
-  | {
-      data: ListBroadcastsResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type ListBroadcastsResponse = Response<ListBroadcastsResponseSuccess>;

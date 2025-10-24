@@ -9,7 +9,7 @@ import { ContactProperties } from './contact-properties/contact-properties';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
-import type { ErrorResponse } from './interfaces';
+import type { ErrorResponse, Response } from './interfaces';
 import { Segments } from './segments/segments';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
@@ -65,17 +65,18 @@ export class Resend {
     });
   }
 
-  async fetchRequest<T>(
-    path: string,
-    options = {},
-  ): Promise<{ data: T; error: null } | { data: null; error: ErrorResponse }> {
+  async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
     try {
       const response = await fetch(`${baseUrl}${path}`, options);
 
       if (!response.ok) {
         try {
           const rawError = await response.text();
-          return { data: null, error: JSON.parse(rawError) };
+          return {
+            data: null,
+            error: JSON.parse(rawError),
+            headers: Object.fromEntries(response.headers.entries()),
+          };
         } catch (err) {
           if (err instanceof SyntaxError) {
             return {
@@ -86,6 +87,7 @@ export class Resend {
                 message:
                   'Internal server error. We are unable to process your request right now, please try again later.',
               },
+              headers: Object.fromEntries(response.headers.entries()),
             };
           }
 
@@ -96,15 +98,27 @@ export class Resend {
           };
 
           if (err instanceof Error) {
-            return { data: null, error: { ...error, message: err.message } };
+            return {
+              data: null,
+              error: { ...error, message: err.message },
+              headers: Object.fromEntries(response.headers.entries()),
+            };
           }
 
-          return { data: null, error };
+          return {
+            data: null,
+            error,
+            headers: Object.fromEntries(response.headers.entries()),
+          };
         }
       }
 
       const data = await response.json();
-      return { data, error: null };
+      return {
+        data,
+        error: null,
+        headers: Object.fromEntries(response.headers.entries()),
+      };
     } catch {
       return {
         data: null,
@@ -113,6 +127,7 @@ export class Resend {
           statusCode: null,
           message: 'Unable to fetch data. The request could not be resolved.',
         },
+        headers: null,
       };
     }
   }

@@ -1,5 +1,5 @@
 import type { Attachment } from '../../../common/interfaces/attachment.interface';
-import type { ErrorResponse } from '../../../interfaces';
+import type { Response } from '../../../interfaces';
 
 export interface GetAttachmentOptions {
   emailId: string;
@@ -10,12 +10,4 @@ export type GetAttachmentResponseSuccess = {
   object: 'attachment';
 } & Attachment;
 
-export type GetAttachmentResponse =
-  | {
-      data: GetAttachmentResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type GetAttachmentResponse = Response<GetAttachmentResponseSuccess>;

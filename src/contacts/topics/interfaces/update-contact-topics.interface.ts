@@ -1,5 +1,5 @@
 import type { PatchOptions } from '../../../common/interfaces/patch-option.interface';
-import type { ErrorResponse } from '../../../interfaces';
+import type { Response } from '../../../interfaces';
 
 interface UpdateContactTopicsBaseOptions {
   id?: string;
@@ -17,7 +17,5 @@ export interface UpdateContactTopicsResponseSuccess {
   id: string;
 }
 
-export interface UpdateContactTopicsResponse {
-  data: UpdateContactTopicsResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type UpdateContactTopicsResponse =
+  Response<UpdateContactTopicsResponseSuccess>;

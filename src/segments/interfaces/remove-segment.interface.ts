@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Segment } from './segment';
 
 export interface RemoveSegmentResponseSuccess extends Pick<Segment, 'id'> {
@@ -6,12 +6,4 @@ export interface RemoveSegmentResponseSuccess extends Pick<Segment, 'id'> {
   deleted: boolean;
 }
 
-export type RemoveSegmentResponse =
-  | {
-      data: RemoveSegmentResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type RemoveSegmentResponse = Response<RemoveSegmentResponseSuccess>;

@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Topic } from './topic';
 
 export type RemoveTopicResponseSuccess = Pick<Topic, 'id'> & {
@@ -6,7 +6,4 @@ export type RemoveTopicResponseSuccess = Pick<Topic, 'id'> & {
   deleted: boolean;
 };
 
-export interface RemoveTopicResponse {
-  data: RemoveTopicResponseSuccess | null;
-  error: ErrorResponse | null;
-}
+export type RemoveTopicResponse = Response<RemoveTopicResponseSuccess>;
