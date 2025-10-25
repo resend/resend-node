@@ -116,17 +116,17 @@ interface CreateEmailBaseOptions {
 
 export type CreateEmailOptions =
   | ((RequireAtLeastOne<EmailRenderOptions> & CreateEmailBaseOptions) & {
-    template?: never;
-  })
+      template?: never;
+    })
   | ((EmailTemplateOptions & CreateEmailBaseOptionsWithTemplate) & {
-    react?: never;
-    html?: never;
-    text?: never;
-  });
+      react?: never;
+      html?: never;
+      text?: never;
+    });
 
 export interface CreateEmailRequestOptions
   extends PostOptions,
-  IdempotentRequest { }
+    IdempotentRequest {}
 
 export interface CreateEmailResponseSuccess {
   /** The ID of the newly created email. */
@@ -135,13 +135,13 @@ export interface CreateEmailResponseSuccess {
 
 export type CreateEmailResponse =
   | {
-    data: CreateEmailResponseSuccess;
-    error: null;
-  }
+      data: CreateEmailResponseSuccess;
+      error: null;
+    }
   | {
-    data: null;
-    error: ErrorResponse;
-  };
+      data: null;
+      error: ErrorResponse;
+    };
 
 export interface Attachment {
   /** Content of an attached file. */
