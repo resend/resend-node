@@ -32,9 +32,15 @@ interface EmailTemplateOptions {
   };
 }
 
+type FromTestingAddress = 'onboarding@resend.dev';
+type ToTestingAddress =
+  | 'delivered@resend.dev'
+  | 'bounced@resend.dev'
+  | 'complained@resend.dev';
+
 interface CreateEmailBaseOptionsWithTemplate
   extends Omit<CreateEmailBaseOptions, 'from' | 'subject'> {
-  from?: string;
+  from?: FromTestingAddress | (string & {});
   subject?: string;
 }
 
@@ -62,7 +68,7 @@ interface CreateEmailBaseOptions {
    *
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
-  from: string;
+  from: FromTestingAddress | (string & {});
   /**
    * Custom headers to add to the email.
    *
@@ -92,7 +98,7 @@ interface CreateEmailBaseOptions {
    *
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
-  to: string | string[];
+  to: ToTestingAddress | (string & {}) | (ToTestingAddress | (string & {}))[];
   /**
    * The id of the topic you want to send to
    *
@@ -110,17 +116,17 @@ interface CreateEmailBaseOptions {
 
 export type CreateEmailOptions =
   | ((RequireAtLeastOne<EmailRenderOptions> & CreateEmailBaseOptions) & {
-      template?: never;
-    })
+    template?: never;
+  })
   | ((EmailTemplateOptions & CreateEmailBaseOptionsWithTemplate) & {
-      react?: never;
-      html?: never;
-      text?: never;
-    });
+    react?: never;
+    html?: never;
+    text?: never;
+  });
 
 export interface CreateEmailRequestOptions
   extends PostOptions,
-    IdempotentRequest {}
+  IdempotentRequest { }
 
 export interface CreateEmailResponseSuccess {
   /** The ID of the newly created email. */
@@ -129,13 +135,13 @@ export interface CreateEmailResponseSuccess {
 
 export type CreateEmailResponse =
   | {
-      data: CreateEmailResponseSuccess;
-      error: null;
-    }
+    data: CreateEmailResponseSuccess;
+    error: null;
+  }
   | {
-      data: null;
-      error: ErrorResponse;
-    };
+    data: null;
+    error: ErrorResponse;
+  };
 
 export interface Attachment {
   /** Content of an attached file. */
