@@ -23,6 +23,7 @@ describe('Emails', () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing `from` field.',
+        statusCode: 422,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -36,14 +37,19 @@ describe('Emails', () => {
       const data = await resend.emails.create({} as CreateEmailOptions);
 
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Missing \`from\` field.",
-    "name": "missing_required_field",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Missing \`from\` field.",
+            "name": "missing_required_field",
+            "statusCode": 422,
+          },
+          "headers": {
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('does not send the Idempotency-Key header when idempotencyKey is not provided', async () => {
@@ -144,13 +150,17 @@ describe('Emails', () => {
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('sends email with multiple recipients', async () => {
@@ -174,13 +184,17 @@ describe('Emails', () => {
       };
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('sends email with multiple bcc recipients', async () => {
@@ -206,13 +220,17 @@ describe('Emails', () => {
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('sends email with multiple cc recipients', async () => {
@@ -238,13 +256,17 @@ describe('Emails', () => {
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('sends email with multiple replyTo emails', async () => {
@@ -270,13 +292,17 @@ describe('Emails', () => {
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('can send an email with headers', async () => {
@@ -304,13 +330,17 @@ describe('Emails', () => {
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws an error when an ErrorResponse is returned', async () => {
@@ -318,6 +348,7 @@ describe('Emails', () => {
         name: 'invalid_parameter',
         message:
           'Invalid `from` field. The email address needs to follow the `email@example.com` or `Name <email@example.com>` format',
+        statusCode: 422,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -339,14 +370,19 @@ describe('Emails', () => {
       const result = resend.emails.send(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-  {
-    "data": null,
-    "error": {
-      "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
-      "name": "invalid_parameter",
-    },
-  }
-  `);
+        {
+          "data": null,
+          "error": {
+            "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
+            "name": "invalid_parameter",
+            "statusCode": 422,
+          },
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns an error when fetch fails', async () => {
@@ -369,6 +405,7 @@ describe('Emails', () => {
           error: {
             message: 'Unable to fetch data. The request could not be resolved.',
             name: 'application_error',
+            statusCode: null,
           },
         }),
       );
@@ -397,6 +434,7 @@ describe('Emails', () => {
             message:
               'Internal server error. We are unable to process your request right now, please try again later.',
             name: 'application_error',
+            statusCode: 422,
           },
         }),
       );
@@ -425,13 +463,17 @@ describe('Emails', () => {
 
         const data = await resend.emails.send(payload);
         expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "template-email-123",
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "id": "template-email-123",
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
 
         // Verify the correct API payload was sent
         const lastCall = fetchMock.mock.calls[0];
@@ -463,8 +505,7 @@ describe('Emails', () => {
             variables: {
               name: 'John Doe',
               company: 'Acme Corp',
-              welcomeBonus: 100,
-              isPremium: true,
+              welcomeBonus: 100
             },
           },
           to: 'user@example.com',
@@ -472,13 +513,17 @@ describe('Emails', () => {
 
         const data = await resend.emails.send(payload);
         expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "template-vars-email-456",
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "id": "template-vars-email-456",
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
 
         // Verify the correct API payload was sent
         const lastCall = fetchMock.mock.calls[0];
@@ -490,7 +535,6 @@ describe('Emails', () => {
               name: 'John Doe',
               company: 'Acme Corp',
               welcomeBonus: 100,
-              isPremium: true,
             },
           },
           to: 'user@example.com',
@@ -524,13 +568,17 @@ describe('Emails', () => {
 
         const data = await resend.emails.send(payload);
         expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "template-with-overrides-789",
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "id": "template-with-overrides-789",
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
 
         // Verify the correct API payload was sent
         const lastCall = fetchMock.mock.calls[0];
@@ -552,6 +600,7 @@ describe('Emails', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Template not found',
+          statusCode: 404,
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -571,14 +620,19 @@ describe('Emails', () => {
 
         const result = await resend.emails.send(payload);
         expect(result).toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Template not found",
-    "name": "not_found",
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Template not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "authorization": "Bearer re_924b3rjh2387fbewf823",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
   });
@@ -589,6 +643,7 @@ describe('Emails', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Email not found',
+          statusCode: 404,
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -604,14 +659,19 @@ describe('Emails', () => {
         );
 
         await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Email not found",
-    "name": "not_found",
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Email not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -644,27 +704,31 @@ describe('Emails', () => {
         await expect(
           resend.emails.get('67d9bcdb-5a02-42d7-8da9-0d6feea18cff'),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "bcc": null,
-    "cc": null,
-    "created_at": "2023-04-07T23:13:52.669661+00:00",
-    "from": "bu@resend.com",
-    "html": "<p>hello hello</p>",
-    "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
-    "last_event": "delivered",
-    "object": "email",
-    "reply_to": null,
-    "scheduled_at": null,
-    "subject": "Test email",
-    "text": null,
-    "to": [
-      "zeno@resend.com",
-    ],
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "bcc": null,
+              "cc": null,
+              "created_at": "2023-04-07T23:13:52.669661+00:00",
+              "from": "bu@resend.com",
+              "html": "<p>hello hello</p>",
+              "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
+              "last_event": "delivered",
+              "object": "email",
+              "reply_to": null,
+              "scheduled_at": null,
+              "subject": "Test email",
+              "text": null,
+              "to": [
+                "zeno@resend.com",
+              ],
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
 
       it('returns emails with to and multiple cc', async () => {
@@ -695,30 +759,34 @@ describe('Emails', () => {
         await expect(
           resend.emails.get('67d9bcdb-5a02-42d7-8da9-0d6feea18cff'),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "bcc": null,
-    "cc": [
-      "zeno@resend.com",
-      "bu@resend.com",
-    ],
-    "created_at": "2023-04-07T23:13:52.669661+00:00",
-    "from": "bu@resend.com",
-    "html": "<p>hello hello</p>",
-    "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
-    "last_event": "delivered",
-    "object": "email",
-    "reply_to": null,
-    "scheduled_at": null,
-    "subject": "Test email",
-    "text": null,
-    "to": [
-      "zeno@resend.com",
-    ],
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "bcc": null,
+              "cc": [
+                "zeno@resend.com",
+                "bu@resend.com",
+              ],
+              "created_at": "2023-04-07T23:13:52.669661+00:00",
+              "from": "bu@resend.com",
+              "html": "<p>hello hello</p>",
+              "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
+              "last_event": "delivered",
+              "object": "email",
+              "reply_to": null,
+              "scheduled_at": null,
+              "subject": "Test email",
+              "text": null,
+              "to": [
+                "zeno@resend.com",
+              ],
+            },
+            "error": null,
+            "headers": {
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
   });
@@ -756,6 +824,10 @@ describe('Emails', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
           'https://api.resend.com/emails',
@@ -770,6 +842,10 @@ describe('Emails', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
           'https://api.resend.com/emails?limit=10',
@@ -782,6 +858,10 @@ describe('Emails', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
           'https://api.resend.com/emails?after=cursor123',
@@ -794,6 +874,10 @@ describe('Emails', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
           'https://api.resend.com/emails?before=cursor123',

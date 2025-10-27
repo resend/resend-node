@@ -1,2 +1,2 @@
-export * from './get-inbound-email.interface';
-export * from './list-inbound-emails.interface';
+export * from './get-receiving-email.interface';
+export * from './list-receiving-emails.interface';

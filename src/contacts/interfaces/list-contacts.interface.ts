@@ -1,6 +1,6 @@
 // list-contacts.interface.ts
 import type { PaginationOptions } from '../../common/interfaces';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Contact } from './contact';
 
 export type ListAudienceContactsOptions = {
@@ -17,12 +17,4 @@ export interface ListContactsResponseSuccess {
   has_more: boolean;
 }
 
-export type ListContactsResponse =
-  | {
-      data: ListContactsResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type ListContactsResponse = Response<ListContactsResponseSuccess>;

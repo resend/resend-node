@@ -40,13 +40,17 @@ describe('Topics', () => {
       await expect(
         resend.topics.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws error when missing name', async () => {
@@ -57,6 +61,7 @@ describe('Topics', () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing `name` field.',
+        statusCode: 422,
       };
 
       mockErrorResponse(response, {
@@ -70,14 +75,19 @@ describe('Topics', () => {
       const result = resend.topics.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Missing \`name\` field.",
-    "name": "missing_required_field",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Missing \`name\` field.",
+            "name": "missing_required_field",
+            "statusCode": 422,
+          },
+          "headers": {
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws error when missing defaultSubscription', async () => {
@@ -88,6 +98,7 @@ describe('Topics', () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing `defaultSubscription` field.',
+        statusCode: 422,
       };
 
       mockErrorResponse(response, {
@@ -101,14 +112,19 @@ describe('Topics', () => {
       const result = resend.topics.create(payload as CreateTopicOptions);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Missing \`defaultSubscription\` field.",
-    "name": "missing_required_field",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Missing \`defaultSubscription\` field.",
+            "name": "missing_required_field",
+            "statusCode": 422,
+          },
+          "headers": {
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -139,28 +155,32 @@ describe('Topics', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.topics.list()).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "created_at": "2023-04-07T23:13:52.669661+00:00",
-        "defaultSubscription": "opt_in",
-        "description": "Weekly newsletter updates",
-        "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-        "name": "Newsletter",
-      },
-      {
-        "created_at": "2023-04-07T23:13:20.417116+00:00",
-        "defaultSubscription": "opt_out",
-        "description": "Product announcements and updates",
-        "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
-        "name": "Product Updates",
-      },
-    ],
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "created_at": "2023-04-07T23:13:52.669661+00:00",
+                "defaultSubscription": "opt_in",
+                "description": "Weekly newsletter updates",
+                "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+                "name": "Newsletter",
+              },
+              {
+                "created_at": "2023-04-07T23:13:20.417116+00:00",
+                "defaultSubscription": "opt_out",
+                "description": "Product announcements and updates",
+                "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
+                "name": "Product Updates",
+              },
+            ],
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -170,6 +190,7 @@ describe('Topics', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Topic not found',
+          statusCode: 404,
         };
 
         mockErrorResponse(response, {
@@ -185,14 +206,19 @@ describe('Topics', () => {
         );
 
         await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Topic not found",
-    "name": "not_found",
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Topic not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -213,17 +239,21 @@ describe('Topics', () => {
       await expect(
         resend.topics.get('fd61172c-cafc-40f5-b049-b45947779a29'),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "created_at": "2024-01-16T18:12:26.514Z",
-    "defaultSubscription": "opt_in",
-    "description": "Weekly newsletter updates",
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "name": "Newsletter",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "created_at": "2024-01-16T18:12:26.514Z",
+            "defaultSubscription": "opt_in",
+            "description": "Weekly newsletter updates",
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "name": "Newsletter",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns error when missing id', async () => {
@@ -236,7 +266,9 @@ describe('Topics', () => {
   "error": {
     "message": "Missing \`id\` field.",
     "name": "missing_required_field",
+    "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -261,13 +293,17 @@ describe('Topics', () => {
       await expect(
         resend.topics.update(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns error when missing id', async () => {
@@ -284,7 +320,9 @@ describe('Topics', () => {
   "error": {
     "message": "Missing \`id\` field.",
     "name": "missing_required_field",
+    "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -305,15 +343,19 @@ describe('Topics', () => {
       await expect(
         resend.topics.remove('3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223'),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "deleted": true,
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-    "object": "topic",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "deleted": true,
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+            "object": "topic",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns error when missing id', async () => {
@@ -326,7 +368,9 @@ describe('Topics', () => {
   "error": {
     "message": "Missing \`id\` field.",
     "name": "missing_required_field",
+    "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });

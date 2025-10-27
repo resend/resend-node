@@ -54,6 +54,10 @@ describe('Templates', () => {
             "object": "template",
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
+          },
         }
       `);
     });
@@ -99,6 +103,10 @@ describe('Templates', () => {
             "object": "template",
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
+          },
         }
       `);
     });
@@ -136,6 +144,10 @@ describe('Templates', () => {
             "message": "Variable 'user_email' is used in the template but not defined in the variables list",
             "name": "validation_error",
           },
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
+          },
         }
       `);
     });
@@ -172,6 +184,10 @@ describe('Templates', () => {
             "object": "template",
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
+          },
         }
       `);
 
@@ -234,6 +250,10 @@ describe('Templates', () => {
             "object": "template",
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
+          },
         }
       `);
 
@@ -289,6 +309,10 @@ describe('Templates', () => {
             "object": "template",
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
+          },
         }
       `);
     });
@@ -313,6 +337,10 @@ describe('Templates', () => {
           "error": {
             "message": "Template not found",
             "name": "not_found",
+          },
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
           },
         }
       `);
@@ -342,6 +370,10 @@ describe('Templates', () => {
             "object": "template",
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
+          },
         }
       `);
     });
@@ -368,6 +400,10 @@ describe('Templates', () => {
           "error": {
             "message": "Template not found",
             "name": "not_found",
+          },
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
           },
         }
       `);
@@ -402,6 +438,10 @@ describe('Templates', () => {
             "object": "template",
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+            "content-type": "application/json",
+          },
         }
       `);
     });
@@ -451,6 +491,10 @@ describe('Templates', () => {
             "object": "template",
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+            "content-type": "application/json",
+          },
         }
       `);
     });
@@ -483,6 +527,10 @@ describe('Templates', () => {
             "message": "Template not found",
             "name": "not_found",
           },
+          "headers": {
+            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+            "content-type": "application/json",
+          },
         }
       `);
     });
@@ -511,6 +559,10 @@ describe('Templates', () => {
             "error": {
               "message": "Template not found",
               "name": "not_found",
+            },
+            "headers": {
+              "authorization": "Bearer re_test_api_key",
+              "content-type": "application/json",
             },
           }
         `);
@@ -584,6 +636,10 @@ describe('Templates', () => {
             ],
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
+          },
         }
       `);
     });
@@ -612,6 +668,10 @@ describe('Templates', () => {
             "object": "template",
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
+          },
         }
       `);
     });
@@ -637,6 +697,10 @@ describe('Templates', () => {
           "error": {
             "message": "Template not found",
             "name": "not_found",
+          },
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
           },
         }
       `);
@@ -698,6 +762,10 @@ describe('Templates', () => {
               "object": "template",
             },
             "error": null,
+            "headers": {
+              "authorization": "Bearer re_test_api_key",
+              "content-type": "application/json",
+            },
           }
         `);
       });
@@ -752,6 +820,10 @@ describe('Templates', () => {
               "object": "template",
             },
             "error": null,
+            "headers": {
+              "authorization": "Bearer re_test_api_key",
+              "content-type": "application/json",
+            },
           }
         `);
       });
@@ -818,6 +890,10 @@ describe('Templates', () => {
             "object": "list",
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
+          },
         }
       `);
 
@@ -876,6 +952,10 @@ describe('Templates', () => {
             "object": "list",
           },
           "error": null,
+          "headers": {
+            "authorization": "Bearer re_test_api_key",
+            "content-type": "application/json",
+          },
         }
       `);
 

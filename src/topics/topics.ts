@@ -30,7 +30,7 @@ export class Topics {
 
     const data = await this.resend.post<CreateTopicResponseSuccess>('/topics', {
       ...body,
-      defaultSubscription: defaultSubscription,
+      default_subscription: defaultSubscription,
     });
 
     return data;
@@ -46,8 +46,10 @@ export class Topics {
     if (!id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
@@ -63,8 +65,10 @@ export class Topics {
     if (!payload.id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
@@ -82,8 +86,10 @@ export class Topics {
     if (!id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };

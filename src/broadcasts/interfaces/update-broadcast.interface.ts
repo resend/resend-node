@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 
 export interface UpdateBroadcastResponseSuccess {
   id: string;
@@ -6,6 +6,10 @@ export interface UpdateBroadcastResponseSuccess {
 
 export type UpdateBroadcastOptions = {
   name?: string;
+  segmentId?: string;
+  /**
+   * @deprecated Use segmentId instead
+   */
   audienceId?: string;
   from?: string;
   html?: string;
@@ -17,12 +21,4 @@ export type UpdateBroadcastOptions = {
   topicId?: string | null;
 };
 
-export type UpdateBroadcastResponse =
-  | {
-      data: UpdateBroadcastResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type UpdateBroadcastResponse = Response<UpdateBroadcastResponseSuccess>;

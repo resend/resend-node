@@ -28,15 +28,16 @@ import type {
   UpdateContactResponse,
   UpdateContactResponseSuccess,
 } from './interfaces/update-contact.interface';
+import { ContactSegments } from './segments/contact-segments';
 import { ContactTopics } from './topics/contact-topics';
 
 export class Contacts {
   readonly topics: ContactTopics;
-  readonly audiences: ContactAudiences;
+  readonly segments: ContactSegments;
 
   constructor(private readonly resend: Resend) {
     this.topics = new ContactTopics(this.resend);
-    this.audiences = new ContactAudiences(this.resend);
+    this.segments = new ContactSegments(this.resend);
   }
 
   async create(
@@ -91,41 +92,40 @@ export class Contacts {
 
   async get(options: GetContactOptions): Promise<GetContactResponse> {
     if (typeof options === 'string') {
-      const data = await this.resend.get<GetContactResponseSuccess>(
-        `/contacts/${options}`,
-      );
-      return data;
+      return this.resend.get<GetContactResponseSuccess>(`/contacts/${options}`);
     }
 
     if (!options.id && !options.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
     }
 
     if (!options.audienceId) {
-      const data = await this.resend.get<GetContactResponseSuccess>(
+      return this.resend.get<GetContactResponseSuccess>(
         `/contacts/${options?.email ? options?.email : options?.id}`,
       );
-      return data;
     }
 
-    const data = await this.resend.get<GetContactResponseSuccess>(
+    return this.resend.get<GetContactResponseSuccess>(
       `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
     );
-    return data;
   }
 
   async update(options: UpdateContactOptions): Promise<UpdateContactResponse> {
     if (!options.id && !options.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
@@ -156,35 +156,33 @@ export class Contacts {
 
   async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
     if (typeof payload === 'string') {
-      const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+      return this.resend.delete<RemoveContactsResponseSuccess>(
         `/contacts/${payload}`,
       );
-      return data;
     }
 
     if (!payload.id && !payload.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
+          statusCode: null,
           name: 'missing_required_field',
         },
       };
     }
 
     if (!payload.audienceId) {
-      const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+      return this.resend.delete<RemoveContactsResponseSuccess>(
         `/contacts/${payload?.email ? payload?.email : payload?.id}`,
       );
-      return data;
     }
 
-    const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+    return this.resend.delete<RemoveContactsResponseSuccess>(
       `/audiences/${payload.audienceId}/contacts/${
         payload?.email ? payload?.email : payload?.id
       }`,
     );
-
-    return data;
   }
 }
