@@ -24,4 +24,4 @@ export interface GetReceivingEmailResponseSuccess {
   }>;
 }
 
-export type GetInboundEmailResponse = Response<GetReceivingEmailResponseSuccess>;
+export type GetReceivingEmailResponse = Response<GetReceivingEmailResponseSuccess>;
