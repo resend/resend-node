@@ -11,3 +11,4 @@ export { ErrorResponse } from './interfaces';
 export { Resend } from './resend';
 export * from './segments/interfaces';
 export * from './webhooks/interfaces';
+export * from './webhooks/interfaces';
