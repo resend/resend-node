@@ -7,7 +7,7 @@ import type {
   ListAttachmentsApiResponse,
   ListAttachmentsOptions,
   ListAttachmentsResponse,
-} from './interfaces';
+} from '../../attachments/interfaces';
 
 export class Attachments {
   constructor(private readonly resend: Resend) {}

@@ -2,14 +2,14 @@ import { buildPaginationQuery } from '../../common/utils/build-pagination-query'
 import type { Resend } from '../../resend';
 import { Attachments } from './attachments/attachments';
 import type {
-  GetInboundEmailResponse,
-  GetInboundEmailResponseSuccess,
-} from './interfaces/get-inbound-email.interface';
+  GetReceivingEmailResponse,
+  GetReceivingEmailResponseSuccess,
+} from './interfaces/get-receiving-email.interface';
 import type {
-  ListInboundEmailsOptions,
-  ListInboundEmailsResponse,
-  ListInboundEmailsResponseSuccess,
-} from './interfaces/list-inbound-emails.interface';
+  ListReceivingEmailsOptions,
+  ListReceivingEmailsResponse,
+  ListReceivingEmailsResponseSuccess,
+} from './interfaces/list-receiving-emails.interface';
 
 export class Receiving {
   readonly attachments: Attachments;
@@ -18,8 +18,8 @@ export class Receiving {
     this.attachments = new Attachments(resend);
   }
 
-  async get(id: string): Promise<GetInboundEmailResponse> {
-    const data = await this.resend.get<GetInboundEmailResponseSuccess>(
+  async get(id: string): Promise<GetReceivingEmailResponse> {
+    const data = await this.resend.get<GetReceivingEmailResponseSuccess>(
       `/emails/receiving/${id}`,
     );
 
@@ -27,14 +27,14 @@ export class Receiving {
   }
 
   async list(
-    options: ListInboundEmailsOptions = {},
-  ): Promise<ListInboundEmailsResponse> {
+    options: ListReceivingEmailsOptions = {},
+  ): Promise<ListReceivingEmailsResponse> {
     const queryString = buildPaginationQuery(options);
     const url = queryString
       ? `/emails/receiving?${queryString}`
       : '/emails/receiving';
 
-    const data = await this.resend.get<ListInboundEmailsResponseSuccess>(url);
+    const data = await this.resend.get<ListReceivingEmailsResponseSuccess>(url);
 
     return data;
   }

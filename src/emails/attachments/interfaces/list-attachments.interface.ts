@@ -1,6 +1,6 @@
 import type { PaginationOptions } from '../../../common/interfaces';
+import type { Attachment } from '../../../common/interfaces/attachment.interface';
 import type { ErrorResponse } from '../../../interfaces';
-import type { Attachment } from './attachment';
 
 export type ListAttachmentsOptions = PaginationOptions & {
   emailId: string;
