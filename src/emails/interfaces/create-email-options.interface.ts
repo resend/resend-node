@@ -28,7 +28,7 @@ interface EmailRenderOptions {
 interface EmailTemplateOptions {
   template: {
     id: string;
-    variables?: Record<string, string | number | boolean>;
+    variables?: Record<string, string | number>;
   };
 }
 
