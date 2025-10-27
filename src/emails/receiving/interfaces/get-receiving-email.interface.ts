@@ -1,6 +1,6 @@
 import type { ErrorResponse } from '../../../interfaces';
 
-export interface GetInboundEmailResponseSuccess {
+export interface GetReceivingEmailResponseSuccess {
   object: 'inbound';
   id: string;
   to: string[];
@@ -24,9 +24,9 @@ export interface GetInboundEmailResponseSuccess {
   }>;
 }
 
-export type GetInboundEmailResponse =
+export type GetReceivingEmailResponse =
   | {
-      data: GetInboundEmailResponseSuccess;
+      data: GetReceivingEmailResponseSuccess;
       error: null;
     }
   | {
