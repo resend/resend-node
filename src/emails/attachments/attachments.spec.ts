@@ -39,15 +39,19 @@ describe('Sending', () => {
         });
 
         expect(result).toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Attachment not found",
-    "name": "not_found",
-    "statusCode": 404,
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Attachment not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -85,6 +89,10 @@ describe('Sending', () => {
         expect(result).toEqual({
           data: apiResponse,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
       });
 
@@ -121,6 +129,10 @@ describe('Sending', () => {
         expect(result).toEqual({
           data: apiResponse,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
       });
 
@@ -155,6 +167,10 @@ describe('Sending', () => {
         expect(result).toEqual({
           data: apiResponse,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
       });
     });
@@ -212,7 +228,14 @@ describe('Sending', () => {
           emailId: '61cda979-919d-4b9d-9638-c148b93ff410',
         });
 
-        expect(result).toEqual({ data: null, error: response });
+        expect(result).toEqual({
+          data: null,
+          error: response,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
+        });
       });
     });
 
@@ -261,7 +284,14 @@ describe('Sending', () => {
           ],
         };
 
-        expect(result).toEqual({ data: expectedResponse, error: null });
+        expect(result).toEqual({
+          data: expectedResponse,
+          error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
+        });
       });
 
       it('returns empty array when no attachments', async () => {
@@ -287,7 +317,14 @@ describe('Sending', () => {
           emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
         });
 
-        expect(result).toEqual({ data: emptyResponse, error: null });
+        expect(result).toEqual({
+          data: emptyResponse,
+          error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
+        });
       });
     });
 
@@ -331,6 +368,10 @@ describe('Sending', () => {
         expect(result).toEqual({
           data: expectedResponse,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
           'https://api.resend.com/emails/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments',
@@ -377,6 +418,10 @@ describe('Sending', () => {
         expect(result).toEqual({
           data: expectedResponse,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
           'https://api.resend.com/emails/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments?limit=10',
@@ -421,6 +466,10 @@ describe('Sending', () => {
         expect(result).toEqual({
           data: expectedResponse,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
           'https://api.resend.com/emails/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments?after=cursor123',
@@ -465,6 +514,10 @@ describe('Sending', () => {
         expect(result).toEqual({
           data: expectedResponse,
           error: null,
+          headers: {
+            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
+          },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
           'https://api.resend.com/emails/67d9bcdb-5a02-42d7-8da9-0d6feea18cff/attachments?before=cursor123',

@@ -40,13 +40,17 @@ describe('ContactTopics', () => {
       await expect(
         resend.contacts.topics.update(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('updates contact topics with opt_out', async () => {
@@ -71,13 +75,17 @@ describe('ContactTopics', () => {
       await expect(
         resend.contacts.topics.update(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('updates contact topics with both opt_in and opt_out', async () => {
@@ -106,13 +114,17 @@ describe('ContactTopics', () => {
       await expect(
         resend.contacts.topics.update(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns error when missing both id and email', async () => {
@@ -138,6 +150,7 @@ describe('ContactTopics', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -164,13 +177,17 @@ describe('ContactTopics', () => {
       await expect(
         resend.contacts.topics.update(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -206,28 +223,32 @@ describe('ContactTopics', () => {
       await expect(
         resend.contacts.topics.list(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "description": "This is a test topic",
-        "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
-        "name": "Test Topic",
-        "subscription": "opt_in",
-      },
-      {
-        "description": null,
-        "id": "another-topic-id",
-        "name": "Another Topic",
-        "subscription": "opt_out",
-      },
-    ],
-    "has_more": false,
-    "object": "list",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "description": "This is a test topic",
+                "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
+                "name": "Test Topic",
+                "subscription": "opt_in",
+              },
+              {
+                "description": null,
+                "id": "another-topic-id",
+                "name": "Another Topic",
+                "subscription": "opt_out",
+              },
+            ],
+            "has_more": false,
+            "object": "list",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('gets contact topics by ID', async () => {
@@ -255,22 +276,26 @@ describe('ContactTopics', () => {
       await expect(
         resend.contacts.topics.list(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "description": "This is a test topic",
-        "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
-        "name": "Test Topic",
-        "subscription": "opt_in",
-      },
-    ],
-    "has_more": false,
-    "object": "list",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "description": "This is a test topic",
+                "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
+                "name": "Test Topic",
+                "subscription": "opt_in",
+              },
+            ],
+            "has_more": false,
+            "object": "list",
+          },
+          "error": null,
+          "headers": {
+            "authorization": "Bearer re_924b3rjh2387fbewf823",
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns error when missing both id and email', async () => {
@@ -289,6 +314,7 @@ describe('ContactTopics', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });

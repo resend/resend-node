@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../../interfaces';
+import type { Response } from '../../../interfaces';
 import type { ContactSegmentsBaseOptions } from './contact-segments.interface';
 
 export type RemoveContactSegmentOptions = ContactSegmentsBaseOptions & {
@@ -11,11 +11,4 @@ export interface RemoveContactSegmentResponseSuccess {
 }
 
 export type RemoveContactSegmentResponse =
-  | {
-      data: RemoveContactSegmentResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+  Response<RemoveContactSegmentResponseSuccess>;

@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../../interfaces';
+import type { Response } from '../../../interfaces';
 import type { ContactSegmentsBaseOptions } from './contact-segments.interface';
 
 export type AddContactSegmentOptions = ContactSegmentsBaseOptions & {
@@ -10,11 +10,4 @@ export interface AddContactSegmentResponseSuccess {
 }
 
 export type AddContactSegmentResponse =
-  | {
-      data: AddContactSegmentResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+  Response<AddContactSegmentResponseSuccess>;

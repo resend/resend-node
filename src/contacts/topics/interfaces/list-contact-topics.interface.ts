@@ -3,7 +3,7 @@ import type {
   PaginatedData,
   PaginationOptions,
 } from '../../../common/interfaces/pagination-options.interface';
-import type { ErrorResponse } from '../../../interfaces';
+import type { Response } from '../../../interfaces';
 
 interface ListContactTopicsBaseOptions {
   id?: string;
@@ -25,11 +25,4 @@ export interface ContactTopic {
 export type ListContactTopicsResponseSuccess = PaginatedData<ContactTopic[]>;
 
 export type ListContactTopicsResponse =
-  | {
-      data: ListContactTopicsResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+  Response<ListContactTopicsResponseSuccess>;

@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { WebhookEvent } from './webhook-event.interface';
 
 export interface GetWebhookResponseSuccess {
@@ -11,12 +11,4 @@ export interface GetWebhookResponseSuccess {
   signing_secret: string;
 }
 
-export type GetWebhookResponse =
-  | {
-      data: GetWebhookResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type GetWebhookResponse = Response<GetWebhookResponseSuccess>;

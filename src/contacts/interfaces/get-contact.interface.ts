@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Contact, SelectingField } from './contact';
 
 export type GetContactOptions =
@@ -15,12 +15,4 @@ export interface GetContactResponseSuccess
   object: 'contact';
 }
 
-export type GetContactResponse =
-  | {
-      data: GetContactResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type GetContactResponse = Response<GetContactResponseSuccess>;
