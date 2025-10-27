@@ -2,8 +2,8 @@ import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
 import type {
-  GetInboundEmailResponseSuccess,
-  ListInboundEmailsResponseSuccess,
+  GetReceivingEmailResponseSuccess,
+  ListReceivingEmailsResponseSuccess,
 } from './interfaces';
 
 const fetchMocker = createFetchMock(vi);
@@ -48,7 +48,7 @@ describe('Receiving', () => {
 
     describe('when inbound email found', () => {
       it('returns inbound email', async () => {
-        const apiResponse: GetInboundEmailResponseSuccess = {
+        const apiResponse: GetReceivingEmailResponseSuccess = {
           object: 'inbound' as const,
           id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           to: ['received@example.com'],
@@ -125,7 +125,7 @@ describe('Receiving', () => {
       });
 
       it('returns inbound email with no attachments', async () => {
-        const apiResponse: GetInboundEmailResponseSuccess = {
+        const apiResponse: GetReceivingEmailResponseSuccess = {
           object: 'inbound' as const,
           id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           to: ['received@example.com'],
@@ -213,7 +213,7 @@ describe('Receiving', () => {
 
     describe('when inbound emails found', () => {
       it('returns list of inbound emails with transformed fields', async () => {
-        const apiResponse: ListInboundEmailsResponseSuccess = {
+        const apiResponse: ListReceivingEmailsResponseSuccess = {
           object: 'list' as const,
           has_more: true,
           data: [

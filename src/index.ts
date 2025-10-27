@@ -1,14 +1,13 @@
 export * from './api-keys/interfaces';
-export * from './attachments/interfaces';
 export * from './batch/interfaces';
 export * from './broadcasts/interfaces';
 export * from './common/interfaces';
 export * from './contacts/interfaces';
 export * from './domains/interfaces';
+export * from './emails/attachments/interfaces';
 export * from './emails/interfaces';
 export * from './emails/receiving/interfaces';
 export { ErrorResponse } from './interfaces';
 export { Resend } from './resend';
 export * from './segments/interfaces';
-export * from './webhooks/interfaces';
 export * from './webhooks/interfaces';

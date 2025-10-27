@@ -1,5 +1,5 @@
-import type { ErrorResponse } from '../../interfaces';
-import type { Attachment } from './attachment';
+import type { Attachment } from '../../../common/interfaces/attachment.interface';
+import type { ErrorResponse } from '../../../interfaces';
 
 export interface GetAttachmentOptions {
   emailId: string;
