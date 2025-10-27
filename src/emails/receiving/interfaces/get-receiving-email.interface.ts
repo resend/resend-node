@@ -1,7 +1,7 @@
 import type { ErrorResponse } from '../../../interfaces';
 
 export interface GetReceivingEmailResponseSuccess {
-  object: 'inbound';
+  object: 'email';
   id: string;
   to: string[];
   from: string;

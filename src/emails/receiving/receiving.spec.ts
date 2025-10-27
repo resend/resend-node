@@ -49,7 +49,7 @@ describe('Receiving', () => {
     describe('when inbound email found', () => {
       it('returns inbound email', async () => {
         const apiResponse: GetReceivingEmailResponseSuccess = {
-          object: 'inbound' as const,
+          object: 'email' as const,
           id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           to: ['received@example.com'],
           from: 'sender@example.com',
@@ -109,7 +109,7 @@ describe('Receiving', () => {
     },
     "html": "<p>hello world</p>",
     "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
-    "object": "inbound",
+    "object": "email",
     "reply_to": [
       "reply@example.com",
     ],
@@ -126,7 +126,7 @@ describe('Receiving', () => {
 
       it('returns inbound email with no attachments', async () => {
         const apiResponse: GetReceivingEmailResponseSuccess = {
-          object: 'inbound' as const,
+          object: 'email' as const,
           id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
           to: ['received@example.com'],
           from: 'sender@example.com',
@@ -164,7 +164,7 @@ describe('Receiving', () => {
     "headers": {},
     "html": null,
     "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
-    "object": "inbound",
+    "object": "email",
     "reply_to": null,
     "subject": "Test inbound email",
     "text": "hello world",
