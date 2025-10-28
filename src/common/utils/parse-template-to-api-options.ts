@@ -1,17 +1,10 @@
 import type { CreateTemplateOptions } from '../../templates/interfaces/create-template-options.interface';
-import type { TemplateVariableListFallbackType } from '../../templates/interfaces/template';
 import type { UpdateTemplateOptions } from '../../templates/interfaces/update-template.interface';
 
 interface TemplateVariableApiOptions {
   key: string;
-  type: 'string' | 'number' | 'boolean' | 'object' | 'list';
-  fallback_value?:
-    | string
-    | number
-    | boolean
-    | Record<string, unknown>
-    | TemplateVariableListFallbackType
-    | null;
+  type: 'string' | 'number';
+  fallback_value?: string | number | null;
 }
 
 interface TemplateApiOptions {

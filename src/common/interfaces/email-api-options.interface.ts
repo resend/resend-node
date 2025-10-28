@@ -25,6 +25,6 @@ export interface EmailApiOptions {
   attachments?: EmailApiAttachment[];
   template?: {
     id: string;
-    variables?: Record<string, string | number | boolean>;
+    variables?: Record<string, string | number>;
   };
 }
