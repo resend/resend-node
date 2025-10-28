@@ -6,16 +6,12 @@ export interface CreateDomainOptions {
   name: string;
   region?: DomainRegion;
   customReturnPath?: string;
-  capability?: 'send' | 'receive' | 'send-and-receive';
 }
 
 export interface CreateDomainRequestOptions extends PostOptions {}
 
 export interface CreateDomainResponseSuccess
-  extends Pick<
-    Domain,
-    'name' | 'id' | 'status' | 'created_at' | 'region' | 'capability'
-  > {
+  extends Pick<Domain, 'name' | 'id' | 'status' | 'created_at' | 'region'> {
   records: DomainRecords[];
 }
 

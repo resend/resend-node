@@ -66,5 +66,4 @@ export interface Domain {
   status: DomainStatus;
   created_at: string;
   region: DomainRegion;
-  capability: 'send' | 'receive' | 'send-and-receive';
 }
