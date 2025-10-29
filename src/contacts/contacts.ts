@@ -51,6 +51,7 @@ export class Contacts {
           email: payload.email,
           first_name: payload.firstName,
           last_name: payload.lastName,
+          properties: payload.properties,
         },
         options,
       );
@@ -137,6 +138,7 @@ export class Contacts {
           unsubscribed: options.unsubscribed,
           first_name: options.firstName,
           last_name: options.lastName,
+          properties: options.properties,
         },
       );
       return data;

@@ -31,7 +31,10 @@ describe('Contacts', () => {
     it('creates a contact', async () => {
       const payload: CreateContactOptions = {
         email: 'team@resend.com',
-        audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+        properties: {
+          country: 'Canada',
+          edition: 1,
+        },
       };
       const response: CreateContactResponseSuccess = {
         object: 'contact',
@@ -368,6 +371,7 @@ describe('Contacts', () => {
         last_name: '',
         created_at: '2024-01-16T18:12:26.514Z',
         unsubscribed: false,
+        properties: {},
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -393,6 +397,7 @@ describe('Contacts', () => {
             "id": "fd61172c-cafc-40f5-b049-b45947779a29",
             "last_name": "",
             "object": "contact",
+            "properties": {},
             "unsubscribed": false,
           },
           "error": null,
@@ -412,6 +417,7 @@ describe('Contacts', () => {
         last_name: '',
         created_at: '2024-01-16T18:12:26.514Z',
         unsubscribed: false,
+        properties: {},
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -437,6 +443,7 @@ describe('Contacts', () => {
             "id": "fd61172c-cafc-40f5-b049-b45947779a29",
             "last_name": "",
             "object": "contact",
+            "properties": {},
             "unsubscribed": false,
           },
           "error": null,
@@ -457,6 +464,16 @@ describe('Contacts', () => {
           last_name: '',
           created_at: '2024-01-16T18:12:26.514Z',
           unsubscribed: false,
+          properties: {
+            country: {
+              type: 'string',
+              value: 'Canada',
+            },
+            edition: {
+              type: 'number',
+              value: 1,
+            },
+          },
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -481,6 +498,16 @@ describe('Contacts', () => {
               "id": "fd61172c-cafc-40f5-b049-b45947779a29",
               "last_name": "",
               "object": "contact",
+              "properties": {
+                "country": {
+                  "type": "string",
+                  "value": "Canada",
+                },
+                "edition": {
+                  "type": "number",
+                  "value": 1,
+                },
+              },
               "unsubscribed": false,
             },
             "error": null,
@@ -500,6 +527,16 @@ describe('Contacts', () => {
           last_name: '',
           created_at: '2024-01-16T18:12:26.514Z',
           unsubscribed: false,
+          properties: {
+            country: {
+              type: 'string',
+              value: 'Canada',
+            },
+            edition: {
+              type: 'number',
+              value: 1,
+            },
+          },
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -524,6 +561,16 @@ describe('Contacts', () => {
               "id": "fd61172c-cafc-40f5-b049-b45947779a29",
               "last_name": "",
               "object": "contact",
+              "properties": {
+                "country": {
+                  "type": "string",
+                  "value": "Canada",
+                },
+                "edition": {
+                  "type": "number",
+                  "value": 1,
+                },
+              },
               "unsubscribed": false,
             },
             "error": null,
@@ -541,6 +588,16 @@ describe('Contacts', () => {
           first_name: '',
           last_name: '',
           created_at: '2024-01-16T18:12:26.514Z',
+          properties: {
+            country: {
+              type: 'string',
+              value: 'Canada',
+            },
+            edition: {
+              type: 'number',
+              value: 1,
+            },
+          },
           unsubscribed: false,
         };
 
@@ -563,6 +620,16 @@ describe('Contacts', () => {
               "id": "fd61172c-cafc-40f5-b049-b45947779a29",
               "last_name": "",
               "object": "contact",
+              "properties": {
+                "country": {
+                  "type": "string",
+                  "value": "Canada",
+                },
+                "edition": {
+                  "type": "number",
+                  "value": 1,
+                },
+              },
               "unsubscribed": false,
             },
             "error": null,
@@ -589,6 +656,16 @@ describe('Contacts', () => {
           first_name: '',
           last_name: '',
           created_at: '2024-01-16T18:12:26.514Z',
+          properties: {
+            country: {
+              type: 'string',
+              value: 'Canada',
+            },
+            edition: {
+              type: 'number',
+              value: 1,
+            },
+          },
           unsubscribed: false,
         };
 
@@ -611,6 +688,16 @@ describe('Contacts', () => {
               "id": "fd61172c-cafc-40f5-b049-b45947779a29",
               "last_name": "",
               "object": "contact",
+              "properties": {
+                "country": {
+                  "type": "string",
+                  "value": "Canada",
+                },
+                "edition": {
+                  "type": "number",
+                  "value": 1,
+                },
+              },
               "unsubscribed": false,
             },
             "error": null,
@@ -635,8 +722,11 @@ describe('Contacts', () => {
     it('updates a contact', async () => {
       const payload: UpdateContactOptions = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
-        audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
         firstName: 'Bu',
+        properties: {
+          country: 'Canada',
+          edition: 1,
+        },
       };
       const response = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
