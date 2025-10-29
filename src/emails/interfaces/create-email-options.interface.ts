@@ -32,7 +32,17 @@ interface EmailTemplateOptions {
   };
 }
 
+/**
+  * These are testing email addresses, they do not actually send an email to anyone.
+  *
+  * @link https://resend.com/docs/dashboard/emails/send-test-emails 
+  */
 type FromTestingAddress = 'onboarding@resend.dev';
+/**
+  * These are testing email addresses, they do not actually send an email to anyone.
+  *
+  * @link https://resend.com/docs/dashboard/emails/send-test-emails 
+  */
 type ToTestingAddress =
   | 'delivered@resend.dev'
   | 'bounced@resend.dev'
@@ -97,6 +107,13 @@ interface CreateEmailBaseOptions {
    * Recipient email address. For multiple addresses, send as an array of strings. Max 50.
    *
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
+   *
+   * Can also be one of the following testing email addresses
+   * - `delivered@resend.dev`
+   * - `bounced@resend.dev`
+   * - `complained@resend.dev`
+   *
+   * @link https://resend.com/docs/dashboard/emails/send-test-emails 
    */
   to: ToTestingAddress | (string & {}) | (ToTestingAddress | (string & {}))[];
   /**
