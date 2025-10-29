@@ -47,7 +47,6 @@ describe('Batch', () => {
         },
         {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         },
       );
@@ -70,7 +69,6 @@ describe('Batch', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -88,7 +86,6 @@ describe('Batch', () => {
         },
         {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         },
       );
@@ -126,7 +123,6 @@ describe('Batch', () => {
         },
         {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         },
       );
@@ -194,7 +190,6 @@ describe('Batch', () => {
         },
         {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         },
       );
@@ -217,7 +212,6 @@ describe('Batch', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -235,7 +229,6 @@ describe('Batch', () => {
         },
         {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         },
       );
@@ -271,7 +264,6 @@ describe('Batch', () => {
         },
         {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         },
       );
@@ -305,7 +297,6 @@ describe('Batch', () => {
         202,
         {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         },
       );
@@ -342,7 +333,6 @@ describe('Batch', () => {
         },
         {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         },
       );
@@ -408,7 +398,6 @@ describe('Batch', () => {
         },
         {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         },
       );
@@ -428,7 +417,6 @@ describe('Batch', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -516,7 +504,6 @@ describe('Batch', () => {
         },
         {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         },
       );
@@ -539,7 +526,6 @@ describe('Batch', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -626,7 +612,6 @@ describe('Batch', () => {
         },
         {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         },
       );
@@ -643,7 +628,6 @@ describe('Batch', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }

@@ -30,7 +30,6 @@ describe('Audiences', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -46,7 +45,6 @@ describe('Audiences', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -64,7 +62,6 @@ describe('Audiences', () => {
         status: 422,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -80,7 +77,6 @@ describe('Audiences', () => {
             "name": "missing_required_field",
           },
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -110,7 +106,6 @@ describe('Audiences', () => {
       it('lists audiences', async () => {
         mockSuccessResponse(response, {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -121,7 +116,6 @@ describe('Audiences', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -140,7 +134,6 @@ describe('Audiences', () => {
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -150,7 +143,6 @@ describe('Audiences', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -167,7 +159,6 @@ describe('Audiences', () => {
       it('passes after param and returns a response', async () => {
         mockSuccessResponse(response, {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -180,7 +171,6 @@ describe('Audiences', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -197,7 +187,6 @@ describe('Audiences', () => {
       it('passes before param and returns a response', async () => {
         mockSuccessResponse(response, {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -210,7 +199,6 @@ describe('Audiences', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -238,7 +226,6 @@ describe('Audiences', () => {
           status: 404,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -254,7 +241,6 @@ describe('Audiences', () => {
               "name": "not_found",
             },
             "headers": {
-              "authorization": "Bearer re_924b3rjh2387fbewf823",
               "content-type": "application/json",
             },
           }
@@ -274,7 +260,6 @@ describe('Audiences', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -292,7 +277,6 @@ describe('Audiences', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -312,7 +296,6 @@ describe('Audiences', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -327,7 +310,6 @@ describe('Audiences', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }

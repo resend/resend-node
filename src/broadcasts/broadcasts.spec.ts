@@ -32,7 +32,6 @@ describe('Broadcasts', () => {
         status: 422,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -46,7 +45,6 @@ describe('Broadcasts', () => {
             "statusCode": 422,
           },
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -61,7 +59,6 @@ describe('Broadcasts', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -80,7 +77,6 @@ describe('Broadcasts', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -96,7 +92,6 @@ describe('Broadcasts', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -114,7 +109,6 @@ describe('Broadcasts', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -130,7 +124,6 @@ describe('Broadcasts', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -150,7 +143,6 @@ describe('Broadcasts', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -169,7 +161,6 @@ describe('Broadcasts', () => {
         status: 422,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -192,7 +183,6 @@ describe('Broadcasts', () => {
             "statusCode": 422,
           },
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -230,7 +220,6 @@ describe('Broadcasts', () => {
       fetchMock.mockOnce('local_rate_limited', {
         status: 422,
         headers: {
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -266,7 +255,6 @@ describe('Broadcasts', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -279,7 +267,6 @@ describe('Broadcasts', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -319,7 +306,6 @@ describe('Broadcasts', () => {
       it('lists broadcasts', async () => {
         mockSuccessResponse(response, {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -330,7 +316,6 @@ describe('Broadcasts', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -349,7 +334,6 @@ describe('Broadcasts', () => {
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -359,7 +343,6 @@ describe('Broadcasts', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -376,7 +359,6 @@ describe('Broadcasts', () => {
       it('passes after param and returns a response', async () => {
         mockSuccessResponse(response, {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -389,7 +371,6 @@ describe('Broadcasts', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -406,7 +387,6 @@ describe('Broadcasts', () => {
       it('passes before param and returns a response', async () => {
         mockSuccessResponse(response, {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -419,7 +399,6 @@ describe('Broadcasts', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -448,7 +427,6 @@ describe('Broadcasts', () => {
           status: 404,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -467,7 +445,6 @@ describe('Broadcasts', () => {
               "statusCode": 404,
             },
             "headers": {
-              "authorization": "Bearer re_924b3rjh2387fbewf823",
               "content-type": "application/json",
             },
           }
@@ -499,7 +476,6 @@ describe('Broadcasts', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -529,7 +505,6 @@ describe('Broadcasts', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -549,7 +524,6 @@ describe('Broadcasts', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -566,7 +540,6 @@ describe('Broadcasts', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -582,7 +555,6 @@ describe('Broadcasts', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -597,7 +569,6 @@ describe('Broadcasts', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }

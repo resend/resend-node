@@ -40,9 +40,7 @@ describe('Templates', () => {
         id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
       await expect(
@@ -55,7 +53,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -89,9 +86,7 @@ describe('Templates', () => {
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
       await expect(
@@ -104,7 +99,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -129,9 +123,7 @@ describe('Templates', () => {
           "Variable 'user_email' is used in the template but not defined in the variables list",
       };
 
-      mockErrorResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockErrorResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
 
@@ -145,7 +137,6 @@ describe('Templates', () => {
             "name": "validation_error",
           },
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -170,9 +161,7 @@ describe('Templates', () => {
         id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
       await expect(
@@ -185,7 +174,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -236,9 +224,7 @@ describe('Templates', () => {
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
       await expect(
@@ -251,7 +237,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -295,9 +280,7 @@ describe('Templates', () => {
         deleted: true,
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
 
@@ -310,7 +293,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -326,7 +308,6 @@ describe('Templates', () => {
 
       mockErrorResponse(response, {
         status: 404,
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
@@ -339,7 +320,6 @@ describe('Templates', () => {
             "name": "not_found",
           },
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -355,9 +335,7 @@ describe('Templates', () => {
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
 
@@ -371,7 +349,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -387,7 +364,6 @@ describe('Templates', () => {
 
       mockErrorResponse(response, {
         status: 404,
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
       });
 
       const resend = new Resend(TEST_API_KEY);
@@ -402,7 +378,6 @@ describe('Templates', () => {
             "name": "not_found",
           },
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -421,11 +396,7 @@ describe('Templates', () => {
         id,
       };
 
-      mockSuccessResponse(response, {
-        headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-        },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -439,7 +410,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -474,11 +444,7 @@ describe('Templates', () => {
         id,
       };
 
-      mockSuccessResponse(response, {
-        headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-        },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -492,7 +458,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -512,7 +477,6 @@ describe('Templates', () => {
       mockErrorResponse(response, {
         status: 404,
         headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -528,7 +492,6 @@ describe('Templates', () => {
             "name": "not_found",
           },
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -546,7 +509,6 @@ describe('Templates', () => {
 
         mockErrorResponse(response, {
           status: 404,
-          headers: { Authorization: `Bearer ${TEST_API_KEY}` },
         });
 
         const resend = new Resend(TEST_API_KEY);
@@ -561,7 +523,6 @@ describe('Templates', () => {
               "name": "not_found",
             },
             "headers": {
-              "authorization": "Bearer re_test_api_key",
               "content-type": "application/json",
             },
           }
@@ -597,9 +558,7 @@ describe('Templates', () => {
         ],
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
 
@@ -637,7 +596,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -653,9 +611,7 @@ describe('Templates', () => {
         id,
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
 
@@ -669,7 +625,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -683,9 +638,7 @@ describe('Templates', () => {
         message: 'Template not found',
       };
 
-      mockErrorResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockErrorResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
 
@@ -699,7 +652,6 @@ describe('Templates', () => {
             "name": "not_found",
           },
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -727,7 +679,6 @@ describe('Templates', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
-              Authorization: `Bearer ${TEST_API_KEY}`,
             },
           },
         );
@@ -741,7 +692,6 @@ describe('Templates', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
-              Authorization: `Bearer ${TEST_API_KEY}`,
             },
           },
         );
@@ -763,7 +713,6 @@ describe('Templates', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_test_api_key",
               "content-type": "application/json",
             },
           }
@@ -791,7 +740,6 @@ describe('Templates', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
-              Authorization: `Bearer ${TEST_API_KEY}`,
             },
           },
         );
@@ -804,7 +752,6 @@ describe('Templates', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
-              Authorization: `Bearer ${TEST_API_KEY}`,
             },
           },
         );
@@ -821,7 +768,6 @@ describe('Templates', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_test_api_key",
               "content-type": "application/json",
             },
           }
@@ -857,9 +803,7 @@ describe('Templates', () => {
         ],
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
 
@@ -891,7 +835,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -923,9 +866,7 @@ describe('Templates', () => {
         ],
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
 
@@ -953,7 +894,6 @@ describe('Templates', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_test_api_key",
             "content-type": "application/json",
           },
         }
@@ -975,9 +915,7 @@ describe('Templates', () => {
         data: [],
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: `Bearer ${TEST_API_KEY}` },
-      });
+      mockSuccessResponse(response);
 
       const resend = new Resend(TEST_API_KEY);
 

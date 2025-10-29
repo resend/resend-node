@@ -33,7 +33,6 @@ describe('Topics', () => {
       };
 
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -46,7 +45,6 @@ describe('Topics', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -66,7 +64,6 @@ describe('Topics', () => {
 
       mockErrorResponse(response, {
         headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -83,7 +80,6 @@ describe('Topics', () => {
             "statusCode": 422,
           },
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -103,7 +99,6 @@ describe('Topics', () => {
 
       mockErrorResponse(response, {
         headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -120,7 +115,6 @@ describe('Topics', () => {
             "statusCode": 422,
           },
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -149,7 +143,6 @@ describe('Topics', () => {
         ],
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -176,7 +169,6 @@ describe('Topics', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -195,7 +187,6 @@ describe('Topics', () => {
 
         mockErrorResponse(response, {
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -214,7 +205,6 @@ describe('Topics', () => {
               "statusCode": 404,
             },
             "headers": {
-              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
@@ -232,7 +222,6 @@ describe('Topics', () => {
       };
 
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -249,7 +238,6 @@ describe('Topics', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -285,7 +273,6 @@ describe('Topics', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -299,7 +286,6 @@ describe('Topics', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -336,7 +322,6 @@ describe('Topics', () => {
         deleted: true,
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -351,7 +336,6 @@ describe('Topics', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
