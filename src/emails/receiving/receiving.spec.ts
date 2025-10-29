@@ -26,7 +26,6 @@ describe('Receiving', () => {
           status: 404,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -42,7 +41,6 @@ describe('Receiving', () => {
               "name": "not_found",
             },
             "headers": {
-              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
@@ -82,7 +80,6 @@ describe('Receiving', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -125,7 +122,6 @@ describe('Receiving', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
@@ -153,7 +149,6 @@ describe('Receiving', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -182,7 +177,6 @@ describe('Receiving', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
@@ -204,7 +198,6 @@ describe('Receiving', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -219,7 +212,6 @@ describe('Receiving', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
@@ -270,7 +262,6 @@ describe('Receiving', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -326,7 +317,6 @@ describe('Receiving', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
@@ -356,7 +346,6 @@ describe('Receiving', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -378,7 +367,6 @@ describe('Receiving', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -400,7 +388,6 @@ describe('Receiving', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 

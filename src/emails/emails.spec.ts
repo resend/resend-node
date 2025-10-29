@@ -30,7 +30,6 @@ describe('Emails', () => {
         status: 422,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -45,7 +44,6 @@ describe('Emails', () => {
             "statusCode": 422,
           },
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -61,7 +59,6 @@ describe('Emails', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -104,7 +101,6 @@ describe('Emails', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -137,7 +133,6 @@ describe('Emails', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
         },
       });
 
@@ -156,7 +151,6 @@ describe('Emails', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
             "content-type": "application/json",
           },
         }
@@ -172,7 +166,6 @@ describe('Emails', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -190,7 +183,6 @@ describe('Emails', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -206,7 +198,6 @@ describe('Emails', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -226,7 +217,6 @@ describe('Emails', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -242,7 +232,6 @@ describe('Emails', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -262,7 +251,6 @@ describe('Emails', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -278,7 +266,6 @@ describe('Emails', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -298,7 +285,6 @@ describe('Emails', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -314,7 +300,6 @@ describe('Emails', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -336,7 +321,6 @@ describe('Emails', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -355,7 +339,6 @@ describe('Emails', () => {
         status: 422,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -378,7 +361,6 @@ describe('Emails', () => {
             "statusCode": 422,
           },
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -415,9 +397,7 @@ describe('Emails', () => {
     it('returns an error when api responds with text payload', async () => {
       fetchMock.mockOnce('local_rate_limited', {
         status: 422,
-        headers: {
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+        headers: {},
       });
 
       const result = await resend.emails.send({
@@ -450,7 +430,6 @@ describe('Emails', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -469,7 +448,6 @@ describe('Emails', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_924b3rjh2387fbewf823",
               "content-type": "application/json",
             },
           }
@@ -495,7 +473,6 @@ describe('Emails', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -520,7 +497,6 @@ describe('Emails', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_924b3rjh2387fbewf823",
               "content-type": "application/json",
             },
           }
@@ -552,7 +528,6 @@ describe('Emails', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -576,7 +551,6 @@ describe('Emails', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_924b3rjh2387fbewf823",
               "content-type": "application/json",
             },
           }
@@ -609,7 +583,6 @@ describe('Emails', () => {
           status: 404,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -630,7 +603,6 @@ describe('Emails', () => {
               "statusCode": 404,
             },
             "headers": {
-              "authorization": "Bearer re_924b3rjh2387fbewf823",
               "content-type": "application/json",
             },
           }
@@ -652,7 +624,6 @@ describe('Emails', () => {
           status: 404,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -669,7 +640,6 @@ describe('Emails', () => {
               "statusCode": 404,
             },
             "headers": {
-              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
@@ -699,7 +669,6 @@ describe('Emails', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -726,7 +695,6 @@ describe('Emails', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
@@ -754,7 +722,6 @@ describe('Emails', () => {
           status: 200,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -784,7 +751,6 @@ describe('Emails', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
@@ -812,9 +778,7 @@ describe('Emails', () => {
         },
       ],
     };
-    const headers = {
-      Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-    };
+    const headers = {};
 
     describe('when no pagination options provided', () => {
       it('calls endpoint without query params and return the response', async () => {
@@ -827,7 +791,6 @@ describe('Emails', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -845,7 +808,6 @@ describe('Emails', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -861,7 +823,6 @@ describe('Emails', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -877,7 +838,6 @@ describe('Emails', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });

@@ -30,7 +30,6 @@ describe('API Keys', () => {
         status: 201,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -46,7 +45,6 @@ describe('API Keys', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -66,7 +64,6 @@ describe('API Keys', () => {
         status: 422,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -82,7 +79,6 @@ describe('API Keys', () => {
             "name": "validation_error",
           },
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -105,7 +101,6 @@ describe('API Keys', () => {
           status: 201,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -121,7 +116,6 @@ describe('API Keys', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_924b3rjh2387fbewf823",
               "content-type": "application/json",
             },
           }
@@ -142,7 +136,6 @@ describe('API Keys', () => {
           status: 201,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -158,7 +151,6 @@ describe('API Keys', () => {
             },
             "error": null,
             "headers": {
-              "authorization": "Bearer re_924b3rjh2387fbewf823",
               "content-type": "application/json",
             },
           }
@@ -175,7 +167,6 @@ describe('API Keys', () => {
           status: 422,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -196,7 +187,6 @@ describe('API Keys', () => {
               "name": "invalid_access",
             },
             "headers": {
-              "authorization": "Bearer re_924b3rjh2387fbewf823",
               "content-type": "application/json",
             },
           }
@@ -218,7 +208,6 @@ describe('API Keys', () => {
     //         status: 201,
     //         headers: {
     //           'content-type': 'application/json',
-    //           Authorization: 'Bearer re_924b3rjh2387fbewf823',
     //         },
     //       },
     //     );
@@ -252,7 +241,6 @@ describe('API Keys', () => {
     //         status: 500,
     //         headers: {
     //           'content-type': 'application/json',
-    //           Authorization: 'Bearer re_924b3rjh2387fbewf823',
     //         },
     //       },
     //     );
@@ -301,9 +289,7 @@ describe('API Keys', () => {
     describe('when no pagination options are provided', () => {
       it('lists api keys', async () => {
         mockSuccessResponse(response, {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -313,7 +299,6 @@ describe('API Keys', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -331,9 +316,7 @@ describe('API Keys', () => {
     describe('when pagination options are provided', () => {
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -342,7 +325,6 @@ describe('API Keys', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -358,9 +340,7 @@ describe('API Keys', () => {
 
       it('passes after param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -372,7 +352,6 @@ describe('API Keys', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -388,9 +367,7 @@ describe('API Keys', () => {
 
       it('passes before param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -402,7 +379,6 @@ describe('API Keys', () => {
           data: response,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -427,7 +403,6 @@ describe('API Keys', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -438,7 +413,6 @@ describe('API Keys', () => {
           "data": {},
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -455,7 +429,6 @@ describe('API Keys', () => {
         status: 500,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -471,7 +444,6 @@ describe('API Keys', () => {
             "name": "application_error",
           },
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -488,7 +460,6 @@ describe('API Keys', () => {
         status: 404,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -506,7 +477,6 @@ describe('API Keys', () => {
             "name": "not_found",
           },
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }

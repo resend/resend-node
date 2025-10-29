@@ -29,7 +29,6 @@ describe('Sending', () => {
           status: 404,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -47,7 +46,6 @@ describe('Sending', () => {
               "statusCode": 404,
             },
             "headers": {
-              "authorization": "Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop",
               "content-type": "application/json",
             },
           }
@@ -76,7 +74,6 @@ describe('Sending', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
-              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             },
           },
         );
@@ -90,7 +87,6 @@ describe('Sending', () => {
           data: apiResponse,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -116,7 +112,6 @@ describe('Sending', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
-              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             },
           },
         );
@@ -130,7 +125,6 @@ describe('Sending', () => {
           data: apiResponse,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -154,7 +148,6 @@ describe('Sending', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
-              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             },
           },
         );
@@ -168,7 +161,6 @@ describe('Sending', () => {
           data: apiResponse,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -204,9 +196,7 @@ describe('Sending', () => {
       ],
     };
 
-    const headers = {
-      Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-    };
+    const headers = {};
 
     describe('when email not found', () => {
       it('returns error', async () => {
@@ -220,7 +210,6 @@ describe('Sending', () => {
           status: 404,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
           },
         });
 
@@ -232,7 +221,6 @@ describe('Sending', () => {
           data: null,
           error: response,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -248,7 +236,6 @@ describe('Sending', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
-              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             },
           },
         );
@@ -288,7 +275,6 @@ describe('Sending', () => {
           data: expectedResponse,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -308,7 +294,6 @@ describe('Sending', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
-              Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             },
           },
         );
@@ -321,7 +306,6 @@ describe('Sending', () => {
           data: emptyResponse,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -369,7 +353,6 @@ describe('Sending', () => {
           data: expectedResponse,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -419,7 +402,6 @@ describe('Sending', () => {
           data: expectedResponse,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -467,7 +449,6 @@ describe('Sending', () => {
           data: expectedResponse,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });
@@ -515,7 +496,6 @@ describe('Sending', () => {
           data: expectedResponse,
           error: null,
           headers: {
-            authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
             'content-type': 'application/json',
           },
         });

@@ -32,9 +32,7 @@ describe('ContactTopics', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -46,7 +44,6 @@ describe('ContactTopics', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -67,9 +64,7 @@ describe('ContactTopics', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -81,7 +76,6 @@ describe('ContactTopics', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -106,9 +100,7 @@ describe('ContactTopics', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -120,7 +112,6 @@ describe('ContactTopics', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -169,9 +160,7 @@ describe('ContactTopics', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -183,7 +172,6 @@ describe('ContactTopics', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -215,9 +203,7 @@ describe('ContactTopics', () => {
         ],
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -244,7 +230,6 @@ describe('ContactTopics', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
@@ -268,9 +253,7 @@ describe('ContactTopics', () => {
         ],
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -291,7 +274,6 @@ describe('ContactTopics', () => {
           },
           "error": null,
           "headers": {
-            "authorization": "Bearer re_924b3rjh2387fbewf823",
             "content-type": "application/json",
           },
         }
