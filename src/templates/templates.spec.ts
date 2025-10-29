@@ -476,8 +476,7 @@ describe('Templates', () => {
 
       mockErrorResponse(response, {
         status: 404,
-        headers: {
-        },
+        headers: {},
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');

@@ -37,8 +37,7 @@ describe('ContactProperties', () => {
       };
 
       mockSuccessResponse(response, {
-        headers: {
-        },
+        headers: {},
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -69,8 +68,7 @@ describe('ContactProperties', () => {
         message: 'Missing `key` field.',
       };
 
-      mockErrorResponse(response, {
-      });
+      mockErrorResponse(response, {});
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.create(payload),
@@ -115,8 +113,7 @@ describe('ContactProperties', () => {
         has_more: false,
       };
       mockSuccessResponse(response, {
-        headers: {
-        },
+        headers: {},
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -165,8 +162,7 @@ describe('ContactProperties', () => {
         created_at: '2021-01-01T00:00:00.000Z',
       };
       mockSuccessResponse(response, {
-        headers: {
-        },
+        headers: {},
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -195,8 +191,7 @@ describe('ContactProperties', () => {
         name: 'missing_required_field',
         message: 'Missing `id` field.',
       };
-      mockErrorResponse(response, {
-      });
+      mockErrorResponse(response, {});
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.get(''),
@@ -219,8 +214,7 @@ describe('ContactProperties', () => {
         name: 'not_found',
         message: 'Contact property not found',
       };
-      mockErrorResponse(response, {
-      });
+      mockErrorResponse(response, {});
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.get('b6d24b8e-af0b-4c3c-be0c-359bbd97381e'),
@@ -251,8 +245,7 @@ describe('ContactProperties', () => {
         object: 'contact_property',
       };
       mockSuccessResponse(response, {
-        headers: {
-        },
+        headers: {},
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -280,8 +273,7 @@ describe('ContactProperties', () => {
         name: 'missing_required_field',
         message: 'Missing `id` field.',
       };
-      mockErrorResponse(response, {
-      });
+      mockErrorResponse(response, {});
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.update(payload),
@@ -307,8 +299,7 @@ describe('ContactProperties', () => {
         object: 'contact_property',
       };
       mockSuccessResponse(response, {
-        headers: {
-        },
+        headers: {},
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -334,8 +325,7 @@ describe('ContactProperties', () => {
         name: 'missing_required_field',
         message: 'Missing `id` field.',
       };
-      mockErrorResponse(response, {
-      });
+      mockErrorResponse(response, {});
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.remove(''),

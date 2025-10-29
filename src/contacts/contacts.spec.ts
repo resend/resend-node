@@ -128,8 +128,7 @@ describe('Contacts', () => {
         };
 
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -181,8 +180,7 @@ describe('Contacts', () => {
             has_more: false,
           };
 
-          mockSuccessResponse(response, {
-          });
+          mockSuccessResponse(response, {});
 
           const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -240,8 +238,7 @@ describe('Contacts', () => {
 
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -268,8 +265,7 @@ describe('Contacts', () => {
 
       it('passes limit and after params and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -297,8 +293,7 @@ describe('Contacts', () => {
 
       it('passes limit and before params and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');

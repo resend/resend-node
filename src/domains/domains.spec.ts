@@ -483,8 +483,7 @@ describe('Domains', () => {
     describe('when no pagination options are provided', () => {
       it('lists domains', async () => {
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -511,8 +510,7 @@ describe('Domains', () => {
     describe('when pagination options are provided', () => {
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -536,8 +534,7 @@ describe('Domains', () => {
 
       it('passes after param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -564,8 +561,7 @@ describe('Domains', () => {
 
       it('passes before param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');

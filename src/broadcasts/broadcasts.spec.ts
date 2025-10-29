@@ -219,8 +219,7 @@ describe('Broadcasts', () => {
     it('returns an error when api responds with text payload', async () => {
       fetchMock.mockOnce('local_rate_limited', {
         status: 422,
-        headers: {
-        },
+        headers: {},
       });
 
       const result = await resend.broadcasts.create({
@@ -305,8 +304,7 @@ describe('Broadcasts', () => {
     describe('when no pagination options are provided', () => {
       it('lists broadcasts', async () => {
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -333,8 +331,7 @@ describe('Broadcasts', () => {
     describe('when pagination options are provided', () => {
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -358,8 +355,7 @@ describe('Broadcasts', () => {
 
       it('passes after param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -386,8 +382,7 @@ describe('Broadcasts', () => {
 
       it('passes before param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');

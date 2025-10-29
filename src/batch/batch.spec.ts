@@ -46,8 +46,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-          },
+          headers: {},
         },
       );
 
@@ -85,8 +84,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-          },
+          headers: {},
         },
       );
 
@@ -122,8 +120,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-          },
+          headers: {},
         },
       );
 
@@ -189,8 +186,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-          },
+          headers: {},
         },
       );
 
@@ -228,8 +224,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-          },
+          headers: {},
         },
       );
 
@@ -263,8 +258,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-          },
+          headers: {},
         },
       );
 
@@ -296,8 +290,7 @@ describe('Batch', () => {
         },
         202,
         {
-          headers: {
-          },
+          headers: {},
         },
       );
 
@@ -332,8 +325,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-          },
+          headers: {},
         },
       );
 
@@ -397,8 +389,7 @@ describe('Batch', () => {
           data: [{ id: 'template-batch-1' }, { id: 'template-batch-2' }],
         },
         {
-          headers: {
-          },
+          headers: {},
         },
       );
 
@@ -503,8 +494,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-          },
+          headers: {},
         },
       );
 
@@ -611,8 +601,7 @@ describe('Batch', () => {
           data: [{ id: 'template-with-overrides-1' }],
         },
         {
-          headers: {
-          },
+          headers: {},
         },
       );
 

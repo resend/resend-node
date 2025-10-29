@@ -397,8 +397,7 @@ describe('Emails', () => {
     it('returns an error when api responds with text payload', async () => {
       fetchMock.mockOnce('local_rate_limited', {
         status: 422,
-        headers: {
-        },
+        headers: {},
       });
 
       const result = await resend.emails.send({
@@ -779,8 +778,7 @@ describe('Emails', () => {
         },
       ],
     };
-    const headers = {
-    };
+    const headers = {};
 
     describe('when no pagination options provided', () => {
       it('calls endpoint without query params and return the response', async () => {

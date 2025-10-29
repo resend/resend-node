@@ -32,8 +32,7 @@ describe('Topics', () => {
         id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
       };
 
-      mockSuccessResponse(response, {
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -63,8 +62,7 @@ describe('Topics', () => {
       };
 
       mockErrorResponse(response, {
-        headers: {
-        },
+        headers: {},
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -98,8 +96,7 @@ describe('Topics', () => {
       };
 
       mockErrorResponse(response, {
-        headers: {
-        },
+        headers: {},
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -142,8 +139,7 @@ describe('Topics', () => {
           },
         ],
       };
-      mockSuccessResponse(response, {
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -186,8 +182,7 @@ describe('Topics', () => {
         };
 
         mockErrorResponse(response, {
-          headers: {
-          },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -221,8 +216,7 @@ describe('Topics', () => {
         created_at: '2024-01-16T18:12:26.514Z',
       };
 
-      mockSuccessResponse(response, {
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -272,8 +266,7 @@ describe('Topics', () => {
       const response = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
-      mockSuccessResponse(response, {
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
@@ -321,8 +314,7 @@ describe('Topics', () => {
         object: 'topic',
         deleted: true,
       };
-      mockSuccessResponse(response, {
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(

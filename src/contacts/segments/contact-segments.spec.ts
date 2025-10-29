@@ -42,8 +42,7 @@ describe('ContactSegments', () => {
         has_more: false,
       };
 
-      mockSuccessResponse(response, {
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -92,8 +91,7 @@ describe('ContactSegments', () => {
         has_more: true,
       };
 
-      mockSuccessResponse(response, {
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -152,8 +150,7 @@ describe('ContactSegments', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      mockSuccessResponse(response, {
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -181,8 +178,7 @@ describe('ContactSegments', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      mockSuccessResponse(response, {
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -234,8 +230,7 @@ describe('ContactSegments', () => {
         deleted: true,
       };
 
-      mockSuccessResponse(response, {
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -265,8 +260,7 @@ describe('ContactSegments', () => {
         deleted: true,
       };
 
-      mockSuccessResponse(response, {
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(

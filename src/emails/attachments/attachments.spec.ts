@@ -196,8 +196,7 @@ describe('Sending', () => {
       ],
     };
 
-    const headers = {
-    };
+    const headers = {};
 
     describe('when email not found', () => {
       it('returns error', async () => {
