@@ -25,7 +25,6 @@ describe('Domains', () => {
       const response: CreateDomainResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
         name: 'resend.com',
-        capability: 'send-and-receive',
         created_at: '2023-04-07T22:48:33.420498+00:00',
         status: 'not_started',
         records: [
@@ -96,7 +95,6 @@ describe('Domains', () => {
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
-            "capability": "send-and-receive",
             "created_at": "2023-04-07T22:48:33.420498+00:00",
             "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
             "name": "resend.com",
@@ -203,7 +201,6 @@ describe('Domains', () => {
         const response: CreateDomainResponseSuccess = {
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
           name: 'resend.com',
-          capability: 'send',
           created_at: '2023-04-07T22:48:33.420498+00:00',
           status: 'not_started',
           records: [
@@ -263,7 +260,6 @@ describe('Domains', () => {
         ).resolves.toMatchInlineSnapshot(`
           {
             "data": {
-              "capability": "send",
               "created_at": "2023-04-07T22:48:33.420498+00:00",
               "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
               "name": "resend.com",
@@ -361,7 +357,6 @@ describe('Domains', () => {
         const response: CreateDomainResponseSuccess = {
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
           name: 'resend.com',
-          capability: 'send',
           created_at: '2023-04-07T22:48:33.420498+00:00',
           status: 'not_started',
           records: [
@@ -412,7 +407,6 @@ describe('Domains', () => {
         ).resolves.toMatchInlineSnapshot(`
           {
             "data": {
-              "capability": "send",
               "created_at": "2023-04-07T22:48:33.420498+00:00",
               "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
               "name": "resend.com",
@@ -467,7 +461,6 @@ describe('Domains', () => {
           status: 'not_started',
           created_at: '2023-04-07T23:13:52.669661+00:00',
           region: 'eu-west-1',
-          capability: 'send',
         },
         {
           id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
@@ -475,7 +468,6 @@ describe('Domains', () => {
           status: 'not_started',
           created_at: '2023-04-07T23:13:20.417116+00:00',
           region: 'us-east-1',
-          capability: 'receive',
         },
       ],
     };
@@ -627,7 +619,6 @@ describe('Domains', () => {
         object: 'domain',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'resend.com',
-        capability: 'send-and-receive',
         status: 'not_started',
         created_at: '2023-06-21T06:10:36.144Z',
         region: 'us-east-1',
@@ -682,7 +673,6 @@ describe('Domains', () => {
       await expect(resend.domains.get('1234')).resolves.toMatchInlineSnapshot(`
         {
           "data": {
-            "capability": "send-and-receive",
             "created_at": "2023-06-21T06:10:36.144Z",
             "id": "fd61172c-cafc-40f5-b049-b45947779a29",
             "name": "resend.com",
