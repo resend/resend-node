@@ -5,6 +5,8 @@ export type GetContactPropertyResponseSuccess = ApiContactProperty & {
   object: 'contact_property';
 };
 
-export type GetContactPropertyResponse = Response<ContactProperty & {
-  object: 'contact_property';
-}>;
+export type GetContactPropertyResponse = Response<
+  ContactProperty & {
+    object: 'contact_property';
+  }
+>;
