@@ -3,8 +3,9 @@ import type { ContactProperty } from './contact-property';
 
 export type RemoveContactPropertyResponseSuccess = Pick<
   ContactProperty,
-  'id' | 'object'
+  'id'
 > & {
+  object: 'contact_property';
   deleted: boolean;
 };
 

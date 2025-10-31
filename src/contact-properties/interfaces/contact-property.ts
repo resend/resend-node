@@ -11,7 +11,6 @@ type NumberBaseApiContactProperty = {
 
 export type ApiContactProperty = {
   id: string;
-  object: 'contact_property';
   created_at: string;
   key: string;
 } & (StringBaseApiContactProperty | NumberBaseApiContactProperty);
@@ -29,7 +28,6 @@ type NumberBaseContactProperty = {
 
 export type ContactProperty = {
   id: string;
-  object: 'contact_property';
   createdAt: string;
   key: string;
 } & (StringBaseContactProperty | NumberBaseContactProperty);

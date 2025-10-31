@@ -97,7 +97,6 @@ describe('ContactProperties', () => {
             key: 'country',
             type: 'string',
             fallback_value: 'unknown',
-            object: 'contact_property',
             created_at: '2021-01-01T00:00:00.000Z',
           },
           {
@@ -105,7 +104,6 @@ describe('ContactProperties', () => {
             key: 'edition',
             type: 'number',
             fallback_value: 1,
-            object: 'contact_property',
             created_at: '2021-01-01T00:00:00.000Z',
           },
         ],
@@ -127,7 +125,6 @@ describe('ContactProperties', () => {
         "fallbackValue": "unknown",
         "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
         "key": "country",
-        "object": "contact_property",
         "type": "string",
       },
       {
@@ -135,7 +132,6 @@ describe('ContactProperties', () => {
         "fallbackValue": 1,
         "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
         "key": "edition",
-        "object": "contact_property",
         "type": "number",
       },
     ],
