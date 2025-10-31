@@ -25,8 +25,10 @@ export interface CreateContactPropertyApiOptions {
 
 export type CreateContactPropertyResponseSuccess = Pick<
   ContactProperty,
-  'id' | 'object'
->;
+  'id'
+> & {
+  object: 'contact_property';
+};
 
 export type CreateContactPropertyResponse =
   Response<CreateContactPropertyResponseSuccess>;

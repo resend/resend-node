@@ -87,7 +87,10 @@ export class ContactProperties {
 
     if (response.data) {
       return {
-        data: parseContactPropertyFromApi(response.data),
+        data: {
+          object: 'contact_property',
+          ...parseContactPropertyFromApi(response.data),
+        },
         headers: response.headers,
         error: null,
       };

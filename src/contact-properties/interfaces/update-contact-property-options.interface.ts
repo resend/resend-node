@@ -14,8 +14,10 @@ export interface UpdateContactPropertyApiOptions {
 
 export type UpdateContactPropertyResponseSuccess = Pick<
   ContactProperty,
-  'id' | 'object'
->;
+  'id'
+> & {
+  object: 'contact_property';
+};
 
 export type UpdateContactPropertyResponse =
   Response<UpdateContactPropertyResponseSuccess>;

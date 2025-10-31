@@ -17,7 +17,6 @@ export function parseContactPropertyFromApi(
   return {
     id: contactProperty.id,
     key: contactProperty.key,
-    object: contactProperty.object,
     createdAt: contactProperty.created_at,
     type: contactProperty.type,
     fallbackValue: contactProperty.fallback_value,
