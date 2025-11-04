@@ -5,7 +5,7 @@ const eventJson = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
 const prTitle = eventJson.pull_request.title;
 
 const isValidType = (title) =>
-  /^(feat|fix|chore|refactor)(\([a-zA-Z0-9-]+\))?:\s[a-z].*$/.test(title);
+  /^(feat|fix|chore|refactor)(\([a-zA-Z0-9-]+\))?:\s[a-z0-9].*$/.test(title);
 
 const validateTitle = (title) => {
   if (!isValidType(title)) {
