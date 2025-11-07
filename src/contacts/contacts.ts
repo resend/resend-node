@@ -12,7 +12,6 @@ import type {
   GetContactResponseSuccess,
 } from './interfaces/get-contact.interface';
 import type {
-  ListAudienceContactsOptions,
   ListContactsOptions,
   ListContactsResponse,
   ListContactsResponseSuccess,
@@ -72,21 +71,19 @@ export class Contacts {
     return data;
   }
 
-  async list(
-    options: ListContactsOptions | ListAudienceContactsOptions = {},
-  ): Promise<ListContactsResponse> {
-    if (!('audienceId' in options) || options.audienceId === undefined) {
+  async list(options: ListContactsOptions = {}): Promise<ListContactsResponse> {
+    const segmentId = options.segmentId ?? options.audienceId;
+    if (!segmentId) {
       const queryString = buildPaginationQuery(options);
       const url = queryString ? `/contacts?${queryString}` : '/contacts';
       const data = await this.resend.get<ListContactsResponseSuccess>(url);
       return data;
     }
 
-    const { audienceId, ...paginationOptions } = options;
-    const queryString = buildPaginationQuery(paginationOptions);
+    const queryString = buildPaginationQuery(options);
     const url = queryString
-      ? `/audiences/${audienceId}/contacts?${queryString}`
-      : `/audiences/${audienceId}/contacts`;
+      ? `/segments/${segmentId}/contacts?${queryString}`
+      : `/segments/${segmentId}/contacts`;
     const data = await this.resend.get<ListContactsResponseSuccess>(url);
     return data;
   }

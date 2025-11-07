@@ -105,7 +105,7 @@ describe('Contacts', () => {
     describe('without pagination', () => {
       it('lists contacts', async () => {
         const options: ListContactsOptions = {
-          audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+          segmentId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
         };
         const response: ListContactsResponseSuccess = {
           object: 'list',
@@ -146,14 +146,14 @@ describe('Contacts', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/audiences/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts',
+          'https://api.resend.com/segments/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
           }),
         );
       });
-      describe('when audienceId is not provided', () => {
+      describe('when segmentId is not provided', () => {
         it('lists contacts', async () => {
           const options: ListContactsOptions = {
             limit: 10,
@@ -246,7 +246,7 @@ describe('Contacts', () => {
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
         const result = await resend.contacts.list({
-          audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+          segmentId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
           limit: 1,
         });
         expect(result).toEqual({
@@ -258,7 +258,7 @@ describe('Contacts', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/audiences/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts?limit=1',
+          'https://api.resend.com/segments/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts?limit=1',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
@@ -273,7 +273,7 @@ describe('Contacts', () => {
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
         const result = await resend.contacts.list({
-          audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+          segmentId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
           limit: 1,
           after: 'cursor-value',
         });
@@ -286,7 +286,7 @@ describe('Contacts', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/audiences/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts?limit=1&after=cursor-value',
+          'https://api.resend.com/segments/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts?limit=1&after=cursor-value',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
@@ -301,7 +301,7 @@ describe('Contacts', () => {
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
         const result = await resend.contacts.list({
-          audienceId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
+          segmentId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381a',
           limit: 1,
           before: 'cursor-value',
         });
@@ -314,7 +314,7 @@ describe('Contacts', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/audiences/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts?limit=1&before=cursor-value',
+          'https://api.resend.com/segments/b6d24b8e-af0b-4c3c-be0c-359bbd97381a/contacts?limit=1&before=cursor-value',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
