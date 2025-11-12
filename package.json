@@ -62,7 +62,7 @@
     "@pollyjs/adapter-fetch": "6.0.7",
     "@pollyjs/core": "6.0.6",
     "@pollyjs/persister-fs": "6.0.6",
-    "@types/node": "22.18.9",
+    "@types/node": "24.10.1",
     "@types/react": "19.2.0",
     "cross-env": "10.1.0",
     "dotenv": "17.2.3",
