@@ -32,17 +32,6 @@ interface EmailTemplateOptions {
   };
 }
 
-/**
-  * These are testing email addresses, they do not actually send an email to anyone.
-  *
-  * @link https://resend.com/docs/dashboard/emails/send-test-emails 
-  */
-type FromTestingAddress = 'onboarding@resend.dev';
-/**
-  * These are testing email addresses, they do not actually send an email to anyone.
-  *
-  * @link https://resend.com/docs/dashboard/emails/send-test-emails 
-  */
 type ToTestingAddress =
   | 'delivered@resend.dev'
   | 'bounced@resend.dev'
@@ -50,7 +39,7 @@ type ToTestingAddress =
 
 interface CreateEmailBaseOptionsWithTemplate
   extends Omit<CreateEmailBaseOptions, 'from' | 'subject'> {
-  from?: FromTestingAddress | (string & {});
+  from?: string;
   subject?: string;
 }
 
@@ -78,7 +67,7 @@ interface CreateEmailBaseOptions {
    *
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
    */
-  from: FromTestingAddress | (string & {});
+  from: string;
   /**
    * Custom headers to add to the email.
    *
