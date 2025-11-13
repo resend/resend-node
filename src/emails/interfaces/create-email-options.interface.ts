@@ -32,6 +32,11 @@ interface EmailTemplateOptions {
   };
 }
 
+type ToTestingAddress =
+  | 'delivered@resend.dev'
+  | 'bounced@resend.dev'
+  | 'complained@resend.dev';
+
 interface CreateEmailBaseOptionsWithTemplate
   extends Omit<CreateEmailBaseOptions, 'from' | 'subject'> {
   from?: string;
@@ -91,8 +96,15 @@ interface CreateEmailBaseOptions {
    * Recipient email address. For multiple addresses, send as an array of strings. Max 50.
    *
    * @link https://resend.com/docs/api-reference/emails/send-email#body-parameters
+   *
+   * Can also be one of the following testing email addresses
+   * - `delivered@resend.dev`
+   * - `bounced@resend.dev`
+   * - `complained@resend.dev`
+   *
+   * @link https://resend.com/docs/dashboard/emails/send-test-emails 
    */
-  to: string | string[];
+  to: ToTestingAddress | (string & {}) | (ToTestingAddress | (string & {}))[];
   /**
    * The id of the topic you want to send to
    *
