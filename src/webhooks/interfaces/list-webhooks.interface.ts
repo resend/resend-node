@@ -1,5 +1,5 @@
 import type { PaginationOptions } from '../../common/interfaces';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { WebhookEvent } from './webhook-event.interface';
 
 export type ListWebhooksOptions = PaginationOptions;
@@ -18,12 +18,4 @@ export type ListWebhooksResponseSuccess = {
   data: Webhook[];
 };
 
-export type ListWebhooksResponse =
-  | {
-      data: ListWebhooksResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type ListWebhooksResponse = Response<ListWebhooksResponseSuccess>;

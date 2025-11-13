@@ -42,34 +42,35 @@ describe('ContactSegments', () => {
         has_more: false,
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contacts.segments.list(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "created_at": "2021-01-01T00:00:00.000Z",
-        "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
-        "name": "Test Segment",
-      },
-      {
-        "created_at": "2021-01-02T00:00:00.000Z",
-        "id": "d7e1e488-ae2c-4255-a40c-a4db3af7ed0c",
-        "name": "Another Segment",
-      },
-    ],
-    "has_more": false,
-    "object": "list",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "created_at": "2021-01-01T00:00:00.000Z",
+                "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
+                "name": "Test Segment",
+              },
+              {
+                "created_at": "2021-01-02T00:00:00.000Z",
+                "id": "d7e1e488-ae2c-4255-a40c-a4db3af7ed0c",
+                "name": "Another Segment",
+              },
+            ],
+            "has_more": false,
+            "object": "list",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('gets contact segments by ID', async () => {
@@ -90,29 +91,30 @@ describe('ContactSegments', () => {
         has_more: true,
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contacts.segments.list(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "created_at": "2021-01-01T00:00:00.000Z",
-        "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
-        "name": "Test Segment",
-      },
-    ],
-    "has_more": true,
-    "object": "list",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "created_at": "2021-01-01T00:00:00.000Z",
+                "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
+                "name": "Test Segment",
+              },
+            ],
+            "has_more": true,
+            "object": "list",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns error when missing both id and email', async () => {
@@ -131,6 +133,7 @@ describe('ContactSegments', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -147,21 +150,22 @@ describe('ContactSegments', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contacts.segments.add(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('adds a contact to an audience by ID', async () => {
@@ -174,21 +178,22 @@ describe('ContactSegments', () => {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contacts.segments.add(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns error when missing both id and email', async () => {
@@ -207,6 +212,7 @@ describe('ContactSegments', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -224,22 +230,23 @@ describe('ContactSegments', () => {
         deleted: true,
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contacts.segments.remove(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "deleted": true,
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "deleted": true,
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('removes a contact from an audience by ID', async () => {
@@ -253,22 +260,23 @@ describe('ContactSegments', () => {
         deleted: true,
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contacts.segments.remove(options),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "deleted": true,
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "deleted": true,
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns error when missing both id and email', async () => {
@@ -287,6 +295,7 @@ describe('ContactSegments', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });

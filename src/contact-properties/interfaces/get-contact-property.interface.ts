@@ -1,14 +1,12 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { ApiContactProperty, ContactProperty } from './contact-property';
 
-export type GetContactPropertyResponseSuccess = ApiContactProperty;
+export type GetContactPropertyResponseSuccess = ApiContactProperty & {
+  object: 'contact_property';
+};
 
-export type GetContactPropertyResponse =
-  | {
-      data: ContactProperty;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type GetContactPropertyResponse = Response<
+  ContactProperty & {
+    object: 'contact_property';
+  }
+>;

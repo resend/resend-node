@@ -37,20 +37,23 @@ describe('ContactProperties', () => {
       };
 
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        headers: {},
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
-    "object": "contact_property",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
+            "object": "contact_property",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws error when missing key', async () => {
@@ -65,22 +68,23 @@ describe('ContactProperties', () => {
         message: 'Missing `key` field.',
       };
 
-      mockErrorResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockErrorResponse(response, {});
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Missing \`key\` field.",
-    "name": "missing_required_field",
-    "statusCode": 422,
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Missing \`key\` field.",
+            "name": "missing_required_field",
+            "statusCode": 422,
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -93,7 +97,6 @@ describe('ContactProperties', () => {
             key: 'country',
             type: 'string',
             fallback_value: 'unknown',
-            object: 'contact_property',
             created_at: '2021-01-01T00:00:00.000Z',
           },
           {
@@ -101,7 +104,6 @@ describe('ContactProperties', () => {
             key: 'edition',
             type: 'number',
             fallback_value: 1,
-            object: 'contact_property',
             created_at: '2021-01-01T00:00:00.000Z',
           },
         ],
@@ -109,7 +111,7 @@ describe('ContactProperties', () => {
         has_more: false,
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        headers: {},
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -123,7 +125,6 @@ describe('ContactProperties', () => {
         "fallbackValue": "unknown",
         "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
         "key": "country",
-        "object": "contact_property",
         "type": "string",
       },
       {
@@ -131,7 +132,6 @@ describe('ContactProperties', () => {
         "fallbackValue": 1,
         "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
         "key": "edition",
-        "object": "contact_property",
         "type": "number",
       },
     ],
@@ -139,6 +139,9 @@ describe('ContactProperties', () => {
     "object": "list",
   },
   "error": null,
+  "headers": {
+    "content-type": "application/json",
+  },
 }
 `);
     });
@@ -155,7 +158,7 @@ describe('ContactProperties', () => {
         created_at: '2021-01-01T00:00:00.000Z',
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        headers: {},
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
@@ -171,6 +174,9 @@ describe('ContactProperties', () => {
     "type": "string",
   },
   "error": null,
+  "headers": {
+    "content-type": "application/json",
+  },
 }
 `);
     });
@@ -181,9 +187,7 @@ describe('ContactProperties', () => {
         name: 'missing_required_field',
         message: 'Missing `id` field.',
       };
-      mockErrorResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockErrorResponse(response, {});
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.get(''),
@@ -195,6 +199,7 @@ describe('ContactProperties', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -205,22 +210,23 @@ describe('ContactProperties', () => {
         name: 'not_found',
         message: 'Contact property not found',
       };
-      mockErrorResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockErrorResponse(response, {});
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.get('b6d24b8e-af0b-4c3c-be0c-359bbd97381e'),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Contact property not found",
-    "name": "not_found",
-    "statusCode": 404,
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Contact property not found",
+            "name": "not_found",
+            "statusCode": 404,
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -235,20 +241,23 @@ describe('ContactProperties', () => {
         object: 'contact_property',
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        headers: {},
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.update(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-    "object": "contact_property",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+            "object": "contact_property",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
     it('returns error when missing id', async () => {
       const payload: UpdateContactPropertyOptions = {
@@ -260,9 +269,7 @@ describe('ContactProperties', () => {
         name: 'missing_required_field',
         message: 'Missing `id` field.',
       };
-      mockErrorResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockErrorResponse(response, {});
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.update(payload),
@@ -274,6 +281,7 @@ describe('ContactProperties', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });
@@ -287,21 +295,24 @@ describe('ContactProperties', () => {
         object: 'contact_property',
       };
       mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+        headers: {},
       });
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.remove('b6d24b8e-af0b-4c3c-be0c-359bbd97381e'),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "deleted": true,
-    "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
-    "object": "contact_property",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "deleted": true,
+            "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
+            "object": "contact_property",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns error when missing id', async () => {
@@ -310,9 +321,7 @@ describe('ContactProperties', () => {
         name: 'missing_required_field',
         message: 'Missing `id` field.',
       };
-      mockErrorResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
-      });
+      mockErrorResponse(response, {});
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
         resend.contactProperties.remove(''),
@@ -324,6 +333,7 @@ describe('ContactProperties', () => {
     "name": "missing_required_field",
     "statusCode": null,
   },
+  "headers": null,
 }
 `);
     });

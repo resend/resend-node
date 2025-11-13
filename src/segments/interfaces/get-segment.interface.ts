@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Segment } from './segment';
 
 export interface GetSegmentResponseSuccess
@@ -6,12 +6,4 @@ export interface GetSegmentResponseSuccess
   object: 'segment';
 }
 
-export type GetSegmentResponse =
-  | {
-      data: GetSegmentResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type GetSegmentResponse = Response<GetSegmentResponseSuccess>;

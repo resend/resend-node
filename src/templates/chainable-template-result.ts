@@ -30,10 +30,10 @@ export class ChainableTemplateResult<
     if (error) {
       return {
         data: null,
+        headers: null,
         error,
       };
     }
-    const publishResult = await this.publishFn(data.id);
-    return publishResult;
+    return this.publishFn(data.id);
   }
 }

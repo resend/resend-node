@@ -1,5 +1,5 @@
 import type { PaginationOptions } from '../../common/interfaces';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Template } from './template';
 
 export type ListTemplatesOptions = PaginationOptions;
@@ -22,12 +22,4 @@ export interface ListTemplatesResponseSuccess {
   has_more: boolean;
 }
 
-export type ListTemplatesResponse =
-  | {
-      data: ListTemplatesResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type ListTemplatesResponse = Response<ListTemplatesResponseSuccess>;

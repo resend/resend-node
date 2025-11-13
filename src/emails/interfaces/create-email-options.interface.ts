@@ -2,7 +2,7 @@ import type * as React from 'react';
 import type { PostOptions } from '../../common/interfaces';
 import type { IdempotentRequest } from '../../common/interfaces/idempotent-request.interface';
 import type { RequireAtLeastOne } from '../../common/interfaces/require-at-least-one';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 
 interface EmailRenderOptions {
   /**
@@ -28,7 +28,7 @@ interface EmailRenderOptions {
 interface EmailTemplateOptions {
   template: {
     id: string;
-    variables?: Record<string, string | number | boolean>;
+    variables?: Record<string, string | number>;
   };
 }
 
@@ -139,15 +139,7 @@ export interface CreateEmailResponseSuccess {
   id: string;
 }
 
-export type CreateEmailResponse =
-  | {
-      data: CreateEmailResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type CreateEmailResponse = Response<CreateEmailResponseSuccess>;
 
 export interface Attachment {
   /** Content of an attached file. */

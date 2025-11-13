@@ -46,31 +46,32 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         },
       );
 
       const data = await resend.batch.create(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "id": "aabeeefc-bd13-474a-a440-0ee139b3a4cc",
-      },
-      {
-        "id": "aebe1c6e-30ad-4257-993b-519f5affa626",
-      },
-      {
-        "id": "b2bc2598-f98b-4da4-86c9-7b32881ef394",
-      },
-    ],
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "id": "aabeeefc-bd13-474a-a440-0ee139b3a4cc",
+              },
+              {
+                "id": "aebe1c6e-30ad-4257-993b-519f5affa626",
+              },
+              {
+                "id": "b2bc2598-f98b-4da4-86c9-7b32881ef394",
+              },
+            ],
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('does not send the Idempotency-Key header when idempotencyKey is not provided', async () => {
@@ -83,9 +84,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         },
       );
 
@@ -121,9 +120,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         },
       );
 
@@ -189,31 +186,32 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         },
       );
 
       const data = await resend.batch.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "id": "aabeeefc-bd13-474a-a440-0ee139b3a4cc",
-      },
-      {
-        "id": "aebe1c6e-30ad-4257-993b-519f5affa626",
-      },
-      {
-        "id": "b2bc2598-f98b-4da4-86c9-7b32881ef394",
-      },
-    ],
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "id": "aabeeefc-bd13-474a-a440-0ee139b3a4cc",
+              },
+              {
+                "id": "aebe1c6e-30ad-4257-993b-519f5affa626",
+              },
+              {
+                "id": "b2bc2598-f98b-4da4-86c9-7b32881ef394",
+              },
+            ],
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('does not send the Idempotency-Key header when idempotencyKey is not provided', async () => {
@@ -226,9 +224,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         },
       );
 
@@ -262,9 +258,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         },
       );
 
@@ -296,9 +290,7 @@ describe('Batch', () => {
         },
         202,
         {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         },
       );
 
@@ -333,9 +325,7 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         },
       );
 
@@ -399,28 +389,29 @@ describe('Batch', () => {
           data: [{ id: 'template-batch-1' }, { id: 'template-batch-2' }],
         },
         {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         },
       );
 
       const data = await resend.batch.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "id": "template-batch-1",
-      },
-      {
-        "id": "template-batch-2",
-      },
-    ],
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "id": "template-batch-1",
+              },
+              {
+                "id": "template-batch-2",
+              },
+            ],
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
 
       // Verify the correct API payload was sent
       const lastCall = fetchMock.mock.calls[0];
@@ -503,31 +494,32 @@ describe('Batch', () => {
           ],
         },
         {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         },
       );
 
       const data = await resend.batch.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "id": "html-batch-1",
-      },
-      {
-        "id": "template-batch-2",
-      },
-      {
-        "id": "html-batch-3",
-      },
-    ],
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "id": "html-batch-1",
+              },
+              {
+                "id": "template-batch-2",
+              },
+              {
+                "id": "html-batch-3",
+              },
+            ],
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
 
       // Verify the correct API payload was sent
       const lastCall = fetchMock.mock.calls[0];
@@ -609,25 +601,26 @@ describe('Batch', () => {
           data: [{ id: 'template-with-overrides-1' }],
         },
         {
-          headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-          },
+          headers: {},
         },
       );
 
       const data = await resend.batch.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "data": [
-      {
-        "id": "template-with-overrides-1",
-      },
-    ],
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "data": [
+              {
+                "id": "template-with-overrides-1",
+              },
+            ],
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
 
       // Verify the correct API payload was sent
       const lastCall = fetchMock.mock.calls[0];

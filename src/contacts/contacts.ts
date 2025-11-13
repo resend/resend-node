@@ -12,7 +12,6 @@ import type {
   GetContactResponseSuccess,
 } from './interfaces/get-contact.interface';
 import type {
-  ListAudienceContactsOptions,
   ListContactsOptions,
   ListContactsResponse,
   ListContactsResponseSuccess,
@@ -51,6 +50,7 @@ export class Contacts {
           email: payload.email,
           first_name: payload.firstName,
           last_name: payload.lastName,
+          properties: payload.properties,
         },
         options,
       );
@@ -64,42 +64,39 @@ export class Contacts {
         email: payload.email,
         first_name: payload.firstName,
         last_name: payload.lastName,
+        properties: payload.properties,
       },
       options,
     );
     return data;
   }
 
-  async list(
-    options: ListContactsOptions | ListAudienceContactsOptions = {},
-  ): Promise<ListContactsResponse> {
-    if (!('audienceId' in options) || options.audienceId === undefined) {
+  async list(options: ListContactsOptions = {}): Promise<ListContactsResponse> {
+    const segmentId = options.segmentId ?? options.audienceId;
+    if (!segmentId) {
       const queryString = buildPaginationQuery(options);
       const url = queryString ? `/contacts?${queryString}` : '/contacts';
       const data = await this.resend.get<ListContactsResponseSuccess>(url);
       return data;
     }
 
-    const { audienceId, ...paginationOptions } = options;
-    const queryString = buildPaginationQuery(paginationOptions);
+    const queryString = buildPaginationQuery(options);
     const url = queryString
-      ? `/audiences/${audienceId}/contacts?${queryString}`
-      : `/audiences/${audienceId}/contacts`;
+      ? `/segments/${segmentId}/contacts?${queryString}`
+      : `/segments/${segmentId}/contacts`;
     const data = await this.resend.get<ListContactsResponseSuccess>(url);
     return data;
   }
 
   async get(options: GetContactOptions): Promise<GetContactResponse> {
     if (typeof options === 'string') {
-      const data = await this.resend.get<GetContactResponseSuccess>(
-        `/contacts/${options}`,
-      );
-      return data;
+      return this.resend.get<GetContactResponseSuccess>(`/contacts/${options}`);
     }
 
     if (!options.id && !options.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
           statusCode: null,
@@ -109,22 +106,21 @@ export class Contacts {
     }
 
     if (!options.audienceId) {
-      const data = await this.resend.get<GetContactResponseSuccess>(
+      return this.resend.get<GetContactResponseSuccess>(
         `/contacts/${options?.email ? options?.email : options?.id}`,
       );
-      return data;
     }
 
-    const data = await this.resend.get<GetContactResponseSuccess>(
+    return this.resend.get<GetContactResponseSuccess>(
       `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
     );
-    return data;
   }
 
   async update(options: UpdateContactOptions): Promise<UpdateContactResponse> {
     if (!options.id && !options.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
           statusCode: null,
@@ -140,6 +136,7 @@ export class Contacts {
           unsubscribed: options.unsubscribed,
           first_name: options.firstName,
           last_name: options.lastName,
+          properties: options.properties,
         },
       );
       return data;
@@ -151,6 +148,7 @@ export class Contacts {
         unsubscribed: options.unsubscribed,
         first_name: options.firstName,
         last_name: options.lastName,
+        properties: options.properties,
       },
     );
     return data;
@@ -158,15 +156,15 @@ export class Contacts {
 
   async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
     if (typeof payload === 'string') {
-      const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+      return this.resend.delete<RemoveContactsResponseSuccess>(
         `/contacts/${payload}`,
       );
-      return data;
     }
 
     if (!payload.id && !payload.email) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` or `email` field.',
           statusCode: null,
@@ -176,18 +174,15 @@ export class Contacts {
     }
 
     if (!payload.audienceId) {
-      const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+      return this.resend.delete<RemoveContactsResponseSuccess>(
         `/contacts/${payload?.email ? payload?.email : payload?.id}`,
       );
-      return data;
     }
 
-    const data = await this.resend.delete<RemoveContactsResponseSuccess>(
+    return this.resend.delete<RemoveContactsResponseSuccess>(
       `/audiences/${payload.audienceId}/contacts/${
         payload?.email ? payload?.email : payload?.id
       }`,
     );
-
-    return data;
   }
 }

@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { Template } from './template';
 
 export interface DuplicateTemplateResponseSuccess extends Pick<Template, 'id'> {
@@ -6,11 +6,4 @@ export interface DuplicateTemplateResponseSuccess extends Pick<Template, 'id'> {
 }
 
 export type DuplicateTemplateResponse =
-  | {
-      data: DuplicateTemplateResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+  Response<DuplicateTemplateResponseSuccess>;

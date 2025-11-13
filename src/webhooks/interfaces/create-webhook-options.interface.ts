@@ -1,5 +1,5 @@
 import type { PostOptions } from '../../common/interfaces';
-import type { ErrorResponse } from '../../interfaces';
+import type { Response } from '../../interfaces';
 import type { WebhookEvent } from './webhook-event.interface';
 
 export interface CreateWebhookOptions {
@@ -15,12 +15,4 @@ export interface CreateWebhookResponseSuccess {
   signing_secret: string;
 }
 
-export type CreateWebhookResponse =
-  | {
-      data: CreateWebhookResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+export type CreateWebhookResponse = Response<CreateWebhookResponseSuccess>;

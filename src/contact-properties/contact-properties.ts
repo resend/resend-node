@@ -61,6 +61,7 @@ export class ContactProperties {
             parseContactPropertyFromApi(apiContactProperty),
           ),
         },
+        headers: response.headers,
         error: null,
       };
     }
@@ -72,6 +73,7 @@ export class ContactProperties {
     if (!id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
           statusCode: null,
@@ -85,7 +87,11 @@ export class ContactProperties {
 
     if (response.data) {
       return {
-        data: parseContactPropertyFromApi(response.data),
+        data: {
+          object: 'contact_property',
+          ...parseContactPropertyFromApi(response.data),
+        },
+        headers: response.headers,
         error: null,
       };
     }
@@ -99,6 +105,7 @@ export class ContactProperties {
     if (!payload.id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
           statusCode: null,
@@ -119,6 +126,7 @@ export class ContactProperties {
     if (!id) {
       return {
         data: null,
+        headers: null,
         error: {
           message: 'Missing `id` field.',
           statusCode: null,

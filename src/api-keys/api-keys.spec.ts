@@ -30,7 +30,6 @@ describe('API Keys', () => {
         status: 201,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -39,14 +38,17 @@ describe('API Keys', () => {
       await expect(
         resend.apiKeys.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
-    "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+            "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws error when missing name', async () => {
@@ -62,7 +64,6 @@ describe('API Keys', () => {
         status: 422,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -71,14 +72,17 @@ describe('API Keys', () => {
       const result = resend.apiKeys.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "String must contain at least 1 character(s)",
-    "name": "validation_error",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "String must contain at least 1 character(s)",
+            "name": "validation_error",
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     describe('with access', () => {
@@ -97,7 +101,6 @@ describe('API Keys', () => {
           status: 201,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -106,14 +109,17 @@ describe('API Keys', () => {
         await expect(
           resend.apiKeys.create(payload),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
-    "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+              "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
+            },
+            "error": null,
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
 
       it('creates api key with access `sending_access`', async () => {
@@ -130,7 +136,6 @@ describe('API Keys', () => {
           status: 201,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -139,14 +144,17 @@ describe('API Keys', () => {
         await expect(
           resend.apiKeys.create(payload),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "430eed87-632a-4ea6-90db-0aace67ec228",
-    "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
-  },
-  "error": null,
-}
-`);
+          {
+            "data": {
+              "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+              "token": "re_PKr4RCko_Lhm9ost2YjNCctnPjbLw8Nqk",
+            },
+            "error": null,
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
 
       it('throws error with wrong access', async () => {
@@ -159,7 +167,6 @@ describe('API Keys', () => {
           status: 422,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -173,14 +180,17 @@ describe('API Keys', () => {
         await expect(
           resend.apiKeys.create(payload),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Access must be "full_access" | "sending_access"",
-    "name": "invalid_access",
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Access must be "full_access" | "sending_access"",
+              "name": "invalid_access",
+            },
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -198,7 +208,6 @@ describe('API Keys', () => {
     //         status: 201,
     //         headers: {
     //           'content-type': 'application/json',
-    //           Authorization: 'Bearer re_924b3rjh2387fbewf823',
     //         },
     //       },
     //     );
@@ -232,7 +241,6 @@ describe('API Keys', () => {
     //         status: 500,
     //         headers: {
     //           'content-type': 'application/json',
-    //           Authorization: 'Bearer re_924b3rjh2387fbewf823',
     //         },
     //       },
     //     );
@@ -281,7 +289,7 @@ describe('API Keys', () => {
     describe('when no pagination options are provided', () => {
       it('lists api keys', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -290,6 +298,9 @@ describe('API Keys', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -305,7 +316,7 @@ describe('API Keys', () => {
     describe('when pagination options are provided', () => {
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -313,6 +324,9 @@ describe('API Keys', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -326,7 +340,7 @@ describe('API Keys', () => {
 
       it('passes after param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -337,6 +351,9 @@ describe('API Keys', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -350,7 +367,7 @@ describe('API Keys', () => {
 
       it('passes before param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -361,6 +378,9 @@ describe('API Keys', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -383,18 +403,20 @@ describe('API Keys', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.apiKeys.remove(id)).resolves.toMatchInlineSnapshot(`
-{
-  "data": {},
-  "error": null,
-}
-`);
+        {
+          "data": {},
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws error when missing id', async () => {
@@ -407,7 +429,6 @@ describe('API Keys', () => {
         status: 500,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -416,14 +437,17 @@ describe('API Keys', () => {
       const result = resend.apiKeys.remove('');
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Something went wrong",
-    "name": "application_error",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Something went wrong",
+            "name": "application_error",
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws error when wrong id', async () => {
@@ -436,7 +460,6 @@ describe('API Keys', () => {
         status: 404,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -447,14 +470,17 @@ describe('API Keys', () => {
       );
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "API key not found",
-    "name": "not_found",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "API key not found",
+            "name": "not_found",
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 });

@@ -30,7 +30,6 @@ describe('Segments', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -38,15 +37,18 @@ describe('Segments', () => {
       await expect(
         resend.segments.create(payload),
       ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
-    "name": "Resend",
-    "object": "segment",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
+            "name": "Resend",
+            "object": "segment",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws error when missing name', async () => {
@@ -60,7 +62,6 @@ describe('Segments', () => {
         status: 422,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
@@ -69,14 +70,17 @@ describe('Segments', () => {
       const result = resend.segments.create(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Missing "name" field",
-    "name": "missing_required_field",
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Missing "name" field",
+            "name": "missing_required_field",
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -101,7 +105,7 @@ describe('Segments', () => {
     describe('when no pagination options are provided', () => {
       it('lists audiences', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -110,6 +114,9 @@ describe('Segments', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -125,7 +132,7 @@ describe('Segments', () => {
     describe('when pagination options are provided', () => {
       it('passes limit param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -133,6 +140,9 @@ describe('Segments', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -146,7 +156,7 @@ describe('Segments', () => {
 
       it('passes after param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -157,6 +167,9 @@ describe('Segments', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -170,7 +183,7 @@ describe('Segments', () => {
 
       it('passes before param and returns a response', async () => {
         mockSuccessResponse(response, {
-          headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+          headers: {},
         });
 
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
@@ -181,6 +194,9 @@ describe('Segments', () => {
         expect(result).toEqual({
           data: response,
           error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
@@ -206,7 +222,6 @@ describe('Segments', () => {
           status: 404,
           headers: {
             'content-type': 'application/json',
-            Authorization: 'Bearer re_924b3rjh2387fbewf823',
           },
         });
 
@@ -215,14 +230,17 @@ describe('Segments', () => {
         const result = resend.segments.get('1234');
 
         await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Audience not found",
-    "name": "not_found",
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Audience not found",
+              "name": "not_found",
+            },
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -238,23 +256,25 @@ describe('Segments', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.segments.get('1234')).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "created_at": "2023-06-21T06:10:36.144Z",
-    "id": "fd61172c-cafc-40f5-b049-b45947779a29",
-    "name": "resend.com",
-    "object": "segment",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "created_at": "2023-06-21T06:10:36.144Z",
+            "id": "fd61172c-cafc-40f5-b049-b45947779a29",
+            "name": "resend.com",
+            "object": "segment",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
@@ -270,22 +290,24 @@ describe('Segments', () => {
         status: 200,
         headers: {
           'content-type': 'application/json',
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
         },
       });
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
       await expect(resend.segments.remove(id)).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "deleted": true,
-    "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-    "object": "segment",
-  },
-  "error": null,
-}
-`);
+        {
+          "data": {
+            "deleted": true,
+            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+            "object": "segment",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 });
