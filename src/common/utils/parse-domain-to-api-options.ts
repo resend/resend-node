@@ -8,5 +8,6 @@ export function parseDomainToApiOptions(
     name: domain.name,
     region: domain.region,
     custom_return_path: domain.customReturnPath,
+    capabilities: domain.capabilities,
   };
 }
