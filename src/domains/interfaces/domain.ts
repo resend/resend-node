@@ -4,6 +4,13 @@ export type DomainRegion =
   | 'sa-east-1'
   | 'ap-northeast-1';
 
+export type DomainCapabilityStatus = 'enabled' | 'disabled';
+
+export interface DomainCapabilities {
+  sending: DomainCapabilityStatus;
+  receiving: DomainCapabilityStatus;
+}
+
 export type DomainNameservers =
   | 'Amazon Route 53'
   | 'Cloudflare'
