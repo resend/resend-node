@@ -9,6 +9,9 @@
     "dist/**"
   ],
   "engines": {
+    "node": ">=20"
+  },
+  "devEngines": {
     "node": ">=22"
   },
   "exports": {
