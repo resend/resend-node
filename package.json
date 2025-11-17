@@ -68,7 +68,7 @@
     "dotenv": "17.2.3",
     "pkg-pr-new": "0.0.60",
     "rimraf": "6.1.0",
-    "tsup": "8.5.0",
+    "tsup": "8.5.1",
     "typescript": "5.9.3",
     "vitest": "3.2.4",
     "vitest-fetch-mock": "0.4.5"
