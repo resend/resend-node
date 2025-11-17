@@ -73,4 +73,5 @@ export interface Domain {
   status: DomainStatus;
   created_at: string;
   region: DomainRegion;
+  capabilities: DomainCapabilities;
 }
