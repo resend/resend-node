@@ -9,7 +9,10 @@
     "dist/**"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
+  },
+  "devEngines": {
+    "node": ">=22"
   },
   "exports": {
     ".": {
