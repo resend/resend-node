@@ -17,17 +17,17 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/index.d.ts",
+        "types": "./dist/index.d.mts",
         "default": "./dist/index.mjs"
       },
       "require": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
       }
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "build": "tsdown src/index.ts --format esm,cjs --dts",
     "format": "biome format --write .",
     "format:apply": "biome check --write .",
     "format:check": "biome format .",
@@ -71,7 +71,7 @@
     "dotenv": "17.2.3",
     "pkg-pr-new": "0.0.60",
     "rimraf": "6.1.0",
-    "tsup": "8.5.0",
+    "tsdown": "0.16.5",
     "typescript": "5.9.3",
     "vitest": "3.2.4",
     "vitest-fetch-mock": "0.4.5"
