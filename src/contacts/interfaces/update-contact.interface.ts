@@ -8,8 +8,14 @@ interface UpdateContactPropertiesOptions {
 export type UpdateContactOptions = {
   audienceId?: string;
   unsubscribed?: boolean;
-  firstName?: string;
-  lastName?: string;
+  /**
+   * Use `null` to clear the `firstName`
+   */
+  firstName?: string | null;
+  /**
+   * Use `null` to clear the `lastName`
+   */
+  lastName?: string | null;
   properties?: UpdateContactPropertiesOptions;
 } & SelectingField;
 
