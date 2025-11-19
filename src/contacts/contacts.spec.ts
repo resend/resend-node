@@ -73,6 +73,7 @@ describe('Contacts', () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing `email` field.',
+        statusCode: 422,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -92,6 +93,7 @@ describe('Contacts', () => {
           "error": {
             "message": "Missing \`email\` field.",
             "name": "missing_required_field",
+            "statusCode": 422,
           },
           "headers": {
             "content-type": "application/json",
@@ -330,6 +332,7 @@ describe('Contacts', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Contact not found',
+          statusCode: 404,
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -353,6 +356,7 @@ describe('Contacts', () => {
             "error": {
               "message": "Contact not found",
               "name": "not_found",
+              "statusCode": 404,
             },
             "headers": {
               "content-type": "application/json",

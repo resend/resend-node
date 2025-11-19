@@ -58,6 +58,7 @@ describe('API Keys', () => {
       const response: ErrorResponse = {
         message: 'String must contain at least 1 character(s)',
         name: 'validation_error',
+        statusCode: 422,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -77,6 +78,7 @@ describe('API Keys', () => {
           "error": {
             "message": "String must contain at least 1 character(s)",
             "name": "validation_error",
+            "statusCode": 422,
           },
           "headers": {
             "content-type": "application/json",
@@ -161,6 +163,7 @@ describe('API Keys', () => {
         const response: ErrorResponse = {
           name: 'invalid_access',
           message: 'Access must be "full_access" | "sending_access"',
+          statusCode: 422,
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -185,6 +188,7 @@ describe('API Keys', () => {
             "error": {
               "message": "Access must be "full_access" | "sending_access"",
               "name": "invalid_access",
+              "statusCode": 422,
             },
             "headers": {
               "content-type": "application/json",
@@ -423,6 +427,7 @@ describe('API Keys', () => {
       const response: ErrorResponse = {
         name: 'application_error',
         message: 'Something went wrong',
+        statusCode: 500,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -442,6 +447,7 @@ describe('API Keys', () => {
           "error": {
             "message": "Something went wrong",
             "name": "application_error",
+            "statusCode": 500,
           },
           "headers": {
             "content-type": "application/json",
@@ -454,6 +460,7 @@ describe('API Keys', () => {
       const response: ErrorResponse = {
         name: 'not_found',
         message: 'API key not found',
+        statusCode: 404,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -475,6 +482,7 @@ describe('API Keys', () => {
           "error": {
             "message": "API key not found",
             "name": "not_found",
+            "statusCode": 404,
           },
           "headers": {
             "content-type": "application/json",

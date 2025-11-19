@@ -20,6 +20,7 @@ describe('Receiving', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Email not found',
+          statusCode: 404,
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -39,6 +40,7 @@ describe('Receiving', () => {
             "error": {
               "message": "Email not found",
               "name": "not_found",
+              "statusCode": 404,
             },
             "headers": {
               "content-type": "application/json",
@@ -69,11 +71,13 @@ describe('Receiving', () => {
             {
               id: 'att_123',
               filename: 'document.pdf',
+              size: 1024,
               content_type: 'application/pdf',
               content_id: 'cid_123',
               content_disposition: 'attachment',
             },
           ],
+          message_id: 'msg_123',
         };
 
         fetchMock.mockOnce(JSON.stringify(apiResponse), {
@@ -97,6 +101,7 @@ describe('Receiving', () => {
                   "content_type": "application/pdf",
                   "filename": "document.pdf",
                   "id": "att_123",
+                  "size": 1024,
                 },
               ],
               "bcc": null,
@@ -110,6 +115,7 @@ describe('Receiving', () => {
               },
               "html": "<p>hello world</p>",
               "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
+              "message_id": "msg_123",
               "object": "email",
               "reply_to": [
                 "reply@example.com",
@@ -143,6 +149,7 @@ describe('Receiving', () => {
           reply_to: null,
           headers: {},
           attachments: [],
+          message_id: 'msg_456',
         };
 
         fetchMock.mockOnce(JSON.stringify(apiResponse), {
@@ -167,6 +174,7 @@ describe('Receiving', () => {
               "headers": {},
               "html": null,
               "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
+              "message_id": "msg_456",
               "object": "email",
               "reply_to": null,
               "subject": "Test inbound email",
@@ -238,11 +246,13 @@ describe('Receiving', () => {
                 {
                   id: 'att_123',
                   filename: 'document.pdf',
+                  size: 1024,
                   content_type: 'application/pdf',
                   content_id: 'cid_123',
                   content_disposition: 'attachment' as const,
                 },
               ],
+              message_id: 'msg_789',
             },
             {
               id: '87e9bcdb-6b03-43e8-9ea0-1e7gffa19d00',
@@ -254,6 +264,7 @@ describe('Receiving', () => {
               cc: null,
               reply_to: null,
               attachments: [],
+              message_id: 'msg_012',
             },
           ],
         };
@@ -279,6 +290,7 @@ describe('Receiving', () => {
                       "content_type": "application/pdf",
                       "filename": "document.pdf",
                       "id": "att_123",
+                      "size": 1024,
                     },
                   ],
                   "bcc": null,
@@ -288,6 +300,7 @@ describe('Receiving', () => {
                   "created_at": "2023-04-07T23:13:52.669661+00:00",
                   "from": "sender@example.com",
                   "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
+                  "message_id": "msg_789",
                   "reply_to": [
                     "reply@example.com",
                   ],
@@ -305,6 +318,7 @@ describe('Receiving', () => {
                   "created_at": "2023-04-08T10:20:30.123456+00:00",
                   "from": "sender2@example.com",
                   "id": "87e9bcdb-6b03-43e8-9ea0-1e7gffa19d00",
+                  "message_id": "msg_012",
                   "reply_to": null,
                   "subject": "Test inbound email 2",
                   "to": [

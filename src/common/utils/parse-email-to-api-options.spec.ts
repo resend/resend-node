@@ -79,7 +79,7 @@ describe('parseEmailToApiOptions', () => {
           name: 'John Doe',
           company: 'Acme Corp',
           count: 42,
-          isPremium: true,
+          isPremium: 'true',
         },
       },
       to: 'user@example.com',
@@ -108,7 +108,7 @@ describe('parseEmailToApiOptions', () => {
           name: 'John Doe',
           company: 'Acme Corp',
           count: 42,
-          isPremium: true,
+          isPremium: 'true',
         },
       },
     });

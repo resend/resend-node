@@ -5,7 +5,7 @@ import { mockSuccessResponse } from '../../test-utils/mock-fetch';
 import type {
   ListAttachmentsApiResponse,
   ListAttachmentsResponseSuccess,
-} from '../interfaces';
+} from './interfaces';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();

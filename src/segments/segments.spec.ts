@@ -56,6 +56,7 @@ describe('Segments', () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing "name" field',
+        statusCode: 422,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -75,6 +76,7 @@ describe('Segments', () => {
           "error": {
             "message": "Missing "name" field",
             "name": "missing_required_field",
+            "statusCode": 422,
           },
           "headers": {
             "content-type": "application/json",
@@ -216,6 +218,7 @@ describe('Segments', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Audience not found',
+          statusCode: 404,
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -235,6 +238,7 @@ describe('Segments', () => {
             "error": {
               "message": "Audience not found",
               "name": "not_found",
+              "statusCode": 404,
             },
             "headers": {
               "content-type": "application/json",
