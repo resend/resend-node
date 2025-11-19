@@ -9,12 +9,12 @@ export type UpdateContactOptions = {
   audienceId?: string;
   unsubscribed?: boolean;
   /**
-    * Use `null` to clear the `firstName`
-    */
+   * Use `null` to clear the `firstName`
+   */
   firstName?: string | null;
   /**
-    * Use `null` to clear the `lastName`
-    */
+   * Use `null` to clear the `lastName`
+   */
   lastName?: string | null;
   properties?: UpdateContactPropertiesOptions;
 } & SelectingField;
