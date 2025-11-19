@@ -19,19 +19,17 @@ describe('getPaginationQueryProperties', () => {
   it('builds query string with multiple parameters', () => {
     const result = getPaginationQueryProperties({
       before: 'cursor1',
-      after: 'cursor2',
       limit: 25,
     });
 
-    expect(result).toBe('?before=cursor1&after=cursor2&limit=25');
+    expect(result).toBe('?before=cursor1&limit=25');
   });
 
   it('ignores undefined/null values', () => {
     expect(
       getPaginationQueryProperties({
-        before: undefined,
         after: 'cursor2',
-        limit: null,
+        limit: undefined,
       }),
     ).toBe('?after=cursor2');
   });

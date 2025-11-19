@@ -5,7 +5,7 @@ import { mockSuccessResponse } from '../../../test-utils/mock-fetch';
 import type {
   ListAttachmentsApiResponse,
   ListAttachmentsResponseSuccess,
-} from './interfaces';
+} from '../../attachments/interfaces';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -22,6 +22,7 @@ describe('Receiving', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Attachment not found',
+          statusCode: 404,
         };
 
         fetchMock.mockOnce(JSON.stringify(response), {
@@ -42,6 +43,7 @@ describe('Receiving', () => {
             "error": {
               "message": "Attachment not found",
               "name": "not_found",
+              "statusCode": 404,
             },
             "headers": {
               "content-type": "application/json",

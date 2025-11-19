@@ -121,6 +121,7 @@ describe('Templates', () => {
         name: 'validation_error',
         message:
           "Variable 'user_email' is used in the template but not defined in the variables list",
+        statusCode: 422,
       };
 
       mockErrorResponse(response);
@@ -135,6 +136,7 @@ describe('Templates', () => {
           "error": {
             "message": "Variable 'user_email' is used in the template but not defined in the variables list",
             "name": "validation_error",
+            "statusCode": 422,
           },
           "headers": {
             "content-type": "application/json",
@@ -304,6 +306,7 @@ describe('Templates', () => {
       const response: ErrorResponse = {
         name: 'not_found',
         message: 'Template not found',
+        statusCode: 404,
       };
 
       mockErrorResponse(response, {
@@ -318,6 +321,7 @@ describe('Templates', () => {
           "error": {
             "message": "Template not found",
             "name": "not_found",
+            "statusCode": 404,
           },
           "headers": {
             "content-type": "application/json",
@@ -360,6 +364,7 @@ describe('Templates', () => {
       const response: ErrorResponse = {
         name: 'not_found',
         message: 'Template not found',
+        statusCode: 404,
       };
 
       mockErrorResponse(response, {
@@ -376,6 +381,7 @@ describe('Templates', () => {
           "error": {
             "message": "Template not found",
             "name": "not_found",
+            "statusCode": 404,
           },
           "headers": {
             "content-type": "application/json",
@@ -472,6 +478,7 @@ describe('Templates', () => {
       const response: ErrorResponse = {
         name: 'not_found',
         message: 'Template not found',
+        statusCode: 404,
       };
 
       mockErrorResponse(response, {
@@ -489,6 +496,7 @@ describe('Templates', () => {
           "error": {
             "message": "Template not found",
             "name": "not_found",
+            "statusCode": 404,
           },
           "headers": {
             "content-type": "application/json",
@@ -504,6 +512,7 @@ describe('Templates', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Template not found',
+          statusCode: 404,
         };
 
         mockErrorResponse(response, {
@@ -520,6 +529,7 @@ describe('Templates', () => {
             "error": {
               "message": "Template not found",
               "name": "not_found",
+              "statusCode": 404,
             },
             "headers": {
               "content-type": "application/json",
@@ -635,6 +645,7 @@ describe('Templates', () => {
       const response: ErrorResponse = {
         name: 'not_found',
         message: 'Template not found',
+        statusCode: 404,
       };
 
       mockErrorResponse(response);
@@ -649,6 +660,7 @@ describe('Templates', () => {
           "error": {
             "message": "Template not found",
             "name": "not_found",
+            "statusCode": 404,
           },
           "headers": {
             "content-type": "application/json",
