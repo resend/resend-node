@@ -2,9 +2,9 @@
   "name": "resend",
   "version": "6.5.0",
   "description": "Node.js library for the Resend API",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "files": [
     "dist/**"
   ],
