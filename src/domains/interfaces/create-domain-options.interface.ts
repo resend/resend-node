@@ -12,6 +12,9 @@ export interface CreateDomainOptions {
   region?: DomainRegion;
   customReturnPath?: string;
   capabilities?: Partial<DomainCapabilities>;
+  openTracking?: boolean;
+  clickTracking?: boolean;
+  tls?: 'enforced' | 'opportunistic';
 }
 
 export interface CreateDomainRequestOptions extends PostOptions {}

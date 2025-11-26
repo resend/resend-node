@@ -9,5 +9,8 @@ export function parseDomainToApiOptions(
     region: domain.region,
     custom_return_path: domain.customReturnPath,
     capabilities: domain.capabilities,
+    open_tracking: domain.openTracking,
+    click_tracking: domain.clickTracking,
+    tls: domain.tls,
   };
 }

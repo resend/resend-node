@@ -5,4 +5,7 @@ export interface DomainApiOptions {
   region?: string;
   custom_return_path?: string;
   capabilities?: Partial<DomainCapabilities>;
+  open_tracking?: boolean;
+  click_tracking?: boolean;
+  tls?: 'enforced' | 'opportunistic';
 }
