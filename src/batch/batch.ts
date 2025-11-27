@@ -34,8 +34,17 @@ export class Batch {
       emails.push(parseEmailToApiOptions(email));
     }
 
+    const useExperimental =
+      typeof process !== 'undefined' && process.env
+        ? process.env.RESEND_EXPERIMENTAL_BATCH !== 'false' &&
+          process.env.RESEND_EXPERIMENTAL_BATCH !== '0'
+        : true;
+    const endpoint = useExperimental
+      ? '/experimental/emails/batch'
+      : '/emails/batch';
+
     const data = await this.resend.post<CreateBatchSuccessResponse<Options>>(
-      '/emails/batch',
+      endpoint,
       emails,
       {
         ...options,
