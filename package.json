@@ -1,6 +1,6 @@
 {
   "name": "resend",
-  "version": "6.5.2",
+  "version": "6.5.2-batch.0",
   "description": "Node.js library for the Resend API",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
