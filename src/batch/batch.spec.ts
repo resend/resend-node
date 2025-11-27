@@ -650,4 +650,73 @@ describe('Batch', () => {
       ]);
     });
   });
+
+  describe('experimental batch endpoint', () => {
+    const originalEnv = process.env.RESEND_EXPERIMENTAL_BATCH;
+
+    afterEach(() => {
+      if (originalEnv === undefined) {
+        delete process.env.RESEND_EXPERIMENTAL_BATCH;
+      } else {
+        process.env.RESEND_EXPERIMENTAL_BATCH = originalEnv;
+      }
+    });
+
+    it('uses experimental endpoint by default', async () => {
+      delete process.env.RESEND_EXPERIMENTAL_BATCH;
+
+      mockSuccessResponse(
+        {
+          data: [{ id: 'experimental-email-1' }],
+        },
+        {
+          headers: {},
+        },
+      );
+
+      const payload: CreateBatchOptions = [
+        {
+          from: 'admin@resend.com',
+          to: 'user@resend.com',
+          subject: 'Test',
+          html: '<h1>Test</h1>',
+        },
+      ];
+
+      await resend.batch.create(payload);
+
+      const lastCall = fetchMock.mock.calls[0];
+      const url = lastCall[0] as string;
+      expect(url).toContain('/experimental/emails/batch');
+    });
+
+    it('uses standard endpoint when RESEND_EXPERIMENTAL_BATCH is "false"', async () => {
+      process.env.RESEND_EXPERIMENTAL_BATCH = 'false';
+
+      mockSuccessResponse(
+        {
+          data: [{ id: 'standard-email-1' }],
+        },
+        {
+          headers: {},
+        },
+      );
+
+      const payload: CreateBatchOptions = [
+        {
+          from: 'admin@resend.com',
+          to: 'user@resend.com',
+          subject: 'Test',
+          html: '<h1>Test</h1>',
+        },
+      ];
+
+      await resend.batch.create(payload);
+
+      const lastCall = fetchMock.mock.calls[0];
+      const url = lastCall[0] as string;
+      expect(url).toContain('/emails/batch');
+      expect(url).not.toContain('/experimental/emails/batch');
+    });
+  });
 });
