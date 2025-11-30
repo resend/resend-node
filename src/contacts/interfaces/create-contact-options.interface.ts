@@ -6,13 +6,37 @@ interface CreateContactPropertiesOptions {
   [key: string]: string | number | null;
 }
 
-export interface CreateContactOptions {
-  audienceId?: string;
+export interface LegacyCreateContactOptions {
+  /**
+   * @deprecated Use `segments` instead to add one or more segments to the new contact
+   */
+  audienceId: string;
   email: string;
   unsubscribed?: boolean;
   firstName?: string;
   lastName?: string;
   properties?: CreateContactPropertiesOptions;
+  segments?: never;
+  topics?: never;
+}
+
+export interface CreateContactOptions {
+  email: string;
+  unsubscribed?: boolean;
+  firstName?: string;
+  lastName?: string;
+  properties?: CreateContactPropertiesOptions;
+  segments?: {
+    id: string;
+  }[];
+  topics?: {
+    id: string;
+    subscription: 'opt_in' | 'opt_out';
+  }[];
+  /**
+   * @deprecated Use `segments` instead to add one or more segments to the new contact
+   */
+  audienceId?: never;
 }
 
 export interface CreateContactRequestOptions extends PostOptions {}
