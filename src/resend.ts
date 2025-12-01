@@ -65,6 +65,20 @@ export class Resend {
     });
   }
 
+  private logError(error: ErrorResponse, path: string, status?: number): void {
+    if (
+      typeof process !== 'undefined' &&
+      process.env &&
+      process.env.NODE_ENV !== 'production'
+    ) {
+      console.error('[Resend API Error]:', {
+        ...(status !== undefined && { status }),
+        error,
+        path,
+      });
+    }
+  }
+
   async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
     try {
       const response = await fetch(`${baseUrl}${path}`, options);
@@ -72,21 +86,29 @@ export class Resend {
       if (!response.ok) {
         try {
           const rawError = await response.text();
+          const parsedError = JSON.parse(rawError);
+
+          this.logError(parsedError, path, response.status);
+
           return {
             data: null,
-            error: JSON.parse(rawError),
+            error: parsedError,
             headers: Object.fromEntries(response.headers.entries()),
           };
         } catch (err) {
           if (err instanceof SyntaxError) {
+            const error = {
+              name: 'application_error',
+              statusCode: response.status,
+              message:
+                'Internal server error. We are unable to process your request right now, please try again later.',
+            };
+
+            this.logError(error, path, response.status);
+
             return {
               data: null,
-              error: {
-                name: 'application_error',
-                statusCode: response.status,
-                message:
-                  'Internal server error. We are unable to process your request right now, please try again later.',
-              },
+              error,
               headers: Object.fromEntries(response.headers.entries()),
             };
           }
@@ -98,12 +120,18 @@ export class Resend {
           };
 
           if (err instanceof Error) {
+            const errorWithMessage = { ...error, message: err.message };
+
+            this.logError(errorWithMessage, path, response.status);
+
             return {
               data: null,
-              error: { ...error, message: err.message },
+              error: errorWithMessage,
               headers: Object.fromEntries(response.headers.entries()),
             };
           }
+
+          this.logError(error, path, response.status);
 
           return {
             data: null,
@@ -120,13 +148,17 @@ export class Resend {
         headers: Object.fromEntries(response.headers.entries()),
       };
     } catch {
+      const error = {
+        name: 'application_error',
+        statusCode: null,
+        message: 'Unable to fetch data. The request could not be resolved.',
+      };
+
+      this.logError(error, path);
+
       return {
         data: null,
-        error: {
-          name: 'application_error',
-          statusCode: null,
-          message: 'Unable to fetch data. The request could not be resolved.',
-        },
+        error,
         headers: null,
       };
     }
