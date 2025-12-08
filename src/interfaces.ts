@@ -18,15 +18,14 @@ export type RESEND_ERROR_CODE_KEY =
   | 'daily_quota_exceeded'
   | 'rate_limit_exceeded'
   | 'security_error'
-  | 'suspended_api_key'
   | 'application_error'
   | 'internal_server_error';
 
 export type Response<T> = (
   | {
-      data: T;
-      error: null;
-    }
+    data: T;
+    error: null;
+  }
   | { error: ErrorResponse; data: null }
 ) & {
   headers: Record<string, string> | null;
