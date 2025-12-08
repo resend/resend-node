@@ -23,9 +23,9 @@ export type RESEND_ERROR_CODE_KEY =
 
 export type Response<T> = (
   | {
-    data: T;
-    error: null;
-  }
+      data: T;
+      error: null;
+    }
   | { error: ErrorResponse; data: null }
 ) & {
   headers: Record<string, string> | null;
