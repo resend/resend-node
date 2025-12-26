@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "next": "15.5.6",
+    "next": "15.5.8",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "resend": "../.."
