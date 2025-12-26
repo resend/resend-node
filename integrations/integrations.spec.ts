@@ -24,7 +24,10 @@ describe('integrations', () => {
    */
   async function prepareTemporaryIntegrationCopy(integrationPath: string) {
     const temporaryIntegrationPath = await fs.promises.mkdtemp(
-      `resend-node-integration-${path.basename(integrationPath)}`,
+      path.join(
+        os.tmpdir(),
+        `resend-node-integration-${path.basename(integrationPath)}`,
+      ),
     );
     await fs.promises.cp(
       path.resolve(__dirname, integrationPath),
