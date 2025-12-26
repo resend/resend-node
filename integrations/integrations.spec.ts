@@ -23,12 +23,12 @@ describe('integrations', () => {
    * Also modifies the package.json to point to the SDK with an absolute path.
    */
   async function prepareTemporaryIntegrationCopy(integrationPath: string) {
-    const temporaryIntegrationDir = await fs.promises.mkdtempDisposable(
+    const temporaryIntegrationPath = await fs.promises.mkdtemp(
       `resend-node-integration-${path.basename(integrationPath)}`,
     );
     await fs.promises.cp(
       path.resolve(__dirname, integrationPath),
-      temporaryIntegrationDir.path,
+      temporaryIntegrationPath,
       {
         recursive: true,
       },
@@ -37,49 +37,48 @@ describe('integrations', () => {
     const testingLockPackageJson: { dependencies: Record<string, string> } =
       JSON.parse(
         await fs.promises.readFile(
-          path.resolve(temporaryIntegrationDir.path, 'package.json'),
+          path.resolve(temporaryIntegrationPath, 'package.json'),
           'utf8',
         ),
       );
     testingLockPackageJson.dependencies.resend = sdkPath;
     await fs.promises.writeFile(
-      path.resolve(temporaryIntegrationDir.path, 'package.json'),
+      path.resolve(temporaryIntegrationPath, 'package.json'),
       JSON.stringify(testingLockPackageJson, null, 2),
     );
 
-    return temporaryIntegrationDir;
+    return temporaryIntegrationPath;
   }
 
   test('nextjs', { timeout: 30_000 }, async () => {
-    const temporaryNextApp = await prepareTemporaryIntegrationCopy('./nextjs');
+    const temporaryNextAppPath =
+      await prepareTemporaryIntegrationCopy('./nextjs');
 
     const buildInstall = spawnSync(
       'npm install --install-links && npm run build',
       {
         stdio: 'inherit',
-        cwd: temporaryNextApp.path,
+        cwd: temporaryNextAppPath,
         shell: true,
       },
     );
-    temporaryNextApp.remove();
     if (buildInstall.status !== 0) {
       throw new Error('next.js build failed');
     }
   });
 
   test('esbuild', { timeout: 30_000 }, async () => {
-    const temporaryEsbuildApp =
+    const temporaryEsbuildAppPath =
       await prepareTemporaryIntegrationCopy('./esbuild');
 
     const buildInstall = spawnSync(
       'npm install --install-links && npm run build',
       {
         stdio: 'inherit',
-        cwd: temporaryEsbuildApp.path,
+        cwd: temporaryEsbuildAppPath,
         shell: true,
       },
     );
-    temporaryEsbuildApp.remove();
     if (buildInstall.status !== 0) {
       throw new Error('esbuild build failed');
     }
