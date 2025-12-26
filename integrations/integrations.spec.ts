@@ -18,7 +18,7 @@ describe('integrations', () => {
   });
 
   /**
-   * Create an extra temporary copy of the given integration so that there's @react-email/render module resolution from ../node_modules
+   * Create an extra temporary copy of the given integration so that there's `@react-email/render` module resolution from ../node_modules
    *
    * Also modifies the package.json to point to the SDK with an absolute path.
    */
