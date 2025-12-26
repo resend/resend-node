@@ -87,7 +87,7 @@ describe('integrations', () => {
       },
     );
     if (buildInstall.status !== 0) {
-      throw new Error('next.js build failed');
+      throw new Error('esbuild build failed');
     }
   });
 });
