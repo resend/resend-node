@@ -6,7 +6,7 @@ export type ListReceivingEmailsOptions = PaginationOptions;
 
 export type ListReceivingEmail = Omit<
   GetReceivingEmailResponseSuccess,
-  'html' | 'text' | 'headers' | 'object'
+  'html' | 'text' | 'headers' | 'raw' | 'object'
 >;
 
 export interface ListReceivingEmailsResponseSuccess {
