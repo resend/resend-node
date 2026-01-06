@@ -14,6 +14,10 @@ export interface GetReceivingEmailResponseSuccess {
   text: string | null;
   headers: Record<string, string>;
   message_id: string;
+  raw: {
+    download_url: string;
+    expires_at: string;
+  } | null;
   attachments: Array<{
     id: string;
     filename: string;
