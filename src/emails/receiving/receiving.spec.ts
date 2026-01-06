@@ -70,7 +70,7 @@ describe('Receiving', () => {
           raw: {
             download_url:
               'https://example.com/emails/raw/abc123?signature=xyz789',
-            expires_at: '2023-04-07T24:13:52.669661+00:00',
+            expires_at: '2023-04-08T00:13:52.669661+00:00',
           },
           attachments: [
             {
@@ -124,7 +124,7 @@ describe('Receiving', () => {
               "object": "email",
               "raw": {
                 "download_url": "https://example.com/emails/raw/abc123?signature=xyz789",
-                "expires_at": "2023-04-07T24:13:52.669661+00:00",
+                "expires_at": "2023-04-08T00:13:52.669661+00:00",
               },
               "reply_to": [
                 "reply@example.com",
