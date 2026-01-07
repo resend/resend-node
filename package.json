@@ -73,7 +73,7 @@
     "cross-env": "10.1.0",
     "dotenv": "17.2.3",
     "pkg-pr-new": "0.0.60",
-    "rimraf": "6.1.0",
+    "rimraf": "6.1.2",
     "tsdown": "0.18.4",
     "typescript": "5.9.3",
     "vitest": "3.2.4",
