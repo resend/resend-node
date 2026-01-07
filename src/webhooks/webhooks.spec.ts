@@ -1,5 +1,5 @@
 import { Webhook } from 'svix';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
@@ -18,9 +18,11 @@ import type {
 
 const mocks = vi.hoisted(() => {
   const verify = vi.fn();
-  const webhookConstructor = vi.fn(() => ({
-    verify,
-  }));
+  const webhookConstructor = vi.fn(function (this: {
+    verify: ReturnType<typeof vi.fn>;
+  }) {
+    this.verify = verify;
+  });
 
   return {
     verify,
