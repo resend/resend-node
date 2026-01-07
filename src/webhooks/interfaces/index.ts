@@ -38,7 +38,9 @@ export type {
   EmailFailedEvent,
   EmailOpenedEvent,
   EmailReceivedEvent,
+  EmailScheduledEvent,
   EmailSentEvent,
+  EmailSuppressedEvent,
   WebhookEvent,
   WebhookEventPayload,
 } from './webhook-event.interface';

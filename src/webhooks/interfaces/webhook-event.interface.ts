@@ -1,5 +1,6 @@
 export type WebhookEvent =
   | 'email.sent'
+  | 'email.scheduled'
   | 'email.delivered'
   | 'email.delivery_delayed'
   | 'email.complained'
@@ -8,6 +9,7 @@ export type WebhookEvent =
   | 'email.clicked'
   | 'email.received'
   | 'email.failed'
+  | 'email.suppressed'
   | 'contact.created'
   | 'contact.updated'
   | 'contact.deleted'
@@ -41,6 +43,11 @@ interface EmailClick {
 
 interface EmailFailed {
   reason: string;
+}
+
+interface EmailSuppressed {
+  message: string;
+  type: string;
 }
 
 interface ReceivedEmailAttachment {
@@ -100,6 +107,12 @@ export interface EmailSentEvent {
   data: BaseEmailEventData;
 }
 
+export interface EmailScheduledEvent {
+  type: 'email.scheduled';
+  created_at: string;
+  data: BaseEmailEventData;
+}
+
 export interface EmailDeliveredEvent {
   type: 'email.delivered';
   created_at: string;
@@ -154,6 +167,14 @@ export interface EmailFailedEvent {
   };
 }
 
+export interface EmailSuppressedEvent {
+  type: 'email.suppressed';
+  created_at: string;
+  data: BaseEmailEventData & {
+    suppressed: EmailSuppressed;
+  };
+}
+
 export interface ContactCreatedEvent {
   type: 'contact.created';
   created_at: string;
@@ -192,6 +213,7 @@ export interface DomainDeletedEvent {
 
 export type WebhookEventPayload =
   | EmailSentEvent
+  | EmailScheduledEvent
   | EmailDeliveredEvent
   | EmailDeliveryDelayedEvent
   | EmailComplainedEvent
@@ -200,6 +222,7 @@ export type WebhookEventPayload =
   | EmailClickedEvent
   | EmailReceivedEvent
   | EmailFailedEvent
+  | EmailSuppressedEvent
   | ContactCreatedEvent
   | ContactUpdatedEvent
   | ContactDeletedEvent
