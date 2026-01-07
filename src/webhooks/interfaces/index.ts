@@ -23,4 +23,22 @@ export type {
   UpdateWebhookResponse,
   UpdateWebhookResponseSuccess,
 } from './update-webhook.interface';
-export type { WebhookEvent } from './webhook-event.interface';
+export type {
+  ContactCreatedEvent,
+  ContactDeletedEvent,
+  ContactUpdatedEvent,
+  DomainCreatedEvent,
+  DomainDeletedEvent,
+  DomainUpdatedEvent,
+  EmailBouncedEvent,
+  EmailClickedEvent,
+  EmailComplainedEvent,
+  EmailDeliveredEvent,
+  EmailDeliveryDelayedEvent,
+  EmailFailedEvent,
+  EmailOpenedEvent,
+  EmailReceivedEvent,
+  EmailSentEvent,
+  WebhookEvent,
+  WebhookEventPayload,
+} from './webhook-event.interface';
