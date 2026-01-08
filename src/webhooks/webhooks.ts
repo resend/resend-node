@@ -25,6 +25,7 @@ import type {
   UpdateWebhookResponse,
   UpdateWebhookResponseSuccess,
 } from './interfaces/update-webhook.interface';
+import type { WebhookEventPayload } from './interfaces/webhook-event.interface';
 
 interface Headers {
   id: string;
@@ -87,12 +88,12 @@ export class Webhooks {
     return data;
   }
 
-  verify(payload: VerifyWebhookOptions) {
+  verify(payload: VerifyWebhookOptions): WebhookEventPayload {
     const webhook = new Webhook(payload.webhookSecret);
     return webhook.verify(payload.payload, {
       'svix-id': payload.headers.id,
       'svix-timestamp': payload.headers.timestamp,
       'svix-signature': payload.headers.signature,
-    });
+    }) as WebhookEventPayload;
   }
 }
