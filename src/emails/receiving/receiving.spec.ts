@@ -525,7 +525,7 @@ describe('Receiving', () => {
         const sendEmailBody = JSON.parse(sendEmailCall[1]?.body as string);
         expect(sendEmailBody.from).toBe('sender@verified-domain.com');
         expect(sendEmailBody.to).toBe('forward@example.com');
-        expect(sendEmailBody.subject).toBe('Fwd: Original Subject');
+        expect(sendEmailBody.subject).toBe('Original Subject');
         expect(sendEmailBody.text).toBe('hello world');
         expect(sendEmailBody.html).toBe('<p>hello world</p>');
         expect(sendEmailBody.attachments).toBeUndefined();
@@ -657,7 +657,7 @@ describe('Receiving', () => {
         const sendEmailBody = JSON.parse(
           fetchMock.mock.calls[1][1]?.body as string,
         );
-        expect(sendEmailBody.subject).toBe('Fwd: (no subject)');
+        expect(sendEmailBody.subject).toBe('(no subject)');
       });
     });
 

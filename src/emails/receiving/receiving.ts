@@ -63,17 +63,18 @@ export class Receiving {
     const email = emailResponse.data;
 
     const originalSubject = email.subject || '(no subject)';
-    const forwardSubject = originalSubject.startsWith('Fwd:')
-      ? originalSubject
-      : `Fwd: ${originalSubject}`;
 
     if (passthrough) {
       return this.forwardPassthrough(email, {
         to,
         from,
-        subject: forwardSubject,
+        subject: originalSubject,
       });
     }
+
+    const forwardSubject = originalSubject.startsWith('Fwd:')
+      ? originalSubject
+      : `Fwd: ${originalSubject}`;
 
     return this.forwardWrapped(email, {
       to,
