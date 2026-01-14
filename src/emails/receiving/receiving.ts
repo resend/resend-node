@@ -1,3 +1,4 @@
+import { simpleParser } from 'mailparser';
 import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import { Attachments } from './attachments/attachments';
@@ -91,43 +92,50 @@ export class Receiving {
   ): Promise<ForwardReceivingEmailResponse> {
     const { to, from, subject } = options;
 
-    const downloadedAttachments = await Promise.all(
-      email.attachments.map(async (attachment) => {
-        const attachmentDetails = await this.attachments.get({
-          emailId: email.id,
-          id: attachment.id,
-        });
+    if (!email.raw?.download_url) {
+      return {
+        data: null,
+        error: {
+          name: 'validation_error',
+          message: 'Raw email content is not available for this email',
+          statusCode: 400,
+        },
+        headers: null,
+      };
+    }
 
-        if (attachmentDetails.error || !attachmentDetails.data.download_url) {
-          return null;
-        }
+    const rawResponse = await fetch(email.raw.download_url);
 
-        const response = await fetch(attachmentDetails.data.download_url);
-        if (!response.ok) {
-          return null;
-        }
+    if (!rawResponse.ok) {
+      return {
+        data: null,
+        error: {
+          name: 'application_error',
+          message: 'Failed to download raw email content',
+          statusCode: rawResponse.status,
+        },
+        headers: null,
+      };
+    }
 
-        const buffer = await response.arrayBuffer();
+    const rawEmailContent = await rawResponse.text();
 
-        // Strip angle brackets from content_id if present
-        // Email standards use <id@domain> but cid: references use id@domain
-        const contentId = attachment.content_id
-          ? attachment.content_id.replace(/^<|>$/g, '')
-          : undefined;
+    const parsed = await simpleParser(rawEmailContent, {
+      skipImageLinks: true,
+    });
 
-        return {
-          filename: attachment.filename,
-          content: Buffer.from(buffer).toString('base64'),
-          content_type: attachment.content_type,
-          content_id: contentId || undefined,
-          content_disposition: attachment.content_disposition,
-        };
-      }),
-    );
+    const attachments = parsed.attachments.map((attachment) => {
+      const contentId = attachment.contentId
+        ? attachment.contentId.replace(/^<|>$/g, '')
+        : undefined;
 
-    const validAttachments = downloadedAttachments.filter(
-      (a): a is NonNullable<typeof a> => a !== null,
-    );
+      return {
+        filename: attachment.filename,
+        content: attachment.content.toString('base64'),
+        content_type: attachment.contentType,
+        content_id: contentId || undefined,
+      };
+    });
 
     const data = await this.resend.post<ForwardReceivingEmailResponseSuccess>(
       '/emails',
@@ -135,9 +143,9 @@ export class Receiving {
         from,
         to,
         subject,
-        text: email.text || undefined,
-        html: email.html || undefined,
-        attachments: validAttachments.length > 0 ? validAttachments : undefined,
+        text: parsed.text || undefined,
+        html: parsed.html || undefined,
+        attachments: attachments.length > 0 ? attachments : undefined,
       },
     );
 
