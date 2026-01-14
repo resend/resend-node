@@ -112,6 +112,7 @@ export class Receiving {
           filename: attachment.filename,
           content: Buffer.from(buffer).toString('base64'),
           content_type: attachment.content_type,
+          content_id: attachment.content_id || undefined,
         };
       }),
     );
