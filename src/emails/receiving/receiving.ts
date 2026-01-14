@@ -2,6 +2,11 @@ import { buildPaginationQuery } from '../../common/utils/build-pagination-query'
 import type { Resend } from '../../resend';
 import { Attachments } from './attachments/attachments';
 import type {
+  ForwardReceivingEmailOptions,
+  ForwardReceivingEmailResponse,
+  ForwardReceivingEmailResponseSuccess,
+} from './interfaces/forward-receiving-email.interface';
+import type {
   GetReceivingEmailResponse,
   GetReceivingEmailResponseSuccess,
 } from './interfaces/get-receiving-email.interface';
@@ -35,6 +40,77 @@ export class Receiving {
       : '/emails/receiving';
 
     const data = await this.resend.get<ListReceivingEmailsResponseSuccess>(url);
+
+    return data;
+  }
+
+  async forward(
+    options: ForwardReceivingEmailOptions,
+  ): Promise<ForwardReceivingEmailResponse> {
+    const { emailId, to, from, text, html } = options;
+
+    const emailResponse = await this.get(emailId);
+
+    if (emailResponse.error) {
+      return {
+        data: null,
+        error: emailResponse.error,
+        headers: emailResponse.headers,
+      };
+    }
+
+    const email = emailResponse.data;
+
+    if (!email.raw?.download_url) {
+      return {
+        data: null,
+        error: {
+          name: 'validation_error',
+          message: 'Raw email content is not available for this email',
+          statusCode: 400,
+        },
+        headers: null,
+      };
+    }
+
+    const rawResponse = await fetch(email.raw.download_url);
+
+    if (!rawResponse.ok) {
+      return {
+        data: null,
+        error: {
+          name: 'application_error',
+          message: 'Failed to download raw email content',
+          statusCode: rawResponse.status,
+        },
+        headers: null,
+      };
+    }
+
+    const rawEmailContent = await rawResponse.text();
+
+    const originalSubject = email.subject || '(no subject)';
+    const forwardSubject = originalSubject.startsWith('Fwd:')
+      ? originalSubject
+      : `Fwd: ${originalSubject}`;
+
+    const data = await this.resend.post<ForwardReceivingEmailResponseSuccess>(
+      '/emails',
+      {
+        from,
+        to,
+        subject: forwardSubject,
+        text: text ?? '',
+        html,
+        attachments: [
+          {
+            filename: 'forwarded_message.eml',
+            content: Buffer.from(rawEmailContent).toString('base64'),
+            content_type: 'message/rfc822',
+          },
+        ],
+      },
+    );
 
     return data;
   }

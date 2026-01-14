@@ -1,6 +1,6 @@
 {
   "name": "resend",
-  "version": "6.7.0-preview-raw-inbound.0",
+  "version": "6.7.0-preview-forwarding.0",
   "description": "Node.js library for the Resend API",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
