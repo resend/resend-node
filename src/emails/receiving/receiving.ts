@@ -47,7 +47,8 @@ export class Receiving {
   async forward(
     options: ForwardReceivingEmailOptions,
   ): Promise<ForwardReceivingEmailResponse> {
-    const { emailId, to, from, text, html } = options;
+    const { emailId, to, from } = options;
+    const passthrough = options.passthrough !== false;
 
     const emailResponse = await this.get(emailId);
 
@@ -60,6 +61,90 @@ export class Receiving {
     }
 
     const email = emailResponse.data;
+
+    const originalSubject = email.subject || '(no subject)';
+    const forwardSubject = originalSubject.startsWith('Fwd:')
+      ? originalSubject
+      : `Fwd: ${originalSubject}`;
+
+    if (passthrough) {
+      return this.forwardPassthrough(email, {
+        to,
+        from,
+        subject: forwardSubject,
+      });
+    }
+
+    return this.forwardWrapped(email, {
+      to,
+      from,
+      subject: forwardSubject,
+      text: 'text' in options ? options.text : undefined,
+      html: 'html' in options ? options.html : undefined,
+    });
+  }
+
+  private async forwardPassthrough(
+    email: GetReceivingEmailResponseSuccess,
+    options: { to: string | string[]; from: string; subject: string },
+  ): Promise<ForwardReceivingEmailResponse> {
+    const { to, from, subject } = options;
+
+    const downloadedAttachments = await Promise.all(
+      email.attachments.map(async (attachment) => {
+        const attachmentDetails = await this.attachments.get({
+          emailId: email.id,
+          id: attachment.id,
+        });
+
+        if (attachmentDetails.error || !attachmentDetails.data.download_url) {
+          return null;
+        }
+
+        const response = await fetch(attachmentDetails.data.download_url);
+        if (!response.ok) {
+          return null;
+        }
+
+        const buffer = await response.arrayBuffer();
+        return {
+          filename: attachment.filename,
+          content: Buffer.from(buffer).toString('base64'),
+          content_type: attachment.content_type,
+        };
+      }),
+    );
+
+    const validAttachments = downloadedAttachments.filter(
+      (a): a is NonNullable<typeof a> => a !== null,
+    );
+
+    const data = await this.resend.post<ForwardReceivingEmailResponseSuccess>(
+      '/emails',
+      {
+        from,
+        to,
+        subject,
+        text: email.text || undefined,
+        html: email.html || undefined,
+        attachments: validAttachments.length > 0 ? validAttachments : undefined,
+      },
+    );
+
+    return data;
+  }
+
+  private async forwardWrapped(
+    email: GetReceivingEmailResponseSuccess,
+    options: {
+      to: string | string[];
+      from: string;
+      subject: string;
+      text?: string;
+      html?: string;
+    },
+  ): Promise<ForwardReceivingEmailResponse> {
+    const { to, from, subject, text, html } = options;
 
     if (!email.raw?.download_url) {
       return {
@@ -89,18 +174,13 @@ export class Receiving {
 
     const rawEmailContent = await rawResponse.text();
 
-    const originalSubject = email.subject || '(no subject)';
-    const forwardSubject = originalSubject.startsWith('Fwd:')
-      ? originalSubject
-      : `Fwd: ${originalSubject}`;
-
     const data = await this.resend.post<ForwardReceivingEmailResponseSuccess>(
       '/emails',
       {
         from,
         to,
-        subject: forwardSubject,
-        text: text ?? '',
+        subject,
+        text,
         html,
         attachments: [
           {
