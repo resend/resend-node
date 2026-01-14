@@ -615,6 +615,85 @@ describe('Receiving', () => {
         );
       });
 
+      it('passes through content_id for inline attachments and strips angle brackets', async () => {
+        const getEmailResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'original-sender@example.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: 'Email with inline image',
+          html: '<p>See image: <img src="cid:image001@example.com"></p>',
+          text: 'See image',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          headers: {},
+          raw: null,
+          attachments: [
+            {
+              id: 'att_inline',
+              filename: 'image.jpg',
+              size: 2048,
+              content_type: 'image/jpeg',
+              content_id: '<image001@example.com>',
+              content_disposition: 'inline',
+            },
+          ],
+          message_id: 'msg_123',
+        };
+
+        const attachmentDetails = {
+          object: 'attachment' as const,
+          id: 'att_inline',
+          filename: 'image.jpg',
+          size: 2048,
+          content_type: 'image/jpeg',
+          content_disposition: 'inline' as const,
+          download_url: 'https://example.com/inline-image',
+          expires_at: '2023-04-08T00:13:52.669661+00:00',
+        };
+
+        const imageContent = 'fake-image-binary-content';
+
+        fetchMock.mockOnce(JSON.stringify(getEmailResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        fetchMock.mockOnce(JSON.stringify(attachmentDetails), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        fetchMock.mockOnce(imageContent, {
+          status: 200,
+          headers: { 'content-type': 'image/jpeg' },
+        });
+
+        fetchMock.mockOnce(JSON.stringify({ id: 'new-email-id' }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+        });
+
+        const sendEmailCall = fetchMock.mock.calls[3];
+        const sendEmailBody = JSON.parse(sendEmailCall[1]?.body as string);
+
+        expect(sendEmailBody.attachments).toHaveLength(1);
+        expect(sendEmailBody.attachments[0].content_id).toBe(
+          'image001@example.com',
+        );
+        expect(sendEmailBody.attachments[0].content_disposition).toBe('inline');
+        expect(sendEmailBody.attachments[0].filename).toBe('image.jpg');
+        expect(sendEmailBody.attachments[0].content_type).toBe('image/jpeg');
+      });
+
       it('handles email with no subject', async () => {
         const getEmailResponse: GetReceivingEmailResponseSuccess = {
           object: 'email' as const,

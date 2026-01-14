@@ -108,11 +108,19 @@ export class Receiving {
         }
 
         const buffer = await response.arrayBuffer();
+
+        // Strip angle brackets from content_id if present
+        // Email standards use <id@domain> but cid: references use id@domain
+        const contentId = attachment.content_id
+          ? attachment.content_id.replace(/^<|>$/g, '')
+          : undefined;
+
         return {
           filename: attachment.filename,
           content: Buffer.from(buffer).toString('base64'),
           content_type: attachment.content_type,
-          content_id: attachment.content_id || undefined,
+          content_id: contentId || undefined,
+          content_disposition: attachment.content_disposition,
         };
       }),
     );
