@@ -83,6 +83,73 @@ describe('Broadcasts', () => {
       `);
     });
 
+    it('creates and sends a broadcast', async () => {
+      const response: CreateBroadcastResponseSuccess = {
+        id: '71cdfe68-cf79-473a-a9d7-21f91db6a526',
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const payload: CreateBroadcastOptions = {
+        from: 'bu@resend.com',
+        segmentId: '0192f4ed-c2e9-7112-9c13-b04a043e23ee',
+        subject: 'Hello World',
+        html: '<h1>Hello world</h1>',
+        send: true,
+      };
+
+      const data = await resend.broadcasts.create(payload);
+      expect(data).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+    });
+
+    it('creates and schedules a broadcast', async () => {
+      const response: CreateBroadcastResponseSuccess = {
+        id: '71cdfe68-cf79-473a-a9d7-21f91db6a526',
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const payload: CreateBroadcastOptions = {
+        from: 'bu@resend.com',
+        segmentId: '0192f4ed-c2e9-7112-9c13-b04a043e23ee',
+        subject: 'Hello World',
+        html: '<h1>Hello world</h1>',
+        send: true,
+        scheduledAt: '2024-08-05T11:52:01.858Z',
+      };
+
+      const data = await resend.broadcasts.create(payload);
+      expect(data).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+    });
+
     it('creates broadcast with multiple recipients', async () => {
       const response: CreateBroadcastResponseSuccess = {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',

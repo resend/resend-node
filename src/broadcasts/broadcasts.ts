@@ -53,6 +53,8 @@ export class Broadcasts {
         subject: payload.subject,
         text: payload.text,
         topic_id: payload.topicId,
+        send: payload.send,
+        scheduled_at: payload.scheduledAt,
       },
       options,
     );

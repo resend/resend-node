@@ -37,6 +37,42 @@ interface SegmentOptions {
   audienceId: string;
 }
 
+type SendBroadcastOnCreationOptions =
+  | {
+      /**
+       * Whether to send the broadcast immediately or keep it as a draft.
+       * If not provided or set to false, the broadcast will be created as a draft.
+       *
+       * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+       */
+      send: true;
+      /**
+       * Schedule time to send the broadcast. Can only be used if `send` is true.
+       * The date should be in ISO 8601 format (e.g: 2024-08-05T11:52:01.858Z)
+       * or relative time (eg: in 2 days).
+       *
+       * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+       */
+      scheduledAt?: string;
+    }
+  | {
+      /**
+       * Whether to send the broadcast immediately or keep it as a draft.
+       * If not provided or set to false, the broadcast will be created as a draft.
+       *
+       * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+       */
+      send?: false;
+      /**
+       * Schedule time to send the broadcast. Can only be used if `send` is true.
+       * The date should be in ISO 8601 format (e.g: 2024-08-05T11:52:01.858Z)
+       * or relative time (eg: in 2 days).
+       *
+       * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+       */
+      scheduledAt?: never;
+    };
+
 interface CreateBroadcastBaseOptions {
   /**
    * The name of the broadcast
@@ -78,7 +114,8 @@ interface CreateBroadcastBaseOptions {
 
 export type CreateBroadcastOptions = RequireAtLeastOne<EmailRenderOptions> &
   RequireAtLeastOne<SegmentOptions> &
-  CreateBroadcastBaseOptions;
+  CreateBroadcastBaseOptions &
+  SendBroadcastOnCreationOptions;
 
 export interface CreateBroadcastRequestOptions extends PostOptions {}
 
