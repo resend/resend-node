@@ -53,6 +53,7 @@
   },
   "homepage": "https://github.com/resend/resend-node#readme",
   "dependencies": {
+    "mailparser": "3.7.2",
     "svix": "1.84.1"
   },
   "peerDependencies": {
@@ -68,6 +69,7 @@
     "@pollyjs/adapter-fetch": "6.0.7",
     "@pollyjs/core": "6.0.6",
     "@pollyjs/persister-fs": "6.0.6",
+    "@types/mailparser": "3.4.5",
     "@types/node": "24.10.9",
     "@types/react": "19.2.9",
     "cross-env": "10.1.0",

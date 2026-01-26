@@ -2,6 +2,7 @@ import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
 import type {
+  ForwardReceivingEmailResponseSuccess,
   GetReceivingEmailResponseSuccess,
   ListReceivingEmailsResponseSuccess,
 } from './interfaces';
@@ -67,6 +68,11 @@ describe('Receiving', () => {
           headers: {
             example: 'value',
           },
+          raw: {
+            download_url:
+              'https://example.com/emails/raw/abc123?signature=xyz789',
+            expires_at: '2023-04-08T00:13:52.669661+00:00',
+          },
           attachments: [
             {
               id: 'att_123',
@@ -117,6 +123,10 @@ describe('Receiving', () => {
               "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
               "message_id": "msg_123",
               "object": "email",
+              "raw": {
+                "download_url": "https://example.com/emails/raw/abc123?signature=xyz789",
+                "expires_at": "2023-04-08T00:13:52.669661+00:00",
+              },
               "reply_to": [
                 "reply@example.com",
               ],
@@ -148,6 +158,7 @@ describe('Receiving', () => {
           cc: null,
           reply_to: null,
           headers: {},
+          raw: null,
           attachments: [],
           message_id: 'msg_456',
         };
@@ -176,6 +187,7 @@ describe('Receiving', () => {
               "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
               "message_id": "msg_456",
               "object": "email",
+              "raw": null,
               "reply_to": null,
               "subject": "Test inbound email",
               "text": "hello world",
@@ -409,6 +421,607 @@ describe('Receiving', () => {
 
         expect(fetchMock.mock.calls[0][0]).toBe(
           'https://api.resend.com/emails/receiving?before=cursor456',
+        );
+      });
+    });
+  });
+
+  describe('forward', () => {
+    describe('common error handling', () => {
+      it('returns error when email not found', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          message: 'Email not found',
+          statusCode: 404,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const result = await resend.emails.receiving.forward({
+          emailId: '61cda979-919d-4b9d-9638-c148b93ff410',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+        });
+
+        expect(result).toMatchInlineSnapshot(`
+          {
+            "data": null,
+            "error": {
+              "message": "Email not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+      });
+
+      it('returns error when email has no raw content', async () => {
+        const getEmailResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'original-sender@example.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: 'Test Subject',
+          html: '<p>hello</p>',
+          text: 'hello',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          headers: {},
+          raw: null,
+          attachments: [],
+          message_id: 'msg_123',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(getEmailResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        const result = await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+        });
+
+        expect(result.error).toEqual({
+          name: 'validation_error',
+          message: 'Raw email content is not available for this email',
+          statusCode: 400,
+        });
+        expect(result.data).toBeNull();
+      });
+
+      it('returns error when raw email download fails', async () => {
+        const getEmailResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'original-sender@example.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: 'Test Subject',
+          html: null,
+          text: 'hello world',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          headers: {},
+          raw: {
+            download_url: 'https://example.com/raw-email-download',
+            expires_at: '2023-04-08T00:13:52.669661+00:00',
+          },
+          attachments: [],
+          message_id: 'msg_123',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(getEmailResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        fetchMock.mockOnce('Not Found', {
+          status: 404,
+          headers: { 'content-type': 'text/plain' },
+        });
+
+        const result = await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+        });
+
+        expect(result.error).toEqual({
+          name: 'application_error',
+          message: 'Failed to download raw email content',
+          statusCode: 404,
+        });
+        expect(result.data).toBeNull();
+      });
+    });
+
+    describe('passthrough mode (default)', () => {
+      it('sends email with original content directly', async () => {
+        const getEmailResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'original-sender@example.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: 'Original Subject',
+          html: '<p>hello world</p>',
+          text: 'hello world',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          headers: {},
+          raw: {
+            download_url: 'https://example.com/raw-email-download',
+            expires_at: '2023-04-08T00:13:52.669661+00:00',
+          },
+          attachments: [],
+          message_id: 'msg_123',
+        };
+
+        const rawEmailContent = `From: original-sender@example.com
+To: received@example.com
+Subject: Original Subject
+Content-Type: multipart/alternative; boundary="boundary123"
+
+--boundary123
+Content-Type: text/plain; charset="UTF-8"
+
+hello world
+
+--boundary123
+Content-Type: text/html; charset="UTF-8"
+
+<p>hello world</p>
+
+--boundary123--`;
+
+        const forwardResponse: ForwardReceivingEmailResponseSuccess = {
+          id: 'new-email-id-123',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(getEmailResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        fetchMock.mockOnce(rawEmailContent, {
+          status: 200,
+          headers: { 'content-type': 'message/rfc822' },
+        });
+
+        fetchMock.mockOnce(JSON.stringify(forwardResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        const result = await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+        });
+
+        expect(result).toMatchInlineSnapshot(`
+          {
+            "data": {
+              "id": "new-email-id-123",
+            },
+            "error": null,
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+
+        const sendEmailCall = fetchMock.mock.calls[2];
+        expect(sendEmailCall[0]).toBe('https://api.resend.com/emails');
+
+        const sendEmailBody = JSON.parse(sendEmailCall[1]?.body as string);
+        expect(sendEmailBody.from).toBe('sender@verified-domain.com');
+        expect(sendEmailBody.to).toBe('forward@example.com');
+        expect(sendEmailBody.subject).toBe('Original Subject');
+        expect(sendEmailBody.text).toContain('hello world');
+        expect(sendEmailBody.html).toContain('<p>hello world</p>');
+        expect(sendEmailBody.attachments).toBeUndefined();
+      });
+
+      it('includes original attachments', async () => {
+        const getEmailResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'original-sender@example.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: 'Email with attachment',
+          html: '<p>See attached</p>',
+          text: 'See attached',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          headers: {},
+          raw: {
+            download_url: 'https://example.com/raw-email-download',
+            expires_at: '2023-04-08T00:13:52.669661+00:00',
+          },
+          attachments: [
+            {
+              id: 'att_123',
+              filename: 'document.pdf',
+              size: 1024,
+              content_type: 'application/pdf',
+              content_id: 'cid_123',
+              content_disposition: 'attachment',
+            },
+          ],
+          message_id: 'msg_123',
+        };
+
+        const attachmentContent =
+          Buffer.from('PDF content here').toString('base64');
+
+        const rawEmailContent = `From: original-sender@example.com
+To: received@example.com
+Subject: Email with attachment
+Content-Type: multipart/mixed; boundary="boundary123"
+
+--boundary123
+Content-Type: text/plain; charset="UTF-8"
+
+See attached
+
+--boundary123
+Content-Type: text/html; charset="UTF-8"
+
+<p>See attached</p>
+
+--boundary123
+Content-Type: application/pdf; name="document.pdf"
+Content-Disposition: attachment; filename="document.pdf"
+Content-Transfer-Encoding: base64
+
+${attachmentContent}
+
+--boundary123--`;
+
+        const forwardResponse: ForwardReceivingEmailResponseSuccess = {
+          id: 'new-email-id-456',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(getEmailResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        fetchMock.mockOnce(rawEmailContent, {
+          status: 200,
+          headers: { 'content-type': 'message/rfc822' },
+        });
+
+        fetchMock.mockOnce(JSON.stringify(forwardResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+        });
+
+        const sendEmailCall = fetchMock.mock.calls[2];
+        const sendEmailBody = JSON.parse(sendEmailCall[1]?.body as string);
+
+        expect(sendEmailBody.attachments).toHaveLength(1);
+        expect(sendEmailBody.attachments[0].filename).toBe('document.pdf');
+        expect(sendEmailBody.attachments[0].content_type).toBe(
+          'application/pdf',
+        );
+      });
+
+      it('passes through content_id for inline attachments and strips angle brackets', async () => {
+        const getEmailResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'original-sender@example.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: 'Email with inline image',
+          html: '<p>See image: <img src="cid:image001@example.com"></p>',
+          text: 'See image',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          headers: {},
+          raw: {
+            download_url: 'https://example.com/raw-email-download',
+            expires_at: '2023-04-08T00:13:52.669661+00:00',
+          },
+          attachments: [
+            {
+              id: 'att_inline',
+              filename: 'image.jpg',
+              size: 2048,
+              content_type: 'image/jpeg',
+              content_id: '<image001@example.com>',
+              content_disposition: 'inline',
+            },
+          ],
+          message_id: 'msg_123',
+        };
+
+        const imageContent = Buffer.from('fake-image-binary-content').toString(
+          'base64',
+        );
+
+        const rawEmailContent = `From: original-sender@example.com
+To: received@example.com
+Subject: Email with inline image
+Content-Type: multipart/related; boundary="boundary123"
+
+--boundary123
+Content-Type: text/html; charset="UTF-8"
+
+<p>See image: <img src="cid:image001@example.com"></p>
+
+--boundary123
+Content-Type: image/jpeg; name="image.jpg"
+Content-Disposition: inline; filename="image.jpg"
+Content-Transfer-Encoding: base64
+Content-ID: <image001@example.com>
+
+${imageContent}
+
+--boundary123--`;
+
+        fetchMock.mockOnce(JSON.stringify(getEmailResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        fetchMock.mockOnce(rawEmailContent, {
+          status: 200,
+          headers: { 'content-type': 'message/rfc822' },
+        });
+
+        fetchMock.mockOnce(JSON.stringify({ id: 'new-email-id' }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+        });
+
+        const sendEmailCall = fetchMock.mock.calls[2];
+        const sendEmailBody = JSON.parse(sendEmailCall[1]?.body as string);
+
+        expect(sendEmailBody.attachments).toHaveLength(1);
+        expect(sendEmailBody.attachments[0].content_id).toBe(
+          'image001@example.com',
+        );
+        expect(sendEmailBody.attachments[0].filename).toBe('image.jpg');
+        expect(sendEmailBody.attachments[0].content_type).toBe('image/jpeg');
+      });
+
+      it('handles email with no subject', async () => {
+        const getEmailResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'original-sender@example.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: '',
+          html: null,
+          text: 'hello world',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          headers: {},
+          raw: {
+            download_url: 'https://example.com/raw-email-download',
+            expires_at: '2023-04-08T00:13:52.669661+00:00',
+          },
+          attachments: [],
+          message_id: 'msg_123',
+        };
+
+        const rawEmailContent = `From: original-sender@example.com
+To: received@example.com
+Content-Type: text/plain; charset="UTF-8"
+
+hello world`;
+
+        const forwardResponse: ForwardReceivingEmailResponseSuccess = {
+          id: 'new-email-id-789',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(getEmailResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        fetchMock.mockOnce(rawEmailContent, {
+          status: 200,
+          headers: { 'content-type': 'message/rfc822' },
+        });
+
+        fetchMock.mockOnce(JSON.stringify(forwardResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+        });
+
+        const sendEmailBody = JSON.parse(
+          fetchMock.mock.calls[2][1]?.body as string,
+        );
+        expect(sendEmailBody.subject).toBe('(no subject)');
+      });
+    });
+
+    describe('wrapped mode (passthrough: false)', () => {
+      it('sends forwarded email with raw content as .eml attachment', async () => {
+        const getEmailResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'original-sender@example.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: 'Original Subject',
+          html: '<p>hello world</p>',
+          text: 'hello world',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          headers: {},
+          raw: {
+            download_url: 'https://example.com/raw-email-download',
+            expires_at: '2023-04-08T00:13:52.669661+00:00',
+          },
+          attachments: [],
+          message_id: 'msg_123',
+        };
+
+        const rawEmailContent =
+          'From: original-sender@example.com\r\nTo: received@example.com\r\nSubject: Original Subject\r\n\r\nhello world';
+
+        const forwardResponse: ForwardReceivingEmailResponseSuccess = {
+          id: 'new-email-id-123',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(getEmailResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        fetchMock.mockOnce(rawEmailContent, {
+          status: 200,
+          headers: { 'content-type': 'message/rfc822' },
+        });
+
+        fetchMock.mockOnce(JSON.stringify(forwardResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        const result = await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+          passthrough: false,
+          text: 'Forwarded email.',
+        });
+
+        expect(result).toMatchInlineSnapshot(`
+          {
+            "data": {
+              "id": "new-email-id-123",
+            },
+            "error": null,
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+
+        const sendEmailCall = fetchMock.mock.calls[2];
+        expect(sendEmailCall[0]).toBe('https://api.resend.com/emails');
+
+        const sendEmailBody = JSON.parse(sendEmailCall[1]?.body as string);
+        expect(sendEmailBody.from).toBe('sender@verified-domain.com');
+        expect(sendEmailBody.to).toBe('forward@example.com');
+        expect(sendEmailBody.subject).toBe('Fwd: Original Subject');
+        expect(sendEmailBody.text).toBe('Forwarded email.');
+        expect(sendEmailBody.attachments).toHaveLength(1);
+        expect(sendEmailBody.attachments[0].filename).toBe(
+          'forwarded_message.eml',
+        );
+        expect(sendEmailBody.attachments[0].content_type).toBe(
+          'message/rfc822',
+        );
+        expect(sendEmailBody.attachments[0].content).toBe(
+          Buffer.from(rawEmailContent).toString('base64'),
+        );
+      });
+
+      it('includes text and html body', async () => {
+        const getEmailResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'original-sender@example.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: 'Test Subject',
+          html: null,
+          text: 'hello world',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          headers: {},
+          raw: {
+            download_url: 'https://example.com/raw-email-download',
+            expires_at: '2023-04-08T00:13:52.669661+00:00',
+          },
+          attachments: [],
+          message_id: 'msg_123',
+        };
+
+        const rawEmailContent = 'raw email content';
+
+        const forwardResponse: ForwardReceivingEmailResponseSuccess = {
+          id: 'new-email-id-789',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(getEmailResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        fetchMock.mockOnce(rawEmailContent, {
+          status: 200,
+          headers: { 'content-type': 'message/rfc822' },
+        });
+
+        fetchMock.mockOnce(JSON.stringify(forwardResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+          passthrough: false,
+          text: 'Please see the forwarded email attached.',
+          html: '<p>Please see the forwarded email attached.</p>',
+        });
+
+        const sendEmailBody = JSON.parse(
+          fetchMock.mock.calls[2][1]?.body as string,
+        );
+        expect(sendEmailBody.text).toBe(
+          'Please see the forwarded email attached.',
+        );
+        expect(sendEmailBody.html).toBe(
+          '<p>Please see the forwarded email attached.</p>',
         );
       });
     });
