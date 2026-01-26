@@ -5,6 +5,7 @@ import { mockSuccessResponse } from '../test-utils/mock-fetch';
 import type {
   CreateContactOptions,
   CreateContactResponseSuccess,
+  LegacyCreateContactOptions,
 } from './interfaces/create-contact-options.interface';
 import type {
   GetContactOptions,
@@ -28,78 +29,188 @@ describe('Contacts', () => {
   afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
-    it('creates a contact', async () => {
-      const payload: CreateContactOptions = {
-        email: 'team@resend.com',
-        properties: {
-          country: 'Canada',
-          edition: 1,
-        },
-      };
-      const response: CreateContactResponseSuccess = {
-        object: 'contact',
-        id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
-      };
+    describe('current create contact endpoint', () => {
+      it('creates a contact', async () => {
+        const payload: CreateContactOptions = {
+          email: 'team@resend.com',
+          properties: {
+            country: 'Canada',
+            edition: 1,
+          },
+          segments: [{ id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223' }],
+          topics: [
+            {
+              id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87224',
+              subscription: 'opt_in',
+            },
+          ],
+        };
+        const response: CreateContactResponseSuccess = {
+          object: 'contact',
+          id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
+        };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-        },
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        await expect(
+          resend.contacts.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
+          {
+            "data": {
+              "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
+              "object": "contact",
+            },
+            "error": null,
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
 
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      await expect(
-        resend.contacts.create(payload),
-      ).resolves.toMatchInlineSnapshot(`
-        {
-          "data": {
-            "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
-            "object": "contact",
+      it('throws error when missing name', async () => {
+        const payload: LegacyCreateContactOptions = {
+          email: '',
+          audienceId: '',
+        };
+        const response: ErrorResponse = {
+          name: 'missing_required_field',
+          message: 'Missing `email` field.',
+          statusCode: 422,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 422,
+          headers: {
+            'content-type': 'application/json',
           },
-          "error": null,
-          "headers": {
-            "content-type": "application/json",
-          },
-        }
-      `);
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = resend.contacts.create(payload);
+
+        await expect(result).resolves.toMatchInlineSnapshot(`
+          {
+            "data": null,
+            "error": {
+              "message": "Missing \`email\` field.",
+              "name": "missing_required_field",
+              "statusCode": 422,
+            },
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+      });
     });
 
-    it('throws error when missing name', async () => {
-      const payload: CreateContactOptions = {
-        email: '',
-        audienceId: '',
-      };
-      const response: ErrorResponse = {
-        name: 'missing_required_field',
-        message: 'Missing `email` field.',
-        statusCode: 422,
-      };
+    describe('legacy create contact endpoint', () => {
+      it('creates a contact', async () => {
+        const payload: LegacyCreateContactOptions = {
+          audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+          email: 'team@resend.com',
+          properties: {
+            country: 'Canada',
+            edition: 1,
+          },
+        };
+        const response: CreateContactResponseSuccess = {
+          object: 'contact',
+          id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
+        };
 
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 422,
-        headers: {
-          'content-type': 'application/json',
-        },
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        await expect(
+          resend.contacts.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
+          {
+            "data": {
+              "id": "3deaccfb-f47f-440a-8875-ea14b1716b43",
+              "object": "contact",
+            },
+            "error": null,
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
 
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-
-      const result = resend.contacts.create(payload);
-
-      await expect(result).resolves.toMatchInlineSnapshot(`
-        {
-          "data": null,
-          "error": {
-            "message": "Missing \`email\` field.",
-            "name": "missing_required_field",
-            "statusCode": 422,
+      it('throws error when using `audienceId` together with `segments`', async () => {
+        const payload: LegacyCreateContactOptions = {
+          audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+          email: 'team@resend.com',
+          properties: {
+            country: 'Canada',
+            edition: 1,
           },
-          "headers": {
-            "content-type": "application/json",
+          //@ts-expect-error - `segments` is not a valid property for `LegacyCreateContactOptions`
+          segments: [{ id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223' }],
+        };
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        await expect(
+          resend.contacts.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
+          {
+            "data": null,
+            "error": {
+              "message": "\`audienceId\` is deprecated, and cannot be used together with \`segments\` or \`topics\`. Use \`segments\` instead to add one or more segments to the new contact.",
+              "name": "invalid_parameter",
+              "statusCode": null,
+            },
+            "headers": null,
+          }
+        `);
+      });
+
+      it('throws error when using `audienceId` together with `topics`', async () => {
+        const payload: LegacyCreateContactOptions = {
+          audienceId: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+          email: 'team@resend.com',
+          properties: {
+            country: 'Canada',
+            edition: 1,
           },
-        }
-      `);
+          //@ts-expect-error - `topics` is not a valid property for `LegacyCreateContactOptions`
+          topics: [
+            {
+              id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87224',
+              subscription: 'opt_in',
+            },
+          ],
+        };
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        await expect(
+          resend.contacts.create(payload),
+        ).resolves.toMatchInlineSnapshot(`
+          {
+            "data": null,
+            "error": {
+              "message": "\`audienceId\` is deprecated, and cannot be used together with \`segments\` or \`topics\`. Use \`segments\` instead to add one or more segments to the new contact.",
+              "name": "invalid_parameter",
+              "statusCode": null,
+            },
+            "headers": null,
+          }
+        `);
+      });
     });
   });
 
