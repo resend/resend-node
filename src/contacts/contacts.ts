@@ -5,6 +5,7 @@ import type {
   CreateContactRequestOptions,
   CreateContactResponse,
   CreateContactResponseSuccess,
+  LegacyCreateContactOptions,
 } from './interfaces/create-contact-options.interface';
 import type {
   GetContactOptions,
@@ -39,12 +40,26 @@ export class Contacts {
   }
 
   async create(
-    payload: CreateContactOptions,
+    payload: CreateContactOptions | LegacyCreateContactOptions,
     options: CreateContactRequestOptions = {},
   ): Promise<CreateContactResponse> {
-    if (!payload.audienceId) {
+    // Legacy create contact endpoint
+    if ('audienceId' in payload) {
+      if ('segments' in payload || 'topics' in payload) {
+        return {
+          data: null,
+          headers: null,
+          error: {
+            message:
+              '`audienceId` is deprecated, and cannot be used together with `segments` or `topics`. Use `segments` instead to add one or more segments to the new contact.',
+            statusCode: null,
+            name: 'invalid_parameter',
+          },
+        };
+      }
+
       const data = await this.resend.post<CreateContactResponseSuccess>(
-        '/contacts',
+        `/audiences/${payload.audienceId}/contacts`,
         {
           unsubscribed: payload.unsubscribed,
           email: payload.email,
@@ -57,14 +72,17 @@ export class Contacts {
       return data;
     }
 
+    // Current create contact endpoint
     const data = await this.resend.post<CreateContactResponseSuccess>(
-      `/audiences/${payload.audienceId}/contacts`,
+      '/contacts',
       {
         unsubscribed: payload.unsubscribed,
         email: payload.email,
         first_name: payload.firstName,
         last_name: payload.lastName,
         properties: payload.properties,
+        segments: payload.segments,
+        topics: payload.topics,
       },
       options,
     );
