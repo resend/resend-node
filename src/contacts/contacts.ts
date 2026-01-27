@@ -40,6 +40,15 @@ export class Contacts {
   }
 
   async create(
+    paylaod: CreateContactOptions,
+    options?: CreateContactRequestOptions,
+  ): Promise<CreateContactResponse>;
+  async create(
+    paylaod: LegacyCreateContactOptions,
+    options?: CreateContactRequestOptions,
+  ): Promise<CreateContactResponse>;
+
+  async create(
     payload: CreateContactOptions | LegacyCreateContactOptions,
     options: CreateContactRequestOptions = {},
   ): Promise<CreateContactResponse> {

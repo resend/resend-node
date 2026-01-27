@@ -9,6 +9,8 @@ interface CreateContactPropertiesOptions {
 export interface LegacyCreateContactOptions {
   /**
    * @deprecated Use `segments` instead to add one or more segments to the new contact
+   *
+   * @see https://resend.com/docs/dashboard/segments/migrating-from-audiences-to-segments
    */
   audienceId: string;
   email: string;
@@ -16,8 +18,6 @@ export interface LegacyCreateContactOptions {
   firstName?: string;
   lastName?: string;
   properties?: CreateContactPropertiesOptions;
-  segments?: never;
-  topics?: never;
 }
 
 export interface CreateContactOptions {
@@ -33,10 +33,6 @@ export interface CreateContactOptions {
     id: string;
     subscription: 'opt_in' | 'opt_out';
   }[];
-  /**
-   * @deprecated Use `segments` instead to add one or more segments to the new contact
-   */
-  audienceId?: never;
 }
 
 export interface CreateContactRequestOptions extends PostOptions {}
