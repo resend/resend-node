@@ -1,4 +1,4 @@
-import { simpleParser } from 'mailparser';
+import PostalMime from 'postal-mime';
 import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import { Attachments } from './attachments/attachments';
@@ -120,9 +120,7 @@ export class Receiving {
 
     const rawEmailContent = await rawResponse.text();
 
-    const parsed = await simpleParser(rawEmailContent, {
-      skipImageLinks: true,
-    });
+    const parsed = await PostalMime.parse(rawEmailContent, {});
 
     const attachments = parsed.attachments.map((attachment) => {
       const contentId = attachment.contentId
@@ -131,8 +129,8 @@ export class Receiving {
 
       return {
         filename: attachment.filename,
-        content: attachment.content.toString('base64'),
-        content_type: attachment.contentType,
+        content: attachment.content.toString(),
+        content_type: attachment.mimeType,
         content_id: contentId || undefined,
       };
     });
