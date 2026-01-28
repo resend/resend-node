@@ -120,7 +120,9 @@ export class Receiving {
 
     const rawEmailContent = await rawResponse.text();
 
-    const parsed = await PostalMime.parse(rawEmailContent, {});
+    const parsed = await PostalMime.parse(rawEmailContent, {
+      attachmentEncoding: "base64"
+    });
 
     const attachments = parsed.attachments.map((attachment) => {
       const contentId = attachment.contentId
