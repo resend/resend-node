@@ -53,7 +53,7 @@
   },
   "homepage": "https://github.com/resend/resend-node#readme",
   "dependencies": {
-    "mailparser": "3.9.1",
+    "mailparser": "3.9.3",
     "svix": "1.84.1"
   },
   "peerDependencies": {
