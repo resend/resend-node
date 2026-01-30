@@ -30,7 +30,7 @@ jobs:
       - name: Find changed files
         id: changed_files
         if: github.event_name == 'pull_request'
-        uses: tj-actions/changed-files@7d5bbf4e8d5c63a42c94e1c1bff2394247117e96
+        uses: tj-actions/changed-files@caee9d94cec72c6797349cc07842c787d2cc9f74
         with:
           files: src/**/*
           dir_names: true
