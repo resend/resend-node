@@ -20,11 +20,11 @@ export interface GetReceivingEmailResponseSuccess {
   } | null;
   attachments: Array<{
     id: string;
-    filename: string;
+    filename: string | null;
     size: number;
     content_type: string;
-    content_id: string;
-    content_disposition: string;
+    content_id: string | null;
+    content_disposition: string | null;
   }>;
 }
 
