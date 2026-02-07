@@ -17,16 +17,27 @@ import { Webhooks } from './webhooks/webhooks';
 
 const defaultBaseUrl = 'https://api.resend.com';
 const defaultUserAgent = `resend-node:${version}`;
-const baseUrl =
-  typeof process !== 'undefined' && process.env
+
+function getDefaultBaseUrl(): string {
+  return typeof process !== 'undefined' && process.env
     ? process.env.RESEND_BASE_URL || defaultBaseUrl
     : defaultBaseUrl;
-const userAgent =
-  typeof process !== 'undefined' && process.env
+}
+
+function getDefaultUserAgent(): string {
+  return typeof process !== 'undefined' && process.env
     ? process.env.RESEND_USER_AGENT || defaultUserAgent
     : defaultUserAgent;
+}
+
+export interface ResendOptions {
+  baseUrl?: string;
+  userAgent?: string;
+}
 
 export class Resend {
+  readonly baseUrl: string;
+  readonly userAgent: string;
   private readonly headers: Headers;
 
   readonly apiKeys = new ApiKeys(this);
@@ -45,7 +56,10 @@ export class Resend {
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
 
-  constructor(readonly key?: string) {
+  constructor(
+    readonly key?: string,
+    options?: ResendOptions,
+  ) {
     if (!key) {
       if (typeof process !== 'undefined' && process.env) {
         this.key = process.env.RESEND_API_KEY;
@@ -58,16 +72,19 @@ export class Resend {
       }
     }
 
+    this.baseUrl = options?.baseUrl ?? getDefaultBaseUrl();
+    this.userAgent = options?.userAgent ?? getDefaultUserAgent();
+
     this.headers = new Headers({
       Authorization: `Bearer ${this.key}`,
-      'User-Agent': userAgent,
+      'User-Agent': this.userAgent,
       'Content-Type': 'application/json',
     });
   }
 
   async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
     try {
-      const response = await fetch(`${baseUrl}${path}`, options);
+      const response = await fetch(`${this.baseUrl}${path}`, options);
 
       if (!response.ok) {
         try {
