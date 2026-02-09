@@ -52,10 +52,10 @@ interface EmailSuppressed {
 
 interface ReceivedEmailAttachment {
   id: string;
-  filename: string;
+  filename: string | null;
   content_type: string;
-  content_disposition: string;
-  content_id?: string;
+  content_disposition: string | null;
+  content_id: string | null;
 }
 
 interface ReceivedEmailEventData {
