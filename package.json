@@ -83,5 +83,5 @@
     "vitest": "4.0.18",
     "vitest-fetch-mock": "0.4.5"
   },
-  "packageManager": "pnpm@10.28.2"
+  "packageManager": "pnpm@10.29.2"
 }
