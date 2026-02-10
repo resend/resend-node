@@ -34,8 +34,8 @@ importers:
         specifier: 3.4.6
         version: 3.4.6
       '@types/node':
-        specifier: 24.10.9
-        version: 24.10.9
+        specifier: 24.10.13
+        version: 24.10.13
       '@types/react':
         specifier: 19.2.13
         version: 19.2.13
@@ -65,10 +65,10 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.0.18
-        version: 4.0.18(@types/node@24.10.9)
+        version: 4.0.18(@types/node@24.10.13)
       vitest-fetch-mock:
         specifier: 0.4.5
-        version: 0.4.5(vitest@4.0.18(@types/node@24.10.9))
+        version: 0.4.5(vitest@4.0.18(@types/node@24.10.13))
 
 packages:
 
@@ -688,8 +688,8 @@ packages:
   '@types/mailparser@3.4.6':
     resolution: {integrity: sha512-wVV3cnIKzxTffaPH8iRnddX1zahbYB1ZEoAxyhoBo3TBCBuK6nZ8M8JYO/RhsCuuBVOw/DEN/t/ENbruwlxn6Q==}
 
-  '@types/node@24.10.9':
-    resolution: {integrity: sha512-ne4A0IpG3+2ETuREInjPNhUGis1SFjv1d5asp8MzEAGtOZeTeHVDOYqOgqfhvseqg/iXty2hjBf1zAOb7RNiNw==}
+  '@types/node@24.10.13':
+    resolution: {integrity: sha512-oH72nZRfDv9lADUBSo104Aq7gPHpQZc4BTx38r9xf9pg5LfP6EzSyH2n7qFmmxRQXh7YlUXODcYsg6PuTDSxGg==}
 
   '@types/react@19.2.13':
     resolution: {integrity: sha512-KkiJeU6VbYbUOp5ITMIc7kBfqlYkKA5KhEHVrGMmUUMt7NeaZg65ojdPk+FtNrBAOXNVM5QM72jnADjM+XVRAQ==}
@@ -2141,10 +2141,10 @@ snapshots:
 
   '@types/mailparser@3.4.6':
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 24.10.13
       iconv-lite: 0.6.3
 
-  '@types/node@24.10.9':
+  '@types/node@24.10.13':
     dependencies:
       undici-types: 7.16.0
 
@@ -2154,7 +2154,7 @@ snapshots:
 
   '@types/set-cookie-parser@2.4.10':
     dependencies:
-      '@types/node': 24.10.9
+      '@types/node': 24.10.13
 
   '@vitest/expect@4.0.18':
     dependencies:
@@ -2165,13 +2165,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.0.3
 
-  '@vitest/mocker@4.0.18(vite@7.3.0(@types/node@24.10.9))':
+  '@vitest/mocker@4.0.18(vite@7.3.0(@types/node@24.10.13))':
     dependencies:
       '@vitest/spy': 4.0.18
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 7.3.0(@types/node@24.10.9)
+      vite: 7.3.0(@types/node@24.10.13)
 
   '@vitest/pretty-format@4.0.18':
     dependencies:
@@ -3028,7 +3028,7 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vite@7.3.0(@types/node@24.10.9):
+  vite@7.3.0(@types/node@24.10.13):
     dependencies:
       esbuild: 0.27.2
       fdir: 6.5.0(picomatch@4.0.3)
@@ -3037,17 +3037,17 @@ snapshots:
       rollup: 4.54.0
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 24.10.9
+      '@types/node': 24.10.13
       fsevents: 2.3.3
 
-  vitest-fetch-mock@0.4.5(vitest@4.0.18(@types/node@24.10.9)):
+  vitest-fetch-mock@0.4.5(vitest@4.0.18(@types/node@24.10.13)):
     dependencies:
-      vitest: 4.0.18(@types/node@24.10.9)
+      vitest: 4.0.18(@types/node@24.10.13)
 
-  vitest@4.0.18(@types/node@24.10.9):
+  vitest@4.0.18(@types/node@24.10.13):
     dependencies:
       '@vitest/expect': 4.0.18
-      '@vitest/mocker': 4.0.18(vite@7.3.0(@types/node@24.10.9))
+      '@vitest/mocker': 4.0.18(vite@7.3.0(@types/node@24.10.13))
       '@vitest/pretty-format': 4.0.18
       '@vitest/runner': 4.0.18
       '@vitest/snapshot': 4.0.18
@@ -3064,10 +3064,10 @@ snapshots:
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vite: 7.3.0(@types/node@24.10.9)
+      vite: 7.3.0(@types/node@24.10.13)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 24.10.9
+      '@types/node': 24.10.13
     transitivePeerDependencies:
       - jiti
       - less
