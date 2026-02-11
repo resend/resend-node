@@ -3,7 +3,18 @@ import type { IdempotentRequest } from '../../common/interfaces/idempotent-reque
 import type { CreateEmailOptions } from '../../emails/interfaces/create-email-options.interface';
 import type { Response } from '../../interfaces';
 
-export type CreateBatchOptions = CreateEmailOptions[];
+/**
+ * Email options for batch sending. Same as CreateEmailOptions but without attachments
+ * and scheduledAt, as these are not supported in the batch API.
+ *
+ * @link https://resend.com/docs/dashboard/emails/batch-sending#limitations
+ */
+export type CreateBatchEmailOptions = Omit<
+  CreateEmailOptions,
+  'attachments' | 'scheduledAt'
+>;
+
+export type CreateBatchOptions = CreateBatchEmailOptions[];
 
 export interface CreateBatchRequestOptions
   extends PostOptions,
