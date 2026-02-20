@@ -50,13 +50,13 @@ export class Emails {
     payload: CreateEmailOptions,
     options: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
-    if (payload.react) {
-      payload.html = await render(payload.react as React.ReactElement);
-    }
+    const resolved = payload.react
+      ? { ...payload, html: await render(payload.react as React.ReactElement) }
+      : payload;
 
     const data = await this.resend.post<CreateEmailResponseSuccess>(
       '/emails',
-      parseEmailToApiOptions(payload),
+      parseEmailToApiOptions(resolved),
       options,
     );
 
