@@ -2,10 +2,7 @@ import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
 import { mockSuccessResponse } from '../../test-utils/mock-fetch';
-import type {
-  ListAttachmentsApiResponse,
-  ListAttachmentsResponseSuccess,
-} from './interfaces';
+import type { ListAttachmentsResponseSuccess } from './interfaces';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -169,7 +166,7 @@ describe('Sending', () => {
   });
 
   describe('list', () => {
-    const apiResponse: ListAttachmentsApiResponse = {
+    const apiResponse: ListAttachmentsResponseSuccess = {
       object: 'list' as const,
       has_more: false,
       data: [

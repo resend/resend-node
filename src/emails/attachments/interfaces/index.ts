@@ -4,7 +4,6 @@ export type {
   GetAttachmentResponseSuccess,
 } from './get-attachment.interface';
 export type {
-  ListAttachmentsApiResponse,
   ListAttachmentsOptions,
   ListAttachmentsResponse,
   ListAttachmentsResponseSuccess,
