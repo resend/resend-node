@@ -247,6 +247,34 @@ describe('Templates', () => {
       expect(mockRenderAsync).toHaveBeenCalledWith(mockReactComponent);
     });
 
+    it('does not mutate payload when using React component', async () => {
+      const mockReactComponent = {
+        type: 'div',
+        props: { children: 'Welcome!' },
+      } as React.ReactElement;
+
+      mockRenderAsync.mockResolvedValueOnce('<div>Welcome!</div>');
+
+      const payload: CreateTemplateOptions = {
+        name: 'Welcome Email',
+        react: mockReactComponent,
+      };
+
+      const originalPayload = { ...payload };
+
+      const response: CreateTemplateResponseSuccess = {
+        object: 'template',
+        id: 'non-mutating-payload-id',
+      };
+
+      mockSuccessResponse(response);
+
+      const resend = new Resend(TEST_API_KEY);
+      await resend.templates.create(payload);
+
+      expect(payload).toEqual(originalPayload);
+    });
+
     it('throws error when React renderer fails to load', async () => {
       const mockReactComponent = {
         type: 'div',
