@@ -54,12 +54,23 @@ export class Templates {
     if (payload.react) {
       if (!this.renderAsync) {
         try {
-          const { renderAsync } = await import('@react-email/render');
-          this.renderAsync = renderAsync;
-        } catch {
-          throw new Error(
-            'Failed to render React component. Make sure to install `@react-email/render`',
-          );
+          const mod = await import('@react-email/render');
+          // @ts-expect-error - renderAsync exists in older @react-email/render, not in type defs
+          const renderFn = (mod.render ?? mod.renderAsync) as (
+            component: React.ReactElement,
+          ) => Promise<string>;
+          if (typeof renderFn !== 'function') {
+            throw new Error(
+              'Failed to render React component. Make sure to install `@react-email/render`',
+            );
+          }
+          this.renderAsync = renderFn;
+        } catch (err) {
+          throw err instanceof Error
+            ? err
+            : new Error(
+                'Failed to render React component. Make sure to install `@react-email/render`',
+              );
         }
       }
 
