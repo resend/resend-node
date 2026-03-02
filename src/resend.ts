@@ -17,17 +17,25 @@ import { Webhooks } from './webhooks/webhooks';
 
 const defaultBaseUrl = 'https://api.resend.com';
 const defaultUserAgent = `resend-node:${version}`;
-const baseUrl =
-  typeof process !== 'undefined' && process.env
-    ? process.env.RESEND_BASE_URL || defaultBaseUrl
-    : defaultBaseUrl;
-const userAgent =
-  typeof process !== 'undefined' && process.env
-    ? process.env.RESEND_USER_AGENT || defaultUserAgent
-    : defaultUserAgent;
+
+/** optional overrides when creating the client instead of env variables */
+export type ResendClientOptions = {
+  baseUrl?: string;
+  userAgent?: string;
+  /** custom fetch used for tests. */
+  fetch?: typeof fetch;
+};
+
+function getEnv(name: string): string | undefined {
+  if (typeof process === 'undefined' || !process.env) return undefined;
+  return process.env[name];
+}
 
 export class Resend {
   private readonly headers: Headers;
+  private readonly baseUrl: string;
+  private readonly fetchImpl: typeof fetch;
+  private readonly _key: string;
 
   readonly apiKeys = new ApiKeys(this);
   readonly segments = new Segments(this);
@@ -45,29 +53,35 @@ export class Resend {
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
 
-  constructor(readonly key?: string) {
-    if (!key) {
-      if (typeof process !== 'undefined' && process.env) {
-        this.key = process.env.RESEND_API_KEY;
-      }
-
-      if (!this.key) {
-        throw new Error(
-          'Missing API key. Pass it to the constructor `new Resend("re_123")`',
-        );
-      }
+  constructor(key?: string, options?: ResendClientOptions) {
+    const apiKey = key ?? getEnv('RESEND_API_KEY');
+    if (!apiKey) {
+      throw new Error(
+        'Missing API key. Pass it to the constructor `new Resend("re_123")` or set RESEND_API_KEY.',
+      );
     }
+    this._key = apiKey;
+
+    this.baseUrl =
+      options?.baseUrl ?? getEnv('RESEND_BASE_URL') ?? defaultBaseUrl;
+    const userAgent =
+      options?.userAgent ?? getEnv('RESEND_USER_AGENT') ?? defaultUserAgent;
+    this.fetchImpl = options?.fetch ?? fetch;
 
     this.headers = new Headers({
-      Authorization: `Bearer ${this.key}`,
+      Authorization: `Bearer ${apiKey}`,
       'User-Agent': userAgent,
       'Content-Type': 'application/json',
     });
   }
 
+  get key(): string {
+    return this._key;
+  }
+
   async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
     try {
-      const response = await fetch(`${baseUrl}${path}`, options);
+      const response = await this.fetchImpl(`${this.baseUrl}${path}`, options);
 
       if (!response.ok) {
         try {

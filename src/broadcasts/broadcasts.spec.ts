@@ -256,7 +256,7 @@ describe('Broadcasts', () => {
       `);
     });
 
-    it('returns an error when fetch fails', async () => {
+    it('returns an error when fetch fails (with env base URL)', async () => {
       const originalEnv = process.env;
       process.env = {
         ...originalEnv,
@@ -281,6 +281,31 @@ describe('Broadcasts', () => {
         }),
       );
       process.env = originalEnv;
+    });
+
+    it('returns an error when fetch fails (with client options)', async () => {
+      const resendWithInvalidBase = new Resend(
+        're_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        { baseUrl: 'http://invalidurl.noturl' },
+      );
+
+      const result = await resendWithInvalidBase.broadcasts.create({
+        from: 'example@resend.com',
+        segmentId: '0192f4f1-d5f9-7110-8eb5-370552515917',
+        subject: 'Hello World',
+        text: 'Hello world',
+      });
+
+      expect(result).toEqual(
+        expect.objectContaining({
+          data: null,
+          error: {
+            message: 'Unable to fetch data. The request could not be resolved.',
+            name: 'application_error',
+            statusCode: null,
+          },
+        }),
+      );
     });
 
     it('returns an error when api responds with text payload', async () => {
