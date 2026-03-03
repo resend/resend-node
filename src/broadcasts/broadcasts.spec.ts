@@ -306,6 +306,13 @@ describe('Broadcasts', () => {
           },
         }),
       );
+      expect(fetchMock).toHaveBeenCalledWith(
+        'http://invalidurl.noturl/broadcasts',
+        expect.objectContaining({
+          method: 'POST',
+          headers: expect.any(Headers),
+        }),
+      );
     });
 
     it('returns an error when api responds with text payload', async () => {

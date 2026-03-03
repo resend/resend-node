@@ -417,6 +417,9 @@ describe('Emails', () => {
           },
         }),
       );
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'http://invalidurl.noturl/emails',
+      );
     });
 
     it('returns an error when api responds with text payload', async () => {

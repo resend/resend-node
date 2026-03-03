@@ -63,9 +63,9 @@ export class Resend {
     this._key = apiKey;
 
     this.baseUrl =
-      options?.baseUrl ?? getEnv('RESEND_BASE_URL') ?? defaultBaseUrl;
+      options?.baseUrl || getEnv('RESEND_BASE_URL') || defaultBaseUrl;
     const userAgent =
-      options?.userAgent ?? getEnv('RESEND_USER_AGENT') ?? defaultUserAgent;
+      options?.userAgent || getEnv('RESEND_USER_AGENT') || defaultUserAgent;
     this.fetchImpl = options?.fetch ?? fetch;
 
     this.headers = new Headers({
