@@ -1,6 +1,6 @@
 import type { Response } from '../../interfaces';
 
-export type CreateWorkflowEventOptions =
+export type SendEventOptions =
   | {
       event: string;
       contactId: string;
@@ -14,11 +14,10 @@ export type CreateWorkflowEventOptions =
       payload?: Record<string, unknown>;
     };
 
-export interface CreateWorkflowEventResponseSuccess {
+export interface SendEventResponseSuccess {
   object: 'workflow_event';
   event: string;
   event_instance_id: string;
 }
 
-export type CreateWorkflowEventResponse =
-  Response<CreateWorkflowEventResponseSuccess>;
+export type SendEventResponse = Response<SendEventResponseSuccess>;

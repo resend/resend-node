@@ -9,6 +9,7 @@ export * from './contacts/topics/interfaces';
 export * from './domains/interfaces';
 export * from './emails/attachments/interfaces';
 export * from './emails/interfaces';
+export * from './events/interfaces';
 export * from './emails/receiving/interfaces';
 export type { ErrorResponse, Response } from './interfaces';
 export { Resend } from './resend';

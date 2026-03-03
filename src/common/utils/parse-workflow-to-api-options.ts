@@ -1,5 +1,5 @@
 import type { CreateWorkflowOptions } from '../../workflows/interfaces/create-workflow-options.interface';
-import type { CreateWorkflowEventOptions } from '../../workflows/interfaces/create-workflow-event.interface';
+import type { SendEventOptions } from '../../events/interfaces/send-event.interface';
 import type {
   WorkflowEdge,
   WorkflowEdgeType,
@@ -89,7 +89,7 @@ export function parseWorkflowToApiOptions(
 }
 
 export function parseWorkflowEventToApiOptions(
-  event: CreateWorkflowEventOptions,
+  event: SendEventOptions,
 ): WorkflowEventApiOptions {
   return {
     event: event.event,
