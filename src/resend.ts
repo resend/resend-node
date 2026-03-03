@@ -9,6 +9,7 @@ import { ContactProperties } from './contact-properties/contact-properties';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
+import { Events } from './events/events';
 import type { ErrorResponse, Response } from './interfaces';
 import { Logs } from './logs/logs';
 import { Segments } from './segments/segments';
@@ -31,22 +32,23 @@ const userAgent =
 export class Resend {
   private readonly headers: Headers;
 
-  readonly apiKeys = new ApiKeys(this);
   readonly segments = new Segments(this);
+  readonly apiKeys = new ApiKeys(this);
   /**
    * @deprecated Use segments instead
    */
   readonly audiences = this.segments;
   readonly batch = new Batch(this);
   readonly broadcasts = new Broadcasts(this);
-  readonly contacts = new Contacts(this);
   readonly contactProperties = new ContactProperties(this);
+  readonly contacts = new Contacts(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
+  readonly events = new Events(this);
   readonly logs = new Logs(this);
-  readonly webhooks = new Webhooks(this);
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
+  readonly webhooks = new Webhooks(this);
   readonly workflows = new Workflows(this);
 
   constructor(readonly key?: string) {

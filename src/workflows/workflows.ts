@@ -1,14 +1,6 @@
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
-import {
-  parseWorkflowEventToApiOptions,
-  parseWorkflowToApiOptions,
-} from '../common/utils/parse-workflow-to-api-options';
+import { parseWorkflowToApiOptions } from '../common/utils/parse-workflow-to-api-options';
 import type { Resend } from '../resend';
-import type {
-  CreateWorkflowEventOptions,
-  CreateWorkflowEventResponse,
-  CreateWorkflowEventResponseSuccess,
-} from './interfaces/create-workflow-event.interface';
 import type {
   CreateWorkflowOptions,
   CreateWorkflowResponse,
@@ -27,6 +19,11 @@ import type {
   RemoveWorkflowResponse,
   RemoveWorkflowResponseSuccess,
 } from './interfaces/remove-workflow.interface';
+import type {
+  UpdateWorkflowOptions,
+  UpdateWorkflowResponse,
+  UpdateWorkflowResponseSuccess,
+} from './interfaces/update-workflow.interface';
 
 export class Workflows {
   constructor(private readonly resend: Resend) {}
@@ -64,14 +61,14 @@ export class Workflows {
     return data;
   }
 
-  async createEvent(
-    payload: CreateWorkflowEventOptions,
-  ): Promise<CreateWorkflowEventResponse> {
-    const data = await this.resend.post<CreateWorkflowEventResponseSuccess>(
-      '/workflows/events',
-      parseWorkflowEventToApiOptions(payload),
+  async update(
+    id: string,
+    payload: UpdateWorkflowOptions,
+  ): Promise<UpdateWorkflowResponse> {
+    const data = await this.resend.patch<UpdateWorkflowResponseSuccess>(
+      `/workflows/${id}`,
+      payload,
     );
-
     return data;
   }
 }
