@@ -25,32 +25,6 @@ describe('Workflows', () => {
       const response: CreateWorkflowResponseSuccess = {
         object: 'workflow',
         id: '71cdfe68-cf79-473a-a9d7-21f91db6a526',
-        name: 'Welcome Flow',
-        status: 'enabled',
-        created_at: '2025-01-01T00:00:00.000Z',
-        updated_at: '2025-01-01T00:00:00.000Z',
-        steps: [
-          {
-            id: 'step-1',
-            type: 'trigger',
-            config: { event_name: 'user.created' },
-            ref: 'trigger',
-          },
-          {
-            id: 'step-2',
-            type: 'send_email',
-            config: { template_id: 'tpl-123' },
-            ref: 'welcome_email',
-          },
-        ],
-        edges: [
-          {
-            id: 'edge-1',
-            from_step_id: 'step-1',
-            to_step_id: 'step-2',
-            edge_type: 'default',
-          },
-        ],
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -84,38 +58,8 @@ describe('Workflows', () => {
       expect(data).toMatchInlineSnapshot(`
         {
           "data": {
-            "created_at": "2025-01-01T00:00:00.000Z",
-            "edges": [
-              {
-                "edge_type": "default",
-                "from_step_id": "step-1",
-                "id": "edge-1",
-                "to_step_id": "step-2",
-              },
-            ],
             "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
-            "name": "Welcome Flow",
             "object": "workflow",
-            "status": "enabled",
-            "steps": [
-              {
-                "config": {
-                  "event_name": "user.created",
-                },
-                "id": "step-1",
-                "ref": "trigger",
-                "type": "trigger",
-              },
-              {
-                "config": {
-                  "template_id": "tpl-123",
-                },
-                "id": "step-2",
-                "ref": "welcome_email",
-                "type": "send_email",
-              },
-            ],
-            "updated_at": "2025-01-01T00:00:00.000Z",
           },
           "error": null,
           "headers": {
