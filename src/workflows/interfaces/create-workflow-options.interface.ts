@@ -1,9 +1,6 @@
 import type { Response } from '../../interfaces';
-import type { Workflow } from './workflow';
 import type {
   WorkflowEdge,
-  WorkflowResponseEdge,
-  WorkflowResponseStep,
   WorkflowStep,
 } from './workflow-step.interface';
 
@@ -14,9 +11,9 @@ export interface CreateWorkflowOptions {
   edges: WorkflowEdge[];
 }
 
-export interface CreateWorkflowResponseSuccess extends Workflow {
-  steps: WorkflowResponseStep[];
-  edges: WorkflowResponseEdge[];
+export interface CreateWorkflowResponseSuccess {
+  object: 'workflow';
+  id: string;
 }
 
 export type CreateWorkflowResponse = Response<CreateWorkflowResponseSuccess>;
