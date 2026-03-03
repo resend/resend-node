@@ -1,5 +1,5 @@
 import type { CreateWorkflowOptions } from '../../workflows/interfaces/create-workflow-options.interface';
-import type { CreateWorkflowEventOptions } from '../../workflows/interfaces/create-workflow-event.interface';
+import type { SendEventOptions } from '../../events/interfaces/send-event.interface';
 import {
   parseWorkflowToApiOptions,
   parseWorkflowEventToApiOptions,
@@ -184,7 +184,7 @@ describe('parseWorkflowToApiOptions', () => {
 
 describe('parseWorkflowEventToApiOptions', () => {
   it('converts contactId to contact_id', () => {
-    const event: CreateWorkflowEventOptions = {
+    const event: SendEventOptions = {
       event: 'user.signed_up',
       contactId: 'contact_abc123',
       payload: { plan: 'pro' },
@@ -201,7 +201,7 @@ describe('parseWorkflowEventToApiOptions', () => {
   });
 
   it('passes email through without conversion', () => {
-    const event: CreateWorkflowEventOptions = {
+    const event: SendEventOptions = {
       event: 'user.signed_up',
       email: 'user@example.com',
       payload: { source: 'website' },

@@ -6,10 +6,10 @@ import type {
   CreateWorkflowOptions,
   CreateWorkflowResponseSuccess,
 } from './interfaces/create-workflow-options.interface';
-import type { CreateWorkflowEventResponseSuccess } from './interfaces/create-workflow-event.interface';
 import type { GetWorkflowResponseSuccess } from './interfaces/get-workflow.interface';
 import type { ListWorkflowsResponseSuccess } from './interfaces/list-workflows.interface';
 import type { RemoveWorkflowResponseSuccess } from './interfaces/remove-workflow.interface';
+import type { UpdateWorkflowResponseSuccess } from './interfaces/update-workflow.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -421,12 +421,13 @@ describe('Workflows', () => {
     });
   });
 
-  describe('createEvent', () => {
-    it('creates a workflow event with contactId', async () => {
-      const response: CreateWorkflowEventResponseSuccess = {
-        object: 'workflow_event',
-        event: 'user.created',
-        event_instance_id: 'evt-inst-123',
+  describe('update', () => {
+    it('updates a workflow', async () => {
+      const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
+      const response: UpdateWorkflowResponseSuccess = {
+        object: 'workflow',
+        id,
+        status: 'disabled',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -436,18 +437,13 @@ describe('Workflows', () => {
         },
       });
 
-      const data = await resend.workflows.createEvent({
-        event: 'user.created',
-        contactId: 'contact-123',
-        payload: { name: 'John' },
-      });
-
+      const data = await resend.workflows.update(id, { status: 'disabled' });
       expect(data).toMatchInlineSnapshot(`
         {
           "data": {
-            "event": "user.created",
-            "event_instance_id": "evt-inst-123",
-            "object": "workflow_event",
+            "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
+            "object": "workflow",
+            "status": "disabled",
           },
           "error": null,
           "headers": {
@@ -455,40 +451,15 @@ describe('Workflows', () => {
           },
         }
       `);
-    });
 
-    it('creates a workflow event with email', async () => {
-      const response: CreateWorkflowEventResponseSuccess = {
-        object: 'workflow_event',
-        event: 'user.created',
-        event_instance_id: 'evt-inst-456',
-      };
-
-      fetchMock.mockOnce(JSON.stringify(response), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
-        },
-      });
-
-      const data = await resend.workflows.createEvent({
-        event: 'user.created',
-        email: 'john@example.com',
-      });
-
-      expect(data).toMatchInlineSnapshot(`
-        {
-          "data": {
-            "event": "user.created",
-            "event_instance_id": "evt-inst-456",
-            "object": "workflow_event",
-          },
-          "error": null,
-          "headers": {
-            "content-type": "application/json",
-          },
-        }
-      `);
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/workflows/${id}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          headers: expect.any(Headers),
+          body: JSON.stringify({ status: 'disabled' }),
+        }),
+      );
     });
   });
 });
