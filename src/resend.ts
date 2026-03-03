@@ -18,11 +18,11 @@ import { Webhooks } from './webhooks/webhooks';
 const defaultBaseUrl = 'https://api.resend.com';
 const defaultUserAgent = `resend-node:${version}`;
 
-/** optional overrides when creating the client instead of env variables */
+/** optional options when creating the client instead of env variables */
 export type ResendClientOptions = {
   baseUrl?: string;
   userAgent?: string;
-  /** custom fetch used for tests. */
+  /** custom fetch can be used for tests. */
   fetch?: typeof fetch;
 };
 
