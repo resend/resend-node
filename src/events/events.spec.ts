@@ -2,12 +2,12 @@ import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import { mockSuccessResponse } from '../test-utils/mock-fetch';
-import type { SendEventResponseSuccess } from './interfaces/send-event.interface';
 import type { CreateEventResponseSuccess } from './interfaces/create-event.interface';
 import type { GetEventResponseSuccess } from './interfaces/get-event.interface';
 import type { ListEventsResponseSuccess } from './interfaces/list-events.interface';
-import type { UpdateEventResponseSuccess } from './interfaces/update-event.interface';
 import type { RemoveEventResponseSuccess } from './interfaces/remove-event.interface';
+import type { SendEventResponseSuccess } from './interfaces/send-event.interface';
+import type { UpdateEventResponseSuccess } from './interfaces/update-event.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -254,7 +254,7 @@ describe('Events', () => {
         },
       });
 
-      const data = await resend.events.get('user.created');
+      await resend.events.get('user.created');
 
       expect(fetchMock).toHaveBeenCalledWith(
         'https://api.resend.com/events/user.created',

@@ -49,9 +49,7 @@ describe('Workflows', () => {
             config: { templateId: 'tpl-123' },
           },
         ],
-        edges: [
-          { from: 'trigger', to: 'welcome_email', edgeType: 'default' },
-        ],
+        edges: [{ from: 'trigger', to: 'welcome_email', edgeType: 'default' }],
       };
 
       const data = await resend.workflows.create(payload);
@@ -347,9 +345,7 @@ describe('Workflows', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(
-        resend.workflows.remove(id),
-      ).resolves.toMatchInlineSnapshot(`
+      await expect(resend.workflows.remove(id)).resolves.toMatchInlineSnapshot(`
         {
           "data": {
             "deleted": true,

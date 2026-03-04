@@ -1,8 +1,5 @@
 import type { Response } from '../../interfaces';
-import type {
-  WorkflowEdge,
-  WorkflowStep,
-} from './workflow-step.interface';
+import type { WorkflowEdge, WorkflowStep } from './workflow-step.interface';
 
 export interface CreateWorkflowOptions {
   name: string;

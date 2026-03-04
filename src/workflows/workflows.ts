@@ -28,7 +28,9 @@ import type {
 export class Workflows {
   constructor(private readonly resend: Resend) {}
 
-  async create(payload: CreateWorkflowOptions): Promise<CreateWorkflowResponse> {
+  async create(
+    payload: CreateWorkflowOptions,
+  ): Promise<CreateWorkflowResponse> {
     const data = await this.resend.post<CreateWorkflowResponseSuccess>(
       '/workflows',
       parseWorkflowToApiOptions(payload),
