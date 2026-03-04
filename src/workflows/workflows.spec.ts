@@ -81,7 +81,11 @@ describe('Workflows', () => {
         },
       });
 
-      const data = await resend.workflows.create({} as CreateWorkflowOptions);
+      const data = await resend.workflows.create({
+        name: '',
+        steps: [],
+        edges: [],
+      });
       expect(data).toMatchInlineSnapshot(`
         {
           "data": null,
@@ -104,7 +108,6 @@ describe('Workflows', () => {
       has_more: false,
       data: [
         {
-          object: 'workflow',
           id: '49a3999c-0ce1-4ea6-ab68-afcd6dc2e794',
           name: 'Welcome Flow',
           status: 'enabled',
@@ -112,7 +115,6 @@ describe('Workflows', () => {
           updated_at: '2025-01-01T00:00:00.000Z',
         },
         {
-          object: 'workflow',
           id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
           name: 'Onboarding Flow',
           status: 'disabled',

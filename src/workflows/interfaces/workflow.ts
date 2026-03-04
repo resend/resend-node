@@ -1,5 +1,4 @@
 export interface Workflow {
-  object: 'workflow';
   id: string;
   name: string;
   status: 'enabled' | 'disabled';

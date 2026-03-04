@@ -7,7 +7,7 @@ export type ListEventsOptions = PaginationOptions;
 export interface ListEventsResponseSuccess {
   object: 'list';
   has_more: boolean;
-  data: Omit<Event, 'object'>[];
+  data: Event[];
 }
 
 export type ListEventsResponse = Response<ListEventsResponseSuccess>;

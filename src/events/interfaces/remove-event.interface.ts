@@ -1,9 +1,9 @@
 import type { Response } from '../../interfaces';
+import type { Event } from './event';
 
-export interface RemoveEventResponseSuccess {
+export interface RemoveEventResponseSuccess extends Pick<Event, 'id'> {
   object: 'event';
-  id: string;
-  deleted: true;
+  deleted: boolean;
 }
 
 export type RemoveEventResponse = Response<RemoveEventResponseSuccess>;
