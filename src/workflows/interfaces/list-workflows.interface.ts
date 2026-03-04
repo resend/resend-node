@@ -1,5 +1,5 @@
-import type { Response } from '../../interfaces';
 import type { PaginationOptions } from '../../common/interfaces';
+import type { Response } from '../../interfaces';
 import type { Workflow } from './workflow';
 
 export type ListWorkflowsOptions = PaginationOptions;

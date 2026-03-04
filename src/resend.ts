@@ -9,11 +9,11 @@ import { ContactProperties } from './contact-properties/contact-properties';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
+import { Events } from './events/events';
 import type { ErrorResponse, Response } from './interfaces';
 import { Segments } from './segments/segments';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
-import { Events } from './events/events';
 import { Webhooks } from './webhooks/webhooks';
 import { Workflows } from './workflows/workflows';
 

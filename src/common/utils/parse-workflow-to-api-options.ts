@@ -1,5 +1,5 @@
-import type { CreateWorkflowOptions } from '../../workflows/interfaces/create-workflow-options.interface';
 import type { SendEventOptions } from '../../events/interfaces/send-event.interface';
+import type { CreateWorkflowOptions } from '../../workflows/interfaces/create-workflow-options.interface';
 import type {
   WorkflowEdge,
   WorkflowEdgeType,
