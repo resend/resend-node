@@ -130,7 +130,7 @@ describe('Events', () => {
 
       const data = await resend.events.create({
         name: 'user.created',
-        schema: { type: 'object' },
+        schema: { name: 'string', age: 'number' },
       });
 
       expect(data).toMatchInlineSnapshot(`
@@ -153,7 +153,7 @@ describe('Events', () => {
           headers: expect.any(Headers),
           body: JSON.stringify({
             name: 'user.created',
-            schema: { type: 'object' },
+            schema: { name: 'string', age: 'number' },
           }),
         }),
       );
@@ -196,7 +196,7 @@ describe('Events', () => {
         object: 'event',
         id: 'evt-123',
         name: 'user.created',
-        schema: { type: 'object' },
+        schema: { name: 'string' },
         created_at: '2025-01-01T00:00:00.000Z',
         updated_at: '2025-01-01T00:00:00.000Z',
       };
@@ -217,7 +217,7 @@ describe('Events', () => {
             "name": "user.created",
             "object": "event",
             "schema": {
-              "type": "object",
+              "name": "string",
             },
             "updated_at": "2025-01-01T00:00:00.000Z",
           },
@@ -350,7 +350,7 @@ describe('Events', () => {
       });
 
       const data = await resend.events.update('evt-123', {
-        schema: { type: 'object', properties: { name: { type: 'string' } } },
+        schema: { name: 'string', active: 'boolean' },
       });
 
       expect(data).toMatchInlineSnapshot(`
@@ -372,10 +372,7 @@ describe('Events', () => {
           method: 'PATCH',
           headers: expect.any(Headers),
           body: JSON.stringify({
-            schema: {
-              type: 'object',
-              properties: { name: { type: 'string' } },
-            },
+            schema: { name: 'string', active: 'boolean' },
           }),
         }),
       );
