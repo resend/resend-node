@@ -6,6 +6,7 @@ import type {
 } from './workflow-step.interface';
 
 export interface GetWorkflowResponseSuccess extends Workflow {
+  object: 'workflow';
   steps: WorkflowResponseStep[];
   edges: WorkflowResponseEdge[];
 }

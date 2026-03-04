@@ -83,8 +83,8 @@ export function parseWorkflowToApiOptions(
   return {
     name: workflow.name,
     status: workflow.status,
-    steps: workflow.steps?.map(parseStepConfig),
-    edges: workflow.edges?.map(parseEdge),
+    steps: workflow.steps.map(parseStepConfig),
+    edges: workflow.edges.map(parseEdge),
   };
 }
 
