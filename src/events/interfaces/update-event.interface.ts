@@ -1,7 +1,8 @@
 import type { Response } from '../../interfaces';
+import type { EventSchemaMap } from './event';
 
 export interface UpdateEventOptions {
-  schema: unknown;
+  schema: EventSchemaMap | null;
 }
 
 export interface UpdateEventResponseSuccess {
