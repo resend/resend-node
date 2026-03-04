@@ -1,8 +1,8 @@
-import type { CreateWorkflowOptions } from '../../workflows/interfaces/create-workflow-options.interface';
 import type { SendEventOptions } from '../../events/interfaces/send-event.interface';
+import type { CreateWorkflowOptions } from '../../workflows/interfaces/create-workflow-options.interface';
 import {
-  parseWorkflowToApiOptions,
   parseWorkflowEventToApiOptions,
+  parseWorkflowToApiOptions,
 } from './parse-workflow-to-api-options';
 
 describe('parseWorkflowToApiOptions', () => {

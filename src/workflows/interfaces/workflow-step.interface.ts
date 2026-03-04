@@ -29,7 +29,9 @@ export type TemplateVariableValue =
   | boolean
   | { var: string }
   | Record<string, string | number | boolean>
-  | Array<string | number | boolean | Record<string, string | number | boolean>>;
+  | Array<
+      string | number | boolean | Record<string, string | number | boolean>
+    >;
 
 export interface TriggerStepConfig {
   eventName: string;
