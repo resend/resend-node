@@ -1,6 +1,7 @@
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { parseWorkflowToApiOptions } from '../common/utils/parse-workflow-to-api-options';
 import type { Resend } from '../resend';
+import { WorkflowRuns } from '../workflow-runs/workflow-runs';
 import type {
   CreateWorkflowOptions,
   CreateWorkflowResponse,
@@ -26,7 +27,11 @@ import type {
 } from './interfaces/update-workflow.interface';
 
 export class Workflows {
-  constructor(private readonly resend: Resend) {}
+  readonly runs: WorkflowRuns;
+
+  constructor(private readonly resend: Resend) {
+    this.runs = new WorkflowRuns(this.resend);
+  }
 
   async create(
     payload: CreateWorkflowOptions,

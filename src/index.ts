@@ -17,4 +17,5 @@ export * from './segments/interfaces';
 export * from './templates/interfaces';
 export * from './topics/interfaces';
 export * from './webhooks/interfaces';
+export * from './workflow-runs/interfaces';
 export * from './workflows/interfaces';
