@@ -1,5 +1,6 @@
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
+import { WorkflowRunSteps } from '../workflow-run-steps/workflow-run-steps';
 import type {
   GetWorkflowRunOptions,
   GetWorkflowRunResponse,
@@ -12,7 +13,11 @@ import type {
 } from './interfaces/list-workflow-runs.interface';
 
 export class WorkflowRuns {
-  constructor(private readonly resend: Resend) {}
+  readonly steps: WorkflowRunSteps;
+
+  constructor(private readonly resend: Resend) {
+    this.steps = new WorkflowRunSteps(resend);
+  }
 
   async get(options: GetWorkflowRunOptions): Promise<GetWorkflowRunResponse> {
     const data = await this.resend.get<GetWorkflowRunResponseSuccess>(
