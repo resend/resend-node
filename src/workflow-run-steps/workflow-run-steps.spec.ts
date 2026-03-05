@@ -5,50 +5,61 @@ import {
   mockSuccessResponse,
 } from '../test-utils/mock-fetch';
 import type {
-  GetWorkflowRunOptions,
-  GetWorkflowRunResponseSuccess,
-} from './interfaces/get-workflow-run.interface';
+  GetWorkflowRunStepOptions,
+  GetWorkflowRunStepResponseSuccess,
+} from './interfaces/get-workflow-run-step.interface';
 import type {
-  ListWorkflowRunsOptions,
-  ListWorkflowRunsResponseSuccess,
-} from './interfaces/list-workflow-runs.interface';
+  ListWorkflowRunStepsOptions,
+  ListWorkflowRunStepsResponseSuccess,
+} from './interfaces/list-workflow-run-steps.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
 
-describe('WorkflowRuns', () => {
+describe('WorkflowRunSteps', () => {
   afterEach(() => fetchMock.resetMocks());
   afterAll(() => fetchMocker.disableMocks());
 
   describe('get', () => {
-    it('gets a workflow run', async () => {
-      const options: GetWorkflowRunOptions = {
+    it('gets a workflow run step', async () => {
+      const options: GetWorkflowRunStepOptions = {
         workflowId: 'wf_123',
         runId: 'wr_456',
+        stepId: 'wrs_789',
       };
-      const response: GetWorkflowRunResponseSuccess = {
-        object: 'workflow_run',
-        id: 'wr_456',
+      const response: GetWorkflowRunStepResponseSuccess = {
+        object: 'workflow_run_step',
+        id: 'wrs_789',
+        step_id: 'step_1',
         status: 'completed',
         started_at: '2024-01-01T00:00:00.000Z',
         completed_at: '2024-01-01T00:01:00.000Z',
         created_at: '2024-01-01T00:00:00.000Z',
+        output: null,
+        error: null,
+        callback_id: null,
+        waiting_for_event_name: null,
       };
 
       mockSuccessResponse(response, {});
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
-        resend.workflows.runs.get(options),
+        resend.workflows.runs.steps.get(options),
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
+            "callback_id": null,
             "completed_at": "2024-01-01T00:01:00.000Z",
             "created_at": "2024-01-01T00:00:00.000Z",
-            "id": "wr_456",
-            "object": "workflow_run",
+            "error": null,
+            "id": "wrs_789",
+            "object": "workflow_run_step",
+            "output": null,
             "started_at": "2024-01-01T00:00:00.000Z",
             "status": "completed",
+            "step_id": "step_1",
+            "waiting_for_event_name": null,
           },
           "error": null,
           "headers": {
@@ -59,32 +70,35 @@ describe('WorkflowRuns', () => {
     });
 
     it('returns error', async () => {
-      const options: GetWorkflowRunOptions = {
+      const options: GetWorkflowRunStepOptions = {
         workflowId: 'wf_123',
-        runId: 'wr_invalid',
+        runId: 'wr_456',
+        stepId: 'wrs_invalid',
       };
 
       mockErrorResponse(
-        { name: 'not_found', message: 'Workflow run not found' },
+        { name: 'not_found', message: 'Workflow run step not found' },
         {},
       );
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      const result = await resend.workflows.runs.get(options);
+      const result = await resend.workflows.runs.steps.get(options);
       expect(result.error).not.toBeNull();
     });
   });
 
   describe('list', () => {
-    it('lists workflow runs', async () => {
-      const options: ListWorkflowRunsOptions = {
+    it('lists workflow run steps', async () => {
+      const options: ListWorkflowRunStepsOptions = {
         workflowId: 'wf_123',
+        runId: 'wr_456',
       };
-      const response: ListWorkflowRunsResponseSuccess = {
+      const response: ListWorkflowRunStepsResponseSuccess = {
         object: 'list',
         data: [
           {
-            id: 'wr_456',
+            id: 'wrs_789',
+            step_id: 'step_1',
             status: 'completed',
             started_at: '2024-01-01T00:00:00.000Z',
             completed_at: '2024-01-01T00:01:00.000Z',
@@ -98,7 +112,7 @@ describe('WorkflowRuns', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
-        resend.workflows.runs.list(options),
+        resend.workflows.runs.steps.list(options),
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
@@ -106,9 +120,10 @@ describe('WorkflowRuns', () => {
               {
                 "completed_at": "2024-01-01T00:01:00.000Z",
                 "created_at": "2024-01-01T00:00:00.000Z",
-                "id": "wr_456",
+                "id": "wrs_789",
                 "started_at": "2024-01-01T00:00:00.000Z",
                 "status": "completed",
+                "step_id": "step_1",
               },
             ],
             "has_more": false,
@@ -122,17 +137,19 @@ describe('WorkflowRuns', () => {
       `);
     });
 
-    it('lists workflow runs with pagination', async () => {
-      const options: ListWorkflowRunsOptions = {
+    it('lists workflow run steps with pagination', async () => {
+      const options: ListWorkflowRunStepsOptions = {
         workflowId: 'wf_123',
+        runId: 'wr_456',
         limit: 1,
-        after: 'wr_cursor',
+        after: 'wrs_cursor',
       };
-      const response: ListWorkflowRunsResponseSuccess = {
+      const response: ListWorkflowRunStepsResponseSuccess = {
         object: 'list',
         data: [
           {
-            id: 'wr_789',
+            id: 'wrs_101',
+            step_id: 'step_2',
             status: 'running',
             started_at: '2024-01-02T00:00:00.000Z',
             completed_at: null,
@@ -146,7 +163,7 @@ describe('WorkflowRuns', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await expect(
-        resend.workflows.runs.list(options),
+        resend.workflows.runs.steps.list(options),
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
@@ -154,9 +171,10 @@ describe('WorkflowRuns', () => {
               {
                 "completed_at": null,
                 "created_at": "2024-01-02T00:00:00.000Z",
-                "id": "wr_789",
+                "id": "wrs_101",
                 "started_at": "2024-01-02T00:00:00.000Z",
                 "status": "running",
+                "step_id": "step_2",
               },
             ],
             "has_more": true,
@@ -171,8 +189,9 @@ describe('WorkflowRuns', () => {
     });
 
     it('returns error', async () => {
-      const options: ListWorkflowRunsOptions = {
+      const options: ListWorkflowRunStepsOptions = {
         workflowId: 'wf_invalid',
+        runId: 'wr_invalid',
       };
 
       mockErrorResponse(
@@ -181,7 +200,7 @@ describe('WorkflowRuns', () => {
       );
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      const result = await resend.workflows.runs.list(options);
+      const result = await resend.workflows.runs.steps.list(options);
       expect(result.error).not.toBeNull();
     });
   });
