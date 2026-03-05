@@ -8,8 +8,6 @@ export interface WorkflowRunStep {
   created_at: string;
   output: unknown;
   error: string | null;
-  callback_id: string | null;
-  waiting_for_event_name: string | null;
 }
 
 export type WorkflowRunStepItem = Pick<

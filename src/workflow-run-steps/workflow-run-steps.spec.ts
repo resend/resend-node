@@ -37,8 +37,6 @@ describe('WorkflowRunSteps', () => {
         created_at: '2024-01-01T00:00:00.000Z',
         output: null,
         error: null,
-        callback_id: null,
-        waiting_for_event_name: null,
       };
 
       mockSuccessResponse(response, {});
@@ -49,7 +47,6 @@ describe('WorkflowRunSteps', () => {
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
-            "callback_id": null,
             "completed_at": "2024-01-01T00:01:00.000Z",
             "created_at": "2024-01-01T00:00:00.000Z",
             "error": null,
@@ -59,7 +56,6 @@ describe('WorkflowRunSteps', () => {
             "started_at": "2024-01-01T00:00:00.000Z",
             "status": "completed",
             "step_id": "step_1",
-            "waiting_for_event_name": null,
           },
           "error": null,
           "headers": {
