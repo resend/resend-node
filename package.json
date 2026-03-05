@@ -54,7 +54,7 @@
   "homepage": "https://github.com/resend/resend-node#readme",
   "dependencies": {
     "postal-mime": "2.7.3",
-    "svix": "1.84.1"
+    "svix": "1.86.0"
   },
   "peerDependencies": {
     "@react-email/render": "*"
@@ -71,9 +71,9 @@
     "@pollyjs/persister-fs": "6.0.6",
     "@types/mailparser": "3.4.6",
     "@types/node": "24.11.0",
-    "@types/react": "19.2.13",
+    "@types/react": "19.2.14",
     "cross-env": "10.1.0",
-    "dotenv": "17.2.4",
+    "dotenv": "17.3.1",
     "pkg-pr-new": "0.0.65",
     "react": "19.2.4",
     "react-dom": "19.2.4",
