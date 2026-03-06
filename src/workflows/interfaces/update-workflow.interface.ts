@@ -1,13 +1,13 @@
 import type { Response } from '../../interfaces';
+import type { Workflow, WorkflowStatus } from './workflow';
 
 export interface UpdateWorkflowOptions {
-  status: 'enabled' | 'disabled';
+  status: WorkflowStatus;
 }
 
-export interface UpdateWorkflowResponseSuccess {
+export interface UpdateWorkflowResponseSuccess
+  extends Pick<Workflow, 'id' | 'status'> {
   object: 'workflow';
-  id: string;
-  status: 'enabled' | 'disabled';
 }
 
 export type UpdateWorkflowResponse = Response<UpdateWorkflowResponseSuccess>;
