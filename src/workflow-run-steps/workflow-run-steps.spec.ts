@@ -31,12 +31,12 @@ describe('WorkflowRunSteps', () => {
         object: 'workflow_run_step',
         id: 'wrs_789',
         step_id: 'step_1',
+        type: 'trigger',
+        config: { event_name: 'user.created' },
         status: 'completed',
         started_at: '2024-01-01T00:00:00.000Z',
         completed_at: '2024-01-01T00:01:00.000Z',
         created_at: '2024-01-01T00:00:00.000Z',
-        output: null,
-        error: null,
       };
 
       mockSuccessResponse(response, {});
@@ -48,14 +48,16 @@ describe('WorkflowRunSteps', () => {
         {
           "data": {
             "completed_at": "2024-01-01T00:01:00.000Z",
+            "config": {
+              "event_name": "user.created",
+            },
             "created_at": "2024-01-01T00:00:00.000Z",
-            "error": null,
             "id": "wrs_789",
             "object": "workflow_run_step",
-            "output": null,
             "started_at": "2024-01-01T00:00:00.000Z",
             "status": "completed",
             "step_id": "step_1",
+            "type": "trigger",
           },
           "error": null,
           "headers": {
@@ -95,6 +97,7 @@ describe('WorkflowRunSteps', () => {
           {
             id: 'wrs_789',
             step_id: 'step_1',
+            type: 'trigger',
             status: 'completed',
             started_at: '2024-01-01T00:00:00.000Z',
             completed_at: '2024-01-01T00:01:00.000Z',
@@ -120,6 +123,7 @@ describe('WorkflowRunSteps', () => {
                 "started_at": "2024-01-01T00:00:00.000Z",
                 "status": "completed",
                 "step_id": "step_1",
+                "type": "trigger",
               },
             ],
             "has_more": false,
@@ -146,6 +150,7 @@ describe('WorkflowRunSteps', () => {
           {
             id: 'wrs_101',
             step_id: 'step_2',
+            type: 'send_email',
             status: 'running',
             started_at: '2024-01-02T00:00:00.000Z',
             completed_at: null,
@@ -171,6 +176,7 @@ describe('WorkflowRunSteps', () => {
                 "started_at": "2024-01-02T00:00:00.000Z",
                 "status": "running",
                 "step_id": "step_2",
+                "type": "send_email",
               },
             ],
             "has_more": true,

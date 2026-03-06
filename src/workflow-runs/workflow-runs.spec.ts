@@ -30,6 +30,10 @@ describe('WorkflowRuns', () => {
         object: 'workflow_run',
         id: 'wr_456',
         status: 'completed',
+        trigger: {
+          event_name: 'user.created',
+          payload: { email: 'jane@example.com' },
+        },
         started_at: '2024-01-01T00:00:00.000Z',
         completed_at: '2024-01-01T00:01:00.000Z',
         created_at: '2024-01-01T00:00:00.000Z',
@@ -49,6 +53,12 @@ describe('WorkflowRuns', () => {
             "object": "workflow_run",
             "started_at": "2024-01-01T00:00:00.000Z",
             "status": "completed",
+            "trigger": {
+              "event_name": "user.created",
+              "payload": {
+                "email": "jane@example.com",
+              },
+            },
           },
           "error": null,
           "headers": {
@@ -86,6 +96,7 @@ describe('WorkflowRuns', () => {
           {
             id: 'wr_456',
             status: 'completed',
+            trigger: { event_name: 'user.created' },
             started_at: '2024-01-01T00:00:00.000Z',
             completed_at: '2024-01-01T00:01:00.000Z',
             created_at: '2024-01-01T00:00:00.000Z',
@@ -109,6 +120,9 @@ describe('WorkflowRuns', () => {
                 "id": "wr_456",
                 "started_at": "2024-01-01T00:00:00.000Z",
                 "status": "completed",
+                "trigger": {
+                  "event_name": "user.created",
+                },
               },
             ],
             "has_more": false,
@@ -134,6 +148,7 @@ describe('WorkflowRuns', () => {
           {
             id: 'wr_789',
             status: 'running',
+            trigger: null,
             started_at: '2024-01-02T00:00:00.000Z',
             completed_at: null,
             created_at: '2024-01-02T00:00:00.000Z',
@@ -157,6 +172,7 @@ describe('WorkflowRuns', () => {
                 "id": "wr_789",
                 "started_at": "2024-01-02T00:00:00.000Z",
                 "status": "running",
+                "trigger": null,
               },
             ],
             "has_more": true,
