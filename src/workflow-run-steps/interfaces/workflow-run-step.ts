@@ -1,12 +1,20 @@
 import type { WorkflowStepType } from '../../workflows/interfaces/workflow-step.interface';
 
+export type WorkflowRunStepStatus =
+  | 'pending'
+  | 'running'
+  | 'completed'
+  | 'failed'
+  | 'skipped'
+  | 'waiting';
+
 export interface WorkflowRunStep {
   object: 'workflow_run_step';
   id: string;
   step_id: string;
   type: WorkflowStepType;
   config: Record<string, unknown>;
-  status: string;
+  status: WorkflowRunStepStatus;
   started_at: string | null;
   completed_at: string | null;
   created_at: string;

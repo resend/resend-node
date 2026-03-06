@@ -79,12 +79,7 @@ export interface WorkflowEdge {
   edgeType?: WorkflowEdgeType;
 }
 
-export type WorkflowStepType =
-  | 'trigger'
-  | 'delay'
-  | 'send_email'
-  | 'wait_for_event'
-  | 'condition';
+export type WorkflowStepType = WorkflowStep['type'];
 
 export interface WorkflowResponseStep {
   id: string;
