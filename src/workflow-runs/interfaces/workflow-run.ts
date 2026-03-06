@@ -3,7 +3,11 @@ export interface WorkflowRunTrigger {
   payload?: Record<string, unknown>;
 }
 
-export type WorkflowRunStatus = 'running' | 'completed' | 'failed' | 'cancelled';
+export type WorkflowRunStatus =
+  | 'running'
+  | 'completed'
+  | 'failed'
+  | 'cancelled';
 
 export interface WorkflowRun {
   object: 'workflow_run';
