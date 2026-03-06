@@ -5,3 +5,5 @@ export interface Workflow {
   created_at: string;
   updated_at: string | null;
 }
+
+export type WorkflowStatus = Workflow['status'];

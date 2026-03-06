@@ -1,9 +1,10 @@
 import type { Response } from '../../interfaces';
 import type { WorkflowEdge, WorkflowStep } from './workflow-step.interface';
+import type { WorkflowStatus } from './workflow';
 
 export interface CreateWorkflowOptions {
   name: string;
-  status?: 'enabled' | 'disabled';
+  status?: WorkflowStatus;
   steps: WorkflowStep[];
   edges: WorkflowEdge[];
 }
