@@ -21,7 +21,9 @@ export type ConditionRule =
       type: 'rule';
       field: string;
       operator: 'exists' | 'is_empty';
-    };
+    }
+  | { type: 'and'; rules: ConditionRule[] }
+  | { type: 'or'; rules: ConditionRule[] };
 
 export type TemplateVariableValue =
   | string
@@ -77,16 +79,22 @@ export interface WorkflowEdge {
   edgeType?: WorkflowEdgeType;
 }
 
+export type WorkflowStepType =
+  | 'trigger'
+  | 'delay'
+  | 'send_email'
+  | 'wait_for_event'
+  | 'condition';
+
 export interface WorkflowResponseStep {
   id: string;
-  type: string;
-  config: unknown;
-  ref?: string;
+  type: WorkflowStepType;
+  config: Record<string, unknown>;
 }
 
 export interface WorkflowResponseEdge {
   id: string;
   from_step_id: string;
   to_step_id: string;
-  edge_type: string;
+  edge_type: WorkflowEdgeType;
 }
