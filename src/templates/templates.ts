@@ -52,7 +52,7 @@ export class Templates {
     payload: CreateTemplateOptions,
   ): Promise<CreateTemplateResponse> {
     if (payload.react) {
-      payload.html = await render(payload.react as React.ReactElement);
+      payload.html = await render(payload.react);
     }
 
     return this.resend.post<CreateTemplateResponseSuccess>(
