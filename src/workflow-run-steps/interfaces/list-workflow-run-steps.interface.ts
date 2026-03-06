@@ -10,8 +10,9 @@ export type ListWorkflowRunStepsOptions = PaginationOptions & {
   runId: string;
 };
 
-export type ListWorkflowRunStepsResponseSuccess =
-  PaginatedData<WorkflowRunStepItem[]>;
+export type ListWorkflowRunStepsResponseSuccess = PaginatedData<
+  WorkflowRunStepItem[]
+>;
 
 export type ListWorkflowRunStepsResponse =
   Response<ListWorkflowRunStepsResponseSuccess>;
