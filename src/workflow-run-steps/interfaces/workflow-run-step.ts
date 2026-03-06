@@ -1,9 +1,11 @@
+import type { WorkflowStepType } from '../../workflows/interfaces/workflow-step.interface';
+
 export interface WorkflowRunStep {
   object: 'workflow_run_step';
   id: string;
   step_id: string;
-  type: string;
-  config: unknown;
+  type: WorkflowStepType;
+  config: Record<string, unknown>;
   status: string;
   started_at: string | null;
   completed_at: string | null;

@@ -3,10 +3,12 @@ export interface WorkflowRunTrigger {
   payload?: Record<string, unknown>;
 }
 
+export type WorkflowRunStatus = 'running' | 'completed' | 'failed' | 'cancelled';
+
 export interface WorkflowRun {
   object: 'workflow_run';
   id: string;
-  status: string;
+  status: WorkflowRunStatus;
   trigger: WorkflowRunTrigger | null;
   started_at: string | null;
   completed_at: string | null;
