@@ -16,10 +16,9 @@ import type { UpdateTemplateOptions } from './interfaces/update-template.interfa
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
 
-const mockRenderAsync = vi.fn();
+const mockRender = vi.fn();
 vi.mock('@react-email/render', () => ({
-  render: mockRenderAsync,
-  renderAsync: mockRenderAsync,
+  render: mockRender,
 }));
 
 const TEST_API_KEY = 're_test_api_key';
@@ -152,7 +151,7 @@ describe('Templates', () => {
         props: { children: 'Welcome!' },
       } as React.ReactElement;
 
-      mockRenderAsync.mockResolvedValueOnce('<div>Welcome!</div>');
+      mockRender.mockResolvedValueOnce('<div>Welcome!</div>');
 
       const payload: CreateTemplateOptions = {
         name: 'Welcome Email',
@@ -182,7 +181,7 @@ describe('Templates', () => {
         }
       `);
 
-      expect(mockRenderAsync).toHaveBeenCalledWith(mockReactComponent);
+      expect(mockRender).toHaveBeenCalledWith(mockReactComponent);
     });
 
     it('creates template with React component and all optional fields', async () => {
@@ -196,7 +195,7 @@ describe('Templates', () => {
         },
       } as React.ReactElement;
 
-      mockRenderAsync.mockResolvedValueOnce(
+      mockRender.mockResolvedValueOnce(
         '<div><h1>Welcome {{{name}}}!</h1><p>Welcome to {{{company}}}.</p></div>',
       );
 
@@ -245,7 +244,7 @@ describe('Templates', () => {
         }
       `);
 
-      expect(mockRenderAsync).toHaveBeenCalledWith(mockReactComponent);
+      expect(mockRender).toHaveBeenCalledWith(mockReactComponent);
     });
 
     it('throws error when React renderer fails to load', async () => {
@@ -255,7 +254,7 @@ describe('Templates', () => {
       } as React.ReactElement;
 
       // Temporarily clear the mock implementation to simulate module load failure
-      mockRenderAsync.mockImplementationOnce(() => {
+      mockRender.mockImplementationOnce(() => {
         throw new Error(
           'Failed to render React component. Make sure to install `@react-email/render`',
         );
