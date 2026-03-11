@@ -1,6 +1,6 @@
 {
   "name": "resend",
-  "version": "6.9.3",
+  "version": "6.10.0-tracking-domains-preview.0",
   "description": "Node.js library for the Resend API",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",

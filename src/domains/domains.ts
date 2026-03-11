@@ -29,9 +29,14 @@ import type {
   VerifyDomainsResponse,
   VerifyDomainsResponseSuccess,
 } from './interfaces/verify-domain.interface';
+import { TrackingDomains } from './tracking-domains/tracking-domains';
 
 export class Domains {
-  constructor(private readonly resend: Resend) {}
+  readonly trackingDomains: TrackingDomains;
+
+  constructor(private readonly resend: Resend) {
+    this.trackingDomains = new TrackingDomains(resend);
+  }
 
   async create(
     payload: CreateDomainOptions,

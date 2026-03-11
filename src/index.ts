@@ -7,6 +7,7 @@ export * from './contacts/interfaces';
 export * from './contacts/segments/interfaces';
 export * from './contacts/topics/interfaces';
 export * from './domains/interfaces';
+export * from './domains/tracking-domains/interfaces';
 export * from './emails/attachments/interfaces';
 export * from './emails/interfaces';
 export * from './emails/receiving/interfaces';
