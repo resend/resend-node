@@ -281,11 +281,13 @@ describe('API Keys', () => {
           id: '5262504e-8ed7-4fac-bd16-0d4be94bc9f2',
           name: 'My API Key 1',
           created_at: '2023-04-07T20:29:10.666968+00:00',
+          last_used_at: '2023-04-08T12:00:00.000000+00:00',
         },
         {
           id: '98c37b35-1473-4afe-a627-78e975a36fab',
           name: 'My API Key 2',
           created_at: '2023-04-06T23:09:49.093947+00:00',
+          last_used_at: null,
         },
       ],
     };
