@@ -1,9 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "resend": ["./src/index.ts"]
-    },
     "allowSyntheticDefaultImports": true,
     "alwaysStrict": true,
     "declaration": true,
@@ -22,5 +18,5 @@
     "target": "es2017",
     "types": ["vitest/globals"]
   },
-  "include": ["src", "integrations"]
+  "include": ["src"]
 }

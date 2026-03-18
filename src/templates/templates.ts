@@ -35,10 +35,8 @@ import type {
   UpdateTemplateResponseSuccess,
 } from './interfaces/update-template.interface';
 
-type RenderAsync = (component: React.ReactElement) => Promise<string>;
-
 export class Templates {
-  private renderAsync?: RenderAsync;
+  private renderAsync?: (component: React.ReactElement) => Promise<string>;
   constructor(private readonly resend: Resend) {}
 
   create(
@@ -57,10 +55,13 @@ export class Templates {
     if (payload.react) {
       if (!this.renderAsync) {
         try {
-          const mod = (await import('@react-email/render')) as unknown as {
-            renderAsync: RenderAsync;
+          // @react-email/render v2 typings omit renderAsync; it exists at runtime and in tests.
+          const { renderAsync } = (await import(
+            '@react-email/render'
+          )) as unknown as {
+            renderAsync: (c: React.ReactElement) => Promise<string>;
           };
-          this.renderAsync = mod.renderAsync;
+          this.renderAsync = renderAsync;
         } catch {
           throw new Error(
             'Failed to render React component. Make sure to install `@react-email/render`',
