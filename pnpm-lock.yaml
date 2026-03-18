@@ -12,8 +12,8 @@ importers:
         specifier: '*'
         version: 2.0.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       postal-mime:
-        specifier: 2.7.3
-        version: 2.7.3
+        specifier: 2.7.4
+        version: 2.7.4
       svix:
         specifier: 1.86.0
         version: 1.86.0
@@ -1241,8 +1241,8 @@ packages:
   pkg-types@1.3.1:
     resolution: {integrity: sha512-/Jm5M4RvtBFVkKWRu2BLUTNP8/M2a+UwuAX+ae4770q1qVGtfjG+WTCupoZixokjmHiry8uI+dlY8KXYV5HVVQ==}
 
-  postal-mime@2.7.3:
-    resolution: {integrity: sha512-MjhXadAJaWgYzevi46+3kLak8y6gbg0ku14O1gO/LNOuay8dO+1PtcSGvAdgDR0DoIsSaiIA8y/Ddw6MnrO0Tw==}
+  postal-mime@2.7.4:
+    resolution: {integrity: sha512-0WdnFQYUrPGGTFu1uOqD2s7omwua8xaeYGdO6rb88oD5yJ/4pPHDA4sdWqfD8wQVfCny563n/HQS7zTFft+f/g==}
 
   postcss@8.5.6:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
@@ -2713,7 +2713,7 @@ snapshots:
       mlly: 1.8.0
       pathe: 2.0.3
 
-  postal-mime@2.7.3: {}
+  postal-mime@2.7.4: {}
 
   postcss@8.5.6:
     dependencies:
