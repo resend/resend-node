@@ -1,3 +1,4 @@
+import type * as React from 'react';
 import type { PaginationOptions } from '../common/interfaces';
 import { getPaginationQueryProperties } from '../common/utils/get-pagination-query-properties';
 import { parseTemplateToApiOptions } from '../common/utils/parse-template-to-api-options';
@@ -54,7 +55,12 @@ export class Templates {
     if (payload.react) {
       if (!this.renderAsync) {
         try {
-          const { renderAsync } = await import('@react-email/render');
+          // @react-email/render v2 typings omit renderAsync; it exists at runtime and in tests.
+          const { renderAsync } = (await import(
+            '@react-email/render'
+          )) as unknown as {
+            renderAsync: (c: React.ReactElement) => Promise<string>;
+          };
           this.renderAsync = renderAsync;
         } catch {
           throw new Error(

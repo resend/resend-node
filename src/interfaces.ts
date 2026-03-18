@@ -1,3 +1,5 @@
+import type { RateLimit } from './rate-limiting';
+
 export type RESEND_ERROR_CODE_KEY =
   | 'invalid_idempotency_key'
   | 'validation_error'
@@ -21,6 +23,14 @@ export type RESEND_ERROR_CODE_KEY =
   | 'application_error'
   | 'internal_server_error';
 
+export type ErrorResponse = {
+  message: string;
+  statusCode: number | null;
+  name: RESEND_ERROR_CODE_KEY;
+  /** Present when {@link name} is `rate_limit_exceeded` */
+  retryAfter?: number;
+};
+
 export type Response<T> = (
   | {
       data: T;
@@ -29,12 +39,8 @@ export type Response<T> = (
   | { error: ErrorResponse; data: null }
 ) & {
   headers: Record<string, string> | null;
-};
-
-export type ErrorResponse = {
-  message: string;
-  statusCode: number | null;
-  name: RESEND_ERROR_CODE_KEY;
+  /** Included on responses from {@link Resend.fetchRequest} when rate-limit headers are present */
+  rateLimiting?: RateLimit | null;
 };
 
 export type Tag = { name: string; value: string };

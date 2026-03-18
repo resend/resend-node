@@ -1,3 +1,4 @@
+import type { CreateBatchEmailOptions } from '../../batch/interfaces/create-batch-options.interface';
 import type { CreateEmailOptions } from '../../emails/interfaces/create-email-options.interface';
 import type {
   EmailApiAttachment,
@@ -17,17 +18,20 @@ function parseAttachments(
 }
 
 export function parseEmailToApiOptions(
-  email: CreateEmailOptions,
+  email: CreateEmailOptions | CreateBatchEmailOptions,
 ): EmailApiOptions {
+  const attachments =
+    'attachments' in email ? email.attachments : undefined;
   return {
-    attachments: parseAttachments(email.attachments),
+    attachments: parseAttachments(attachments),
     bcc: email.bcc,
     cc: email.cc,
     from: email.from,
     headers: email.headers,
     html: email.html,
     reply_to: email.replyTo,
-    scheduled_at: email.scheduledAt,
+    scheduled_at:
+      'scheduledAt' in email ? email.scheduledAt : undefined,
     subject: email.subject,
     tags: email.tags,
     text: email.text,

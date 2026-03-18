@@ -1,4 +1,5 @@
 import type * as React from 'react';
+import { PaginatedRequest } from '../common/pagination';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import { render } from '../render';
@@ -19,8 +20,8 @@ import type {
   GetEmailResponseSuccess,
 } from './interfaces/get-email-options.interface';
 import type {
+  ListEmail,
   ListEmailsOptions,
-  ListEmailsResponse,
   ListEmailsResponseSuccess,
 } from './interfaces/list-emails-options.interface';
 import type {
@@ -71,13 +72,14 @@ export class Emails {
     return data;
   }
 
-  async list(options: ListEmailsOptions = {}): Promise<ListEmailsResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/emails?${queryString}` : '/emails';
+  list(options: ListEmailsOptions = {}): PaginatedRequest<ListEmail> {
+    const fetchPage = async (pageOptions: ListEmailsOptions) => {
+      const queryString = buildPaginationQuery(pageOptions);
+      const url = queryString ? `/emails?${queryString}` : '/emails';
+      return this.resend.get<ListEmailsResponseSuccess>(url);
+    };
 
-    const data = await this.resend.get<ListEmailsResponseSuccess>(url);
-
-    return data;
+    return new PaginatedRequest(fetchPage, options);
   }
 
   async update(payload: UpdateEmailOptions): Promise<UpdateEmailResponse> {

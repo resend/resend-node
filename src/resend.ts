@@ -10,6 +10,7 @@ import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import type { ErrorResponse, Response } from './interfaces';
+import { tryParseRateLimit } from './rate-limiting';
 import { Segments } from './segments/segments';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
@@ -68,14 +69,27 @@ export class Resend {
   async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
     try {
       const response = await fetch(`${baseUrl}${path}`, options);
+      const headerObj = Object.fromEntries(response.headers.entries());
+      const rateMeta = (() => {
+        const r = tryParseRateLimit(response.headers);
+        return r != null ? { rateLimiting: r } : {};
+      })();
 
       if (!response.ok) {
         try {
           const rawError = await response.text();
+          const error = JSON.parse(rawError) as ErrorResponse;
+          if (error.name === 'rate_limit_exceeded' && response.status === 429) {
+            const retryAfterHeader = response.headers.get('retry-after');
+            if (retryAfterHeader) {
+              error.retryAfter = Number.parseInt(retryAfterHeader, 10);
+            }
+          }
           return {
             data: null,
-            error: JSON.parse(rawError),
-            headers: Object.fromEntries(response.headers.entries()),
+            error,
+            headers: headerObj,
+            ...rateMeta,
           };
         } catch (err) {
           if (err instanceof SyntaxError) {
@@ -87,7 +101,8 @@ export class Resend {
                 message:
                   'Internal server error. We are unable to process your request right now, please try again later.',
               },
-              headers: Object.fromEntries(response.headers.entries()),
+              headers: headerObj,
+              ...rateMeta,
             };
           }
 
@@ -101,14 +116,16 @@ export class Resend {
             return {
               data: null,
               error: { ...error, message: err.message },
-              headers: Object.fromEntries(response.headers.entries()),
+              headers: headerObj,
+              ...rateMeta,
             };
           }
 
           return {
             data: null,
             error,
-            headers: Object.fromEntries(response.headers.entries()),
+            headers: headerObj,
+            ...rateMeta,
           };
         }
       }
@@ -117,7 +134,8 @@ export class Resend {
       return {
         data,
         error: null,
-        headers: Object.fromEntries(response.headers.entries()),
+        headers: headerObj,
+        ...rateMeta,
       };
     } catch {
       return {

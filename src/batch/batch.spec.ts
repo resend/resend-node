@@ -592,7 +592,6 @@ describe('Batch', () => {
           subject: 'Custom Subject Override',
           to: 'subscriber@example.com',
           replyTo: 'noreply@example.com',
-          scheduledAt: 'in 1 hour',
         },
       ];
 
@@ -627,17 +626,9 @@ describe('Batch', () => {
       const requestBody = JSON.parse(lastCall[1]?.body as string);
       expect(requestBody).toEqual([
         {
-          attachments: undefined,
-          bcc: undefined,
-          cc: undefined,
           from: 'newsletter@example.com',
-          headers: undefined,
-          html: undefined,
           reply_to: 'noreply@example.com',
-          scheduled_at: 'in 1 hour',
           subject: 'Custom Subject Override',
-          tags: undefined,
-          text: undefined,
           to: 'subscriber@example.com',
           template: {
             id: 'newsletter-template-456',
