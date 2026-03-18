@@ -1,5 +1,7 @@
 import type { EmailApiOptions } from '../common/interfaces/email-api-options.interface';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
+import type { CreateEmailOptions } from '../emails/interfaces/create-email-options.interface';
+import { render } from '../render';
 import type { Resend } from '../resend';
 import type {
   CreateBatchOptions,
@@ -9,7 +11,6 @@ import type {
 } from './interfaces/create-batch-options.interface';
 
 export class Batch {
-  private renderAsync?: (component: React.ReactElement) => Promise<string>;
   constructor(private readonly resend: Resend) {}
 
   async send<Options extends CreateBatchRequestOptions>(
@@ -27,22 +28,11 @@ export class Batch {
 
     for (const email of payload) {
       if (email.react) {
-        if (!this.renderAsync) {
-          try {
-            const { renderAsync } = await import('@react-email/render');
-            this.renderAsync = renderAsync;
-          } catch {
-            throw new Error(
-              'Failed to render React component. Make sure to install `@react-email/render`',
-            );
-          }
-        }
-
-        email.html = await this.renderAsync(email.react as React.ReactElement);
+        email.html = await render(email.react);
         email.react = undefined;
       }
 
-      emails.push(parseEmailToApiOptions(email));
+      emails.push(parseEmailToApiOptions(email as CreateEmailOptions));
     }
 
     const data = await this.resend.post<CreateBatchSuccessResponse<Options>>(
@@ -51,7 +41,7 @@ export class Batch {
       {
         ...options,
         headers: {
-          'x-resend-batch-validation': options?.batchValidation ?? 'strict',
+          'x-batch-validation': options?.batchValidation ?? 'strict',
           ...options?.headers,
         },
       },

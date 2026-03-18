@@ -1,5 +1,3 @@
-import type { RateLimitExceededErrorResponse } from './interfaces';
-
 export type RateLimit = {
   /**
    * The maximum amount of requests that can be made in the time window of {@link RateLimit.shouldResetAfter}.
@@ -16,7 +14,7 @@ export type RateLimit = {
    * and {@link RateLimit.remainingRequests} goes back to the value of
    * {@link RateLimit.limit}.
    *
-   * @see {@link RateLimitExceededErrorResponse.retryAfter}
+   * @see {@link ErrorResponse.retryAfter} when the API returns `rate_limit_exceeded`
    */
   shouldResetAfter: number;
 };
@@ -42,3 +40,13 @@ export function parseRateLimit(headers: Headers): RateLimit {
     shouldResetAfter: reset,
   };
 }
+
+function tryParseRateLimit(headers: Headers): RateLimit | null {
+  try {
+    return parseRateLimit(headers);
+  } catch {
+    return null;
+  }
+}
+
+export { tryParseRateLimit };

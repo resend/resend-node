@@ -1,52 +1,46 @@
 import type { RateLimit } from './rate-limiting';
 
-export const RESEND_ERROR_CODES_BY_KEY = {
-  missing_required_field: 422,
-  invalid_idempotency_key: 400,
-  invalid_idempotent_request: 409,
-  concurrent_idempotent_requests: 409,
-  invalid_access: 422,
-  invalid_parameter: 422,
-  invalid_region: 422,
-  rate_limit_exceeded: 429,
-  missing_api_key: 401,
-  invalid_api_Key: 403,
-  invalid_from_address: 403,
-  validation_error: 403,
-  not_found: 404,
-  method_not_allowed: 405,
-  application_error: 500,
-  internal_server_error: 500,
-} as const;
+export type RESEND_ERROR_CODE_KEY =
+  | 'invalid_idempotency_key'
+  | 'validation_error'
+  | 'missing_api_key'
+  | 'restricted_api_key'
+  | 'invalid_api_key'
+  | 'not_found'
+  | 'method_not_allowed'
+  | 'invalid_idempotent_request'
+  | 'concurrent_idempotent_requests'
+  | 'invalid_attachment'
+  | 'invalid_from_address'
+  | 'invalid_access'
+  | 'invalid_parameter'
+  | 'invalid_region'
+  | 'missing_required_field'
+  | 'monthly_quota_exceeded'
+  | 'daily_quota_exceeded'
+  | 'rate_limit_exceeded'
+  | 'security_error'
+  | 'application_error'
+  | 'internal_server_error';
 
-export type RESEND_ERROR_CODE_KEY = keyof typeof RESEND_ERROR_CODES_BY_KEY;
-
-export type RateLimitExceededErrorResponse = {
+export type ErrorResponse = {
   message: string;
-  name: Extract<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
-  /**
-   * Time in seconds.
-   */
-  retryAfter: number;
+  statusCode: number | null;
+  name: RESEND_ERROR_CODE_KEY;
+  /** Present when {@link name} is `rate_limit_exceeded` */
+  retryAfter?: number;
 };
 
-export type ErrorResponse =
+export type Response<T> = (
   | {
-      message: string;
-      name: Exclude<RESEND_ERROR_CODE_KEY, 'rate_limit_exceeded'>;
-    }
-  | RateLimitExceededErrorResponse;
-
-export type Response<Data> =
-  | {
-      data: Data;
-      rateLimiting: RateLimit;
+      data: T;
       error: null;
     }
-  | {
-      data: null;
-      rateLimiting: RateLimit | null;
-      error: ErrorResponse;
-    };
+  | { error: ErrorResponse; data: null }
+) & {
+  headers: Record<string, string> | null;
+  /** Included on responses from {@link Resend.fetchRequest} when rate-limit headers are present */
+  rateLimiting?: RateLimit | null;
+};
 
 export type Tag = { name: string; value: string };

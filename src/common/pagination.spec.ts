@@ -11,8 +11,6 @@ type TestItem = {
 };
 
 describe('PaginatedRequest', () => {
-  afterEach(() => fetchMock.resetMocks());
-
   const createMockFetchPage = (
     pages: Array<{ data: TestItem[]; has_more: boolean }>,
   ) => {
@@ -29,6 +27,7 @@ describe('PaginatedRequest', () => {
             has_more: currentPage.has_more,
           },
           error: null,
+          headers: {},
           rateLimiting: {
             limit: 10,
             remainingRequests: 9,
@@ -57,7 +56,7 @@ describe('PaginatedRequest', () => {
       const request = new PaginatedRequest(mockFetchPage, { limit: 1 });
       const result = await request;
 
-      expect(result.data.data).toEqual([testItems[0]]);
+      expect(result.data?.data).toEqual([testItems[0]]);
       expect(result.error).toBeNull();
     });
 
@@ -86,7 +85,7 @@ describe('PaginatedRequest', () => {
 
       try {
         const result = await request;
-        expect(result.data.data).toEqual([testItems[0]]);
+        expect(result.data?.data).toEqual([testItems[0]]);
       } finally {
         finallyCallback();
       }
@@ -113,12 +112,12 @@ describe('PaginatedRequest', () => {
       const pages: PageResponse<TestItem>[] = [];
 
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(pages).toHaveLength(2);
-      expect(pages[0].data.data).toEqual([testItems[0], testItems[1]]);
-      expect(pages[1].data.data).toEqual([testItems[2]]);
+      expect(pages[0].data?.data).toEqual([testItems[0], testItems[1]]);
+      expect(pages[1].data?.data).toEqual([testItems[2]]);
     });
 
     it('should stop iteration when has_more is false', async () => {
@@ -130,7 +129,7 @@ describe('PaginatedRequest', () => {
       const pages: PageResponse<TestItem>[] = [];
 
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(pages).toHaveLength(1);
@@ -147,11 +146,11 @@ describe('PaginatedRequest', () => {
       const pages: PageResponse<TestItem>[] = [];
 
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(pages).toHaveLength(2);
-      expect(pages[1].data.data).toEqual([]);
+      expect(pages[1].data?.data).toEqual([]);
     });
   });
 
@@ -169,7 +168,7 @@ describe('PaginatedRequest', () => {
 
       const pages: PageResponse<TestItem>[] = [];
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(mockFetchPage).toHaveBeenCalledTimes(2);
@@ -196,7 +195,7 @@ describe('PaginatedRequest', () => {
 
       const pages: PageResponse<TestItem>[] = [];
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(mockFetchPage).toHaveBeenCalledTimes(2);
@@ -220,7 +219,7 @@ describe('PaginatedRequest', () => {
       const pages: PageResponse<TestItem>[] = [];
 
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(mockFetchPage).toHaveBeenNthCalledWith(2, {
@@ -239,14 +238,16 @@ describe('PaginatedRequest', () => {
           error: {
             name: 'rate_limit_exceeded',
             message: 'Rate limit exceeded',
+            statusCode: 429,
             retryAfter: 0.001, // Very short delay for testing
           },
+          headers: {},
           rateLimiting: {
             limit: 10,
             remainingRequests: 0,
             shouldResetAfter: 60,
           },
-        })
+        } satisfies PageResponse<TestItem>)
         .mockResolvedValueOnce({
           data: {
             object: 'list',
@@ -254,18 +255,19 @@ describe('PaginatedRequest', () => {
             has_more: false,
           },
           error: null,
+          headers: {},
           rateLimiting: {
             limit: 10,
             remainingRequests: 9,
             shouldResetAfter: 60,
           },
-        });
+        } satisfies PageResponse<TestItem>);
 
       const request = new PaginatedRequest(mockFetchPage, { limit: 1 });
       const pages: PageResponse<TestItem>[] = [];
 
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(pages).toHaveLength(1);
@@ -283,25 +285,28 @@ describe('PaginatedRequest', () => {
             has_more: true,
           },
           error: null,
+          headers: {},
           rateLimiting: {
             limit: 10,
             remainingRequests: 9,
             shouldResetAfter: 60,
           },
-        })
+        } satisfies PageResponse<TestItem>)
         .mockResolvedValueOnce({
           data: null,
           error: {
             name: 'rate_limit_exceeded',
             message: 'Rate limit exceeded',
+            statusCode: 429,
             retryAfter: 0.001, // Very short delay for testing
           },
+          headers: {},
           rateLimiting: {
             limit: 10,
             remainingRequests: 0,
             shouldResetAfter: 60,
           },
-        })
+        } satisfies PageResponse<TestItem>)
         .mockResolvedValueOnce({
           data: {
             object: 'list',
@@ -309,18 +314,19 @@ describe('PaginatedRequest', () => {
             has_more: false,
           },
           error: null,
+          headers: {},
           rateLimiting: {
             limit: 10,
             remainingRequests: 9,
             shouldResetAfter: 60,
           },
-        });
+        } satisfies PageResponse<TestItem>);
 
       const request = new PaginatedRequest(mockFetchPage, { limit: 1 });
       const pages: PageResponse<TestItem>[] = [];
 
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(pages).toHaveLength(2);
@@ -333,14 +339,15 @@ describe('PaginatedRequest', () => {
       const mockFetchPage = vi.fn().mockResolvedValue({
         data: { object: 'list', data: [testItems[0]], has_more: false },
         error: null,
+        headers: {},
         rateLimiting: { limit: 10, remainingRequests: 9, shouldResetAfter: 60 },
-      });
+      } satisfies PageResponse<TestItem>);
 
       const request = new PaginatedRequest(mockFetchPage, { limit: 1 });
 
       const pages: PageResponse<TestItem>[] = [];
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
         break; // Only get first page to test this scenario
       }
 
@@ -356,15 +363,17 @@ describe('PaginatedRequest', () => {
         error: {
           name: 'invalid_parameter',
           message: 'Invalid parameter provided',
+          statusCode: 422,
         },
+        headers: {},
         rateLimiting: { limit: 10, remainingRequests: 9, shouldResetAfter: 60 },
-      });
+      } satisfies PageResponse<TestItem>);
 
       const request = new PaginatedRequest(mockFetchPage, { limit: 1 });
       const pages: PageResponse<TestItem>[] = [];
 
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(pages).toHaveLength(1);
@@ -396,7 +405,7 @@ describe('PaginatedRequest', () => {
       const pages: PageResponse<TestItem>[] = [];
 
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(pages).toHaveLength(1);
@@ -415,7 +424,7 @@ describe('PaginatedRequest', () => {
       const pages: PageResponse<TestItem>[] = [];
 
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(pages).toHaveLength(3);
@@ -434,12 +443,12 @@ describe('PaginatedRequest', () => {
 
       // First use as Promise
       const firstPage = await request;
-      expect(firstPage.data.data).toEqual([testItems[0]]);
+      expect(firstPage.data?.data).toEqual([testItems[0]]);
 
       // Then use as AsyncIterable (should start fresh iteration)
       const pages: PageResponse<TestItem>[] = [];
       for await (const page of request) {
-        pages.push(page);
+        pages.push(page as PageResponse<TestItem>);
       }
 
       expect(pages).toHaveLength(2);
@@ -459,13 +468,16 @@ describe('PaginatedRequest', () => {
       const mockFetchPage = vi.fn().mockResolvedValue({
         data: { object: 'list', data: customItems, has_more: false },
         error: null,
+        headers: {},
         rateLimiting: { limit: 10, remainingRequests: 9, shouldResetAfter: 60 },
-      });
+      } satisfies PageResponse<CustomItem>);
 
-      const request = new PaginatedRequest(mockFetchPage, { limit: 10 });
+      const request = new PaginatedRequest<CustomItem>(mockFetchPage, {
+        limit: 10,
+      });
       const result = await request;
 
-      expect(result.data.data).toEqual(customItems);
+      expect(result.data?.data).toEqual(customItems);
     });
   });
 });

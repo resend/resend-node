@@ -65,7 +65,7 @@ export class PaginatedRequest<T extends { id: string }>
 
     let page = await this.fetchPage(options);
     while (page.error?.name === 'rate_limit_exceeded') {
-      const retryAfter = page.error.retryAfter;
+      const retryAfter = page.error.retryAfter ?? 1;
       await sleep(retryAfter);
       page = await this.fetchPage(options);
     }
@@ -77,7 +77,7 @@ export class PaginatedRequest<T extends { id: string }>
     let page = await this.initialPagePromise;
     if (page.error?.name === 'rate_limit_exceeded') {
       page = await this.getPageRetryingRateLimit(
-        page.error.retryAfter,
+        page.error.retryAfter ?? 0,
         this.options,
       );
     }

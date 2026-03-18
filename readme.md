@@ -36,10 +36,10 @@ yarn add resend
 
 Send email with:
 
-- [Node.js](https://github.com/resendlabs/resend-node-example)
-- [Next.js (App Router)](https://github.com/resendlabs/resend-nextjs-app-router-example)
-- [Next.js (Pages Router)](https://github.com/resendlabs/resend-nextjs-pages-router-example)
-- [Express](https://github.com/resendlabs/resend-express-example)
+- [Node.js](https://github.com/resend/resend-node-example)
+- [Next.js (App Router)](https://github.com/resend/resend-nextjs-app-router-example)
+- [Next.js (Pages Router)](https://github.com/resend/resend-nextjs-pages-router-example)
+- [Express](https://github.com/resend/resend-express-example)
 
 ## Setup
 
@@ -119,7 +119,20 @@ console.log(`Email ${data.id} with a React template has been sent`);
 ```
 
 > [!NOTE]
-> If your endpoint is a JS/TS file, render the template (i.e., pass `EmailTemplate({ firstName: "John", product: "MyApp" })` instead of the component).
+> If you're sending emails from a file that doesn't have JSX transpilation set up (e.g., in a `.js`/`.ts` file instead of JSX/TSX), use React's `jsx` runtime function instead of passing the component as JSX:
+>
+>```js
+>import { jsx } from 'react/jsx-runtime'
+>import EmailTemplate from '../components/EmailTemplate';
+>
+>await resend.emails.send({
+>  from: 'you@example.com',
+>  to: 'user@gmail.com',
+>  replyTo: 'you@example.com',
+>  subject: 'hello world',
+>  react: jsx(EmailTemplate, { firstName:"John", product:"MyApp" }),
+>});
+>```
 
 ## License
 

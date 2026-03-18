@@ -7,8 +7,10 @@ export type RemoveContactsResponseSuccess = {
   contact: string;
 };
 
-export type RemoveContactOptions = SelectingField & {
-  audienceId: string;
-};
+export type RemoveContactOptions =
+  | string
+  | (SelectingField & {
+      audienceId?: string;
+    });
 
 export type RemoveContactsResponse = Response<RemoveContactsResponseSuccess>;

@@ -1,7 +1,10 @@
 import type * as React from 'react';
 import { PaginatedRequest } from '../common/pagination';
+import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
+import { render } from '../render';
 import type { Resend } from '../resend';
+import { Attachments } from './attachments/attachments';
 import type {
   CancelEmailResponse,
   CancelEmailResponseSuccess,
@@ -26,10 +29,16 @@ import type {
   UpdateEmailResponse,
   UpdateEmailResponseSuccess,
 } from './interfaces/update-email-options.interface';
+import { Receiving } from './receiving/receiving';
 
 export class Emails {
-  private renderAsync?: (component: React.ReactElement) => Promise<string>;
-  constructor(private readonly resend: Resend) {}
+  readonly attachments: Attachments;
+  readonly receiving: Receiving;
+
+  constructor(private readonly resend: Resend) {
+    this.attachments = new Attachments(resend);
+    this.receiving = new Receiving(resend);
+  }
 
   async send(
     payload: CreateEmailOptions,
@@ -43,20 +52,7 @@ export class Emails {
     options: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
     if (payload.react) {
-      if (!this.renderAsync) {
-        try {
-          const { renderAsync } = await import('@react-email/render');
-          this.renderAsync = renderAsync;
-        } catch {
-          throw new Error(
-            'Failed to render React component. Make sure to install `@react-email/render`',
-          );
-        }
-      }
-
-      payload.html = await this.renderAsync(
-        payload.react as React.ReactElement,
-      );
+      payload.html = await render(payload.react as React.ReactElement);
     }
 
     const data = await this.resend.post<CreateEmailResponseSuccess>(
@@ -77,22 +73,8 @@ export class Emails {
   }
 
   list(options: ListEmailsOptions = {}): PaginatedRequest<ListEmail> {
-    const fetchPage = async (options: ListEmailsOptions) => {
-      const searchParams = new URLSearchParams();
-
-      if (options.limit !== undefined) {
-        searchParams.set('limit', options.limit.toString());
-      }
-
-      if ('after' in options && options.after !== undefined) {
-        searchParams.set('after', options.after);
-      }
-
-      if ('before' in options && options.before !== undefined) {
-        searchParams.set('before', options.before);
-      }
-
-      const queryString = searchParams.toString();
+    const fetchPage = async (pageOptions: ListEmailsOptions) => {
+      const queryString = buildPaginationQuery(pageOptions);
       const url = queryString ? `/emails?${queryString}` : '/emails';
       return this.resend.get<ListEmailsResponseSuccess>(url);
     };

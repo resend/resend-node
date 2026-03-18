@@ -1,0 +1,164 @@
+name: Update Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**/*.ts'
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    name: Trigger Mintlify Agent
+    if: github.repository == 'resend/resend-node'
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Call Mintlify Agent API
+        env:
+          MINTLIFY_API_KEY: ${{ secrets.MINTLIFY_API_KEY }}
+          MINTLIFY_PROJECT_ID: ${{ secrets.MINTLIFY_PROJECT_ID }}
+          COMMITS_JSON: ${{ toJson(github.event.commits) }}
+          COMMIT_SHA: ${{ github.sha }}
+          COMMIT_AUTHOR: ${{ github.actor }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          echo "Triggering Mintlify agent to update documentation..."
+
+          # Get information about all commits in this push
+          COMMIT_URL="https://github.com/${GITHUB_REPOSITORY}/commit/${COMMIT_SHA}"
+          TIMESTAMP=$(date +%s)
+
+          # If no commits in event (manual trigger), fall back to latest commit
+          if [ "$COMMITS_JSON" == "null" ] || [ "$COMMITS_JSON" == "" ]; then
+            echo "No commits in push event, using HEAD commit"
+            COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+            # Use jq to properly escape the commit message
+            COMMITS_JSON=$(jq -n \
+              --arg id "${COMMIT_SHA}" \
+              --arg message "${COMMIT_MESSAGE}" \
+              --arg author "${COMMIT_AUTHOR}" \
+              '[{id: $id, message: $message, author: $author}]')
+          else
+            COMMIT_COUNT=$(echo "$COMMITS_JSON" | jq '. | length')
+            echo "Processing ${COMMIT_COUNT} commit(s) from this push"
+          fi
+
+          # Build context message with commit details
+          CONTEXT_MESSAGE="Update documentation for recent changes to the Resend Node.js SDK pushed to ${GITHUB_REPOSITORY} on branch ${GITHUB_REF_NAME}.
+
+          Repository: ${GITHUB_REPOSITORY}
+          Branch: ${GITHUB_REF_NAME}
+          Commit: ${COMMIT_URL}
+          Pushed by: ${COMMIT_AUTHOR}
+
+          Commits in this push:
+          $(echo "$COMMITS_JSON" | jq -r '.[] | "- \(.id[0:7]): \(.message | split("\n")[0])"')
+
+          Please analyze these changes to the Node.js SDK and update the documentation accordingly **if they're customer-facing changes**.
+
+          In the vast majority of times, you will only have to update the API reference documentation and code examples for the Node.js SDK if not already up to date.
+
+          If these changes do not impact the public API or user experience, no documentation updates are necessary.
+
+          You don't need to document internal implementation details unless they affect how users interact with the SDK.
+
+          Avoid unnecessary updates; focus only on relevant changes. Examples of relevant changes include:
+
+          - New or modified SDK methods or interfaces
+          - Changes to method parameters or return types
+          - Updated usage instructions or examples
+          - New features or deprecations
+          - Changes in required dependencies or peer dependencies
+          - Updates to TypeScript types that affect developer experience
+
+          Ensure that any documentation updates are clear, concise, and follow the existing style and format of the documentation.
+
+          IMPORTANT: It's extremely important that you follow the naming conventions for PRs:
+            - <feat|fix|chore>: <concise description of the change>
+
+          IMPORTANT: If these changes are already documented the target docs repo, you can just skip creating a PR altogether."
+
+          # Build the request body with proper Mintlify API schema
+          # Customize the SYSTEM_PROMPT below with your documentation guidelines
+          SYSTEM_PROMPT="You are an AI agent that updates Resend's documentation.
+
+          IMPORTANT: When you create a pull request, format the title using conventional commits:
+          - Use 'feat:' prefix for new features or additions
+          - Use 'fix:' prefix for bug fixes or corrections
+          - Use 'chore:' prefix for maintenance tasks, refactoring, or minor updates
+          Example: 'feat: add new broadcast methods to Node.js SDK examples'
+
+          Guidelines:
+          - Be concise and clear. Avoid long-winded explanations and focus on how changes impact users.
+          - When modifying the API reference, ensure accuracy in method signatures, parameters, and response types.
+          - Make sure to update the code examples in the API reference if there are changes to the Node.js SDK usage patterns.
+          - If a field is optional, it does _not_ need to be included in the example, but it should be presented in the parameter list.
+          - Use proper formatting for code snippets (TypeScript/JavaScript for Node.js SDK examples).
+          - Prioritize user-facing changes that impact how developers interact with the SDK. If a change is only internal and does not affect users, no documentation update is needed. It's as important to avoid unnecessary updates as it is to add new information to avoid overloading users with irrelevant details.
+          - The vast majority of time, your changes will happen to the API reference documentation code examples, but it might be the case that you also need to update code snippets in integration guides. You will _rarely_ have to update knowledge base articles' text and explanations, but that might happen. Still, be mindful and extra critical about whether a change is necessary in those cases.
+          - Focus on Node.js/TypeScript SDK examples. When updating API reference docs, ensure the Node.js SDK tab shows the correct usage.
+          - Remember: You don't need to update the SDK examples when there's a new _optional_ parameter added to a method. The SDK examples should focus on the most common usage patterns, so optional parameters can be omitted.
+
+          When analyzing changes:
+          - Identify new or modified SDK methods, interfaces, and types
+          - Determine whether the changes impact user experience or SDK usage (e.g., new features, changes in method signatures, new TypeScript types)
+          - Have a look at the existing documentation to understand the existing style and format
+          - Ensure you're not introducing redundant or unnecessary information
+          - Make sure to update the code examples if there are changes to SDK usage patterns
+          - Pay special attention to TypeScript type definitions as they affect the developer experience
+
+          Based on your analysis, update the documentation files in the repository accordingly."
+
+          REQUEST_BODY=$(jq -n \
+            --arg branch "mintlify/docs-update-${TIMESTAMP}" \
+            --arg system "$SYSTEM_PROMPT" \
+            --arg context "$CONTEXT_MESSAGE" \
+            '{
+              branch: $branch,
+              messages: [
+                {
+                  role: "system",
+                  content: $system
+                },
+                {
+                  role: "user",
+                  content: $context
+                }
+              ]
+            }')
+
+          # Call Mintlify Agent API with correct endpoint and schema
+          echo "Calling Mintlify API endpoint..."
+          RESPONSE=$(curl -X POST "https://api.mintlify.com/v1/agent/${MINTLIFY_PROJECT_ID}/job" \
+            -H "Authorization: Bearer ${MINTLIFY_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "$REQUEST_BODY" \
+            -w "\n%{http_code}" \
+            -s)
+
+          # Extract response body and status code
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          RESPONSE_BODY=$(echo "$RESPONSE" | head -n-1)
+
+          echo "Response: $RESPONSE_BODY"
+          echo "HTTP Status: $HTTP_CODE"
+
+          # Check for success (2xx status codes)
+          if [[ "$HTTP_CODE" =~ ^2 ]]; then
+            echo "✅ Successfully triggered Mintlify agent"
+            echo "The agent will analyze these changes and create a PR in resend-docs if documentation updates are needed."
+          else
+            echo "❌ Failed to trigger Mintlify agent"
+            echo "Please check your MINTLIFY_API_KEY and MINTLIFY_PROJECT_ID secrets"
+            echo "Error response: $RESPONSE_BODY"
+            exit 1
+          fi

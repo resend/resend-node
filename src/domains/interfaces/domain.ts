@@ -4,6 +4,13 @@ export type DomainRegion =
   | 'sa-east-1'
   | 'ap-northeast-1';
 
+export type DomainCapabilityStatus = 'enabled' | 'disabled';
+
+export interface DomainCapabilities {
+  sending: DomainCapabilityStatus;
+  receiving: DomainCapabilityStatus;
+}
+
 export type DomainNameservers =
   | 'Amazon Route 53'
   | 'Cloudflare'
@@ -21,7 +28,10 @@ export type DomainStatus =
   | 'temporary_failure'
   | 'not_started';
 
-export type DomainRecords = DomainSpfRecord | DomainDkimRecord;
+export type DomainRecords =
+  | DomainSpfRecord
+  | DomainDkimRecord
+  | ReceivingRecord;
 
 export interface DomainSpfRecord {
   record: 'SPF';
@@ -47,10 +57,21 @@ export interface DomainDkimRecord {
   proxy_status?: 'enable' | 'disable';
 }
 
+export interface ReceivingRecord {
+  record: 'Receiving';
+  name: string;
+  value: string;
+  type: 'MX';
+  ttl: string;
+  status: DomainStatus;
+  priority: number;
+}
+
 export interface Domain {
   id: string;
   name: string;
   status: DomainStatus;
   created_at: string;
   region: DomainRegion;
+  capabilities: DomainCapabilities;
 }

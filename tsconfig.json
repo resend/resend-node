@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "resend": ["./src/index.ts"]
+    },
     "allowSyntheticDefaultImports": true,
     "alwaysStrict": true,
     "declaration": true,
@@ -15,8 +19,8 @@
     "outDir": "build",
     "resolveJsonModule": true,
     "strict": true,
-    "target": "es6",
+    "target": "es2017",
     "types": ["vitest/globals"]
   },
-  "include": ["src"]
+  "include": ["src", "integrations"]
 }

@@ -24,6 +24,7 @@ export interface GetEmailResponseSuccess {
   text: string | null;
   tags?: { name: string; value: string }[];
   to: string[];
+  topic_id?: string | null;
   scheduled_at: string | null;
   object: 'email';
 }

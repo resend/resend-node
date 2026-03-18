@@ -8,21 +8,26 @@ on:
 permissions: 
   contents: read
   pull-requests: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   tests:
     runs-on: buildjet-4vcpu-ubuntu-2204
     container:
-      image: node:22
+      image: node:24-slim
       # credentials:
       #   username: ${{ vars.DOCKER_HUB_USERNAME || '' }}
       #   password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
+        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
       - name: pnpm setup
-        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda
+        uses: pnpm/action-setup@9b5745cdf0a2e8c2620f0746130f809adb911c19
       - name: Install packages
         run: pnpm install
+      - name: Run build
+        run: pnpm build
       - name: Run Tests
         run: pnpm test
         env:

@@ -1,10 +1,7 @@
+import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
-import {
-  mockErrorResponse,
-  mockFetchWithRateLimit,
-  mockSuccessResponse,
-} from '../test-utils/mock-fetch';
+import { mockSuccessResponse } from '../test-utils/mock-fetch';
 import type {
   CreateEmailOptions,
   CreateEmailResponseSuccess,
@@ -12,40 +9,45 @@ import type {
 import type { GetEmailResponseSuccess } from './interfaces/get-email-options.interface';
 import type { ListEmailsResponseSuccess } from './interfaces/list-emails-options.interface';
 
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
 describe('Emails', () => {
   afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
     it('sends email', async () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
         message: 'Missing `from` field.',
+        statusCode: 422,
       };
 
-      mockErrorResponse(response, {
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 422,
         headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          'content-type': 'application/json',
         },
       });
 
       const data = await resend.emails.create({} as CreateEmailOptions);
 
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Missing \`from\` field.",
-    "name": "missing_required_field",
-  },
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Missing \`from\` field.",
+            "name": "missing_required_field",
+            "statusCode": 422,
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('does not send the Idempotency-Key header when idempotencyKey is not provided', async () => {
@@ -53,9 +55,10 @@ describe('Emails', () => {
         id: 'not-idempotent-123',
       };
 
-      mockSuccessResponse(response, {
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
         headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          'content-type': 'application/json',
         },
       });
 
@@ -64,6 +67,7 @@ describe('Emails', () => {
         to: 'user@resend.com',
         subject: 'Not Idempotent Test',
         html: '<h1>Test</h1>',
+        topicId: '9f31e56e-3083-46cf-8e96-c6995e0e576a',
       };
 
       await resend.emails.create(payload);
@@ -74,8 +78,18 @@ describe('Emails', () => {
       const request = lastCall[1];
       expect(request).toBeDefined();
 
-      const headers = new Headers(request?.headers);
-      expect(headers.has('Idempotency-Key')).toBe(false);
+      // Make sure the topic_id is included in the body
+      expect(lastCall[1]?.body).toEqual(
+        '{"from":"admin@resend.com","html":"<h1>Test</h1>","subject":"Not Idempotent Test","to":"user@resend.com","topic_id":"9f31e56e-3083-46cf-8e96-c6995e0e576a"}',
+      );
+
+      //@ts-expect-error
+      const hasIdempotencyKey = lastCall[1]?.headers.has('Idempotency-Key');
+      expect(hasIdempotencyKey).toBeFalsy();
+
+      //@ts-expect-error
+      const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
+      expect(usedIdempotencyKey).toBeNull();
     });
 
     it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
@@ -83,9 +97,10 @@ describe('Emails', () => {
         id: 'idempotent-123',
       };
 
-      mockSuccessResponse(response, {
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
         headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          'content-type': 'application/json',
         },
       });
 
@@ -114,9 +129,10 @@ describe('Emails', () => {
       const response: CreateEmailResponseSuccess = {
         id: '71cdfe68-cf79-473a-a9d7-21f91db6a526',
       };
-      mockSuccessResponse(response, {
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
         headers: {
-          Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+          'content-type': 'application/json',
         },
       });
 
@@ -129,18 +145,16 @@ describe('Emails', () => {
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        {
+          "data": {
+            "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('sends email with multiple recipients', async () => {
@@ -148,8 +162,11 @@ describe('Emails', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
       });
 
       const payload: CreateEmailOptions = {
@@ -160,18 +177,16 @@ describe('Emails', () => {
       };
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('sends email with multiple bcc recipients', async () => {
@@ -179,8 +194,11 @@ describe('Emails', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
       });
 
       const payload: CreateEmailOptions = {
@@ -193,18 +211,16 @@ describe('Emails', () => {
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('sends email with multiple cc recipients', async () => {
@@ -212,8 +228,11 @@ describe('Emails', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
       });
 
       const payload: CreateEmailOptions = {
@@ -226,18 +245,16 @@ describe('Emails', () => {
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('sends email with multiple replyTo emails', async () => {
@@ -245,8 +262,11 @@ describe('Emails', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
       });
 
       const payload: CreateEmailOptions = {
@@ -259,18 +279,16 @@ describe('Emails', () => {
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('can send an email with headers', async () => {
@@ -278,8 +296,11 @@ describe('Emails', () => {
         id: '124dc0f1-e36c-417c-a65c-e33773abc768',
       };
 
-      mockSuccessResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
       });
 
       const payload: CreateEmailOptions = {
@@ -294,18 +315,16 @@ describe('Emails', () => {
 
       const data = await resend.emails.send(payload);
       expect(data).toMatchInlineSnapshot(`
-{
-  "data": {
-    "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        {
+          "data": {
+            "id": "124dc0f1-e36c-417c-a65c-e33773abc768",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('throws an error when an ErrorResponse is returned', async () => {
@@ -313,10 +332,14 @@ describe('Emails', () => {
         name: 'invalid_parameter',
         message:
           'Invalid `from` field. The email address needs to follow the `email@example.com` or `Name <email@example.com>` format',
+        statusCode: 422,
       };
 
-      mockErrorResponse(response, {
-        headers: { Authorization: 'Bearer re_924b3rjh2387fbewf823' },
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+        },
       });
 
       const payload: CreateEmailOptions = {
@@ -330,19 +353,18 @@ describe('Emails', () => {
       const result = resend.emails.send(payload);
 
       await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
-    "name": "invalid_parameter",
-  },
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+        {
+          "data": null,
+          "error": {
+            "message": "Invalid \`from\` field. The email address needs to follow the \`email@example.com\` or \`Name <email@example.com>\` format",
+            "name": "invalid_parameter",
+            "statusCode": 422,
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
 
     it('returns an error when fetch fails', async () => {
@@ -365,6 +387,7 @@ describe('Emails', () => {
           error: {
             message: 'Unable to fetch data. The request could not be resolved.',
             name: 'application_error',
+            statusCode: null,
           },
         }),
       );
@@ -372,11 +395,9 @@ describe('Emails', () => {
     });
 
     it('returns an error when api responds with text payload', async () => {
-      mockFetchWithRateLimit('local_rate_limited', {
+      fetchMock.mockOnce('local_rate_limited', {
         status: 422,
-        headers: {
-          Authorization: 'Bearer re_924b3rjh2387fbewf823',
-        },
+        headers: {},
       });
 
       const result = await resend.emails.send({
@@ -393,9 +414,200 @@ describe('Emails', () => {
             message:
               'Internal server error. We are unable to process your request right now, please try again later.',
             name: 'application_error',
+            statusCode: 422,
           },
         }),
       );
+    });
+
+    describe('template emails', () => {
+      it('sends email with template id only', async () => {
+        const response: CreateEmailResponseSuccess = {
+          id: 'template-email-123',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const payload: CreateEmailOptions = {
+          template: {
+            id: 'welcome-template-123',
+          },
+          to: 'user@example.com',
+        };
+
+        const data = await resend.emails.send(payload);
+        expect(data).toMatchInlineSnapshot(`
+          {
+            "data": {
+              "id": "template-email-123",
+            },
+            "error": null,
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+
+        // Verify the correct API payload was sent
+        const lastCall = fetchMock.mock.calls[0];
+        const requestBody = JSON.parse(lastCall[1]?.body as string);
+        expect(requestBody).toEqual({
+          template: {
+            id: 'welcome-template-123',
+          },
+          to: 'user@example.com',
+        });
+      });
+
+      it('sends email with template id and variables', async () => {
+        const response: CreateEmailResponseSuccess = {
+          id: 'template-vars-email-456',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const payload: CreateEmailOptions = {
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'John Doe',
+              company: 'Acme Corp',
+              welcomeBonus: 100,
+              isPremium: 'true',
+            },
+          },
+          to: 'user@example.com',
+        };
+
+        const data = await resend.emails.send(payload);
+        expect(data).toMatchInlineSnapshot(`
+          {
+            "data": {
+              "id": "template-vars-email-456",
+            },
+            "error": null,
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+
+        // Verify the correct API payload was sent
+        const lastCall = fetchMock.mock.calls[0];
+        const requestBody = JSON.parse(lastCall[1]?.body as string);
+        expect(requestBody).toEqual({
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'John Doe',
+              company: 'Acme Corp',
+              welcomeBonus: 100,
+              isPremium: 'true',
+            },
+          },
+          to: 'user@example.com',
+        });
+      });
+
+      it('sends template email with optional from and subject', async () => {
+        const response: CreateEmailResponseSuccess = {
+          id: 'template-with-overrides-789',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const payload: CreateEmailOptions = {
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'Jane Smith',
+            },
+          },
+          from: 'custom@example.com',
+          subject: 'Custom Subject Override',
+          to: 'user@example.com',
+        };
+
+        const data = await resend.emails.send(payload);
+        expect(data).toMatchInlineSnapshot(`
+          {
+            "data": {
+              "id": "template-with-overrides-789",
+            },
+            "error": null,
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+
+        // Verify the correct API payload was sent
+        const lastCall = fetchMock.mock.calls[0];
+        const requestBody = JSON.parse(lastCall[1]?.body as string);
+        expect(requestBody).toEqual({
+          template: {
+            id: 'welcome-template-123',
+            variables: {
+              name: 'Jane Smith',
+            },
+          },
+          from: 'custom@example.com',
+          subject: 'Custom Subject Override',
+          to: 'user@example.com',
+        });
+      });
+
+      it('handles template email errors correctly', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          message: 'Template not found',
+          statusCode: 404,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const payload: CreateEmailOptions = {
+          template: {
+            id: 'invalid-template-123',
+          },
+          to: 'user@example.com',
+        };
+
+        const result = await resend.emails.send(payload);
+        expect(result).toMatchInlineSnapshot(`
+          {
+            "data": null,
+            "error": {
+              "message": "Template not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+      });
     });
   });
 
@@ -405,11 +617,13 @@ describe('Emails', () => {
         const response: ErrorResponse = {
           name: 'not_found',
           message: 'Email not found',
+          statusCode: 404,
         };
 
-        mockErrorResponse(response, {
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
           },
         });
 
@@ -418,19 +632,18 @@ describe('Emails', () => {
         );
 
         await expect(result).resolves.toMatchInlineSnapshot(`
-{
-  "data": null,
-  "error": {
-    "message": "Email not found",
-    "name": "not_found",
-  },
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+          {
+            "data": null,
+            "error": {
+              "message": "Email not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
 
@@ -452,41 +665,40 @@ describe('Emails', () => {
           scheduled_at: null,
         };
 
-        mockSuccessResponse(response, {
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
           },
         });
 
         await expect(
           resend.emails.get('67d9bcdb-5a02-42d7-8da9-0d6feea18cff'),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "bcc": null,
-    "cc": null,
-    "created_at": "2023-04-07T23:13:52.669661+00:00",
-    "from": "bu@resend.com",
-    "html": "<p>hello hello</p>",
-    "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
-    "last_event": "delivered",
-    "object": "email",
-    "reply_to": null,
-    "scheduled_at": null,
-    "subject": "Test email",
-    "text": null,
-    "to": [
-      "zeno@resend.com",
-    ],
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+          {
+            "data": {
+              "bcc": null,
+              "cc": null,
+              "created_at": "2023-04-07T23:13:52.669661+00:00",
+              "from": "bu@resend.com",
+              "html": "<p>hello hello</p>",
+              "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
+              "last_event": "delivered",
+              "object": "email",
+              "reply_to": null,
+              "scheduled_at": null,
+              "subject": "Test email",
+              "text": null,
+              "to": [
+                "zeno@resend.com",
+              ],
+            },
+            "error": null,
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
 
       it('returns emails with to and multiple cc', async () => {
@@ -506,44 +718,43 @@ describe('Emails', () => {
           scheduled_at: null,
         };
 
-        mockSuccessResponse(response, {
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
           headers: {
-            Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+            'content-type': 'application/json',
           },
         });
 
         await expect(
           resend.emails.get('67d9bcdb-5a02-42d7-8da9-0d6feea18cff'),
         ).resolves.toMatchInlineSnapshot(`
-{
-  "data": {
-    "bcc": null,
-    "cc": [
-      "zeno@resend.com",
-      "bu@resend.com",
-    ],
-    "created_at": "2023-04-07T23:13:52.669661+00:00",
-    "from": "bu@resend.com",
-    "html": "<p>hello hello</p>",
-    "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
-    "last_event": "delivered",
-    "object": "email",
-    "reply_to": null,
-    "scheduled_at": null,
-    "subject": "Test email",
-    "text": null,
-    "to": [
-      "zeno@resend.com",
-    ],
-  },
-  "error": null,
-  "rateLimiting": {
-    "limit": 2,
-    "remainingRequests": 2,
-    "shouldResetAfter": 1,
-  },
-}
-`);
+          {
+            "data": {
+              "bcc": null,
+              "cc": [
+                "zeno@resend.com",
+                "bu@resend.com",
+              ],
+              "created_at": "2023-04-07T23:13:52.669661+00:00",
+              "from": "bu@resend.com",
+              "html": "<p>hello hello</p>",
+              "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
+              "last_event": "delivered",
+              "object": "email",
+              "reply_to": null,
+              "scheduled_at": null,
+              "subject": "Test email",
+              "text": null,
+              "to": [
+                "zeno@resend.com",
+              ],
+            },
+            "error": null,
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
   });
@@ -567,9 +778,7 @@ describe('Emails', () => {
         },
       ],
     };
-    const headers = {
-      Authorization: 'Bearer re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
-    };
+    const headers = {};
 
     describe('when no pagination options provided', () => {
       it('calls endpoint without query params and return the response', async () => {
@@ -581,10 +790,8 @@ describe('Emails', () => {
         expect(result).toEqual({
           data: response,
           error: null,
-          rateLimiting: {
-            limit: 2,
-            remainingRequests: 2,
-            shouldResetAfter: 1,
+          headers: {
+            'content-type': 'application/json',
           },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
@@ -600,10 +807,8 @@ describe('Emails', () => {
         expect(result).toEqual({
           data: response,
           error: null,
-          rateLimiting: {
-            limit: 2,
-            remainingRequests: 2,
-            shouldResetAfter: 1,
+          headers: {
+            'content-type': 'application/json',
           },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
@@ -617,10 +822,8 @@ describe('Emails', () => {
         expect(result).toEqual({
           data: response,
           error: null,
-          rateLimiting: {
-            limit: 2,
-            remainingRequests: 2,
-            shouldResetAfter: 1,
+          headers: {
+            'content-type': 'application/json',
           },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(
@@ -634,10 +837,8 @@ describe('Emails', () => {
         expect(result).toEqual({
           data: response,
           error: null,
-          rateLimiting: {
-            limit: 2,
-            remainingRequests: 2,
-            shouldResetAfter: 1,
+          headers: {
+            'content-type': 'application/json',
           },
         });
         expect(fetchMock.mock.calls[0][0]).toBe(

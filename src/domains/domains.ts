@@ -1,3 +1,4 @@
+import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { parseDomainToApiOptions } from '../common/utils/parse-domain-to-api-options';
 import type { Resend } from '../resend';
 import type {
@@ -11,6 +12,7 @@ import type {
   GetDomainResponseSuccess,
 } from './interfaces/get-domain.interface';
 import type {
+  ListDomainsOptions,
   ListDomainsResponse,
   ListDomainsResponseSuccess,
 } from './interfaces/list-domains.interface';
@@ -43,8 +45,11 @@ export class Domains {
     return data;
   }
 
-  async list(): Promise<ListDomainsResponse> {
-    const data = await this.resend.get<ListDomainsResponseSuccess>('/domains');
+  async list(options: ListDomainsOptions = {}): Promise<ListDomainsResponse> {
+    const queryString = buildPaginationQuery(options);
+    const url = queryString ? `/domains?${queryString}` : '/domains';
+
+    const data = await this.resend.get<ListDomainsResponseSuccess>(url);
     return data;
   }
 
@@ -63,6 +68,7 @@ export class Domains {
         click_tracking: payload.clickTracking,
         open_tracking: payload.openTracking,
         tls: payload.tls,
+        capabilities: payload.capabilities,
       },
     );
     return data;
