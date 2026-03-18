@@ -31,16 +31,15 @@
   },
   "scripts": {
     "build": "tsdown src/index.ts --format esm,cjs --dts",
-    "integration:nextjs": "cd ./integrations/nextjs && next build --turbopack",
+    "integration:nextjs": "cd ./e2e/nextjs && next build --turbopack",
     "lint": "biome check .",
     "lint:fix": "biome check . --write",
     "prepublishOnly": "pnpm run build",
-    "test": "vitest run --exclude integrations",
-    "test:dev": "cross-env TEST_MODE=dev vitest run --exclude integrations",
-    "test:e2e": "vitest run integrations",
-    "test:integrations": "pnpm test:e2e",
-    "test:record": "rimraf --glob \"**/__recordings__\" && cross-env TEST_MODE=record vitest run --exclude integrations",
-    "test:watch": "vitest --exclude integrations",
+    "test": "vitest run --exclude e2e",
+    "test:dev": "cross-env TEST_MODE=dev vitest run --exclude e2e",
+    "test:e2e": "vitest run e2e",
+    "test:record": "rimraf --glob \"**/__recordings__\" && cross-env TEST_MODE=record vitest run --exclude e2e",
+    "test:watch": "vitest --exclude e2e",
     "typecheck": "tsc --noEmit"
   },
   "repository": {
