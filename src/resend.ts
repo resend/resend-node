@@ -79,10 +79,7 @@ export class Resend {
         try {
           const rawError = await response.text();
           const error = JSON.parse(rawError) as ErrorResponse;
-          if (
-            error.name === 'rate_limit_exceeded' &&
-            response.status === 429
-          ) {
+          if (error.name === 'rate_limit_exceeded' && response.status === 429) {
             const retryAfterHeader = response.headers.get('retry-after');
             if (retryAfterHeader) {
               error.retryAfter = Number.parseInt(retryAfterHeader, 10);

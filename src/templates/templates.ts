@@ -57,9 +57,7 @@ export class Templates {
     if (payload.react) {
       if (!this.renderAsync) {
         try {
-          const mod = (await import(
-            '@react-email/render'
-          )) as unknown as {
+          const mod = (await import('@react-email/render')) as unknown as {
             renderAsync: RenderAsync;
           };
           this.renderAsync = mod.renderAsync;
