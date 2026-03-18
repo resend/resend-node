@@ -35,11 +35,12 @@
     "lint": "biome check .",
     "lint:fix": "biome check . --write",
     "prepublishOnly": "pnpm run build",
-    "test": "vitest run",
-    "test:dev": "cross-env TEST_MODE=dev vitest run",
-    "test:integrations": "vitest run integrations",
-    "test:record": "rimraf --glob \"**/__recordings__\" && cross-env TEST_MODE=record vitest run",
-    "test:watch": "vitest",
+    "test": "vitest run --exclude integrations",
+    "test:dev": "cross-env TEST_MODE=dev vitest run --exclude integrations",
+    "test:e2e": "vitest run integrations",
+    "test:integrations": "pnpm test:e2e",
+    "test:record": "rimraf --glob \"**/__recordings__\" && cross-env TEST_MODE=record vitest run --exclude integrations",
+    "test:watch": "vitest --exclude integrations",
     "typecheck": "tsc --noEmit"
   },
   "repository": {
