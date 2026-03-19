@@ -367,7 +367,7 @@ describe('Emails', () => {
       `);
     });
 
-    it('returns an error when fetch fails', async () => {
+    it('returns an error when fetch fails (with env base URL)', async () => {
       const originalEnv = process.env;
       process.env = {
         ...originalEnv,
@@ -392,6 +392,34 @@ describe('Emails', () => {
         }),
       );
       process.env = originalEnv;
+    });
+
+    it('returns an error when fetch fails (with client options)', async () => {
+      const resendWithInvalidBase = new Resend(
+        're_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop',
+        { baseUrl: 'http://invalidurl.noturl' },
+      );
+
+      const result = await resendWithInvalidBase.emails.send({
+        from: 'example@resend.com',
+        to: 'bu@resend.com',
+        subject: 'Hello World',
+        text: 'Hello world',
+      });
+
+      expect(result).toEqual(
+        expect.objectContaining({
+          data: null,
+          error: {
+            message: 'Unable to fetch data. The request could not be resolved.',
+            name: 'application_error',
+            statusCode: null,
+          },
+        }),
+      );
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'http://invalidurl.noturl/emails',
+      );
     });
 
     it('returns an error when api responds with text payload', async () => {
