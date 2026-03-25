@@ -37,7 +37,7 @@ export class Workflows {
     payload: CreateWorkflowOptions,
   ): Promise<CreateWorkflowResponse> {
     const data = await this.resend.post<CreateWorkflowResponseSuccess>(
-      '/workflows',
+      '/automations',
       parseAutomationToApiOptions(payload),
     );
 
@@ -48,7 +48,7 @@ export class Workflows {
     options: ListWorkflowsOptions = {},
   ): Promise<ListWorkflowsResponse> {
     const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/workflows?${queryString}` : '/workflows';
+    const url = queryString ? `/automations?${queryString}` : '/automations';
 
     const data = await this.resend.get<ListWorkflowsResponseSuccess>(url);
     return data;
@@ -56,14 +56,14 @@ export class Workflows {
 
   async get(id: string): Promise<GetWorkflowResponse> {
     const data = await this.resend.get<GetWorkflowResponseSuccess>(
-      `/workflows/${id}`,
+      `/automations/${id}`,
     );
     return data;
   }
 
   async remove(id: string): Promise<RemoveWorkflowResponse> {
     const data = await this.resend.delete<RemoveWorkflowResponseSuccess>(
-      `/workflows/${id}`,
+      `/automations/${id}`,
     );
     return data;
   }
@@ -73,7 +73,7 @@ export class Workflows {
     payload: UpdateWorkflowOptions,
   ): Promise<UpdateWorkflowResponse> {
     const data = await this.resend.patch<UpdateWorkflowResponseSuccess>(
-      `/workflows/${id}`,
+      `/automations/${id}`,
       payload,
     );
     return data;

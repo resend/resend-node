@@ -18,7 +18,7 @@ export class WorkflowRunSteps {
     options: GetWorkflowRunStepOptions,
   ): Promise<GetWorkflowRunStepResponse> {
     const data = await this.resend.get<GetWorkflowRunStepResponseSuccess>(
-      `/workflows/${options.workflowId}/runs/${options.runId}/steps/${options.stepId}`,
+      `/automations/${options.workflowId}/runs/${options.runId}/steps/${options.stepId}`,
     );
     return data;
   }
@@ -28,8 +28,8 @@ export class WorkflowRunSteps {
   ): Promise<ListWorkflowRunStepsResponse> {
     const queryString = buildPaginationQuery(options);
     const url = queryString
-      ? `/workflows/${options.workflowId}/runs/${options.runId}/steps?${queryString}`
-      : `/workflows/${options.workflowId}/runs/${options.runId}/steps`;
+      ? `/automations/${options.workflowId}/runs/${options.runId}/steps?${queryString}`
+      : `/automations/${options.workflowId}/runs/${options.runId}/steps`;
 
     const data =
       await this.resend.get<ListWorkflowRunStepsResponseSuccess>(url);
