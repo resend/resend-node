@@ -1,4 +1,7 @@
 export * from './api-keys/interfaces';
+export * from './automation-run-steps/interfaces';
+export * from './automation-runs/interfaces';
+export * from './automations/interfaces';
 export * from './batch/interfaces';
 export * from './broadcasts/interfaces';
 export * from './common/interfaces';

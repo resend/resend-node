@@ -1,38 +1,38 @@
-import type { SendEventOptions } from '../../events/interfaces/send-event.interface';
-import type { CreateWorkflowOptions } from '../../workflows/interfaces/create-workflow-options.interface';
 import type {
-  WorkflowEdge,
-  WorkflowEdgeType,
-  WorkflowStep,
-} from '../../workflows/interfaces/workflow-step.interface';
+  AutomationEdge,
+  AutomationEdgeType,
+  AutomationStep,
+} from '../../automations/interfaces/automation-step.interface';
+import type { CreateAutomationOptions } from '../../automations/interfaces/create-automation-options.interface';
+import type { SendEventOptions } from '../../events/interfaces/send-event.interface';
 
-interface WorkflowStepApiOptions {
+interface AutomationStepApiOptions {
   ref: string;
   type: string;
   config: unknown;
 }
 
-interface WorkflowEdgeApiOptions {
+interface AutomationEdgeApiOptions {
   from: string;
   to: string;
-  edge_type?: WorkflowEdgeType;
+  edge_type?: AutomationEdgeType;
 }
 
-interface WorkflowApiOptions {
+interface AutomationApiOptions {
   name: string;
   status?: 'enabled' | 'disabled';
-  steps?: WorkflowStepApiOptions[];
-  edges?: WorkflowEdgeApiOptions[];
+  steps?: AutomationStepApiOptions[];
+  edges?: AutomationEdgeApiOptions[];
 }
 
-interface WorkflowEventApiOptions {
+interface EventApiOptions {
   event: string;
   contact_id?: string;
   email?: string;
   payload?: Record<string, unknown>;
 }
 
-function parseStepConfig(step: WorkflowStep): WorkflowStepApiOptions {
+function parseStepConfig(step: AutomationStep): AutomationStepApiOptions {
   switch (step.type) {
     case 'trigger':
       return {
@@ -69,7 +69,7 @@ function parseStepConfig(step: WorkflowStep): WorkflowStepApiOptions {
   }
 }
 
-function parseEdge(edge: WorkflowEdge): WorkflowEdgeApiOptions {
+function parseEdge(edge: AutomationEdge): AutomationEdgeApiOptions {
   return {
     from: edge.from,
     to: edge.to,
@@ -77,20 +77,20 @@ function parseEdge(edge: WorkflowEdge): WorkflowEdgeApiOptions {
   };
 }
 
-export function parseWorkflowToApiOptions(
-  workflow: CreateWorkflowOptions,
-): WorkflowApiOptions {
+export function parseAutomationToApiOptions(
+  automation: CreateAutomationOptions,
+): AutomationApiOptions {
   return {
-    name: workflow.name,
-    status: workflow.status,
-    steps: workflow.steps.map(parseStepConfig),
-    edges: workflow.edges.map(parseEdge),
+    name: automation.name,
+    status: automation.status,
+    steps: automation.steps.map(parseStepConfig),
+    edges: automation.edges.map(parseEdge),
   };
 }
 
-export function parseWorkflowEventToApiOptions(
+export function parseEventToApiOptions(
   event: SendEventOptions,
-): WorkflowEventApiOptions {
+): EventApiOptions {
   return {
     event: event.event,
     contact_id: event.contactId,

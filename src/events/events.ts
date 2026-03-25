@@ -1,5 +1,5 @@
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
-import { parseWorkflowEventToApiOptions } from '../common/utils/parse-workflow-to-api-options';
+import { parseEventToApiOptions } from '../common/utils/parse-automation-to-api-options';
 import type { Resend } from '../resend';
 import type {
   CreateEventOptions,
@@ -36,7 +36,7 @@ export class Events {
   async send(payload: SendEventOptions): Promise<SendEventResponse> {
     const data = await this.resend.post<SendEventResponseSuccess>(
       '/events/send',
-      parseWorkflowEventToApiOptions(payload),
+      parseEventToApiOptions(payload),
     );
 
     return data;

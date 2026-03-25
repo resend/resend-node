@@ -1,14 +1,14 @@
+import type { CreateAutomationOptions } from '../../automations/interfaces/create-automation-options.interface';
 import type { SendEventOptions } from '../../events/interfaces/send-event.interface';
-import type { CreateWorkflowOptions } from '../../workflows/interfaces/create-workflow-options.interface';
 import {
-  parseWorkflowEventToApiOptions,
-  parseWorkflowToApiOptions,
-} from './parse-workflow-to-api-options';
+  parseAutomationToApiOptions,
+  parseEventToApiOptions,
+} from './parse-automation-to-api-options';
 
-describe('parseWorkflowToApiOptions', () => {
+describe('parseAutomationToApiOptions', () => {
   it('converts full payload with all step types from camelCase to snake_case', () => {
-    const workflow: CreateWorkflowOptions = {
-      name: 'Welcome Series',
+    const automation: CreateAutomationOptions = {
+      name: 'Welcome Automation',
       status: 'enabled',
       steps: [
         {
@@ -65,7 +65,7 @@ describe('parseWorkflowToApiOptions', () => {
       ],
     };
 
-    const apiOptions = parseWorkflowToApiOptions(workflow);
+    const apiOptions = parseAutomationToApiOptions(automation);
 
     expect(apiOptions).toEqual({
       name: 'Welcome Series',
@@ -127,7 +127,7 @@ describe('parseWorkflowToApiOptions', () => {
   });
 
   it('converts edge edgeType to edge_type', () => {
-    const workflow: CreateWorkflowOptions = {
+    const automation: CreateAutomationOptions = {
       name: 'Edge Test',
       steps: [
         {
@@ -143,7 +143,7 @@ describe('parseWorkflowToApiOptions', () => {
       ],
     };
 
-    const apiOptions = parseWorkflowToApiOptions(workflow);
+    const apiOptions = parseAutomationToApiOptions(automation);
 
     expect(apiOptions.edges).toEqual([
       { from: 'trigger_1', to: 'step_2', edge_type: 'condition_met' },
@@ -153,7 +153,7 @@ describe('parseWorkflowToApiOptions', () => {
   });
 
   it('handles minimal payload with only required fields', () => {
-    const workflow: CreateWorkflowOptions = {
+    const automation: CreateAutomationOptions = {
       name: 'Minimal Workflow',
       steps: [
         {
@@ -165,7 +165,7 @@ describe('parseWorkflowToApiOptions', () => {
       edges: [{ from: 'trigger_1', to: 'step_2' }],
     };
 
-    const apiOptions = parseWorkflowToApiOptions(workflow);
+    const apiOptions = parseAutomationToApiOptions(automation);
 
     expect(apiOptions).toEqual({
       name: 'Minimal Workflow',
@@ -190,7 +190,7 @@ describe('parseWorkflowEventToApiOptions', () => {
       payload: { plan: 'pro' },
     };
 
-    const apiOptions = parseWorkflowEventToApiOptions(event);
+    const apiOptions = parseEventToApiOptions(event);
 
     expect(apiOptions).toEqual({
       event: 'user.signed_up',
@@ -207,7 +207,7 @@ describe('parseWorkflowEventToApiOptions', () => {
       payload: { source: 'website' },
     };
 
-    const apiOptions = parseWorkflowEventToApiOptions(event);
+    const apiOptions = parseEventToApiOptions(event);
 
     expect(apiOptions).toEqual({
       event: 'user.signed_up',

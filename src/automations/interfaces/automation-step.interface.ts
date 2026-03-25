@@ -1,4 +1,4 @@
-type ConditionRule =
+export type ConditionRule =
   | {
       type: 'rule';
       field: string;
@@ -25,7 +25,7 @@ type ConditionRule =
   | { type: 'and'; rules: ConditionRule[] }
   | { type: 'or'; rules: ConditionRule[] };
 
-type TemplateVariableValue =
+export type TemplateVariableValue =
   | string
   | number
   | boolean
@@ -35,15 +35,15 @@ type TemplateVariableValue =
       string | number | boolean | Record<string, string | number | boolean>
     >;
 
-interface TriggerStepConfig {
+export interface TriggerStepConfig {
   eventName: string;
 }
 
-interface DelayStepConfig {
+export interface DelayStepConfig {
   seconds: number;
 }
 
-interface SendEmailStepConfig {
+export interface SendEmailStepConfig {
   templateId: string;
   subject?: string;
   from?: string;
@@ -51,45 +51,45 @@ interface SendEmailStepConfig {
   variables?: Record<string, TemplateVariableValue>;
 }
 
-interface WaitForEventStepConfig {
+export interface WaitForEventStepConfig {
   eventName: string;
   timeoutSeconds?: number;
   filterRule?: ConditionRule;
 }
 
-type ConditionStepConfig = ConditionRule;
+export type ConditionStepConfig = ConditionRule;
 
-export type WorkflowStep =
+export type AutomationStep =
   | { ref: string; type: 'trigger'; config: TriggerStepConfig }
   | { ref: string; type: 'delay'; config: DelayStepConfig }
   | { ref: string; type: 'send_email'; config: SendEmailStepConfig }
   | { ref: string; type: 'wait_for_event'; config: WaitForEventStepConfig }
   | { ref: string; type: 'condition'; config: ConditionStepConfig };
 
-export type WorkflowEdgeType =
+export type AutomationEdgeType =
   | 'default'
   | 'condition_met'
   | 'condition_not_met'
   | 'timeout'
   | 'event_received';
 
-export interface WorkflowEdge {
+export interface AutomationEdge {
   from: string;
   to: string;
-  edgeType?: WorkflowEdgeType;
+  edgeType?: AutomationEdgeType;
 }
 
-export type WorkflowStepType = WorkflowStep['type'];
+export type AutomationStepType = AutomationStep['type'];
 
-export interface WorkflowResponseStep {
+export interface AutomationResponseStep {
   id: string;
-  type: WorkflowStepType;
+  type: AutomationStepType;
   config: Record<string, unknown>;
 }
 
-export interface WorkflowResponseEdge {
+export interface AutomationResponseEdge {
   id: string;
   from_step_id: string;
   to_step_id: string;
-  edge_type: WorkflowEdgeType;
+  edge_type: AutomationEdgeType;
 }
