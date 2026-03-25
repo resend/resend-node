@@ -21,7 +21,7 @@ export class WorkflowRuns {
 
   async get(options: GetWorkflowRunOptions): Promise<GetWorkflowRunResponse> {
     const data = await this.resend.get<GetWorkflowRunResponseSuccess>(
-      `/workflows/${options.workflowId}/runs/${options.runId}`,
+      `/automations/${options.workflowId}/runs/${options.runId}`,
     );
     return data;
   }
@@ -31,8 +31,8 @@ export class WorkflowRuns {
   ): Promise<ListWorkflowRunsResponse> {
     const queryString = buildPaginationQuery(options);
     const url = queryString
-      ? `/workflows/${options.workflowId}/runs?${queryString}`
-      : `/workflows/${options.workflowId}/runs`;
+      ? `/automations/${options.workflowId}/runs?${queryString}`
+      : `/automations/${options.workflowId}/runs`;
 
     const data = await this.resend.get<ListWorkflowRunsResponseSuccess>(url);
     return data;

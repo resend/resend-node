@@ -142,7 +142,7 @@ describe('Workflows', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/workflows',
+          'https://api.resend.com/automations',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
@@ -168,7 +168,7 @@ describe('Workflows', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/workflows?limit=1',
+          'https://api.resend.com/automations?limit=1',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
@@ -195,7 +195,7 @@ describe('Workflows', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/workflows?limit=1&after=cursor-value',
+          'https://api.resend.com/automations?limit=1&after=cursor-value',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
@@ -222,7 +222,7 @@ describe('Workflows', () => {
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/workflows?limit=1&before=cursor-value',
+          'https://api.resend.com/automations?limit=1&before=cursor-value',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
@@ -393,7 +393,7 @@ describe('Workflows', () => {
       `);
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/workflows/${id}`,
+        `https://api.resend.com/automations/${id}`,
         expect.objectContaining({
           method: 'PATCH',
           headers: expect.any(Headers),
