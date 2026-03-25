@@ -1,5 +1,6 @@
 import { version } from '../package.json';
 import { ApiKeys } from './api-keys/api-keys';
+import { Automations } from './automations/automations';
 import { Batch } from './batch/batch';
 import { Broadcasts } from './broadcasts/broadcasts';
 import type { GetOptions, PostOptions, PutOptions } from './common/interfaces';
@@ -38,6 +39,7 @@ export class Resend {
    * @deprecated Use segments instead
    */
   readonly audiences = this.segments;
+  readonly automations = new Automations(this);
   readonly batch = new Batch(this);
   readonly broadcasts = new Broadcasts(this);
   readonly contactProperties = new ContactProperties(this);

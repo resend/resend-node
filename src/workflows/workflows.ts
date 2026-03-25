@@ -1,5 +1,5 @@
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
-import { parseWorkflowToApiOptions } from '../common/utils/parse-workflow-to-api-options';
+import { parseAutomationToApiOptions } from '../common/utils/parse-automation-to-api-options';
 import type { Resend } from '../resend';
 import { WorkflowRuns } from '../workflow-runs/workflow-runs';
 import type {
@@ -38,7 +38,7 @@ export class Workflows {
   ): Promise<CreateWorkflowResponse> {
     const data = await this.resend.post<CreateWorkflowResponseSuccess>(
       '/workflows',
-      parseWorkflowToApiOptions(payload),
+      parseAutomationToApiOptions(payload),
     );
 
     return data;
