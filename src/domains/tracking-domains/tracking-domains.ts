@@ -18,6 +18,11 @@ import type {
   RemoveTrackingDomainResponseSuccess,
 } from './interfaces/remove-tracking-domain.interface';
 import type {
+  UpdateTrackingDomainOptions,
+  UpdateTrackingDomainResponse,
+  UpdateTrackingDomainResponseSuccess,
+} from './interfaces/update-tracking-domain.interface';
+import type {
   VerifyTrackingDomainResponse,
   VerifyTrackingDomainResponseSuccess,
 } from './interfaces/verify-tracking-domain.interface';
@@ -31,7 +36,7 @@ export class TrackingDomains {
     options: CreateTrackingDomainRequestOptions = {},
   ): Promise<CreateTrackingDomainResponse> {
     return this.resend.post<CreateTrackingDomainResponseSuccess>(
-      `/domains/${domainId}/tracking-domains`,
+      `/domains/${domainId}/tracking`,
       payload,
       options,
     );
@@ -39,7 +44,7 @@ export class TrackingDomains {
 
   async list(domainId: string): Promise<ListTrackingDomainsResponse> {
     return this.resend.get<ListTrackingDomainsResponseSuccess>(
-      `/domains/${domainId}/tracking-domains`,
+      `/domains/${domainId}/tracking`,
     );
   }
 
@@ -48,7 +53,18 @@ export class TrackingDomains {
     trackingDomainId: string,
   ): Promise<GetTrackingDomainResponse> {
     return this.resend.get<GetTrackingDomainResponseSuccess>(
-      `/domains/${domainId}/tracking-domains/${trackingDomainId}`,
+      `/domains/${domainId}/tracking/${trackingDomainId}`,
+    );
+  }
+
+  async update(
+    domainId: string,
+    trackingDomainId: string,
+    payload: UpdateTrackingDomainOptions,
+  ): Promise<UpdateTrackingDomainResponse> {
+    return this.resend.patch<UpdateTrackingDomainResponseSuccess>(
+      `/domains/${domainId}/tracking/${trackingDomainId}`,
+      payload,
     );
   }
 
@@ -57,7 +73,7 @@ export class TrackingDomains {
     trackingDomainId: string,
   ): Promise<RemoveTrackingDomainResponse> {
     return this.resend.delete<RemoveTrackingDomainResponseSuccess>(
-      `/domains/${domainId}/tracking-domains/${trackingDomainId}`,
+      `/domains/${domainId}/tracking/${trackingDomainId}`,
     );
   }
 
@@ -66,7 +82,7 @@ export class TrackingDomains {
     trackingDomainId: string,
   ): Promise<VerifyTrackingDomainResponse> {
     return this.resend.post<VerifyTrackingDomainResponseSuccess>(
-      `/domains/${domainId}/tracking-domains/${trackingDomainId}/verify`,
+      `/domains/${domainId}/tracking/${trackingDomainId}/verify`,
     );
   }
 }

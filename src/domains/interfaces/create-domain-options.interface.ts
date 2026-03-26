@@ -12,7 +12,9 @@ export interface CreateDomainOptions {
   region?: DomainRegion;
   customReturnPath?: string;
   capabilities?: Partial<DomainCapabilities>;
+  /** @deprecated Use tracking domains instead: `resend.domains.tracking.create()` */
   openTracking?: boolean;
+  /** @deprecated Use tracking domains instead: `resend.domains.tracking.create()` */
   clickTracking?: boolean;
   tls?: 'enforced' | 'opportunistic';
 }
