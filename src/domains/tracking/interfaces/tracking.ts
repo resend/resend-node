@@ -1,20 +1,20 @@
-export type TrackingDomainStatus = 'not_started' | 'pending' | 'verified' | 'failed';
+export type TrackingStatus = 'not_started' | 'pending' | 'verified' | 'failed';
 
-export interface TrackingDomainRecord {
+export interface TrackingRecord {
   record: 'Tracking';
   type: 'CNAME';
   name: string;
   value: string;
   ttl: 'Auto';
-  status: TrackingDomainStatus;
+  status: TrackingStatus;
 }
 
-export interface TrackingDomain {
+export interface Tracking {
   object: 'tracking';
   id: string;
   name: string;
   full_name: string;
-  status: TrackingDomainStatus;
+  status: TrackingStatus;
   open_tracking: boolean;
   click_tracking: boolean;
   is_active: boolean;
