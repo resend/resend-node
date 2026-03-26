@@ -6,15 +6,16 @@ import type {
   DomainRecords,
   DomainRegion,
 } from './domain';
+import type { TrackingDomains } from '../tracking-domains/tracking-domains';
 
 export interface CreateDomainOptions {
   name: string;
   region?: DomainRegion;
   customReturnPath?: string;
   capabilities?: Partial<DomainCapabilities>;
-  /** @deprecated Use tracking domains instead: `resend.domains.tracking.create()` */
+  /** @deprecated Use {@link TrackingDomains.create} instead */
   openTracking?: boolean;
-  /** @deprecated Use tracking domains instead: `resend.domains.tracking.create()` */
+  /** @deprecated Use {@link TrackingDomains.create} instead */
   clickTracking?: boolean;
   tls?: 'enforced' | 'opportunistic';
 }

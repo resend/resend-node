@@ -1,11 +1,12 @@
 import type { Response } from '../../interfaces';
 import type { Domain, DomainCapabilities } from './domain';
+import type { TrackingDomains } from '../tracking-domains/tracking-domains';
 
 export interface UpdateDomainsOptions {
   id: string;
-  /** @deprecated Use tracking domains instead: `resend.domains.tracking.update()` */
+  /** @deprecated Use {@link TrackingDomains.update} instead */
   clickTracking?: boolean;
-  /** @deprecated Use tracking domains instead: `resend.domains.tracking.update()` */
+  /** @deprecated Use {@link TrackingDomains.update} instead */
   openTracking?: boolean;
   tls?: 'enforced' | 'opportunistic';
   capabilities?: Partial<DomainCapabilities>;
