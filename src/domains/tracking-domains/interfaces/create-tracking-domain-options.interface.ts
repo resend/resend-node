@@ -4,6 +4,8 @@ import type { TrackingDomain, TrackingDomainRecord } from './tracking-domain';
 
 export interface CreateTrackingDomainOptions {
   subdomain: string;
+  open_tracking?: boolean;
+  click_tracking?: boolean;
 }
 
 export interface CreateTrackingDomainRequestOptions extends PostOptions {}

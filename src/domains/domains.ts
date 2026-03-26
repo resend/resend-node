@@ -32,16 +32,29 @@ import type {
 import { TrackingDomains } from './tracking-domains/tracking-domains';
 
 export class Domains {
-  readonly trackingDomains: TrackingDomains;
+  readonly tracking: TrackingDomains;
 
   constructor(private readonly resend: Resend) {
-    this.trackingDomains = new TrackingDomains(resend);
+    this.tracking = new TrackingDomains(resend);
   }
 
   async create(
     payload: CreateDomainOptions,
     options: CreateDomainRequestOptions = {},
   ): Promise<CreateDomainResponse> {
+    if (payload.openTracking !== undefined) {
+      process.emitWarning(
+        '`openTracking` on domains.create() is deprecated. Use `resend.domains.tracking.create()` instead.',
+        'DeprecationWarning',
+      );
+    }
+    if (payload.clickTracking !== undefined) {
+      process.emitWarning(
+        '`clickTracking` on domains.create() is deprecated. Use `resend.domains.tracking.create()` instead.',
+        'DeprecationWarning',
+      );
+    }
+
     const data = await this.resend.post<CreateDomainResponseSuccess>(
       '/domains',
       parseDomainToApiOptions(payload),
@@ -67,6 +80,19 @@ export class Domains {
   }
 
   async update(payload: UpdateDomainsOptions): Promise<UpdateDomainsResponse> {
+    if (payload.openTracking !== undefined) {
+      process.emitWarning(
+        '`openTracking` on domains.update() is deprecated. Use `resend.domains.tracking.update()` instead.',
+        'DeprecationWarning',
+      );
+    }
+    if (payload.clickTracking !== undefined) {
+      process.emitWarning(
+        '`clickTracking` on domains.update() is deprecated. Use `resend.domains.tracking.update()` instead.',
+        'DeprecationWarning',
+      );
+    }
+
     const data = await this.resend.patch<UpdateDomainsResponseSuccess>(
       `/domains/${payload.id}`,
       {
