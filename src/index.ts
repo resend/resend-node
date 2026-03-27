@@ -10,6 +10,7 @@ export * from './domains/interfaces';
 export * from './emails/attachments/interfaces';
 export * from './emails/interfaces';
 export * from './emails/receiving/interfaces';
+export * from './logs/interfaces';
 export type { ErrorResponse, Response } from './interfaces';
 export { Resend } from './resend';
 export * from './segments/interfaces';
