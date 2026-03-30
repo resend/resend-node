@@ -15,9 +15,8 @@ export type SendEventOptions =
     };
 
 export interface SendEventResponseSuccess {
-  object: 'workflow_event';
+  object: 'event';
   event: string;
-  event_instance_id: string;
 }
 
 export type SendEventResponse = Response<SendEventResponseSuccess>;

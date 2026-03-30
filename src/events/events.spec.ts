@@ -21,9 +21,8 @@ describe('Events', () => {
   describe('send', () => {
     it('sends an event with contactId', async () => {
       const response: SendEventResponseSuccess = {
-        object: 'workflow_event',
+        object: 'event',
         event: 'user.created',
-        event_instance_id: 'evt-inst-123',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -43,8 +42,7 @@ describe('Events', () => {
         {
           "data": {
             "event": "user.created",
-            "event_instance_id": "evt-inst-123",
-            "object": "workflow_event",
+            "object": "event",
           },
           "error": null,
           "headers": {
@@ -69,9 +67,8 @@ describe('Events', () => {
 
     it('sends an event with email', async () => {
       const response: SendEventResponseSuccess = {
-        object: 'workflow_event',
+        object: 'event',
         event: 'user.created',
-        event_instance_id: 'evt-inst-456',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -90,8 +87,7 @@ describe('Events', () => {
         {
           "data": {
             "event": "user.created",
-            "event_instance_id": "evt-inst-456",
-            "object": "workflow_event",
+            "object": "event",
           },
           "error": null,
           "headers": {
