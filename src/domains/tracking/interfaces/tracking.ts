@@ -17,6 +17,5 @@ export interface Tracking {
   status: TrackingStatus;
   open_tracking: boolean;
   click_tracking: boolean;
-  is_active: boolean;
   created_at: string;
 }
