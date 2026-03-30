@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
       - name: pnpm setup
-        uses: pnpm/action-setup@9b5745cdf0a2e8c2620f0746130f809adb911c19
+        uses: pnpm/action-setup@6e7bdbda5fe05107efc88b23b7ed00aa05f84ca0
       - name: Install packages
         run: pnpm install
       - name: Run build
