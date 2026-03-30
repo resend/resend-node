@@ -11,6 +11,7 @@ export * from './emails/attachments/interfaces';
 export * from './emails/interfaces';
 export * from './emails/receiving/interfaces';
 export type { ErrorResponse, Response } from './interfaces';
+export * from './logs/interfaces';
 export { Resend } from './resend';
 export * from './segments/interfaces';
 export * from './templates/interfaces';

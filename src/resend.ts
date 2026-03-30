@@ -10,6 +10,7 @@ import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import type { ErrorResponse, Response } from './interfaces';
+import { Logs } from './logs/logs';
 import { Segments } from './segments/segments';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
@@ -41,6 +42,7 @@ export class Resend {
   readonly contactProperties = new ContactProperties(this);
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
+  readonly logs = new Logs(this);
   readonly webhooks = new Webhooks(this);
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
