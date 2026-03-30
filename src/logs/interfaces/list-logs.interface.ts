@@ -9,7 +9,12 @@ export type ListLogsResponseSuccess = {
   has_more: boolean;
   data: Pick<
     Log,
-    'id' | 'created_at' | 'endpoint' | 'method' | 'response_status' | 'user_agent'
+    | 'id'
+    | 'created_at'
+    | 'endpoint'
+    | 'method'
+    | 'response_status'
+    | 'user_agent'
   >[];
 };
 
