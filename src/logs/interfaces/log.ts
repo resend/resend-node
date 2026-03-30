@@ -5,6 +5,6 @@ export interface Log {
   method: string;
   response_status: number;
   user_agent: string | null;
-  request_body: unknown | null;
-  response_body: unknown | null;
+  request_body: unknown;
+  response_body: unknown;
 }
