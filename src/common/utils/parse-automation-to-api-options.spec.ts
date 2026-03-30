@@ -68,7 +68,7 @@ describe('parseAutomationToApiOptions', () => {
     const apiOptions = parseAutomationToApiOptions(automation);
 
     expect(apiOptions).toEqual({
-      name: 'Welcome Series',
+      name: 'Welcome Automation',
       status: 'enabled',
       steps: [
         {
@@ -154,7 +154,7 @@ describe('parseAutomationToApiOptions', () => {
 
   it('handles minimal payload with only required fields', () => {
     const automation: CreateAutomationOptions = {
-      name: 'Minimal Workflow',
+      name: 'Minimal Automation',
       steps: [
         {
           ref: 'trigger_1',
@@ -168,7 +168,7 @@ describe('parseAutomationToApiOptions', () => {
     const apiOptions = parseAutomationToApiOptions(automation);
 
     expect(apiOptions).toEqual({
-      name: 'Minimal Workflow',
+      name: 'Minimal Automation',
       status: undefined,
       steps: [
         {
@@ -182,7 +182,7 @@ describe('parseAutomationToApiOptions', () => {
   });
 });
 
-describe('parseWorkflowEventToApiOptions', () => {
+describe('parseEventToApiOptions', () => {
   it('converts contactId to contact_id', () => {
     const event: SendEventOptions = {
       event: 'user.signed_up',

@@ -17,7 +17,6 @@ import { Segments } from './segments/segments';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
 import { Webhooks } from './webhooks/webhooks';
-import { Workflows } from './workflows/workflows';
 
 const defaultBaseUrl = 'https://api.resend.com';
 const defaultUserAgent = `resend-node:${version}`;
@@ -51,7 +50,6 @@ export class Resend {
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
   readonly webhooks = new Webhooks(this);
-  readonly workflows = new Workflows(this);
 
   constructor(readonly key?: string) {
     if (!key) {
