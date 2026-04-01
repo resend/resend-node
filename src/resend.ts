@@ -2,7 +2,12 @@ import { version } from '../package.json';
 import { ApiKeys } from './api-keys/api-keys';
 import { Batch } from './batch/batch';
 import { Broadcasts } from './broadcasts/broadcasts';
-import type { GetOptions, PostOptions, PutOptions } from './common/interfaces';
+import type {
+  DeleteOptions,
+  GetOptions,
+  PostOptions,
+  PutOptions,
+} from './common/interfaces';
 import type { IdempotentRequest } from './common/interfaces/idempotent-request.interface';
 import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { ContactProperties } from './contact-properties/contact-properties';
@@ -208,11 +213,18 @@ export class Resend {
     return this.fetchRequest<T>(path, requestOptions);
   }
 
-  async delete<T>(path: string, query?: unknown) {
+  async delete<T>(path: string, query?: unknown, options: DeleteOptions = {}) {
+    const headers = new Headers(this.headers);
+    if (options.headers) {
+      for (const [key, value] of new Headers(options.headers).entries()) {
+        headers.set(key, value);
+      }
+    }
     const requestOptions = {
       method: 'DELETE',
-      body: JSON.stringify(query),
-      headers: this.headers,
+      body: query ? JSON.stringify(query) : undefined,
+      ...options,
+      headers,
     };
 
     return this.fetchRequest<T>(path, requestOptions);
