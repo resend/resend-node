@@ -7,7 +7,7 @@ import type {
 import type {
   GetTopicResponse,
   GetTopicResponseSuccess,
-} from './interfaces/get-contact.interface';
+} from './interfaces/get-topic.interface';
 import type {
   ListTopicsResponse,
   ListTopicsResponseSuccess,

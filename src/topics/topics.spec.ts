@@ -9,7 +9,7 @@ import type {
   CreateTopicOptions,
   CreateTopicResponseSuccess,
 } from './interfaces/create-topic-options.interface';
-import type { GetTopicResponseSuccess } from './interfaces/get-contact.interface';
+import type { GetTopicResponseSuccess } from './interfaces/get-topic.interface';
 import type { ListTopicsResponseSuccess } from './interfaces/list-topics.interface';
 import type { RemoveTopicResponseSuccess } from './interfaces/remove-topic.interface';
 import type { UpdateTopicOptions } from './interfaces/update-topic.interface';
