@@ -222,7 +222,7 @@ export class Resend {
     }
     const requestOptions = {
       method: 'DELETE',
-      body: query ? JSON.stringify(query) : undefined,
+      body: query === undefined ? undefined : JSON.stringify(query),
       ...options,
       headers,
     };
