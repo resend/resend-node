@@ -1,28 +1,28 @@
 import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
-import type { CreateTrackingResponseSuccess } from './interfaces/create-tracking-options.interface';
-import type { GetTrackingResponseSuccess } from './interfaces/get-tracking.interface';
-import type { ListTrackingResponseSuccess } from './interfaces/list-tracking.interface';
-import type { RemoveTrackingResponseSuccess } from './interfaces/remove-tracking.interface';
-import type { UpdateTrackingResponseSuccess } from './interfaces/update-tracking.interface';
-import type { VerifyTrackingResponseSuccess } from './interfaces/verify-tracking.interface';
+import type { CreateTrackingDomainResponseSuccess } from './interfaces/create-tracking-domain-options.interface';
+import type { GetTrackingDomainResponseSuccess } from './interfaces/get-tracking-domain.interface';
+import type { ListTrackingDomainsResponseSuccess } from './interfaces/list-tracking-domains.interface';
+import type { RemoveTrackingDomainResponseSuccess } from './interfaces/remove-tracking-domain.interface';
+import type { UpdateTrackingDomainResponseSuccess } from './interfaces/update-tracking-domain.interface';
+import type { VerifyTrackingDomainResponseSuccess } from './interfaces/verify-tracking-domain.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
 
 const domainId = 'd91cd9bd-1176-434e-8a56-c187d6e3a9a4';
-const trackingId = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+const trackingDomainId = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 
-describe('Tracking', () => {
+describe('TrackingDomains', () => {
   afterEach(() => fetchMock.resetMocks());
   afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
     it('creates a tracking domain', async () => {
-      const response: CreateTrackingResponseSuccess = {
+      const response: CreateTrackingDomainResponseSuccess = {
         object: 'tracking',
-        id: trackingId,
+        id: trackingDomainId,
         name: 'track',
         full_name: 'track.example.com',
         status: 'pending',
@@ -64,9 +64,9 @@ describe('Tracking', () => {
     });
 
     it('creates a tracking domain with open_tracking and click_tracking', async () => {
-      const response: CreateTrackingResponseSuccess = {
+      const response: CreateTrackingDomainResponseSuccess = {
         object: 'tracking',
-        id: trackingId,
+        id: trackingDomainId,
         name: 'track',
         full_name: 'track.example.com',
         status: 'pending',
@@ -138,12 +138,12 @@ describe('Tracking', () => {
 
   describe('list', () => {
     it('lists tracking domains for a domain', async () => {
-      const response: ListTrackingResponseSuccess = {
+      const response: ListTrackingDomainsResponseSuccess = {
         object: 'list',
         data: [
           {
             object: 'tracking',
-            id: trackingId,
+            id: trackingDomainId,
             name: 'track',
             full_name: 'track.example.com',
             status: 'pending',
@@ -174,9 +174,9 @@ describe('Tracking', () => {
 
   describe('get', () => {
     it('gets a tracking domain', async () => {
-      const response: GetTrackingResponseSuccess = {
+      const response: GetTrackingDomainResponseSuccess = {
         object: 'tracking',
-        id: trackingId,
+        id: trackingDomainId,
         name: 'track',
         full_name: 'track.example.com',
         status: 'pending',
@@ -204,13 +204,13 @@ describe('Tracking', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       const result = await resend.domains.tracking.get(
         domainId,
-        trackingId,
+        trackingDomainId,
       );
 
       expect(result.data).toEqual(response);
       expect(result.error).toBeNull();
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/domains/${domainId}/tracking/${trackingId}`,
+        `https://api.resend.com/domains/${domainId}/tracking/${trackingDomainId}`,
         expect.objectContaining({ method: 'GET' }),
       );
     });
@@ -230,7 +230,7 @@ describe('Tracking', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       const result = await resend.domains.tracking.get(
         domainId,
-        trackingId,
+        trackingDomainId,
       );
 
       expect(result.data).toBeNull();
@@ -240,9 +240,9 @@ describe('Tracking', () => {
 
   describe('update', () => {
     it('updates a tracking domain', async () => {
-      const response: UpdateTrackingResponseSuccess = {
+      const response: UpdateTrackingDomainResponseSuccess = {
         object: 'tracking',
-        id: trackingId,
+        id: trackingDomainId,
         name: 'track',
         full_name: 'track.example.com',
         status: 'verified',
@@ -270,14 +270,14 @@ describe('Tracking', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       const result = await resend.domains.tracking.update(
         domainId,
-        trackingId,
+        trackingDomainId,
         { is_active: true, open_tracking: true, click_tracking: true },
       );
 
       expect(result.data).toEqual(response);
       expect(result.error).toBeNull();
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/domains/${domainId}/tracking/${trackingId}`,
+        `https://api.resend.com/domains/${domainId}/tracking/${trackingDomainId}`,
         expect.objectContaining({
           method: 'PATCH',
           body: JSON.stringify({
@@ -305,7 +305,7 @@ describe('Tracking', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       const result = await resend.domains.tracking.update(
         domainId,
-        trackingId,
+        trackingDomainId,
         { is_active: true },
       );
 
@@ -316,9 +316,9 @@ describe('Tracking', () => {
 
   describe('remove', () => {
     it('removes a tracking domain', async () => {
-      const response: RemoveTrackingResponseSuccess = {
+      const response: RemoveTrackingDomainResponseSuccess = {
         object: 'tracking',
-        id: trackingId,
+        id: trackingDomainId,
         deleted: true,
       };
 
@@ -330,13 +330,13 @@ describe('Tracking', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       const result = await resend.domains.tracking.remove(
         domainId,
-        trackingId,
+        trackingDomainId,
       );
 
       expect(result.data).toEqual(response);
       expect(result.error).toBeNull();
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/domains/${domainId}/tracking/${trackingId}`,
+        `https://api.resend.com/domains/${domainId}/tracking/${trackingDomainId}`,
         expect.objectContaining({ method: 'DELETE' }),
       );
     });
@@ -344,9 +344,9 @@ describe('Tracking', () => {
 
   describe('verify', () => {
     it('verifies a tracking domain', async () => {
-      const response: VerifyTrackingResponseSuccess = {
+      const response: VerifyTrackingDomainResponseSuccess = {
         object: 'tracking',
-        id: trackingId,
+        id: trackingDomainId,
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -357,13 +357,13 @@ describe('Tracking', () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       const result = await resend.domains.tracking.verify(
         domainId,
-        trackingId,
+        trackingDomainId,
       );
 
       expect(result.data).toEqual(response);
       expect(result.error).toBeNull();
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/domains/${domainId}/tracking/${trackingId}/verify`,
+        `https://api.resend.com/domains/${domainId}/tracking/${trackingDomainId}/verify`,
         expect.objectContaining({ method: 'POST' }),
       );
     });
