@@ -28,6 +28,7 @@ describe('Tracking', () => {
         status: 'pending',
         open_tracking: false,
         click_tracking: false,
+        is_active: false,
         created_at: '2026-03-10T00:00:00.000Z',
         records: [
           {
@@ -71,6 +72,7 @@ describe('Tracking', () => {
         status: 'pending',
         open_tracking: true,
         click_tracking: true,
+        is_active: false,
         created_at: '2026-03-10T00:00:00.000Z',
         records: [
           {
@@ -147,6 +149,7 @@ describe('Tracking', () => {
             status: 'pending',
             open_tracking: false,
             click_tracking: false,
+            is_active: false,
             created_at: '2026-03-10T00:00:00.000Z',
           },
         ],
@@ -179,6 +182,7 @@ describe('Tracking', () => {
         status: 'pending',
         open_tracking: false,
         click_tracking: false,
+        is_active: false,
         created_at: '2026-03-10T00:00:00.000Z',
         records: [
           {
@@ -244,6 +248,7 @@ describe('Tracking', () => {
         status: 'verified',
         open_tracking: true,
         click_tracking: true,
+        is_active: true,
         created_at: '2026-03-10T00:00:00.000Z',
         records: [
           {
@@ -266,7 +271,7 @@ describe('Tracking', () => {
       const result = await resend.domains.tracking.update(
         domainId,
         trackingId,
-        { open_tracking: true, click_tracking: true },
+        { is_active: true, open_tracking: true, click_tracking: true },
       );
 
       expect(result.data).toEqual(response);
@@ -276,6 +281,7 @@ describe('Tracking', () => {
         expect.objectContaining({
           method: 'PATCH',
           body: JSON.stringify({
+            is_active: true,
             open_tracking: true,
             click_tracking: true,
           }),
@@ -300,7 +306,7 @@ describe('Tracking', () => {
       const result = await resend.domains.tracking.update(
         domainId,
         trackingId,
-        { open_tracking: true },
+        { is_active: true },
       );
 
       expect(result.data).toBeNull();
