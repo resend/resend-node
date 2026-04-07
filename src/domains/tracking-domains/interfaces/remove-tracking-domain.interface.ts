@@ -1,7 +1,7 @@
 import type { Response } from '../../../interfaces';
 
 export interface RemoveTrackingDomainResponseSuccess {
-  object: 'tracking';
+  object: 'tracking_domain';
   id: string;
   deleted: true;
 }

@@ -1,7 +1,7 @@
 import type { Response } from '../../../interfaces';
 
 export interface VerifyTrackingDomainResponseSuccess {
-  object: 'tracking';
+  object: 'tracking_domain';
   id: string;
 }
 
