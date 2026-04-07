@@ -10,13 +10,10 @@ export interface TrackingDomainRecord {
 }
 
 export interface TrackingDomain {
-  object: 'tracking';
+  object: 'tracking_domain';
   id: string;
   name: string;
   full_name: string;
   status: TrackingDomainStatus;
-  open_tracking: boolean;
-  click_tracking: boolean;
-  is_active: boolean;
   created_at: string;
 }
