@@ -31,7 +31,8 @@ export type DomainStatus =
 export type DomainRecords =
   | DomainSpfRecord
   | DomainDkimRecord
-  | ReceivingRecord;
+  | ReceivingRecord
+  | TrackingRecord;
 
 export interface DomainSpfRecord {
   record: 'SPF';
@@ -67,6 +68,15 @@ export interface ReceivingRecord {
   priority: number;
 }
 
+export interface TrackingRecord {
+  record: 'Tracking';
+  name: string;
+  value: string;
+  type: 'CNAME';
+  ttl: string;
+  status: DomainStatus;
+}
+
 export interface Domain {
   id: string;
   name: string;
@@ -74,4 +84,7 @@ export interface Domain {
   created_at: string;
   region: DomainRegion;
   capabilities: DomainCapabilities;
+  open_tracking?: boolean;
+  click_tracking?: boolean;
+  tracking_subdomain?: string;
 }
