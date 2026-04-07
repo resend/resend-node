@@ -1,7 +1,7 @@
-export type TrackingDomainStatus = 'not_started' | 'pending' | 'verified' | 'failed';
+export type TrackingDomainStatus = 'pending' | 'verified' | 'failed';
 
 export interface TrackingDomainRecord {
-  type: 'CNAME';
+  type: 'CNAME' | 'TXT';
   name: string;
   value: string;
   status: TrackingDomainStatus;
