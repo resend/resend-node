@@ -28,11 +28,9 @@ describe('TrackingDomains', () => {
         created_at: '2026-03-10T00:00:00.000Z',
         records: [
           {
-            record: 'Tracking',
             type: 'CNAME',
             name: 'track.example.com',
             value: 'click-tracking.resend.com',
-            ttl: 'Auto',
             status: 'pending',
           },
         ],
@@ -126,11 +124,9 @@ describe('TrackingDomains', () => {
         created_at: '2026-03-10T00:00:00.000Z',
         records: [
           {
-            record: 'Tracking',
             type: 'CNAME',
             name: 'track.example.com',
             value: 'click-tracking.resend.com',
-            ttl: 'Auto',
             status: 'pending',
           },
         ],
