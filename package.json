@@ -54,7 +54,7 @@
   "homepage": "https://github.com/resend/resend-node#readme",
   "dependencies": {
     "postal-mime": "2.7.4",
-    "svix": "1.88.0"
+    "svix": "1.90.0"
   },
   "peerDependencies": {
     "@react-email/render": "*"
