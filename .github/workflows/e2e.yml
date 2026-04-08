@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   e2e:
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     container:
       image: node:24-slim
       # credentials:
