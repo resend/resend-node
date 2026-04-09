@@ -126,6 +126,72 @@ describe('parseAutomationToApiOptions', () => {
     });
   });
 
+  it('converts contact_update, contact_delete, and add_to_segment steps', () => {
+    const automation: CreateAutomationOptions = {
+      name: 'Contact Management',
+      steps: [
+        {
+          ref: 'trigger_1',
+          type: 'trigger',
+          config: { eventName: 'user.signed_up' },
+        },
+        {
+          ref: 'update_contact',
+          type: 'contact_update',
+          config: {
+            firstName: { var: 'event.first_name' },
+            lastName: 'Smith',
+            properties: { company: { var: 'event.company' }, active: true },
+          },
+        },
+        {
+          ref: 'delete_contact',
+          type: 'contact_delete',
+          config: {},
+        },
+        {
+          ref: 'add_segment',
+          type: 'add_to_segment',
+          config: { segmentId: 'seg_123' },
+        },
+      ],
+      edges: [
+        { from: 'trigger_1', to: 'update_contact' },
+        { from: 'update_contact', to: 'delete_contact' },
+        { from: 'delete_contact', to: 'add_segment' },
+      ],
+    };
+
+    const apiOptions = parseAutomationToApiOptions(automation);
+
+    expect(apiOptions.steps).toEqual([
+      {
+        ref: 'trigger_1',
+        type: 'trigger',
+        config: { event_name: 'user.signed_up' },
+      },
+      {
+        ref: 'update_contact',
+        type: 'contact_update',
+        config: {
+          first_name: { var: 'event.first_name' },
+          last_name: 'Smith',
+          properties: { company: { var: 'event.company' }, active: true },
+        },
+      },
+      {
+        ref: 'delete_contact',
+        type: 'contact_delete',
+        config: {},
+      },
+      {
+        ref: 'add_segment',
+        type: 'add_to_segment',
+        config: { segment_id: 'seg_123' },
+      },
+    ]);
+  });
+
   it('converts edge edgeType to edge_type', () => {
     const automation: CreateAutomationOptions = {
       name: 'Edge Test',

@@ -9,6 +9,7 @@ import type {
 import type { GetAutomationResponseSuccess } from './interfaces/get-automation.interface';
 import type { ListAutomationsResponseSuccess } from './interfaces/list-automation.interface';
 import type { RemoveAutomationResponseSuccess } from './interfaces/remove-automation.interface';
+import type { StopAutomationResponseSuccess } from './interfaces/stop-automation.interface';
 import type { UpdateAutomationResponseSuccess } from './interfaces/update-automation.interface';
 
 const fetchMocker = createFetchMock(vi);
@@ -361,12 +362,11 @@ describe('remove', () => {
 });
 
 describe('update', () => {
-  it('updates an automation', async () => {
+  it('updates automation status', async () => {
     const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
     const response: UpdateAutomationResponseSuccess = {
       object: 'automation',
       id,
-      status: 'disabled',
     };
 
     fetchMock.mockOnce(JSON.stringify(response), {
@@ -382,7 +382,6 @@ describe('update', () => {
           "data": {
             "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
             "object": "automation",
-            "status": "disabled",
           },
           "error": null,
           "headers": {
@@ -397,6 +396,111 @@ describe('update', () => {
         method: 'PATCH',
         headers: expect.any(Headers),
         body: JSON.stringify({ status: 'disabled' }),
+      }),
+    );
+  });
+
+  it('updates automation with name, steps, and edges', async () => {
+    const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
+    const response: UpdateAutomationResponseSuccess = {
+      object: 'automation',
+      id,
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+
+    const data = await resend.automations.update(id, {
+      name: 'Updated Flow',
+      steps: [
+        {
+          ref: 'trigger',
+          type: 'trigger',
+          config: { eventName: 'user.created' },
+        },
+        {
+          ref: 'send_email',
+          type: 'send_email',
+          config: { templateId: 'tpl-456' },
+        },
+      ],
+      edges: [{ from: 'trigger', to: 'send_email', edgeType: 'default' }],
+    });
+
+    expect(data.data).toEqual({ object: 'automation', id });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://api.resend.com/automations/${id}`,
+      expect.objectContaining({
+        method: 'PATCH',
+        headers: expect.any(Headers),
+        body: JSON.stringify({
+          name: 'Updated Flow',
+          steps: [
+            {
+              ref: 'trigger',
+              type: 'trigger',
+              config: { event_name: 'user.created' },
+            },
+            {
+              ref: 'send_email',
+              type: 'send_email',
+              config: {
+                template_id: 'tpl-456',
+                subject: undefined,
+                from: undefined,
+                reply_to: undefined,
+                variables: undefined,
+              },
+            },
+          ],
+          edges: [{ from: 'trigger', to: 'send_email', edge_type: 'default' }],
+        }),
+      }),
+    );
+  });
+});
+
+describe('stop', () => {
+  it('stops an automation', async () => {
+    const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
+    const response: StopAutomationResponseSuccess = {
+      object: 'automation',
+      id,
+      status: 'disabled',
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+
+    const data = await resend.automations.stop(id);
+    expect(data).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
+            "object": "automation",
+            "status": "disabled",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://api.resend.com/automations/${id}/stop`,
+      expect.objectContaining({
+        method: 'POST',
+        headers: expect.any(Headers),
       }),
     );
   });

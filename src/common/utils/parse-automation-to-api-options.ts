@@ -4,6 +4,7 @@ import type {
   AutomationStep,
 } from '../../automations/interfaces/automation-step.interface';
 import type { CreateAutomationOptions } from '../../automations/interfaces/create-automation-options.interface';
+import type { UpdateAutomationOptions } from '../../automations/interfaces/update-automation.interface';
 import type { SendEventOptions } from '../../events/interfaces/send-event.interface';
 
 interface AutomationStepApiOptions {
@@ -66,6 +67,24 @@ function parseStepConfig(step: AutomationStep): AutomationStepApiOptions {
       };
     case 'condition':
       return { ref: step.ref, type: step.type, config: step.config };
+    case 'contact_update':
+      return {
+        ref: step.ref,
+        type: step.type,
+        config: {
+          first_name: step.config.firstName,
+          last_name: step.config.lastName,
+          properties: step.config.properties,
+        },
+      };
+    case 'contact_delete':
+      return { ref: step.ref, type: step.type, config: step.config };
+    case 'add_to_segment':
+      return {
+        ref: step.ref,
+        type: step.type,
+        config: { segment_id: step.config.segmentId },
+      };
   }
 }
 
@@ -86,6 +105,37 @@ export function parseAutomationToApiOptions(
     steps: automation.steps.map(parseStepConfig),
     edges: automation.edges.map(parseEdge),
   };
+}
+
+interface UpdateAutomationApiOptions {
+  name?: string;
+  status?: 'enabled' | 'disabled';
+  steps?: AutomationStepApiOptions[];
+  edges?: AutomationEdgeApiOptions[];
+}
+
+export function parseUpdateAutomationToApiOptions(
+  automation: UpdateAutomationOptions,
+): UpdateAutomationApiOptions {
+  const result: UpdateAutomationApiOptions = {};
+
+  if (automation.name !== undefined) {
+    result.name = automation.name;
+  }
+
+  if (automation.status !== undefined) {
+    result.status = automation.status;
+  }
+
+  if (automation.steps !== undefined) {
+    result.steps = automation.steps.map(parseStepConfig);
+  }
+
+  if (automation.edges !== undefined) {
+    result.edges = automation.edges.map(parseEdge);
+  }
+
+  return result;
 }
 
 export function parseEventToApiOptions(

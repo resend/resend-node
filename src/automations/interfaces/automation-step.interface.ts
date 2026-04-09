@@ -59,12 +59,27 @@ export interface WaitForEventStepConfig {
 
 export type ConditionStepConfig = ConditionRule;
 
+export interface ContactUpdateStepConfig {
+  firstName?: string | { var: string };
+  lastName?: string | { var: string };
+  properties?: Record<string, string | number | boolean | { var: string }>;
+}
+
+export type ContactDeleteStepConfig = Record<string, never>;
+
+export interface AddToSegmentStepConfig {
+  segmentId: string;
+}
+
 export type AutomationStep =
   | { ref: string; type: 'trigger'; config: TriggerStepConfig }
   | { ref: string; type: 'delay'; config: DelayStepConfig }
   | { ref: string; type: 'send_email'; config: SendEmailStepConfig }
   | { ref: string; type: 'wait_for_event'; config: WaitForEventStepConfig }
-  | { ref: string; type: 'condition'; config: ConditionStepConfig };
+  | { ref: string; type: 'condition'; config: ConditionStepConfig }
+  | { ref: string; type: 'contact_update'; config: ContactUpdateStepConfig }
+  | { ref: string; type: 'contact_delete'; config: ContactDeleteStepConfig }
+  | { ref: string; type: 'add_to_segment'; config: AddToSegmentStepConfig };
 
 export type AutomationEdgeType =
   | 'default'

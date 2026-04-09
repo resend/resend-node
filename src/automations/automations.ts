@@ -1,6 +1,9 @@
 import { AutomationRuns } from '../automation-runs/automation-runs';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
-import { parseAutomationToApiOptions } from '../common/utils/parse-automation-to-api-options';
+import {
+  parseAutomationToApiOptions,
+  parseUpdateAutomationToApiOptions,
+} from '../common/utils/parse-automation-to-api-options';
 import type { Resend } from '../resend';
 import type {
   CreateAutomationOptions,
@@ -20,6 +23,10 @@ import type {
   RemoveAutomationResponse,
   RemoveAutomationResponseSuccess,
 } from './interfaces/remove-automation.interface';
+import type {
+  StopAutomationResponse,
+  StopAutomationResponseSuccess,
+} from './interfaces/stop-automation.interface';
 import type {
   UpdateAutomationOptions,
   UpdateAutomationResponse,
@@ -74,7 +81,14 @@ export class Automations {
   ): Promise<UpdateAutomationResponse> {
     const data = await this.resend.patch<UpdateAutomationResponseSuccess>(
       `/automations/${id}`,
-      payload,
+      parseUpdateAutomationToApiOptions(payload),
+    );
+    return data;
+  }
+
+  async stop(id: string): Promise<StopAutomationResponse> {
+    const data = await this.resend.post<StopAutomationResponseSuccess>(
+      `/automations/${id}/stop`,
     );
     return data;
   }
