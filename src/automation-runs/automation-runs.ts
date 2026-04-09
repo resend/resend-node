@@ -1,4 +1,3 @@
-import { AutomationRunSteps } from '../automation-run-steps/automation-run-steps';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
@@ -13,11 +12,7 @@ import type {
 } from './interfaces/list-automation-runs.interface';
 
 export class AutomationRuns {
-  readonly steps: AutomationRunSteps;
-
-  constructor(private readonly resend: Resend) {
-    this.steps = new AutomationRunSteps(resend);
-  }
+  constructor(private readonly resend: Resend) {}
 
   async get(
     options: GetAutomationRunOptions,
