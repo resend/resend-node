@@ -40,7 +40,7 @@ export interface TriggerStepConfig {
 }
 
 export interface DelayStepConfig {
-  seconds: number;
+  duration: string;
 }
 
 export interface SendEmailStepConfig {
@@ -53,7 +53,7 @@ export interface SendEmailStepConfig {
 
 export interface WaitForEventStepConfig {
   eventName: string;
-  timeoutSeconds?: number;
+  timeout?: string;
   filterRule?: ConditionRule;
 }
 

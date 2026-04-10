@@ -7,7 +7,7 @@ import type { CreateAutomationOptions } from '../../automations/interfaces/creat
 import type { SendEventOptions } from '../../events/interfaces/send-event.interface';
 
 interface AutomationStepApiOptions {
-  ref: string;
+  key: string;
   type: string;
   config: unknown;
 }
@@ -36,15 +36,15 @@ function parseStepConfig(step: AutomationStep): AutomationStepApiOptions {
   switch (step.type) {
     case 'trigger':
       return {
-        ref: step.ref,
+        key: step.key,
         type: step.type,
         config: { event_name: step.config.eventName },
       };
     case 'delay':
-      return { ref: step.ref, type: step.type, config: step.config };
+      return { key: step.key, type: step.type, config: step.config };
     case 'send_email':
       return {
-        ref: step.ref,
+        key: step.key,
         type: step.type,
         config: {
           template_id: step.config.templateId,
@@ -56,16 +56,16 @@ function parseStepConfig(step: AutomationStep): AutomationStepApiOptions {
       };
     case 'wait_for_event':
       return {
-        ref: step.ref,
+        key: step.key,
         type: step.type,
         config: {
           event_name: step.config.eventName,
-          timeout_seconds: step.config.timeoutSeconds,
+          timeout: step.config.timeout,
           filter_rule: step.config.filterRule,
         },
       };
     case 'condition':
-      return { ref: step.ref, type: step.type, config: step.config };
+      return { key: step.key, type: step.type, config: step.config };
   }
 }
 

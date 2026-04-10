@@ -12,17 +12,17 @@ describe('parseAutomationToApiOptions', () => {
       status: 'enabled',
       steps: [
         {
-          ref: 'trigger_1',
+          key: 'trigger_1',
           type: 'trigger',
           config: { eventName: 'user.signed_up' },
         },
         {
-          ref: 'delay_1',
+          key: 'delay_1',
           type: 'delay',
-          config: { seconds: 3600 },
+          config: { duration: '1 hour' },
         },
         {
-          ref: 'send_1',
+          key: 'send_1',
           type: 'send_email',
           config: {
             templateId: 'tmpl_123',
@@ -33,11 +33,11 @@ describe('parseAutomationToApiOptions', () => {
           },
         },
         {
-          ref: 'wait_1',
+          key: 'wait_1',
           type: 'wait_for_event',
           config: {
             eventName: 'user.confirmed',
-            timeoutSeconds: 86400,
+            timeout: '1 day',
             filterRule: {
               type: 'rule',
               field: 'status',
@@ -47,7 +47,7 @@ describe('parseAutomationToApiOptions', () => {
           },
         },
         {
-          ref: 'cond_1',
+          key: 'cond_1',
           type: 'condition',
           config: {
             type: 'rule',
@@ -72,17 +72,17 @@ describe('parseAutomationToApiOptions', () => {
       status: 'enabled',
       steps: [
         {
-          ref: 'trigger_1',
+          key: 'trigger_1',
           type: 'trigger',
           config: { event_name: 'user.signed_up' },
         },
         {
-          ref: 'delay_1',
+          key: 'delay_1',
           type: 'delay',
-          config: { seconds: 3600 },
+          config: { duration: '1 hour' },
         },
         {
-          ref: 'send_1',
+          key: 'send_1',
           type: 'send_email',
           config: {
             template_id: 'tmpl_123',
@@ -93,11 +93,11 @@ describe('parseAutomationToApiOptions', () => {
           },
         },
         {
-          ref: 'wait_1',
+          key: 'wait_1',
           type: 'wait_for_event',
           config: {
             event_name: 'user.confirmed',
-            timeout_seconds: 86400,
+            timeout: '1 day',
             filter_rule: {
               type: 'rule',
               field: 'status',
@@ -107,7 +107,7 @@ describe('parseAutomationToApiOptions', () => {
           },
         },
         {
-          ref: 'cond_1',
+          key: 'cond_1',
           type: 'condition',
           config: {
             type: 'rule',
@@ -131,7 +131,7 @@ describe('parseAutomationToApiOptions', () => {
       name: 'Edge Test',
       steps: [
         {
-          ref: 'trigger_1',
+          key: 'trigger_1',
           type: 'trigger',
           config: { eventName: 'test.event' },
         },
@@ -157,7 +157,7 @@ describe('parseAutomationToApiOptions', () => {
       name: 'Minimal Automation',
       steps: [
         {
-          ref: 'trigger_1',
+          key: 'trigger_1',
           type: 'trigger',
           config: { eventName: 'test.event' },
         },
@@ -172,7 +172,7 @@ describe('parseAutomationToApiOptions', () => {
       status: undefined,
       steps: [
         {
-          ref: 'trigger_1',
+          key: 'trigger_1',
           type: 'trigger',
           config: { event_name: 'test.event' },
         },
