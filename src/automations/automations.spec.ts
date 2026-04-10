@@ -426,6 +426,80 @@ describe('update', () => {
     );
   });
 
+  it('updates automation steps only', async () => {
+    const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
+    const response: UpdateAutomationResponseSuccess = {
+      object: 'automation',
+      id,
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+
+    await resend.automations.update(id, {
+      steps: [
+        {
+          key: 'trigger',
+          type: 'trigger',
+          config: { eventName: 'user.created' },
+        },
+      ],
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://api.resend.com/automations/${id}`,
+      expect.objectContaining({
+        method: 'PATCH',
+        headers: expect.any(Headers),
+        body: JSON.stringify({
+          steps: [
+            {
+              key: 'trigger',
+              type: 'trigger',
+              config: { event_name: 'user.created' },
+            },
+          ],
+        }),
+      }),
+    );
+  });
+
+  it('updates automation connections only', async () => {
+    const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
+    const response: UpdateAutomationResponseSuccess = {
+      object: 'automation',
+      id,
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+
+    await resend.automations.update(id, {
+      connections: [{ from: 'trigger', to: 'welcome_email', type: 'default' }],
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://api.resend.com/automations/${id}`,
+      expect.objectContaining({
+        method: 'PATCH',
+        headers: expect.any(Headers),
+        body: JSON.stringify({
+          connections: [
+            { from: 'trigger', to: 'welcome_email', type: 'default' },
+          ],
+        }),
+      }),
+    );
+  });
+
   it('updates automation name', async () => {
     const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
     const response: UpdateAutomationResponseSuccess = {

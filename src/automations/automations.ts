@@ -1,6 +1,10 @@
 import { AutomationRuns } from '../automation-runs/automation-runs';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
-import { parseAutomationToApiOptions } from '../common/utils/parse-automation-to-api-options';
+import {
+  parseAutomationToApiOptions,
+  parseConnection,
+  parseStepConfig,
+} from '../common/utils/parse-automation-to-api-options';
 import type { Resend } from '../resend';
 import type {
   CreateAutomationOptions,
@@ -91,14 +95,11 @@ export class Automations {
     if (payload.status !== undefined) {
       apiPayload.status = payload.status;
     }
-    if (payload.steps !== undefined && payload.connections !== undefined) {
-      const parsed = parseAutomationToApiOptions({
-        name: '',
-        steps: payload.steps,
-        connections: payload.connections,
-      });
-      apiPayload.steps = parsed.steps;
-      apiPayload.connections = parsed.connections;
+    if (payload.steps !== undefined) {
+      apiPayload.steps = payload.steps.map(parseStepConfig);
+    }
+    if (payload.connections !== undefined) {
+      apiPayload.connections = payload.connections.map(parseConnection);
     }
 
     const data = await this.resend.patch<UpdateAutomationResponseSuccess>(

@@ -32,7 +32,7 @@ interface EventApiOptions {
   payload?: Record<string, unknown>;
 }
 
-function parseStepConfig(step: AutomationStep): AutomationStepApiOptions {
+export function parseStepConfig(step: AutomationStep): AutomationStepApiOptions {
   switch (step.type) {
     case 'trigger':
       return {
@@ -77,7 +77,7 @@ function parseStepConfig(step: AutomationStep): AutomationStepApiOptions {
   }
 }
 
-function parseConnection(
+export function parseConnection(
   connection: AutomationConnection,
 ): AutomationConnectionApiOptions {
   return {
