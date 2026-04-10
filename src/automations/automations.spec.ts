@@ -48,7 +48,9 @@ describe('create', () => {
           config: { templateId: 'tpl-123' },
         },
       ],
-      edges: [{ from: 'trigger', to: 'welcome_email', type: 'default' }],
+      connections: [
+        { from: 'trigger', to: 'welcome_email', type: 'default' },
+      ],
     };
 
     const data = await resend.automations.create(payload);
@@ -83,7 +85,7 @@ describe('create', () => {
     const data = await resend.automations.create({
       name: '',
       steps: [],
-      edges: [],
+      connections: [],
     });
     expect(data).toMatchInlineSnapshot(`
         {
@@ -284,7 +286,7 @@ describe('get', () => {
           config: { event_name: 'user.created' },
         },
       ],
-      edges: [],
+      connections: [],
     };
 
     fetchMock.mockOnce(JSON.stringify(response), {
@@ -301,8 +303,8 @@ describe('get', () => {
     ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
+            "connections": [],
             "created_at": "2025-01-01T00:00:00.000Z",
-            "edges": [],
             "id": "559ac32e-9ef5-46fb-82a1-b76b840c0f7b",
             "name": "Welcome Flow",
             "object": "automation",

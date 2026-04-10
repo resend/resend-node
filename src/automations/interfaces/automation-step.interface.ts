@@ -73,7 +73,7 @@ export type AutomationEdgeType =
   | 'timeout'
   | 'event_received';
 
-export interface AutomationEdge {
+export interface AutomationConnection {
   from: string;
   to: string;
   type?: AutomationEdgeType;
@@ -87,7 +87,7 @@ export interface AutomationResponseStep {
   config: Record<string, unknown>;
 }
 
-export interface AutomationResponseEdge {
+export interface AutomationResponseConnection {
   id: string;
   from_step_id: string;
   to_step_id: string;
