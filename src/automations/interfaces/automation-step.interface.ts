@@ -62,8 +62,8 @@ export interface WaitForEventStepConfig {
 export type ConditionStepConfig = ConditionRule;
 
 export interface ContactUpdateStepConfig {
-  first_name?: string | null | { var: string };
-  last_name?: string | null | { var: string };
+  firstName?: string | null | { var: string };
+  lastName?: string | null | { var: string };
   unsubscribed?: boolean | { var: string };
   properties?: Record<
     string,
@@ -74,7 +74,7 @@ export interface ContactUpdateStepConfig {
 export type ContactDeleteStepConfig = Record<string, never>;
 
 export interface AddToSegmentStepConfig {
-  segment_id: string;
+  segmentId: string;
 }
 
 export type AutomationStep =
