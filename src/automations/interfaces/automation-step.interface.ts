@@ -69,7 +69,7 @@ export interface ContactUpdateStepConfig {
   >;
 }
 
-export type ContactDeleteStepConfig = {};
+export type ContactDeleteStepConfig = Record<string, never>;
 
 export interface AddToSegmentStepConfig {
   segment_id: string;

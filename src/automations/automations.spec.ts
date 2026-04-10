@@ -514,7 +514,7 @@ describe('update', () => {
       },
     });
 
-    const data = await resend.automations.update(id, {
+    await resend.automations.update(id, {
       name: 'Updated Flow',
     });
 
