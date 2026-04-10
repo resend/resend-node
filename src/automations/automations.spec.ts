@@ -48,9 +48,7 @@ describe('create', () => {
           config: { templateId: 'tpl-123' },
         },
       ],
-      connections: [
-        { from: 'trigger', to: 'welcome_email', type: 'default' },
-      ],
+      connections: [{ from: 'trigger', to: 'welcome_email', type: 'default' }],
     };
 
     const data = await resend.automations.create(payload);
