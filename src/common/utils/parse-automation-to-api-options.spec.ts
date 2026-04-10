@@ -57,7 +57,7 @@ describe('parseAutomationToApiOptions', () => {
           },
         },
       ],
-      edges: [
+      connections: [
         { from: 'trigger_1', to: 'delay_1' },
         { from: 'delay_1', to: 'send_1', type: 'default' },
         { from: 'send_1', to: 'wait_1' },
@@ -117,7 +117,7 @@ describe('parseAutomationToApiOptions', () => {
           },
         },
       ],
-      edges: [
+      connections: [
         { from: 'trigger_1', to: 'delay_1', type: undefined },
         { from: 'delay_1', to: 'send_1', type: 'default' },
         { from: 'send_1', to: 'wait_1', type: undefined },
@@ -136,7 +136,7 @@ describe('parseAutomationToApiOptions', () => {
           config: { eventName: 'test.event' },
         },
       ],
-      edges: [
+      connections: [
         { from: 'trigger_1', to: 'step_2', type: 'condition_met' },
         { from: 'trigger_1', to: 'step_3', type: 'condition_not_met' },
         { from: 'step_2', to: 'step_4', type: 'timeout' },
@@ -145,7 +145,7 @@ describe('parseAutomationToApiOptions', () => {
 
     const apiOptions = parseAutomationToApiOptions(automation);
 
-    expect(apiOptions.edges).toEqual([
+    expect(apiOptions.connections).toEqual([
       { from: 'trigger_1', to: 'step_2', type: 'condition_met' },
       { from: 'trigger_1', to: 'step_3', type: 'condition_not_met' },
       { from: 'step_2', to: 'step_4', type: 'timeout' },
@@ -162,7 +162,7 @@ describe('parseAutomationToApiOptions', () => {
           config: { eventName: 'test.event' },
         },
       ],
-      edges: [{ from: 'trigger_1', to: 'step_2' }],
+      connections: [{ from: 'trigger_1', to: 'step_2' }],
     };
 
     const apiOptions = parseAutomationToApiOptions(automation);
@@ -177,7 +177,7 @@ describe('parseAutomationToApiOptions', () => {
           config: { event_name: 'test.event' },
         },
       ],
-      edges: [{ from: 'trigger_1', to: 'step_2', type: undefined }],
+      connections: [{ from: 'trigger_1', to: 'step_2', type: undefined }],
     });
   });
 });

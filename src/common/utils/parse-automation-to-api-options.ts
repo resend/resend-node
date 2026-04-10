@@ -1,5 +1,5 @@
 import type {
-  AutomationEdge,
+  AutomationConnection,
   AutomationEdgeType,
   AutomationStep,
 } from '../../automations/interfaces/automation-step.interface';
@@ -12,7 +12,7 @@ interface AutomationStepApiOptions {
   config: unknown;
 }
 
-interface AutomationEdgeApiOptions {
+interface AutomationConnectionApiOptions {
   from: string;
   to: string;
   type?: AutomationEdgeType;
@@ -22,7 +22,7 @@ interface AutomationApiOptions {
   name: string;
   status?: 'enabled' | 'disabled';
   steps?: AutomationStepApiOptions[];
-  edges?: AutomationEdgeApiOptions[];
+  connections?: AutomationConnectionApiOptions[];
 }
 
 interface EventApiOptions {
@@ -69,11 +69,13 @@ function parseStepConfig(step: AutomationStep): AutomationStepApiOptions {
   }
 }
 
-function parseEdge(edge: AutomationEdge): AutomationEdgeApiOptions {
+function parseConnection(
+  connection: AutomationConnection,
+): AutomationConnectionApiOptions {
   return {
-    from: edge.from,
-    to: edge.to,
-    type: edge.type,
+    from: connection.from,
+    to: connection.to,
+    type: connection.type,
   };
 }
 
@@ -84,7 +86,7 @@ export function parseAutomationToApiOptions(
     name: automation.name,
     status: automation.status,
     steps: automation.steps.map(parseStepConfig),
-    edges: automation.edges.map(parseEdge),
+    connections: automation.connections.map(parseConnection),
   };
 }
 

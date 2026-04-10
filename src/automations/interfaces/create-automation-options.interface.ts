@@ -1,7 +1,7 @@
 import type { Response } from '../../interfaces';
 import type { AutomationStatus } from './automation';
 import type {
-  AutomationEdge,
+  AutomationConnection,
   AutomationStep,
 } from './automation-step.interface';
 
@@ -9,7 +9,7 @@ export interface CreateAutomationOptions {
   name: string;
   status?: AutomationStatus;
   steps: AutomationStep[];
-  edges: AutomationEdge[];
+  connections: AutomationConnection[];
 }
 
 export interface CreateAutomationResponseSuccess {
