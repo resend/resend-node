@@ -25,11 +25,13 @@ describe('parseAutomationToApiOptions', () => {
           key: 'send_1',
           type: 'send_email',
           config: {
-            templateId: 'tmpl_123',
+            template: {
+              id: 'tmpl_123',
+              variables: { userName: { var: 'contact.name' } },
+            },
             subject: 'Welcome!',
             from: 'hello@example.com',
             replyTo: 'support@example.com',
-            variables: { userName: { var: 'contact.name' } },
           },
         },
         {

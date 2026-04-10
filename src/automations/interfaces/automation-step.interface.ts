@@ -44,11 +44,13 @@ export interface DelayStepConfig {
 }
 
 export interface SendEmailStepConfig {
-  templateId: string;
+  template: {
+    id: string;
+    variables?: Record<string, TemplateVariableValue>;
+  };
   subject?: string;
   from?: string;
   replyTo?: string;
-  variables?: Record<string, TemplateVariableValue>;
 }
 
 export interface WaitForEventStepConfig {
