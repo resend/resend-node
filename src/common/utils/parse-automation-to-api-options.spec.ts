@@ -85,11 +85,13 @@ describe('parseAutomationToApiOptions', () => {
           key: 'send_1',
           type: 'send_email',
           config: {
-            template_id: 'tmpl_123',
+            template: {
+              id: 'tmpl_123',
+              variables: { userName: { var: 'contact.name' } },
+            },
             subject: 'Welcome!',
             from: 'hello@example.com',
             reply_to: 'support@example.com',
-            variables: { userName: { var: 'contact.name' } },
           },
         },
         {
@@ -126,7 +128,7 @@ describe('parseAutomationToApiOptions', () => {
     });
   });
 
-  it('passes edge type through to API options', () => {
+  it('converts connection type field', () => {
     const automation: CreateAutomationOptions = {
       name: 'Edge Test',
       steps: [

@@ -1,6 +1,10 @@
 import { AutomationRuns } from '../automation-runs/automation-runs';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
-import { parseAutomationToApiOptions } from '../common/utils/parse-automation-to-api-options';
+import {
+  parseAutomationToApiOptions,
+  parseConnection,
+  parseStepConfig,
+} from '../common/utils/parse-automation-to-api-options';
 import type { Resend } from '../resend';
 import type {
   CreateAutomationOptions,
@@ -20,6 +24,10 @@ import type {
   RemoveAutomationResponse,
   RemoveAutomationResponseSuccess,
 } from './interfaces/remove-automation.interface';
+import type {
+  StopAutomationResponse,
+  StopAutomationResponseSuccess,
+} from './interfaces/stop-automation.interface';
 import type {
   UpdateAutomationOptions,
   UpdateAutomationResponse,
@@ -48,7 +56,14 @@ export class Automations {
     options: ListAutomationsOptions = {},
   ): Promise<ListAutomationsResponse> {
     const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/automations?${queryString}` : '/automations';
+    const params = [queryString];
+
+    if (options.status) {
+      params.push(`status=${encodeURIComponent(options.status)}`);
+    }
+
+    const qs = params.filter(Boolean).join('&');
+    const url = qs ? `/automations?${qs}` : '/automations';
 
     const data = await this.resend.get<ListAutomationsResponseSuccess>(url);
     return data;
@@ -72,9 +87,31 @@ export class Automations {
     id: string,
     payload: UpdateAutomationOptions,
   ): Promise<UpdateAutomationResponse> {
+    const apiPayload: Record<string, unknown> = {};
+
+    if (payload.name !== undefined) {
+      apiPayload.name = payload.name;
+    }
+    if (payload.status !== undefined) {
+      apiPayload.status = payload.status;
+    }
+    if (payload.steps !== undefined) {
+      apiPayload.steps = payload.steps.map(parseStepConfig);
+    }
+    if (payload.connections !== undefined) {
+      apiPayload.connections = payload.connections.map(parseConnection);
+    }
+
     const data = await this.resend.patch<UpdateAutomationResponseSuccess>(
       `/automations/${id}`,
-      payload,
+      apiPayload,
+    );
+    return data;
+  }
+
+  async stop(id: string): Promise<StopAutomationResponse> {
+    const data = await this.resend.post<StopAutomationResponseSuccess>(
+      `/automations/${id}/stop`,
     );
     return data;
   }

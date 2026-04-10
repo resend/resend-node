@@ -29,13 +29,21 @@ describe('get', () => {
       object: 'automation_run',
       id: 'wr_456',
       status: 'completed',
-      trigger: {
-        event_name: 'user.created',
-        payload: { email: 'jane@example.com' },
-      },
       started_at: '2024-01-01T00:00:00.000Z',
       completed_at: '2024-01-01T00:01:00.000Z',
       created_at: '2024-01-01T00:00:00.000Z',
+      steps: [
+        {
+          key: 'trigger_1',
+          type: 'trigger',
+          status: 'completed',
+          output: null,
+          error: null,
+          started_at: '2024-01-01T00:00:00.000Z',
+          completed_at: '2024-01-01T00:00:01.000Z',
+          created_at: '2024-01-01T00:00:00.000Z',
+        },
+      ],
     };
 
     mockSuccessResponse(response, {});
@@ -52,12 +60,18 @@ describe('get', () => {
             "object": "automation_run",
             "started_at": "2024-01-01T00:00:00.000Z",
             "status": "completed",
-            "trigger": {
-              "event_name": "user.created",
-              "payload": {
-                "email": "jane@example.com",
+            "steps": [
+              {
+                "completed_at": "2024-01-01T00:00:01.000Z",
+                "created_at": "2024-01-01T00:00:00.000Z",
+                "error": null,
+                "key": "trigger_1",
+                "output": null,
+                "started_at": "2024-01-01T00:00:00.000Z",
+                "status": "completed",
+                "type": "trigger",
               },
-            },
+            ],
           },
           "error": null,
           "headers": {
@@ -95,7 +109,6 @@ describe('list', () => {
         {
           id: 'wr_456',
           status: 'completed',
-          trigger: { event_name: 'user.created' },
           started_at: '2024-01-01T00:00:00.000Z',
           completed_at: '2024-01-01T00:01:00.000Z',
           created_at: '2024-01-01T00:00:00.000Z',
@@ -119,9 +132,6 @@ describe('list', () => {
                 "id": "wr_456",
                 "started_at": "2024-01-01T00:00:00.000Z",
                 "status": "completed",
-                "trigger": {
-                  "event_name": "user.created",
-                },
               },
             ],
             "has_more": false,
@@ -147,7 +157,6 @@ describe('list', () => {
         {
           id: 'wr_789',
           status: 'running',
-          trigger: null,
           started_at: '2024-01-02T00:00:00.000Z',
           completed_at: null,
           created_at: '2024-01-02T00:00:00.000Z',
@@ -171,7 +180,6 @@ describe('list', () => {
                 "id": "wr_789",
                 "started_at": "2024-01-02T00:00:00.000Z",
                 "status": "running",
-                "trigger": null,
               },
             ],
             "has_more": true,
@@ -183,6 +191,31 @@ describe('list', () => {
           },
         }
       `);
+  });
+
+  it('lists automation runs with status filter', async () => {
+    const options: ListAutomationRunsOptions = {
+      automationId: 'wf_123',
+      status: ['running', 'failed'],
+    };
+    const response: ListAutomationRunsResponseSuccess = {
+      object: 'list',
+      data: [],
+      has_more: false,
+    };
+
+    mockSuccessResponse(response, {});
+
+    const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+    await resend.automations.runs.list(options);
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://api.resend.com/automations/wf_123/runs?status=running%2Cfailed',
+      expect.objectContaining({
+        method: 'GET',
+        headers: expect.any(Headers),
+      }),
+    );
   });
 
   it('returns error', async () => {

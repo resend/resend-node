@@ -27,8 +27,18 @@ export class AutomationRuns {
     options: ListAutomationRunsOptions,
   ): Promise<ListAutomationRunsResponse> {
     const queryString = buildPaginationQuery(options);
-    const url = queryString
-      ? `/automations/${options.automationId}/runs?${queryString}`
+    const searchParams = new URLSearchParams(queryString);
+
+    if (options.status) {
+      const statusValue = Array.isArray(options.status)
+        ? options.status.join(',')
+        : options.status;
+      searchParams.set('status', statusValue);
+    }
+
+    const qs = searchParams.toString();
+    const url = qs
+      ? `/automations/${options.automationId}/runs?${qs}`
       : `/automations/${options.automationId}/runs`;
 
     const data = await this.resend.get<ListAutomationRunsResponseSuccess>(url);

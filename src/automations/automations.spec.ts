@@ -9,6 +9,7 @@ import type {
 import type { GetAutomationResponseSuccess } from './interfaces/get-automation.interface';
 import type { ListAutomationsResponseSuccess } from './interfaces/list-automation.interface';
 import type { RemoveAutomationResponseSuccess } from './interfaces/remove-automation.interface';
+import type { StopAutomationResponseSuccess } from './interfaces/stop-automation.interface';
 import type { UpdateAutomationResponseSuccess } from './interfaces/update-automation.interface';
 
 const fetchMocker = createFetchMock(vi);
@@ -229,6 +230,32 @@ describe('list', () => {
       );
     });
   });
+
+  describe('when status filter is provided', () => {
+    it('passes status param', async () => {
+      mockSuccessResponse(response, {
+        headers: {},
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const result = await resend.automations.list({ status: 'enabled' });
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/automations?status=enabled',
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+  });
 });
 
 describe('get', () => {
@@ -279,7 +306,7 @@ describe('get', () => {
       updated_at: '2025-01-01T00:00:00.000Z',
       steps: [
         {
-          id: 'step-1',
+          key: 'step-1',
           type: 'trigger',
           config: { event_name: 'user.created' },
         },
@@ -312,7 +339,7 @@ describe('get', () => {
                 "config": {
                   "event_name": "user.created",
                 },
-                "id": "step-1",
+                "key": "step-1",
                 "type": "trigger",
               },
             ],
@@ -361,12 +388,11 @@ describe('remove', () => {
 });
 
 describe('update', () => {
-  it('updates an automation', async () => {
+  it('updates automation status', async () => {
     const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
     const response: UpdateAutomationResponseSuccess = {
       object: 'automation',
       id,
-      status: 'disabled',
     };
 
     fetchMock.mockOnce(JSON.stringify(response), {
@@ -382,7 +408,6 @@ describe('update', () => {
           "data": {
             "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
             "object": "automation",
-            "status": "disabled",
           },
           "error": null,
           "headers": {
@@ -397,6 +422,149 @@ describe('update', () => {
         method: 'PATCH',
         headers: expect.any(Headers),
         body: JSON.stringify({ status: 'disabled' }),
+      }),
+    );
+  });
+
+  it('updates automation steps only', async () => {
+    const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
+    const response: UpdateAutomationResponseSuccess = {
+      object: 'automation',
+      id,
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+
+    await resend.automations.update(id, {
+      steps: [
+        {
+          key: 'trigger',
+          type: 'trigger',
+          config: { eventName: 'user.created' },
+        },
+      ],
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://api.resend.com/automations/${id}`,
+      expect.objectContaining({
+        method: 'PATCH',
+        headers: expect.any(Headers),
+        body: JSON.stringify({
+          steps: [
+            {
+              key: 'trigger',
+              type: 'trigger',
+              config: { event_name: 'user.created' },
+            },
+          ],
+        }),
+      }),
+    );
+  });
+
+  it('updates automation connections only', async () => {
+    const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
+    const response: UpdateAutomationResponseSuccess = {
+      object: 'automation',
+      id,
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+
+    await resend.automations.update(id, {
+      connections: [{ from: 'trigger', to: 'welcome_email', type: 'default' }],
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://api.resend.com/automations/${id}`,
+      expect.objectContaining({
+        method: 'PATCH',
+        headers: expect.any(Headers),
+        body: JSON.stringify({
+          connections: [
+            { from: 'trigger', to: 'welcome_email', type: 'default' },
+          ],
+        }),
+      }),
+    );
+  });
+
+  it('updates automation name', async () => {
+    const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
+    const response: UpdateAutomationResponseSuccess = {
+      object: 'automation',
+      id,
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+
+    await resend.automations.update(id, {
+      name: 'Updated Flow',
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://api.resend.com/automations/${id}`,
+      expect.objectContaining({
+        method: 'PATCH',
+        headers: expect.any(Headers),
+        body: JSON.stringify({ name: 'Updated Flow' }),
+      }),
+    );
+  });
+});
+
+describe('stop', () => {
+  it('stops an automation', async () => {
+    const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
+    const response: StopAutomationResponseSuccess = {
+      object: 'automation',
+      id,
+      status: 'disabled',
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+
+    const data = await resend.automations.stop(id);
+    expect(data).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "71cdfe68-cf79-473a-a9d7-21f91db6a526",
+            "object": "automation",
+            "status": "disabled",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://api.resend.com/automations/${id}/stop`,
+      expect.objectContaining({
+        method: 'POST',
+        headers: expect.any(Headers),
       }),
     );
   });
