@@ -60,11 +60,11 @@ export interface WaitForEventStepConfig {
 export type ConditionStepConfig = ConditionRule;
 
 export type AutomationStep =
-  | { ref: string; type: 'trigger'; config: TriggerStepConfig }
-  | { ref: string; type: 'delay'; config: DelayStepConfig }
-  | { ref: string; type: 'send_email'; config: SendEmailStepConfig }
-  | { ref: string; type: 'wait_for_event'; config: WaitForEventStepConfig }
-  | { ref: string; type: 'condition'; config: ConditionStepConfig };
+  | { key: string; type: 'trigger'; config: TriggerStepConfig }
+  | { key: string; type: 'delay'; config: DelayStepConfig }
+  | { key: string; type: 'send_email'; config: SendEmailStepConfig }
+  | { key: string; type: 'wait_for_event'; config: WaitForEventStepConfig }
+  | { key: string; type: 'condition'; config: ConditionStepConfig };
 
 export type AutomationEdgeType =
   | 'default'

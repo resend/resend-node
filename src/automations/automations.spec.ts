@@ -38,12 +38,12 @@ describe('create', () => {
       status: 'enabled',
       steps: [
         {
-          ref: 'trigger',
+          key: 'trigger',
           type: 'trigger',
           config: { eventName: 'user.created' },
         },
         {
-          ref: 'welcome_email',
+          key: 'welcome_email',
           type: 'send_email',
           config: { templateId: 'tpl-123' },
         },
