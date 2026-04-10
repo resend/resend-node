@@ -46,7 +46,7 @@ describe('create', () => {
         {
           key: 'welcome_email',
           type: 'send_email',
-          config: { templateId: 'tpl-123' },
+          config: { template: { id: 'tpl-123' } },
         },
       ],
       connections: [{ from: 'trigger', to: 'welcome_email', type: 'default' }],

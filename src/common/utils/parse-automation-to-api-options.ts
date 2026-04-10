@@ -49,10 +49,7 @@ export function parseStepConfig(
         key: step.key,
         type: step.type,
         config: {
-          template: {
-            id: step.config.templateId,
-            variables: step.config.variables,
-          },
+          template: step.config.template,
           subject: step.config.subject,
           from: step.config.from,
           reply_to: step.config.replyTo,
