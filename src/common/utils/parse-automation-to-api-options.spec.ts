@@ -128,7 +128,7 @@ describe('parseAutomationToApiOptions', () => {
 
   it('passes edge type through to API options', () => {
     const automation: CreateAutomationOptions = {
-      name: 'Connection Test',
+      name: 'Edge Test',
       steps: [
         {
           key: 'trigger_1',
