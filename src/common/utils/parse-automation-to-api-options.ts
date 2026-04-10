@@ -68,11 +68,24 @@ export function parseStepConfig(
     case 'condition':
       return { key: step.key, type: step.type, config: step.config };
     case 'contact_update':
-      return { key: step.key, type: step.type, config: step.config };
+      return {
+        key: step.key,
+        type: step.type,
+        config: {
+          first_name: step.config.firstName,
+          last_name: step.config.lastName,
+          unsubscribed: step.config.unsubscribed,
+          properties: step.config.properties,
+        },
+      };
     case 'contact_delete':
       return { key: step.key, type: step.type, config: step.config };
     case 'add_to_segment':
-      return { key: step.key, type: step.type, config: step.config };
+      return {
+        key: step.key,
+        type: step.type,
+        config: { segment_id: step.config.segmentId },
+      };
   }
 }
 

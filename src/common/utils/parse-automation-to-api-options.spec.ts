@@ -58,6 +58,26 @@ describe('parseAutomationToApiOptions', () => {
             value: 'pro',
           },
         },
+        {
+          key: 'update_1',
+          type: 'contact_update',
+          config: {
+            firstName: 'Jane',
+            lastName: { var: 'payload.last_name' },
+            unsubscribed: false,
+            properties: { plan: 'pro' },
+          },
+        },
+        {
+          key: 'delete_1',
+          type: 'contact_delete',
+          config: {},
+        },
+        {
+          key: 'segment_1',
+          type: 'add_to_segment',
+          config: { segmentId: 'seg_abc123' },
+        },
       ],
       connections: [
         { from: 'trigger_1', to: 'delay_1' },
@@ -119,6 +139,26 @@ describe('parseAutomationToApiOptions', () => {
             operator: 'eq',
             value: 'pro',
           },
+        },
+        {
+          key: 'update_1',
+          type: 'contact_update',
+          config: {
+            first_name: 'Jane',
+            last_name: { var: 'payload.last_name' },
+            unsubscribed: false,
+            properties: { plan: 'pro' },
+          },
+        },
+        {
+          key: 'delete_1',
+          type: 'contact_delete',
+          config: {},
+        },
+        {
+          key: 'segment_1',
+          type: 'add_to_segment',
+          config: { segment_id: 'seg_abc123' },
         },
       ],
       connections: [
