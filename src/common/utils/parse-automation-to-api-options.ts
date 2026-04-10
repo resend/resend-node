@@ -15,7 +15,7 @@ interface AutomationStepApiOptions {
 interface AutomationEdgeApiOptions {
   from: string;
   to: string;
-  edge_type?: AutomationEdgeType;
+  type?: AutomationEdgeType;
 }
 
 interface AutomationApiOptions {
@@ -73,7 +73,7 @@ function parseEdge(edge: AutomationEdge): AutomationEdgeApiOptions {
   return {
     from: edge.from,
     to: edge.to,
-    edge_type: edge.edgeType,
+    type: edge.type,
   };
 }
 
