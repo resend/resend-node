@@ -76,7 +76,7 @@ export type AutomationEdgeType =
 export interface AutomationEdge {
   from: string;
   to: string;
-  edgeType?: AutomationEdgeType;
+  type?: AutomationEdgeType;
 }
 
 export type AutomationStepType = AutomationStep['type'];
@@ -91,5 +91,5 @@ export interface AutomationResponseEdge {
   id: string;
   from_step_id: string;
   to_step_id: string;
-  edge_type: AutomationEdgeType;
+  type: AutomationEdgeType;
 }

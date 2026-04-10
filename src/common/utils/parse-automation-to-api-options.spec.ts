@@ -59,9 +59,9 @@ describe('parseAutomationToApiOptions', () => {
       ],
       edges: [
         { from: 'trigger_1', to: 'delay_1' },
-        { from: 'delay_1', to: 'send_1', edgeType: 'default' },
+        { from: 'delay_1', to: 'send_1', type: 'default' },
         { from: 'send_1', to: 'wait_1' },
-        { from: 'wait_1', to: 'cond_1', edgeType: 'event_received' },
+        { from: 'wait_1', to: 'cond_1', type: 'event_received' },
       ],
     };
 
@@ -118,15 +118,15 @@ describe('parseAutomationToApiOptions', () => {
         },
       ],
       edges: [
-        { from: 'trigger_1', to: 'delay_1', edge_type: undefined },
-        { from: 'delay_1', to: 'send_1', edge_type: 'default' },
-        { from: 'send_1', to: 'wait_1', edge_type: undefined },
-        { from: 'wait_1', to: 'cond_1', edge_type: 'event_received' },
+        { from: 'trigger_1', to: 'delay_1', type: undefined },
+        { from: 'delay_1', to: 'send_1', type: 'default' },
+        { from: 'send_1', to: 'wait_1', type: undefined },
+        { from: 'wait_1', to: 'cond_1', type: 'event_received' },
       ],
     });
   });
 
-  it('converts edge edgeType to edge_type', () => {
+  it('passes edge type through to API options', () => {
     const automation: CreateAutomationOptions = {
       name: 'Edge Test',
       steps: [
@@ -137,18 +137,18 @@ describe('parseAutomationToApiOptions', () => {
         },
       ],
       edges: [
-        { from: 'trigger_1', to: 'step_2', edgeType: 'condition_met' },
-        { from: 'trigger_1', to: 'step_3', edgeType: 'condition_not_met' },
-        { from: 'step_2', to: 'step_4', edgeType: 'timeout' },
+        { from: 'trigger_1', to: 'step_2', type: 'condition_met' },
+        { from: 'trigger_1', to: 'step_3', type: 'condition_not_met' },
+        { from: 'step_2', to: 'step_4', type: 'timeout' },
       ],
     };
 
     const apiOptions = parseAutomationToApiOptions(automation);
 
     expect(apiOptions.edges).toEqual([
-      { from: 'trigger_1', to: 'step_2', edge_type: 'condition_met' },
-      { from: 'trigger_1', to: 'step_3', edge_type: 'condition_not_met' },
-      { from: 'step_2', to: 'step_4', edge_type: 'timeout' },
+      { from: 'trigger_1', to: 'step_2', type: 'condition_met' },
+      { from: 'trigger_1', to: 'step_3', type: 'condition_not_met' },
+      { from: 'step_2', to: 'step_4', type: 'timeout' },
     ]);
   });
 
@@ -177,7 +177,7 @@ describe('parseAutomationToApiOptions', () => {
           config: { event_name: 'test.event' },
         },
       ],
-      edges: [{ from: 'trigger_1', to: 'step_2', edge_type: undefined }],
+      edges: [{ from: 'trigger_1', to: 'step_2', type: undefined }],
     });
   });
 });
