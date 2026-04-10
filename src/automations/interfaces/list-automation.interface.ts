@@ -3,9 +3,11 @@ import type {
   PaginationOptions,
 } from '../../common/interfaces/pagination-options.interface';
 import type { Response } from '../../interfaces';
-import type { Automation } from './automation';
+import type { Automation, AutomationStatus } from './automation';
 
-export type ListAutomationsOptions = PaginationOptions;
+export type ListAutomationsOptions = PaginationOptions & {
+  status?: AutomationStatus;
+};
 
 export type ListAutomationsResponseSuccess = PaginatedData<Automation[]>;
 

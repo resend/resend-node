@@ -1,6 +1,6 @@
 import type {
   AutomationConnection,
-  AutomationEdgeType,
+  AutomationConnectionType,
   AutomationStep,
 } from '../../automations/interfaces/automation-step.interface';
 import type { CreateAutomationOptions } from '../../automations/interfaces/create-automation-options.interface';
@@ -15,7 +15,7 @@ interface AutomationStepApiOptions {
 interface AutomationConnectionApiOptions {
   from: string;
   to: string;
-  type?: AutomationEdgeType;
+  type?: AutomationConnectionType;
 }
 
 interface AutomationApiOptions {
@@ -47,11 +47,13 @@ function parseStepConfig(step: AutomationStep): AutomationStepApiOptions {
         key: step.key,
         type: step.type,
         config: {
-          template_id: step.config.templateId,
+          template: {
+            id: step.config.templateId,
+            variables: step.config.variables,
+          },
           subject: step.config.subject,
           from: step.config.from,
           reply_to: step.config.replyTo,
-          variables: step.config.variables,
         },
       };
     case 'wait_for_event':
@@ -65,6 +67,12 @@ function parseStepConfig(step: AutomationStep): AutomationStepApiOptions {
         },
       };
     case 'condition':
+      return { key: step.key, type: step.type, config: step.config };
+    case 'contact_update':
+      return { key: step.key, type: step.type, config: step.config };
+    case 'contact_delete':
+      return { key: step.key, type: step.type, config: step.config };
+    case 'add_to_segment':
       return { key: step.key, type: step.type, config: step.config };
   }
 }

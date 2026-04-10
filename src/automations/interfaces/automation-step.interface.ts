@@ -59,14 +59,33 @@ export interface WaitForEventStepConfig {
 
 export type ConditionStepConfig = ConditionRule;
 
+export interface ContactUpdateStepConfig {
+  first_name?: string | null | { var: string };
+  last_name?: string | null | { var: string };
+  unsubscribed?: boolean | { var: string };
+  properties?: Record<
+    string,
+    string | number | boolean | null | { var: string }
+  >;
+}
+
+export type ContactDeleteStepConfig = {};
+
+export interface AddToSegmentStepConfig {
+  segment_id: string;
+}
+
 export type AutomationStep =
   | { key: string; type: 'trigger'; config: TriggerStepConfig }
   | { key: string; type: 'delay'; config: DelayStepConfig }
   | { key: string; type: 'send_email'; config: SendEmailStepConfig }
   | { key: string; type: 'wait_for_event'; config: WaitForEventStepConfig }
-  | { key: string; type: 'condition'; config: ConditionStepConfig };
+  | { key: string; type: 'condition'; config: ConditionStepConfig }
+  | { key: string; type: 'contact_update'; config: ContactUpdateStepConfig }
+  | { key: string; type: 'contact_delete'; config: ContactDeleteStepConfig }
+  | { key: string; type: 'add_to_segment'; config: AddToSegmentStepConfig };
 
-export type AutomationEdgeType =
+export type AutomationConnectionType =
   | 'default'
   | 'condition_met'
   | 'condition_not_met'
@@ -76,20 +95,19 @@ export type AutomationEdgeType =
 export interface AutomationConnection {
   from: string;
   to: string;
-  type?: AutomationEdgeType;
+  type?: AutomationConnectionType;
 }
 
 export type AutomationStepType = AutomationStep['type'];
 
 export interface AutomationResponseStep {
-  id: string;
+  key: string;
   type: AutomationStepType;
   config: Record<string, unknown>;
 }
 
 export interface AutomationResponseConnection {
-  id: string;
-  from_step_id: string;
-  to_step_id: string;
-  type: AutomationEdgeType;
+  from: string;
+  to: string;
+  type: AutomationConnectionType;
 }
