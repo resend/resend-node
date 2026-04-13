@@ -1,4 +1,6 @@
 export * from './api-keys/interfaces';
+export * from './automation-runs/interfaces';
+export * from './automations/interfaces';
 export * from './batch/interfaces';
 export * from './broadcasts/interfaces';
 export * from './common/interfaces';
@@ -10,6 +12,7 @@ export * from './domains/interfaces';
 export * from './emails/attachments/interfaces';
 export * from './emails/interfaces';
 export * from './emails/receiving/interfaces';
+export * from './events/interfaces';
 export type { ErrorResponse, Response } from './interfaces';
 export * from './logs/interfaces';
 export { Resend } from './resend';
