@@ -8,4 +8,5 @@ export interface DomainApiOptions {
   open_tracking?: boolean;
   click_tracking?: boolean;
   tls?: 'enforced' | 'opportunistic';
+  tracking_subdomain?: string;
 }
