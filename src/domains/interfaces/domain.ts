@@ -32,7 +32,8 @@ export type DomainRecords =
   | DomainSpfRecord
   | DomainDkimRecord
   | ReceivingRecord
-  | TrackingRecord;
+  | TrackingRecord
+  | TrackingCaaRecord;
 
 export interface DomainSpfRecord {
   record: 'SPF';
@@ -73,6 +74,15 @@ export interface TrackingRecord {
   name: string;
   value: string;
   type: 'CNAME';
+  ttl: string;
+  status: DomainStatus;
+}
+
+export interface TrackingCaaRecord {
+  record: 'TrackingCAA';
+  name: string;
+  value: string;
+  type: 'CAA';
   ttl: string;
   status: DomainStatus;
 }

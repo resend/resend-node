@@ -508,6 +508,14 @@ describe('Domains', () => {
               status: 'not_started',
               ttl: 'Auto',
             },
+            {
+              record: 'TrackingCAA',
+              name: '',
+              value: '0 issue "amazon.com"',
+              type: 'CAA',
+              status: 'not_started',
+              ttl: 'Auto',
+            },
           ],
           region: 'us-east-1',
         };
@@ -532,6 +540,9 @@ describe('Domains', () => {
         expect(result.data?.click_tracking).toBe(true);
         expect(result.data?.records).toContainEqual(
           expect.objectContaining({ record: 'Tracking' }),
+        );
+        expect(result.data?.records).toContainEqual(
+          expect.objectContaining({ record: 'TrackingCAA' }),
         );
         expect(result.error).toBeNull();
       });
@@ -991,6 +1002,14 @@ describe('Domains', () => {
             ttl: 'Auto',
             status: 'verified',
           },
+          {
+            record: 'TrackingCAA',
+            name: '',
+            value: '0 issue "amazon.com"',
+            type: 'CAA',
+            ttl: 'Auto',
+            status: 'verified',
+          },
         ],
       };
 
@@ -1058,6 +1077,14 @@ describe('Domains', () => {
                 "ttl": "Auto",
                 "type": "CNAME",
                 "value": "tracking.resend.com",
+              },
+              {
+                "name": "",
+                "record": "TrackingCAA",
+                "status": "verified",
+                "ttl": "Auto",
+                "type": "CAA",
+                "value": "0 issue "amazon.com"",
               },
             ],
             "region": "us-east-1",
