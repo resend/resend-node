@@ -9,7 +9,7 @@ on:
 
 jobs:
   update-docs:
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-22.04-2
     name: Trigger Mintlify Agent
     if: github.repository == 'resend/resend-node'
     permissions:
