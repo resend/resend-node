@@ -117,7 +117,9 @@ export class Contacts {
 
   async get(options: GetContactOptions): Promise<GetContactResponse> {
     if (typeof options === 'string') {
-      return this.resend.get<GetContactResponseSuccess>(`/contacts/${encodeURIComponent(options)}`);
+      return this.resend.get<GetContactResponseSuccess>(
+        `/contacts/${encodeURIComponent(options)}`,
+      );
     }
 
     if (!options.id && !options.email) {
@@ -134,12 +136,12 @@ export class Contacts {
 
     if (!options.audienceId) {
       return this.resend.get<GetContactResponseSuccess>(
-        `/contacts/${encodeURIComponent(options?.email ? options?.email : options?.id!)}`,
+        `/contacts/${encodeURIComponent(options.email ?? options.id ?? '')}`,
       );
     }
 
     return this.resend.get<GetContactResponseSuccess>(
-      `/audiences/${encodeURIComponent(options.audienceId)}/contacts/${encodeURIComponent((options?.email ? options?.email : options?.id)!)}`,
+      `/audiences/${encodeURIComponent(options.audienceId)}/contacts/${encodeURIComponent(options.email ?? options.id ?? '')}`,
     );
   }
 
@@ -158,7 +160,7 @@ export class Contacts {
 
     if (!options.audienceId) {
       const data = await this.resend.patch<UpdateContactResponseSuccess>(
-        `/contacts/${encodeURIComponent((options?.email ? options?.email : options?.id)!)}`,
+        `/contacts/${encodeURIComponent(options.email ?? options.id ?? '')}`,
         {
           unsubscribed: options.unsubscribed,
           first_name: options.firstName,
@@ -170,7 +172,7 @@ export class Contacts {
     }
 
     const data = await this.resend.patch<UpdateContactResponseSuccess>(
-      `/audiences/${encodeURIComponent(options.audienceId)}/contacts/${encodeURIComponent((options?.email ? options?.email : options?.id)!)}`,
+      `/audiences/${encodeURIComponent(options.audienceId)}/contacts/${encodeURIComponent(options.email ?? options.id ?? '')}`,
       {
         unsubscribed: options.unsubscribed,
         first_name: options.firstName,
@@ -202,12 +204,12 @@ export class Contacts {
 
     if (!payload.audienceId) {
       return this.resend.delete<RemoveContactsResponseSuccess>(
-        `/contacts/${encodeURIComponent((payload?.email ? payload?.email : payload?.id)!)}`,
+        `/contacts/${encodeURIComponent(payload.email ?? payload.id ?? '')}`,
       );
     }
 
     return this.resend.delete<RemoveContactsResponseSuccess>(
-      `/audiences/${encodeURIComponent(payload.audienceId)}/contacts/${encodeURIComponent((payload?.email ? payload?.email : payload?.id)!)}`,
+      `/audiences/${encodeURIComponent(payload.audienceId)}/contacts/${encodeURIComponent(payload.email ?? payload.id ?? '')}`,
     );
   }
 }

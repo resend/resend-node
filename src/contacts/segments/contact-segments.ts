@@ -34,11 +34,11 @@ export class ContactSegments {
       };
     }
 
-    const identifier = options.email ? options.email : options.contactId;
+    const identifier = options.email ?? options.contactId ?? '';
     const queryString = buildPaginationQuery(options);
     const url = queryString
-      ? `/contacts/${encodeURIComponent(identifier!)}/segments?${queryString}`
-      : `/contacts/${encodeURIComponent(identifier!)}/segments`;
+      ? `/contacts/${encodeURIComponent(identifier)}/segments?${queryString}`
+      : `/contacts/${encodeURIComponent(identifier)}/segments`;
 
     const data = await this.resend.get<ListContactSegmentsResponseSuccess>(url);
     return data;
@@ -59,9 +59,9 @@ export class ContactSegments {
       };
     }
 
-    const identifier = options.email ? options.email : options.contactId;
+    const identifier = options.email ?? options.contactId ?? '';
     return this.resend.post<AddContactSegmentResponseSuccess>(
-      `/contacts/${encodeURIComponent(identifier!)}/segments/${encodeURIComponent(options.segmentId)}`,
+      `/contacts/${encodeURIComponent(identifier)}/segments/${encodeURIComponent(options.segmentId)}`,
     );
   }
 
@@ -80,9 +80,9 @@ export class ContactSegments {
       };
     }
 
-    const identifier = options.email ? options.email : options.contactId;
+    const identifier = options.email ?? options.contactId ?? '';
     return this.resend.delete<RemoveContactSegmentResponseSuccess>(
-      `/contacts/${encodeURIComponent(identifier!)}/segments/${encodeURIComponent(options.segmentId)}`,
+      `/contacts/${encodeURIComponent(identifier)}/segments/${encodeURIComponent(options.segmentId)}`,
     );
   }
 }
