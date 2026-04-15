@@ -65,7 +65,7 @@ export class Emails {
 
   async get(id: string): Promise<GetEmailResponse> {
     const data = await this.resend.get<GetEmailResponseSuccess>(
-      `/emails/${id}`,
+      `/emails/${encodeURIComponent(id)}`,
     );
 
     return data;
@@ -82,7 +82,7 @@ export class Emails {
 
   async update(payload: UpdateEmailOptions): Promise<UpdateEmailResponse> {
     const data = await this.resend.patch<UpdateEmailResponseSuccess>(
-      `/emails/${payload.id}`,
+      `/emails/${encodeURIComponent(payload.id)}`,
       {
         scheduled_at: payload.scheduledAt,
       },
@@ -92,7 +92,7 @@ export class Emails {
 
   async cancel(id: string): Promise<CancelEmailResponse> {
     const data = await this.resend.post<CancelEmailResponseSuccess>(
-      `/emails/${id}/cancel`,
+      `/emails/${encodeURIComponent(id)}/cancel`,
     );
     return data;
   }

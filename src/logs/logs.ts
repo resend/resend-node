@@ -21,7 +21,7 @@ export class Logs {
   }
 
   async get(id: string): Promise<GetLogResponse> {
-    const data = await this.resend.get<GetLogResponseSuccess>(`/logs/${id}`);
+    const data = await this.resend.get<GetLogResponseSuccess>(`/logs/${encodeURIComponent(id)}`);
     return data;
   }
 }

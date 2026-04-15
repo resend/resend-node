@@ -45,14 +45,14 @@ export class Segments {
 
   async get(id: string): Promise<GetSegmentResponse> {
     const data = await this.resend.get<GetSegmentResponseSuccess>(
-      `/segments/${id}`,
+      `/segments/${encodeURIComponent(id)}`,
     );
     return data;
   }
 
   async remove(id: string): Promise<RemoveSegmentResponse> {
     const data = await this.resend.delete<RemoveSegmentResponseSuccess>(
-      `/segments/${id}`,
+      `/segments/${encodeURIComponent(id)}`,
     );
     return data;
   }

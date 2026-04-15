@@ -55,7 +55,7 @@ export class Domains {
 
   async get(id: string): Promise<GetDomainResponse> {
     const data = await this.resend.get<GetDomainResponseSuccess>(
-      `/domains/${id}`,
+      `/domains/${encodeURIComponent(id)}`,
     );
 
     return data;
@@ -63,7 +63,7 @@ export class Domains {
 
   async update(payload: UpdateDomainsOptions): Promise<UpdateDomainsResponse> {
     const data = await this.resend.patch<UpdateDomainsResponseSuccess>(
-      `/domains/${payload.id}`,
+      `/domains/${encodeURIComponent(payload.id)}`,
       {
         click_tracking: payload.clickTracking,
         open_tracking: payload.openTracking,
@@ -76,14 +76,14 @@ export class Domains {
 
   async remove(id: string): Promise<RemoveDomainsResponse> {
     const data = await this.resend.delete<RemoveDomainsResponseSuccess>(
-      `/domains/${id}`,
+      `/domains/${encodeURIComponent(id)}`,
     );
     return data;
   }
 
   async verify(id: string): Promise<VerifyDomainsResponse> {
     const data = await this.resend.post<VerifyDomainsResponseSuccess>(
-      `/domains/${id}/verify`,
+      `/domains/${encodeURIComponent(id)}/verify`,
     );
     return data;
   }

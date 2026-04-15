@@ -16,7 +16,7 @@ export class Attachments {
     const { emailId, id } = options;
 
     const data = await this.resend.get<GetAttachmentResponseSuccess>(
-      `/emails/receiving/${emailId}/attachments/${id}`,
+      `/emails/receiving/${encodeURIComponent(emailId)}/attachments/${encodeURIComponent(id)}`,
     );
 
     return data;
@@ -29,8 +29,8 @@ export class Attachments {
 
     const queryString = buildPaginationQuery(options);
     const url = queryString
-      ? `/emails/receiving/${emailId}/attachments?${queryString}`
-      : `/emails/receiving/${emailId}/attachments`;
+      ? `/emails/receiving/${encodeURIComponent(emailId)}/attachments?${queryString}`
+      : `/emails/receiving/${encodeURIComponent(emailId)}/attachments`;
 
     const data = await this.resend.get<ListAttachmentsResponseSuccess>(url);
 

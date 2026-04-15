@@ -42,7 +42,7 @@ export class ApiKeys {
 
   async remove(id: string): Promise<RemoveApiKeyResponse> {
     const data = await this.resend.delete<RemoveApiKeyResponseSuccess>(
-      `/api-keys/${id}`,
+      `/api-keys/${encodeURIComponent(id)}`,
     );
     return data;
   }

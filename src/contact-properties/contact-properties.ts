@@ -82,7 +82,7 @@ export class ContactProperties {
       };
     }
     const response = await this.resend.get<GetContactPropertyResponseSuccess>(
-      `/contact-properties/${id}`,
+      `/contact-properties/${encodeURIComponent(id)}`,
     );
 
     if (response.data) {
@@ -116,7 +116,7 @@ export class ContactProperties {
 
     const apiOptions = parseContactPropertyToApiOptions(payload);
     const data = await this.resend.patch<UpdateContactPropertyResponseSuccess>(
-      `/contact-properties/${payload.id}`,
+      `/contact-properties/${encodeURIComponent(payload.id)}`,
       apiOptions,
     );
     return data;
@@ -135,7 +135,7 @@ export class ContactProperties {
       };
     }
     const data = await this.resend.delete<RemoveContactPropertyResponseSuccess>(
-      `/contact-properties/${id}`,
+      `/contact-properties/${encodeURIComponent(id)}`,
     );
     return data;
   }

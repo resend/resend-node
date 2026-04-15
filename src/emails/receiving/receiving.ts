@@ -26,7 +26,7 @@ export class Receiving {
 
   async get(id: string): Promise<GetReceivingEmailResponse> {
     const data = await this.resend.get<GetReceivingEmailResponseSuccess>(
-      `/emails/receiving/${id}`,
+      `/emails/receiving/${encodeURIComponent(id)}`,
     );
 
     return data;

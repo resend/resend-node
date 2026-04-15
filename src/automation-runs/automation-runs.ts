@@ -18,7 +18,7 @@ export class AutomationRuns {
     options: GetAutomationRunOptions,
   ): Promise<GetAutomationRunResponse> {
     const data = await this.resend.get<GetAutomationRunResponseSuccess>(
-      `/automations/${options.automationId}/runs/${options.runId}`,
+      `/automations/${encodeURIComponent(options.automationId)}/runs/${encodeURIComponent(options.runId)}`,
     );
     return data;
   }
@@ -37,9 +37,10 @@ export class AutomationRuns {
     }
 
     const qs = searchParams.toString();
+    const safeAutomationId = encodeURIComponent(options.automationId);
     const url = qs
-      ? `/automations/${options.automationId}/runs?${qs}`
-      : `/automations/${options.automationId}/runs`;
+      ? `/automations/${safeAutomationId}/runs?${qs}`
+      : `/automations/${safeAutomationId}/runs`;
 
     const data = await this.resend.get<ListAutomationRunsResponseSuccess>(url);
     return data;
