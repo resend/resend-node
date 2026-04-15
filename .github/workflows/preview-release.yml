@@ -12,7 +12,7 @@ permissions:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   preview-release:
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: depot-ubuntu-22.04-8
     permissions: 
       contents: write
       pull-requests: write
@@ -20,10 +20,10 @@ jobs:
       image: node:24
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: git config --global --add safe.directory $GITHUB_WORKSPACE
       - name: pnpm setup
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
       - name: Install packages
         run: pnpm install --frozen-lockfile
       - name: Run Build
@@ -31,7 +31,7 @@ jobs:
       - name: Find changed files
         id: changed_files
         if: github.event_name == 'pull_request'
-        uses: tj-actions/changed-files@c23d52ba6ff8c67273c61e097615eafe88cb8650
+        uses: tj-actions/changed-files@445b0eb32849cdd5b22a390bf0568af00ed4ca34
         with:
           files: src/**/*
           dir_names: true

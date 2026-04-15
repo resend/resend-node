@@ -18,5 +18,5 @@
     "target": "es2017",
     "types": ["vitest/globals"]
   },
-  "include": ["src", "integrations"]
+  "include": ["src", "e2e"]
 }
