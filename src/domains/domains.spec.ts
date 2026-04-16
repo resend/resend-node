@@ -477,6 +477,77 @@ describe('Domains', () => {
       });
     });
 
+    describe('with trackingSubdomain', () => {
+      it('creates a domain with tracking subdomain', async () => {
+        const response: CreateDomainResponseSuccess = {
+          id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
+          name: 'resend.com',
+          created_at: '2023-04-07T22:48:33.420498+00:00',
+          status: 'not_started',
+          capabilities: {
+            sending: 'enabled',
+            receiving: 'enabled',
+          },
+          open_tracking: true,
+          click_tracking: true,
+          tracking_subdomain: 'track',
+          records: [
+            {
+              record: 'DKIM',
+              name: 'resend._domainkey',
+              value: 'nu22pfdfqaxdybogtw3ebaokmalv5mxg.dkim.com.',
+              type: 'CNAME',
+              status: 'not_started',
+              ttl: 'Auto',
+            },
+            {
+              record: 'Tracking',
+              name: 'track.resend.com',
+              value: 'tracking.resend.com',
+              type: 'CNAME',
+              status: 'not_started',
+              ttl: 'Auto',
+            },
+            {
+              record: 'TrackingCAA',
+              name: '',
+              value: '0 issue "amazon.com"',
+              type: 'CAA',
+              status: 'not_started',
+              ttl: 'Auto',
+            },
+          ],
+          region: 'us-east-1',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const payload: CreateDomainOptions = {
+          name: 'resend.com',
+          trackingSubdomain: 'track',
+        };
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.domains.create(payload);
+
+        expect(result.data?.tracking_subdomain).toBe('track');
+        expect(result.data?.open_tracking).toBe(true);
+        expect(result.data?.click_tracking).toBe(true);
+        expect(result.data?.records).toContainEqual(
+          expect.objectContaining({ record: 'Tracking' }),
+        );
+        expect(result.data?.records).toContainEqual(
+          expect.objectContaining({ record: 'TrackingCAA' }),
+        );
+        expect(result.error).toBeNull();
+      });
+    });
+
     describe('with capabilities', () => {
       it('creates a domain with sending only', async () => {
         const response: CreateDomainResponseSuccess = {
@@ -880,6 +951,9 @@ describe('Domains', () => {
         status: 'not_started',
         created_at: '2023-06-21T06:10:36.144Z',
         region: 'us-east-1',
+        open_tracking: true,
+        click_tracking: true,
+        tracking_subdomain: 'track',
         capabilities: {
           sending: 'enabled',
           receiving: 'enabled',
@@ -920,6 +994,22 @@ describe('Domains', () => {
             status: 'not_started',
             priority: 10,
           },
+          {
+            record: 'Tracking',
+            name: 'track.resend.com',
+            value: 'tracking.resend.com',
+            type: 'CNAME',
+            ttl: 'Auto',
+            status: 'verified',
+          },
+          {
+            record: 'TrackingCAA',
+            name: '',
+            value: '0 issue "amazon.com"',
+            type: 'CAA',
+            ttl: 'Auto',
+            status: 'verified',
+          },
         ],
       };
 
@@ -939,10 +1029,12 @@ describe('Domains', () => {
               "receiving": "enabled",
               "sending": "enabled",
             },
+            "click_tracking": true,
             "created_at": "2023-06-21T06:10:36.144Z",
             "id": "fd61172c-cafc-40f5-b049-b45947779a29",
             "name": "resend.com",
             "object": "domain",
+            "open_tracking": true,
             "records": [
               {
                 "name": "bounces.resend.com",
@@ -978,9 +1070,26 @@ describe('Domains', () => {
                 "type": "MX",
                 "value": "inbound-mx.resend.com",
               },
+              {
+                "name": "track.resend.com",
+                "record": "Tracking",
+                "status": "verified",
+                "ttl": "Auto",
+                "type": "CNAME",
+                "value": "tracking.resend.com",
+              },
+              {
+                "name": "",
+                "record": "TrackingCAA",
+                "status": "verified",
+                "ttl": "Auto",
+                "type": "CAA",
+                "value": "0 issue "amazon.com"",
+              },
             ],
             "region": "us-east-1",
             "status": "not_started",
+            "tracking_subdomain": "track",
           },
           "error": null,
           "headers": {
@@ -1050,6 +1159,41 @@ describe('Domains', () => {
             sending: 'enabled',
             receiving: 'enabled',
           },
+        }),
+      ).resolves.toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+            "object": "domain",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+    });
+
+    it('update domain tracking subdomain', async () => {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      const response: UpdateDomainsResponseSuccess = {
+        object: 'domain',
+        id,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.domains.update({
+          id,
+          trackingSubdomain: 'track',
         }),
       ).resolves.toMatchInlineSnapshot(`
         {

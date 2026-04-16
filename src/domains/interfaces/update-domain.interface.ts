@@ -7,6 +7,7 @@ export interface UpdateDomainsOptions {
   openTracking?: boolean;
   tls?: 'enforced' | 'opportunistic';
   capabilities?: Partial<DomainCapabilities>;
+  trackingSubdomain?: string;
 }
 
 export type UpdateDomainsResponseSuccess = Pick<Domain, 'id'> & {
