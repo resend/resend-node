@@ -1098,6 +1098,99 @@ describe('Domains', () => {
         }
       `);
     });
+
+    it('get partially_verified domain', async () => {
+      const response: GetDomainResponseSuccess = {
+        object: 'domain',
+        id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+        name: 'resend.com',
+        status: 'partially_verified',
+        created_at: '2023-06-21T06:10:36.144Z',
+        region: 'us-east-1',
+        click_tracking: true,
+        tracking_subdomain: 'track',
+        capabilities: {
+          sending: 'enabled',
+          receiving: 'disabled',
+        },
+        records: [
+          {
+            record: 'DKIM',
+            name: 'resend._domainkey',
+            value: 'p=MIG...',
+            type: 'TXT',
+            status: 'verified',
+            ttl: 'Auto',
+          },
+          {
+            record: 'Tracking',
+            name: 'track.resend.com',
+            value: 'tracking.resend.com',
+            type: 'CNAME',
+            ttl: 'Auto',
+            status: 'pending',
+          },
+        ],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.domains.get('1234');
+      expect(result.data?.status).toBe('partially_verified');
+    });
+
+    it('get partially_failed domain', async () => {
+      const response: GetDomainResponseSuccess = {
+        object: 'domain',
+        id: 'fd61172c-cafc-40f5-b049-b45947779a29',
+        name: 'resend.com',
+        status: 'partially_failed',
+        created_at: '2023-06-21T06:10:36.144Z',
+        region: 'us-east-1',
+        capabilities: {
+          sending: 'enabled',
+          receiving: 'enabled',
+        },
+        records: [
+          {
+            record: 'DKIM',
+            name: 'resend._domainkey',
+            value: 'p=MIG...',
+            type: 'TXT',
+            status: 'verified',
+            ttl: 'Auto',
+          },
+          {
+            record: 'Receiving',
+            name: 'resend.com',
+            value: 'inbound-mx.resend.com',
+            type: 'MX',
+            ttl: 'Auto',
+            status: 'failed',
+            priority: 10,
+          },
+        ],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.domains.get('1234');
+      expect(result.data?.status).toBe('partially_failed');
+    });
   });
 
   describe('update', () => {

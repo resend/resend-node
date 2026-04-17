@@ -25,6 +25,14 @@ export type DomainRecordStatus =
   | 'pending'
   | 'verified'
   | 'failed'
+  | 'not_started'
+  | 'partially_verified'
+  | 'partially_failed';
+
+export type DomainRecordStatus =
+  | 'pending'
+  | 'verified'
+  | 'failed'
   | 'temporary_failure'
   | 'not_started';
 
