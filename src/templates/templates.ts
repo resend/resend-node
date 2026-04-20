@@ -51,6 +51,7 @@ export class Templates {
   private async performCreate(
     payload: CreateTemplateOptions,
   ): Promise<CreateTemplateResponse> {
+    let resolved = payload;
     if (payload.react) {
       if (!this.renderAsync) {
         try {
@@ -63,14 +64,16 @@ export class Templates {
         }
       }
 
-      payload.html = await this.renderAsync(
-        payload.react as React.ReactElement,
-      );
+      const renderFn = this.renderAsync;
+      resolved = {
+        ...payload,
+        html: await renderFn(payload.react as React.ReactElement),
+      };
     }
 
     return this.resend.post<CreateTemplateResponseSuccess>(
       '/templates',
-      parseTemplateToApiOptions(payload),
+      parseTemplateToApiOptions(resolved),
     );
   }
 
