@@ -67,7 +67,7 @@ export class Broadcasts {
     payload?: SendBroadcastOptions,
   ): Promise<SendBroadcastResponse> {
     const data = await this.resend.post<SendBroadcastResponseSuccess>(
-      `/broadcasts/${id}/send`,
+      `/broadcasts/${encodeURIComponent(id)}/send`,
       { scheduled_at: payload?.scheduledAt },
     );
 
@@ -86,14 +86,14 @@ export class Broadcasts {
 
   async get(id: string): Promise<GetBroadcastResponse> {
     const data = await this.resend.get<GetBroadcastResponseSuccess>(
-      `/broadcasts/${id}`,
+      `/broadcasts/${encodeURIComponent(id)}`,
     );
     return data;
   }
 
   async remove(id: string): Promise<RemoveBroadcastResponse> {
     const data = await this.resend.delete<RemoveBroadcastResponseSuccess>(
-      `/broadcasts/${id}`,
+      `/broadcasts/${encodeURIComponent(id)}`,
     );
     return data;
   }
@@ -107,7 +107,7 @@ export class Broadcasts {
     }
 
     const data = await this.resend.patch<UpdateBroadcastResponseSuccess>(
-      `/broadcasts/${id}`,
+      `/broadcasts/${encodeURIComponent(id)}`,
       {
         name: payload.name,
         segment_id: payload.segmentId,

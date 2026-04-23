@@ -76,14 +76,14 @@ export class Templates {
 
   async remove(identifier: string): Promise<RemoveTemplateResponse> {
     const data = await this.resend.delete<RemoveTemplateResponseSuccess>(
-      `/templates/${identifier}`,
+      `/templates/${encodeURIComponent(identifier)}`,
     );
     return data;
   }
 
   async get(identifier: string): Promise<GetTemplateResponse> {
     const data = await this.resend.get<GetTemplateResponseSuccess>(
-      `/templates/${identifier}`,
+      `/templates/${encodeURIComponent(identifier)}`,
     );
     return data;
   }
@@ -98,7 +98,7 @@ export class Templates {
     identifier: string,
   ): ChainableTemplateResult<DuplicateTemplateResponse> {
     const promiseDuplicate = this.resend.post<DuplicateTemplateResponseSuccess>(
-      `/templates/${identifier}/duplicate`,
+      `/templates/${encodeURIComponent(identifier)}/duplicate`,
     );
     return new ChainableTemplateResult(
       promiseDuplicate,
@@ -108,7 +108,7 @@ export class Templates {
 
   async publish(identifier: string): Promise<PublishTemplateResponse> {
     const data = await this.resend.post<PublishTemplateResponseSuccess>(
-      `/templates/${identifier}/publish`,
+      `/templates/${encodeURIComponent(identifier)}/publish`,
     );
     return data;
   }
@@ -118,7 +118,7 @@ export class Templates {
     payload: UpdateTemplateOptions,
   ): Promise<UpdateTemplateResponse> {
     const data = await this.resend.patch<UpdateTemplateResponseSuccess>(
-      `/templates/${identifier}`,
+      `/templates/${encodeURIComponent(identifier)}`,
       parseTemplateToApiOptions(payload),
     );
     return data;

@@ -71,14 +71,14 @@ export class Automations {
 
   async get(id: string): Promise<GetAutomationResponse> {
     const data = await this.resend.get<GetAutomationResponseSuccess>(
-      `/automations/${id}`,
+      `/automations/${encodeURIComponent(id)}`,
     );
     return data;
   }
 
   async remove(id: string): Promise<RemoveAutomationResponse> {
     const data = await this.resend.delete<RemoveAutomationResponseSuccess>(
-      `/automations/${id}`,
+      `/automations/${encodeURIComponent(id)}`,
     );
     return data;
   }
@@ -103,7 +103,7 @@ export class Automations {
     }
 
     const data = await this.resend.patch<UpdateAutomationResponseSuccess>(
-      `/automations/${id}`,
+      `/automations/${encodeURIComponent(id)}`,
       apiPayload,
     );
     return data;
@@ -111,7 +111,7 @@ export class Automations {
 
   async stop(id: string): Promise<StopAutomationResponse> {
     const data = await this.resend.post<StopAutomationResponseSuccess>(
-      `/automations/${id}/stop`,
+      `/automations/${encodeURIComponent(id)}/stop`,
     );
     return data;
   }

@@ -56,7 +56,7 @@ export class Webhooks {
 
   async get(id: string): Promise<GetWebhookResponse> {
     const data = await this.resend.get<GetWebhookResponseSuccess>(
-      `/webhooks/${id}`,
+      `/webhooks/${encodeURIComponent(id)}`,
     );
 
     return data;
@@ -75,7 +75,7 @@ export class Webhooks {
     payload: UpdateWebhookOptions,
   ): Promise<UpdateWebhookResponse> {
     const data = await this.resend.patch<UpdateWebhookResponseSuccess>(
-      `/webhooks/${id}`,
+      `/webhooks/${encodeURIComponent(id)}`,
       payload,
     );
     return data;
@@ -83,7 +83,7 @@ export class Webhooks {
 
   async remove(id: string): Promise<RemoveWebhookResponse> {
     const data = await this.resend.delete<RemoveWebhookResponseSuccess>(
-      `/webhooks/${id}`,
+      `/webhooks/${encodeURIComponent(id)}`,
     );
     return data;
   }

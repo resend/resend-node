@@ -823,7 +823,7 @@ describe('Contacts', () => {
         `);
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/contacts/team@resend.com',
+          'https://api.resend.com/contacts/team%40resend.com',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),

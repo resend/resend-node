@@ -29,9 +29,9 @@ export class ContactTopics {
       };
     }
 
-    const identifier = payload.email ? payload.email : payload.id;
+    const identifier = payload.email ?? payload.id ?? '';
     return this.resend.patch<UpdateContactTopicsResponseSuccess>(
-      `/contacts/${identifier}/topics`,
+      `/contacts/${encodeURIComponent(identifier)}/topics`,
       payload.topics,
     );
   }
@@ -51,11 +51,11 @@ export class ContactTopics {
       };
     }
 
-    const identifier = options.email ? options.email : options.id;
+    const identifier = options.email ?? options.id ?? '';
     const queryString = buildPaginationQuery(options);
     const url = queryString
-      ? `/contacts/${identifier}/topics?${queryString}`
-      : `/contacts/${identifier}/topics`;
+      ? `/contacts/${encodeURIComponent(identifier)}/topics?${queryString}`
+      : `/contacts/${encodeURIComponent(identifier)}/topics`;
 
     return this.resend.get<ListContactTopicsResponseSuccess>(url);
   }

@@ -55,7 +55,7 @@ export class Topics {
       };
     }
     const data = await this.resend.get<GetTopicResponseSuccess>(
-      `/topics/${id}`,
+      `/topics/${encodeURIComponent(id)}`,
     );
 
     return data;
@@ -75,7 +75,7 @@ export class Topics {
     }
 
     const data = await this.resend.patch<UpdateTopicResponseSuccess>(
-      `/topics/${payload.id}`,
+      `/topics/${encodeURIComponent(payload.id)}`,
       payload,
     );
 
@@ -96,7 +96,7 @@ export class Topics {
     }
 
     const data = await this.resend.delete<RemoveTopicResponseSuccess>(
-      `/topics/${id}`,
+      `/topics/${encodeURIComponent(id)}`,
     );
 
     return data;
