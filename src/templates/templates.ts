@@ -1,6 +1,7 @@
 import type { PaginationOptions } from '../common/interfaces';
 import { getPaginationQueryProperties } from '../common/utils/get-pagination-query-properties';
 import { parseTemplateToApiOptions } from '../common/utils/parse-template-to-api-options';
+import { render } from '../render';
 import type { Resend } from '../resend';
 import { ChainableTemplateResult } from './chainable-template-result';
 import type {
@@ -35,7 +36,6 @@ import type {
 } from './interfaces/update-template.interface';
 
 export class Templates {
-  private renderAsync?: (component: React.ReactElement) => Promise<string>;
   constructor(private readonly resend: Resend) {}
 
   create(
@@ -46,26 +46,13 @@ export class Templates {
   }
   // This creation process is being done separately from the public create so that
   // the user can chain the publish operation after the create operation. Otherwise, due
-  // to the async nature of the renderAsync, the return type would be
+  // to the async nature of the render, the return type would be
   // Promise<ChainableTemplateResult<CreateTemplateResponse>> which wouldn't be chainable.
   private async performCreate(
     payload: CreateTemplateOptions,
   ): Promise<CreateTemplateResponse> {
     if (payload.react) {
-      if (!this.renderAsync) {
-        try {
-          const { renderAsync } = await import('@react-email/render');
-          this.renderAsync = renderAsync;
-        } catch {
-          throw new Error(
-            'Failed to render React component. Make sure to install `@react-email/render`',
-          );
-        }
-      }
-
-      payload.html = await this.renderAsync(
-        payload.react as React.ReactElement,
-      );
+      payload.html = await render(payload.react);
     }
 
     return this.resend.post<CreateTemplateResponseSuccess>(
