@@ -36,9 +36,7 @@ export class Broadcasts {
     payload: CreateBroadcastOptions,
     options: CreateBroadcastRequestOptions = {},
   ): Promise<SendBroadcastResponse> {
-    if (payload.react) {
-      payload.html = await render(payload.react);
-    }
+    const html = payload.react ? await render(payload.react) : payload.html;
 
     const data = await this.resend.post<SendBroadcastResponseSuccess>(
       '/broadcasts',
@@ -48,7 +46,7 @@ export class Broadcasts {
         audience_id: payload.audienceId,
         preview_text: payload.previewText,
         from: payload.from,
-        html: payload.html,
+        html,
         reply_to: payload.replyTo,
         subject: payload.subject,
         text: payload.text,
@@ -102,9 +100,7 @@ export class Broadcasts {
     id: string,
     payload: UpdateBroadcastOptions,
   ): Promise<UpdateBroadcastResponse> {
-    if (payload.react) {
-      payload.html = await render(payload.react);
-    }
+    const html = payload.react ? await render(payload.react) : payload.html;
 
     const data = await this.resend.patch<UpdateBroadcastResponseSuccess>(
       `/broadcasts/${id}`,
@@ -113,7 +109,7 @@ export class Broadcasts {
         segment_id: payload.segmentId,
         audience_id: payload.audienceId,
         from: payload.from,
-        html: payload.html,
+        html,
         text: payload.text,
         subject: payload.subject,
         reply_to: payload.replyTo,

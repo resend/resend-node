@@ -122,6 +122,26 @@ describe('Emails', () => {
       expect(headers.has('Idempotency-Key')).toBe(true);
       expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
     });
+
+    it('does not mutate payload when using React component', async () => {
+      const mockReact = { type: 'div', props: { children: 'Hi' } };
+      const payload: CreateEmailOptions = {
+        from: 'admin@resend.com',
+        to: 'user@resend.com',
+        subject: 'React Email',
+        react: mockReact as React.ReactElement,
+      };
+      const originalPayload = { ...payload };
+
+      fetchMock.mockOnce(JSON.stringify({ id: 'id-123' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+
+      await resend.emails.create(payload);
+
+      expect(payload).toEqual(originalPayload);
+    });
   });
 
   describe('send', () => {
