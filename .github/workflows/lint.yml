@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   lint:
-    runs-on: buildjet-2vcpu-ubuntu-2204
+    runs-on: depot-ubuntu-22.04-2
     container:
       image: node:24-slim
       # credentials:
