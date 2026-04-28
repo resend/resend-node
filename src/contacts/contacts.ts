@@ -30,6 +30,18 @@ import type {
 import { ContactSegments } from './segments/contact-segments';
 import { ContactTopics } from './topics/contact-topics';
 
+function normalizeRemoveResponse(
+  response: RemoveContactsResponse,
+): RemoveContactsResponse {
+  if (response.data && 'id' in response.data) {
+    return {
+      ...response,
+      data: { ...response.data, contact: response.data.id },
+    };
+  }
+  return response;
+}
+
 export class Contacts {
   readonly topics: ContactTopics;
   readonly segments: ContactSegments;
@@ -183,8 +195,10 @@ export class Contacts {
 
   async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
     if (typeof payload === 'string') {
-      return this.resend.delete<RemoveContactsResponseSuccess>(
-        `/contacts/${payload}`,
+      return normalizeRemoveResponse(
+        await this.resend.delete<RemoveContactsResponseSuccess>(
+          `/contacts/${payload}`,
+        ),
       );
     }
 
@@ -201,15 +215,19 @@ export class Contacts {
     }
 
     if (!payload.audienceId) {
-      return this.resend.delete<RemoveContactsResponseSuccess>(
-        `/contacts/${payload?.email ? payload?.email : payload?.id}`,
+      return normalizeRemoveResponse(
+        await this.resend.delete<RemoveContactsResponseSuccess>(
+          `/contacts/${payload?.email ? payload?.email : payload?.id}`,
+        ),
       );
     }
 
-    return this.resend.delete<RemoveContactsResponseSuccess>(
-      `/audiences/${payload.audienceId}/contacts/${
-        payload?.email ? payload?.email : payload?.id
-      }`,
+    return normalizeRemoveResponse(
+      await this.resend.delete<RemoveContactsResponseSuccess>(
+        `/audiences/${payload.audienceId}/contacts/${
+          payload?.email ? payload?.email : payload?.id
+        }`,
+      ),
     );
   }
 }

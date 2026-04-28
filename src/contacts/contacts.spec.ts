@@ -876,11 +876,12 @@ describe('Contacts', () => {
   describe('remove', () => {
     it('removes a contact by id', async () => {
       const response: RemoveContactsResponseSuccess = {
-        contact: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+        id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
         object: 'contact',
         deleted: true,
+        contact: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
+      fetchMock.mockOnce(JSON.stringify({ ...response, contact: undefined }), {
         status: 200,
         headers: {
           'content-type': 'application/json',
@@ -899,6 +900,7 @@ describe('Contacts', () => {
           "data": {
             "contact": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
             "deleted": true,
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
             "object": "contact",
           },
           "error": null,
@@ -911,11 +913,12 @@ describe('Contacts', () => {
 
     it('removes a contact by email', async () => {
       const response: RemoveContactsResponseSuccess = {
-        contact: 'acme@example.com',
+        id: 'acme@example.com',
         object: 'contact',
         deleted: true,
+        contact: 'acme@example.com',
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
+      fetchMock.mockOnce(JSON.stringify({ ...response, contact: undefined }), {
         status: 200,
         headers: {
           'content-type': 'application/json',
@@ -934,6 +937,7 @@ describe('Contacts', () => {
           "data": {
             "contact": "acme@example.com",
             "deleted": true,
+            "id": "acme@example.com",
             "object": "contact",
           },
           "error": null,
@@ -946,11 +950,12 @@ describe('Contacts', () => {
 
     it('removes a contact by string id', async () => {
       const response: RemoveContactsResponseSuccess = {
-        contact: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+        id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
         object: 'contact',
         deleted: true,
+        contact: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
       };
-      fetchMock.mockOnce(JSON.stringify(response), {
+      fetchMock.mockOnce(JSON.stringify({ ...response, contact: undefined }), {
         status: 200,
         headers: {
           'content-type': 'application/json',
@@ -965,6 +970,7 @@ describe('Contacts', () => {
           "data": {
             "contact": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
             "deleted": true,
+            "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
             "object": "contact",
           },
           "error": null,
