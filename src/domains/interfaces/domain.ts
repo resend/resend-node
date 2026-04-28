@@ -21,12 +21,20 @@ export type DomainNameservers =
   | 'Unidentified'
   | 'Vercel';
 
-export type DomainStatus =
+export type DomainRecordStatus =
   | 'pending'
   | 'verified'
   | 'failed'
   | 'temporary_failure'
   | 'not_started';
+
+export type DomainStatus =
+  | 'pending'
+  | 'verified'
+  | 'failed'
+  | 'not_started'
+  | 'partially_verified'
+  | 'partially_failed';
 
 export type DomainRecords =
   | DomainSpfRecord
@@ -41,7 +49,7 @@ export interface DomainSpfRecord {
   value: string;
   type: 'MX' | 'TXT';
   ttl: string;
-  status: DomainStatus;
+  status: DomainRecordStatus;
   routing_policy?: string;
   priority?: number;
   proxy_status?: 'enable' | 'disable';
@@ -53,7 +61,7 @@ export interface DomainDkimRecord {
   value: string;
   type: 'CNAME' | 'TXT';
   ttl: string;
-  status: DomainStatus;
+  status: DomainRecordStatus;
   routing_policy?: string;
   priority?: number;
   proxy_status?: 'enable' | 'disable';
@@ -65,7 +73,7 @@ export interface ReceivingRecord {
   value: string;
   type: 'MX';
   ttl: string;
-  status: DomainStatus;
+  status: DomainRecordStatus;
   priority: number;
 }
 
@@ -75,7 +83,7 @@ export interface TrackingRecord {
   value: string;
   type: 'CNAME';
   ttl: string;
-  status: DomainStatus;
+  status: DomainRecordStatus;
 }
 
 export interface TrackingCaaRecord {
@@ -84,7 +92,7 @@ export interface TrackingCaaRecord {
   value: string;
   type: 'CAA';
   ttl: string;
-  status: DomainStatus;
+  status: DomainRecordStatus;
 }
 
 export interface Domain {
