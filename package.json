@@ -74,7 +74,7 @@
     "@types/react": "19.2.14",
     "cross-env": "10.1.0",
     "dotenv": "17.4.2",
-    "pkg-pr-new": "0.0.66",
+    "pkg-pr-new": "0.0.69",
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "rimraf": "6.1.3",
