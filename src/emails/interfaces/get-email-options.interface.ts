@@ -18,7 +18,8 @@ export interface GetEmailResponseSuccess {
     | 'opened'
     | 'queued'
     | 'scheduled'
-    | 'sent';
+    | 'sent'
+    | 'suppressed';
   reply_to: string[] | null;
   subject: string;
   text: string | null;
