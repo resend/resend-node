@@ -25,7 +25,7 @@ jobs:
       - name: pnpm setup
         uses: pnpm/action-setup@8912a9102ac27614460f54aedde9e1e7f9aec20d
       - name: Install packages
-        run: pnpm install --foce --no-cache
+        run: pnpm install --force --no-cache
       - name: Run build
         run: pnpm build
       - name: Run Tests
