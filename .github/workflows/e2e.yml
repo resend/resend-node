@@ -25,7 +25,7 @@ jobs:
       - name: pnpm setup
         uses: pnpm/action-setup@8912a9102ac27614460f54aedde9e1e7f9aec20d
       - name: Install packages
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --no-cache
       - name: Run build
         run: pnpm build
       - name: Run E2E Tests
