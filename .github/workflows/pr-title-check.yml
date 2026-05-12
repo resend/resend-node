@@ -2,7 +2,8 @@ name: PR Title Check
 on:
   pull_request:
     types: [opened, edited, synchronize]
-permissions: 
+permissions:
+  contents: read
   pull-requests: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,11 +11,9 @@ concurrency:
 jobs:
   pr-title-check:
     runs-on: depot-ubuntu-22.04-2
+    timeout-minutes: 5
     container:
       image: node:24-slim
-      # credentials:
-      #   username: ${{ vars.DOCKER_HUB_USERNAME || '' }}
-      #   password: ${{ secrets.DOCKER_HUB_API_KEY || '' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
