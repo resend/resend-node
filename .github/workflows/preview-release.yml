@@ -13,7 +13,8 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   preview-release:
     runs-on: depot-ubuntu-22.04-8
-    permissions: 
+    timeout-minutes: 15
+    permissions:
       contents: write
       pull-requests: write
     container:
