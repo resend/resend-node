@@ -17,7 +17,7 @@ const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
 
 const mockRenderAsync = vi.fn();
-vi.mock('@react-email/render', () => ({
+vi.mock('react-email', () => ({
   renderAsync: mockRenderAsync,
 }));
 

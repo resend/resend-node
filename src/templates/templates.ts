@@ -54,11 +54,11 @@ export class Templates {
     if (payload.react) {
       if (!this.renderAsync) {
         try {
-          const { renderAsync } = await import('@react-email/render');
+          const { renderAsync } = await import('react-email');
           this.renderAsync = renderAsync;
         } catch {
           throw new Error(
-            'Failed to render React component. Make sure to install `@react-email/render`',
+            'Failed to render React component. Make sure to install `react-email`',
           );
         }
       }

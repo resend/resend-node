@@ -57,10 +57,10 @@
     "svix": "1.92.2"
   },
   "peerDependencies": {
-    "@react-email/render": "*"
+    "react-email": "*"
   },
   "peerDependenciesMeta": {
-    "@react-email/render": {
+    "react-email": {
       "optional": true
     }
   },

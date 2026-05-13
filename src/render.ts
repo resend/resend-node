@@ -1,10 +1,10 @@
 export async function render(node: React.ReactNode) {
-  let render: typeof import('@react-email/render').render;
+  let render: typeof import('react-email').render;
   try {
-    ({ render } = await import('@react-email/render'));
+    ({ render } = await import('react-email'));
   } catch {
     throw new Error(
-      'Failed to render React component. Make sure to install `@react-email/render` or `@react-email/components`.',
+      'Failed to render React component. Make sure to install `react-email`.',
     );
   }
 
