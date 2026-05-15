@@ -7,9 +7,13 @@ on:
     paths:
       - 'src/**/*.ts'
 
+permissions:
+  contents: read
+
 jobs:
   update-docs:
     runs-on: depot-ubuntu-22.04-2
+    timeout-minutes: 10
     name: Trigger Mintlify Agent
     if: github.repository == 'resend/resend-node'
     permissions:
