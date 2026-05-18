@@ -15,12 +15,23 @@ export interface CreateDomainOptions {
   openTracking?: boolean;
   clickTracking?: boolean;
   tls?: 'enforced' | 'opportunistic';
+  trackingSubdomain?: string;
 }
 
 export interface CreateDomainRequestOptions extends PostOptions {}
 
 export interface CreateDomainResponseSuccess
-  extends Pick<Domain, 'name' | 'id' | 'status' | 'created_at' | 'region'> {
+  extends Pick<
+    Domain,
+    | 'name'
+    | 'id'
+    | 'status'
+    | 'created_at'
+    | 'region'
+    | 'open_tracking'
+    | 'click_tracking'
+    | 'tracking_subdomain'
+  > {
   records: DomainRecords[];
   capabilities: DomainCapabilities;
 }

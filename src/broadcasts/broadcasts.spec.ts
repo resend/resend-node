@@ -83,6 +83,26 @@ describe('Broadcasts', () => {
       `);
     });
 
+    it('does not mutate payload when using React component', async () => {
+      const mockReact = { type: 'div', props: { children: 'Hi' } };
+      const payload: CreateBroadcastOptions = {
+        from: 'bu@resend.com',
+        segmentId: '0192f4ed-c2e9-7112-9c13-b04a043e23ee',
+        subject: 'React Broadcast',
+        react: mockReact as React.ReactElement,
+      };
+      const originalPayload = { ...payload };
+
+      fetchMock.mockOnce(JSON.stringify({ id: 'id-123' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+
+      await resend.broadcasts.create(payload);
+
+      expect(payload).toEqual(originalPayload);
+    });
+
     it('creates and sends a broadcast', async () => {
       const response: CreateBroadcastResponseSuccess = {
         id: '71cdfe68-cf79-473a-a9d7-21f91db6a526',

@@ -69,6 +69,7 @@ export class Domains {
         open_tracking: payload.openTracking,
         tls: payload.tls,
         capabilities: payload.capabilities,
+        tracking_subdomain: payload.trackingSubdomain,
       },
     );
     return data;

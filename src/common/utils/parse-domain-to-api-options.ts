@@ -12,5 +12,6 @@ export function parseDomainToApiOptions(
     open_tracking: domain.openTracking,
     click_tracking: domain.clickTracking,
     tls: domain.tls,
+    tracking_subdomain: domain.trackingSubdomain,
   };
 }
