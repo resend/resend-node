@@ -5,6 +5,7 @@ export * from './batch/interfaces';
 export * from './broadcasts/interfaces';
 export * from './common/interfaces';
 export * from './contact-properties/interfaces';
+export * from './contacts/imports/interfaces';
 export * from './contacts/interfaces';
 export * from './contacts/segments/interfaces';
 export * from './contacts/topics/interfaces';
