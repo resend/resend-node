@@ -51,13 +51,15 @@ export class Templates {
   private async performCreate(
     payload: CreateTemplateOptions,
   ): Promise<CreateTemplateResponse> {
+    const body: CreateTemplateOptions = { ...payload };
+
     if (payload.react) {
-      payload.html = await render(payload.react);
+      body.html = await render(payload.react);
     }
 
     return this.resend.post<CreateTemplateResponseSuccess>(
       '/templates',
-      parseTemplateToApiOptions(payload),
+      parseTemplateToApiOptions(body),
     );
   }
 

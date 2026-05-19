@@ -16,7 +16,7 @@ export async function render(node: React.ReactNode): Promise<string> {
   const renderFn = mod.render ?? mod.renderAsync;
   if (typeof renderFn !== 'function') {
     throw new Error(
-      'Failed to render React component. Make sure to install `@react-email/render` (or an older version with renderAsync).',
+      'Could not find the React Email render function, this is most likely a bug, please file an issue.',
     );
   }
 

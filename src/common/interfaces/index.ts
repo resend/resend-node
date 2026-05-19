@@ -1,4 +1,5 @@
 export * from './attachment.interface';
+export * from './delete-option.interface';
 export * from './domain-api-options.interface';
 export * from './email-api-options.interface';
 export * from './get-option.interface';

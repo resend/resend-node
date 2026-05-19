@@ -21,17 +21,27 @@ export type DomainNameservers =
   | 'Unidentified'
   | 'Vercel';
 
-export type DomainStatus =
+export type DomainRecordStatus =
   | 'pending'
   | 'verified'
   | 'failed'
   | 'temporary_failure'
   | 'not_started';
 
+export type DomainStatus =
+  | 'pending'
+  | 'verified'
+  | 'failed'
+  | 'not_started'
+  | 'partially_verified'
+  | 'partially_failed';
+
 export type DomainRecords =
   | DomainSpfRecord
   | DomainDkimRecord
-  | ReceivingRecord;
+  | ReceivingRecord
+  | TrackingRecord
+  | TrackingCaaRecord;
 
 export interface DomainSpfRecord {
   record: 'SPF';
@@ -39,7 +49,7 @@ export interface DomainSpfRecord {
   value: string;
   type: 'MX' | 'TXT';
   ttl: string;
-  status: DomainStatus;
+  status: DomainRecordStatus;
   routing_policy?: string;
   priority?: number;
   proxy_status?: 'enable' | 'disable';
@@ -51,7 +61,7 @@ export interface DomainDkimRecord {
   value: string;
   type: 'CNAME' | 'TXT';
   ttl: string;
-  status: DomainStatus;
+  status: DomainRecordStatus;
   routing_policy?: string;
   priority?: number;
   proxy_status?: 'enable' | 'disable';
@@ -63,8 +73,26 @@ export interface ReceivingRecord {
   value: string;
   type: 'MX';
   ttl: string;
-  status: DomainStatus;
+  status: DomainRecordStatus;
   priority: number;
+}
+
+export interface TrackingRecord {
+  record: 'Tracking';
+  name: string;
+  value: string;
+  type: 'CNAME';
+  ttl: string;
+  status: DomainRecordStatus;
+}
+
+export interface TrackingCaaRecord {
+  record: 'TrackingCAA';
+  name: string;
+  value: string;
+  type: 'CAA';
+  ttl: string;
+  status: DomainRecordStatus;
 }
 
 export interface Domain {
@@ -74,4 +102,7 @@ export interface Domain {
   created_at: string;
   region: DomainRegion;
   capabilities: DomainCapabilities;
+  open_tracking?: boolean;
+  click_tracking?: boolean;
+  tracking_subdomain?: string;
 }
