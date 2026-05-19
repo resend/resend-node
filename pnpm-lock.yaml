@@ -15,8 +15,8 @@ importers:
         specifier: 2.7.4
         version: 2.7.4
       svix:
-        specifier: 1.92.2
-        version: 1.92.2
+        specifier: 1.94.0
+        version: 1.94.0
     devDependencies:
       '@biomejs/biome':
         specifier: 2.4.14
@@ -1436,8 +1436,8 @@ packages:
     resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
     engines: {node: '>=0.6.19'}
 
-  svix@1.92.2:
-    resolution: {integrity: sha512-ZmuA3UVvlnF9EgxlzmPtF7CKjQb64Z6OFlyfdDfU0sdcC7dJa+3aOYX5B9mA+RS6ch1AxBa4UP/l6KmqfGtWBQ==}
+  svix@1.94.0:
+    resolution: {integrity: sha512-FuP5nJez1P/SeK+4zOBI8RrNhtrzMTBSvwuD4yGGsn+Af2yQazid6OwPu3fpZpMifOJxrJua0su/dYB5fe4v9Q==}
 
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
@@ -2972,7 +2972,7 @@ snapshots:
 
   string-argv@0.3.2: {}
 
-  svix@1.92.2:
+  svix@1.94.0:
     dependencies:
       standardwebhooks: 1.0.0
 
