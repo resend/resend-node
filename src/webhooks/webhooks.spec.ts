@@ -1,4 +1,4 @@
-import { Webhook } from 'svix';
+import { Webhook } from 'standardwebhooks';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
@@ -30,7 +30,7 @@ const mocks = vi.hoisted(() => {
   };
 });
 
-vi.mock('svix', () => ({
+vi.mock('standardwebhooks', () => ({
   Webhook: mocks.webhookConstructor,
 }));
 
@@ -556,7 +556,7 @@ describe('Webhooks', () => {
   });
 
   describe('verify', () => {
-    it('verifies payload using svix headers', () => {
+    it('verifies payload using webhook headers', () => {
       const options = {
         payload: '{"type":"email.sent"}',
         headers: {
@@ -575,9 +575,9 @@ describe('Webhooks', () => {
 
       expect(Webhook).toHaveBeenCalledWith(options.webhookSecret);
       expect(mocks.verify).toHaveBeenCalledWith(options.payload, {
-        'svix-id': options.headers.id,
-        'svix-timestamp': options.headers.timestamp,
-        'svix-signature': options.headers.signature,
+        'webhook-id': options.headers.id,
+        'webhook-timestamp': options.headers.timestamp,
+        'webhook-signature': options.headers.signature,
       });
       expect(result).toBe(expectedResult);
     });
