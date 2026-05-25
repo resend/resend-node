@@ -1,4 +1,4 @@
-import { Webhook } from 'svix';
+import { Webhook } from 'standardwebhooks';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
@@ -91,9 +91,9 @@ export class Webhooks {
   verify(payload: VerifyWebhookOptions): WebhookEventPayload {
     const webhook = new Webhook(payload.webhookSecret);
     return webhook.verify(payload.payload, {
-      'svix-id': payload.headers.id,
-      'svix-timestamp': payload.headers.timestamp,
-      'svix-signature': payload.headers.signature,
+      'webhook-id': payload.headers.id,
+      'webhook-timestamp': payload.headers.timestamp,
+      'webhook-signature': payload.headers.signature,
     }) as WebhookEventPayload;
   }
 }

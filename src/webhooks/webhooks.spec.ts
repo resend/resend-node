@@ -1,4 +1,4 @@
-import { Webhook } from 'svix';
+import { Webhook } from 'standardwebhooks';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
@@ -16,31 +16,12 @@ import type {
   UpdateWebhookResponseSuccess,
 } from './interfaces/update-webhook.interface';
 
-const mocks = vi.hoisted(() => {
-  const verify = vi.fn();
-  const webhookConstructor = vi.fn(function (this: {
-    verify: ReturnType<typeof vi.fn>;
-  }) {
-    this.verify = verify;
-  });
-
-  return {
-    verify,
-    webhookConstructor,
-  };
-});
-
-vi.mock('svix', () => ({
-  Webhook: mocks.webhookConstructor,
-}));
-
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
 
 describe('Webhooks', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks.verify.mockReset();
     fetchMock.resetMocks();
   });
 
@@ -556,30 +537,48 @@ describe('Webhooks', () => {
   });
 
   describe('verify', () => {
-    it('verifies payload using svix headers', () => {
-      const options = {
-        payload: '{"type":"email.sent"}',
-        headers: {
-          id: 'msg_123',
-          timestamp: '1713984875',
-          signature: 'v1,some-signature',
-        },
-        webhookSecret: 'whsec_123',
-      };
+    // Uses the real `standardwebhooks` library to sign a payload the same way
+    // Resend does, then verifies it round-trips through `resend.webhooks.verify`.
+    const webhookSecret = 'whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw';
 
-      const expectedResult = { id: 'msg_123', status: 'verified' };
-      mocks.verify.mockReturnValue(expectedResult);
+    it('verifies a genuinely signed payload and returns the parsed event', () => {
+      const id = 'msg_2KWPBgLlAfxdpx2AI54pPJ85f4W';
+      const payload = JSON.stringify({ type: 'email.sent', data: { id } });
+      // Fresh timestamp: standardwebhooks rejects signatures outside a 5-min window.
+      const timestamp = Math.floor(Date.now() / 1000);
+      const signature = new Webhook(webhookSecret).sign(
+        id,
+        new Date(timestamp * 1000),
+        payload,
+      );
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      const result = resend.webhooks.verify(options);
-
-      expect(Webhook).toHaveBeenCalledWith(options.webhookSecret);
-      expect(mocks.verify).toHaveBeenCalledWith(options.payload, {
-        'svix-id': options.headers.id,
-        'svix-timestamp': options.headers.timestamp,
-        'svix-signature': options.headers.signature,
+      const result = resend.webhooks.verify({
+        payload,
+        headers: { id, timestamp: String(timestamp), signature },
+        webhookSecret,
       });
-      expect(result).toBe(expectedResult);
+
+      expect(result).toEqual({ type: 'email.sent', data: { id } });
+    });
+
+    it('throws when the signature does not match', () => {
+      const id = 'msg_2KWPBgLlAfxdpx2AI54pPJ85f4W';
+      const payload = JSON.stringify({ type: 'email.sent' });
+      const timestamp = Math.floor(Date.now() / 1000);
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      expect(() =>
+        resend.webhooks.verify({
+          payload,
+          headers: {
+            id,
+            timestamp: String(timestamp),
+            signature: 'v1,not-a-valid-signature',
+          },
+          webhookSecret,
+        }),
+      ).toThrow();
     });
   });
 });
