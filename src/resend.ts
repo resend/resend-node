@@ -166,6 +166,13 @@ export class Resend {
     options: PostOptions & IdempotentRequest = {},
   ) {
     const headers = new Headers(this.headers);
+    const isFormData =
+      typeof FormData !== 'undefined' && entity instanceof FormData;
+
+    if (isFormData) {
+      headers.delete('Content-Type');
+    }
+
     if (options.headers) {
       for (const [key, value] of new Headers(options.headers).entries()) {
         headers.set(key, value);
@@ -176,7 +183,7 @@ export class Resend {
     }
     const requestOptions = {
       method: 'POST',
-      body: JSON.stringify(entity),
+      body: isFormData ? entity : JSON.stringify(entity),
       ...options,
       headers,
     };
