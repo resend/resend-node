@@ -24,7 +24,6 @@ describe('ContactImports', () => {
         file: new Blob(['email,first_name\nfoo@example.com,Foo\n'], {
           type: 'text/csv',
         }),
-        fileName: 'contacts.csv',
         columnMap: {
           email: 'Email',
           firstName: 'First Name',

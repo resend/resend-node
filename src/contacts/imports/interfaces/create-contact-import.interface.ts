@@ -29,7 +29,6 @@ export interface ContactImportTopic {
 
 export interface CreateContactImportOptions {
   file: Blob;
-  fileName?: string;
   columnMap?: ContactImportColumnMap;
   onConflict?: ContactImportOnConflict;
   onError?: ContactImportOnError;

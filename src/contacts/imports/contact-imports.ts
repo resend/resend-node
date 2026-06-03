@@ -17,6 +17,8 @@ import type {
   ListContactImportsResponseSuccess,
 } from './interfaces/list-contact-imports.interface';
 
+type ContactImportFormFieldValue = string | object | null;
+
 export class ContactImports {
   constructor(private readonly resend: Resend) {}
 
@@ -59,28 +61,24 @@ export class ContactImports {
   private buildCreateFormData(payload: CreateContactImportOptions): FormData {
     const formData = new FormData();
 
-    if (payload.fileName !== undefined) {
-      formData.append('file', payload.file, payload.fileName);
-    } else {
-      formData.append('file', payload.file);
-    }
+    formData.append('file', payload.file);
 
-    this.appendJsonField(
+    this.appendField(
       formData,
       'column_map',
-      this.buildColumnMap(payload.columnMap),
+      this.buildColumnMap(payload.columnMap ?? null),
     );
-    this.appendStringField(formData, 'on_conflict', payload.onConflict);
-    this.appendStringField(formData, 'on_error', payload.onError);
-    this.appendJsonField(formData, 'segments', payload.segments);
-    this.appendJsonField(formData, 'topics', payload.topics);
+    this.appendField(formData, 'on_conflict', payload.onConflict ?? null);
+    this.appendField(formData, 'on_error', payload.onError ?? null);
+    this.appendField(formData, 'segments', payload.segments ?? null);
+    this.appendField(formData, 'topics', payload.topics ?? null);
 
     return formData;
   }
 
-  private buildColumnMap(columnMap?: ContactImportColumnMap) {
-    if (columnMap === undefined) {
-      return undefined;
+  private buildColumnMap(columnMap: ContactImportColumnMap | null) {
+    if (columnMap === null) {
+      return null;
     }
 
     return {
@@ -92,23 +90,18 @@ export class ContactImports {
     };
   }
 
-  private appendJsonField(
+  private appendField(
     formData: FormData,
     name: string,
-    value: unknown,
+    value: ContactImportFormFieldValue,
   ): void {
-    if (value !== undefined) {
-      formData.append(name, JSON.stringify(value));
+    if (value === null) {
+      return;
     }
-  }
 
-  private appendStringField(
-    formData: FormData,
-    name: string,
-    value: string | undefined,
-  ): void {
-    if (value !== undefined) {
-      formData.append(name, value);
-    }
+    formData.append(
+      name,
+      typeof value === 'string' ? value : JSON.stringify(value),
+    );
   }
 }
