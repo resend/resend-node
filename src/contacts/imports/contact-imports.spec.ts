@@ -37,7 +37,6 @@ describe('ContactImports', () => {
           },
         },
         onConflict: 'upsert',
-        onError: 'abort',
         segments: [{ id: '78261eea-8f8b-4381-83c6-79fa7120f1cf' }],
         topics: [
           {
@@ -94,7 +93,6 @@ describe('ContactImports', () => {
         }),
       );
       expect(body.get('on_conflict')).toBe('upsert');
-      expect(body.get('on_error')).toBe('abort');
       expect(body.get('segments')).toBe(
         JSON.stringify([{ id: '78261eea-8f8b-4381-83c6-79fa7120f1cf' }]),
       );

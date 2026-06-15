@@ -2,7 +2,6 @@ import type { PostOptions } from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
 
 export type ContactImportOnConflict = 'upsert' | 'skip';
-export type ContactImportOnError = 'continue' | 'abort';
 export type ContactImportPropertyType = 'string' | 'number' | 'boolean';
 
 export interface ContactImportPropertyMapping {
@@ -31,7 +30,6 @@ export interface CreateContactImportOptions {
   file: Blob;
   columnMap?: ContactImportColumnMap;
   onConflict?: ContactImportOnConflict;
-  onError?: ContactImportOnError;
   segments?: ContactImportSegment[];
   topics?: ContactImportTopic[];
 }
