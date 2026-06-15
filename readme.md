@@ -82,7 +82,7 @@ const { data } = await resend.emails.send({
   html: '<strong>it works!</strong>',
 });
 
-console.log(`Emaill ${data.id} with customer HTML content has been sent.`);
+console.log(`Email ${data.id} with custom HTML content has been sent.`);
 ```
 
 ## Send email using React
