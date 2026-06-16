@@ -8,6 +8,7 @@ import type {
   ForwardReceivingEmailResponseSuccess,
 } from './interfaces/forward-receiving-email.interface';
 import type {
+  GetReceivingEmailOptions,
   GetReceivingEmailResponse,
   GetReceivingEmailResponseSuccess,
 } from './interfaces/get-receiving-email.interface';
@@ -24,10 +25,22 @@ export class Receiving {
     this.attachments = new Attachments(resend);
   }
 
-  async get(id: string): Promise<GetReceivingEmailResponse> {
-    const data = await this.resend.get<GetReceivingEmailResponseSuccess>(
-      `/emails/receiving/${id}`,
-    );
+  async get(
+    id: string,
+    options: GetReceivingEmailOptions = {},
+  ): Promise<GetReceivingEmailResponse> {
+    const searchParams = new URLSearchParams();
+
+    if (options.html_format !== undefined) {
+      searchParams.set('html_format', options.html_format);
+    }
+
+    const queryString = searchParams.toString();
+    const path = queryString
+      ? `/emails/receiving/${id}?${queryString}`
+      : `/emails/receiving/${id}`;
+
+    const data = await this.resend.get<GetReceivingEmailResponseSuccess>(path);
 
     return data;
   }
