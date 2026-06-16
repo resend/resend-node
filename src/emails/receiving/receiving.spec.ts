@@ -203,6 +203,79 @@ describe('Receiving', () => {
         `);
       });
     });
+
+    describe('query parameters', () => {
+      it('supports the html_format parameter', async () => {
+        const apiResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'sender@example.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: 'Test inbound email',
+          html: '<p>hello world</p>',
+          text: 'hello world',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          headers: {},
+          raw: null,
+          attachments: [],
+          message_id: 'msg_123',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(apiResponse), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        await resend.emails.receiving.get(
+          '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          { html_format: 'cid' },
+        );
+
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff?html_format=cid',
+        );
+      });
+
+      it('omits the query string when no options are passed', async () => {
+        const apiResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'sender@example.com',
+          created_at: '2023-04-07T23:13:52.669661+00:00',
+          subject: 'Test inbound email',
+          html: '<p>hello world</p>',
+          text: 'hello world',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          headers: {},
+          raw: null,
+          attachments: [],
+          message_id: 'msg_123',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(apiResponse), {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        await resend.emails.receiving.get(
+          '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+        );
+
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails/receiving/67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+        );
+      });
+    });
   });
 
   describe('list', () => {
