@@ -8,6 +8,7 @@ export * from './contact-properties/interfaces';
 export * from './contacts/interfaces';
 export * from './contacts/segments/interfaces';
 export * from './contacts/topics/interfaces';
+export * from './domains/claims/interfaces';
 export * from './domains/interfaces';
 export * from './emails/attachments/interfaces';
 export * from './emails/interfaces';
