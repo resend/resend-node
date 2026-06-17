@@ -1,0 +1,19 @@
+src/domains/claims/domain-claims.spec.ts
+  s_a6cd714394bc21::t_d04453fb7fe48a 1-132
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "6d343ad292a891acd8acb66b08f0f2be301f6b74",
+  "prompts": {},
+  "sessions": {
+    "s_a6cd714394bc21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a62b2e71-32c2-4f96-be76-1e3903e0a2b0",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "João Melo <jopcmelo@gmail.com>"
+    }
+  }
+}
