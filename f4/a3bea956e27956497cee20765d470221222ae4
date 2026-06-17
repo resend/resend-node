@@ -1,0 +1,27 @@
+src/domains/claims/interfaces/claim-domain-options.interface.ts
+  s_a6cd714394bc21::t_d06cea07ee9cf8 1-21
+src/domains/claims/interfaces/domain-claim.ts
+  s_a6cd714394bc21::t_c0b483b8ea799e 1-36
+src/domains/claims/interfaces/verify-domain-claim.interface.ts
+  s_a6cd714394bc21::t_201e5a046f5ef8 1-9
+src/domains/claims/interfaces/get-domain-claim.interface.ts
+  s_a6cd714394bc21::t_4949916ef7ce47 1-8
+src/domains/claims/interfaces/index.ts
+  s_a6cd714394bc21::t_86640d02ec34b9 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "f4a3bea956e27956497cee20765d470221222ae4",
+  "prompts": {},
+  "sessions": {
+    "s_a6cd714394bc21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a62b2e71-32c2-4f96-be76-1e3903e0a2b0",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "João Melo <jopcmelo@gmail.com>"
+    }
+  }
+}
