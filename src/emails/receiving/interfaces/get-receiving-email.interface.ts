@@ -27,6 +27,7 @@ export interface GetReceivingEmailResponseSuccess {
   bcc: string[] | null;
   cc: string[] | null;
   reply_to: string[] | null;
+  received_for: string[];
   html: string | null;
   text: string | null;
   headers: Record<string, string> | null;
