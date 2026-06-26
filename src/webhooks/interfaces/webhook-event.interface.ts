@@ -65,6 +65,7 @@ interface ReceivedEmailEventData {
   to: string[];
   bcc: string[];
   cc: string[];
+  received_for: string[];
   message_id: string;
   subject: string;
   attachments: ReceivedEmailAttachment[];

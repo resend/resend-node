@@ -65,6 +65,7 @@ describe('Receiving', () => {
           bcc: null,
           cc: ['cc@example.com'],
           reply_to: ['reply@example.com'],
+          received_for: [],
           headers: {
             example: 'value',
           },
@@ -127,6 +128,7 @@ describe('Receiving', () => {
                 "download_url": "https://example.com/emails/raw/abc123?signature=xyz789",
                 "expires_at": "2023-04-08T00:13:52.669661+00:00",
               },
+              "received_for": [],
               "reply_to": [
                 "reply@example.com",
               ],
@@ -157,6 +159,7 @@ describe('Receiving', () => {
           bcc: null,
           cc: null,
           reply_to: null,
+          received_for: [],
           headers: {},
           raw: null,
           attachments: [],
@@ -188,6 +191,7 @@ describe('Receiving', () => {
               "message_id": "msg_456",
               "object": "email",
               "raw": null,
+              "received_for": [],
               "reply_to": null,
               "subject": "Test inbound email",
               "text": "hello world",
@@ -218,6 +222,7 @@ describe('Receiving', () => {
           bcc: null,
           cc: null,
           reply_to: null,
+          received_for: [],
           headers: {},
           raw: null,
           attachments: [],
@@ -254,6 +259,7 @@ describe('Receiving', () => {
           bcc: null,
           cc: null,
           reply_to: null,
+          received_for: [],
           headers: {},
           raw: null,
           attachments: [],
@@ -549,6 +555,7 @@ describe('Receiving', () => {
           bcc: null,
           cc: null,
           reply_to: null,
+          received_for: [],
           headers: {},
           raw: null,
           attachments: [],
@@ -587,6 +594,7 @@ describe('Receiving', () => {
           bcc: null,
           cc: null,
           reply_to: null,
+          received_for: [],
           headers: {},
           raw: {
             download_url: 'https://example.com/raw-email-download',
@@ -635,6 +643,7 @@ describe('Receiving', () => {
           bcc: null,
           cc: null,
           reply_to: null,
+          received_for: [],
           headers: {},
           raw: {
             download_url: 'https://example.com/raw-email-download',
@@ -723,6 +732,7 @@ Content-Type: text/html; charset="UTF-8"
           bcc: null,
           cc: null,
           reply_to: null,
+          received_for: [],
           headers: {},
           raw: {
             download_url: 'https://example.com/raw-email-download',
@@ -816,6 +826,7 @@ ${attachmentContent}
           bcc: null,
           cc: null,
           reply_to: null,
+          received_for: [],
           headers: {},
           raw: {
             download_url: 'https://example.com/raw-email-download',
@@ -903,6 +914,7 @@ ${imageContent}
           bcc: null,
           cc: null,
           reply_to: null,
+          received_for: [],
           headers: {},
           raw: {
             download_url: 'https://example.com/raw-email-download',
@@ -964,6 +976,7 @@ hello world`;
           bcc: null,
           cc: null,
           reply_to: null,
+          received_for: [],
           headers: {},
           raw: {
             download_url: 'https://example.com/raw-email-download',
@@ -1048,6 +1061,7 @@ hello world`;
           bcc: null,
           cc: null,
           reply_to: null,
+          received_for: [],
           headers: {},
           raw: {
             download_url: 'https://example.com/raw-email-download',
