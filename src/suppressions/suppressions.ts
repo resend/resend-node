@@ -54,7 +54,7 @@ export class Suppressions {
     }
 
     return this.resend.get<GetSuppressionResponseSuccess>(
-      `/suppressions/${idOrEmail}`,
+      `/suppressions/${encodeURIComponent(idOrEmail)}`,
     );
   }
 
@@ -64,7 +64,7 @@ export class Suppressions {
     }
 
     return this.resend.delete<RemoveSuppressionResponseSuccess>(
-      `/suppressions/${idOrEmail}`,
+      `/suppressions/${encodeURIComponent(idOrEmail)}`,
     );
   }
 }

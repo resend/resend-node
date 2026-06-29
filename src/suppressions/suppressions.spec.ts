@@ -86,6 +86,16 @@ describe('Suppressions', () => {
       `);
     });
 
+    it('encodes the identifier in the path', async () => {
+      mockSuccessResponse({}, {});
+
+      const resend = new Resend(API_KEY);
+      await resend.suppressions.get('user+tag@example.com');
+
+      const [url] = fetchMock.mock.calls[0];
+      expect(url).toContain('/suppressions/user%2Btag%40example.com');
+    });
+
     it('returns error when missing identifier', async () => {
       const resend = new Resend(API_KEY);
       await expect(resend.suppressions.get('')).resolves.toMatchInlineSnapshot(`
@@ -129,7 +139,8 @@ describe('Suppressions', () => {
         }
       `);
 
-      const [, options] = fetchMock.mock.calls[0];
+      const [url, options] = fetchMock.mock.calls[0];
+      expect(url).toContain('/suppressions/blocked%40example.com');
       expect(options?.method).toBe('DELETE');
     });
 
