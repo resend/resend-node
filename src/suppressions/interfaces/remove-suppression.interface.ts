@@ -3,7 +3,7 @@ import type { Response } from '../../interfaces';
 export interface RemoveSuppressionResponseSuccess {
   object: 'suppression';
   id: string;
-  deleted: true;
+  deleted: boolean;
 }
 
 export type RemoveSuppressionResponse =
