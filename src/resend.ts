@@ -19,6 +19,7 @@ import { Events } from './events/events';
 import type { ErrorResponse, Response } from './interfaces';
 import { Logs } from './logs/logs';
 import { Segments } from './segments/segments';
+import { Suppressions } from './suppressions/suppressions';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
 import { Webhooks } from './webhooks/webhooks';
@@ -63,6 +64,7 @@ export class Resend {
   readonly emails = new Emails(this);
   readonly events = new Events(this);
   readonly logs = new Logs(this);
+  readonly suppressions = new Suppressions(this);
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
   readonly webhooks = new Webhooks(this);
