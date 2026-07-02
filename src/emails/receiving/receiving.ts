@@ -4,6 +4,7 @@ import type { Resend } from '../../resend';
 import { Attachments } from './attachments/attachments';
 import type {
   ForwardReceivingEmailOptions,
+  ForwardReceivingEmailRequestOptions,
   ForwardReceivingEmailResponse,
   ForwardReceivingEmailResponseSuccess,
 } from './interfaces/forward-receiving-email.interface';
@@ -60,6 +61,7 @@ export class Receiving {
 
   async forward(
     options: ForwardReceivingEmailOptions,
+    requestOptions: ForwardReceivingEmailRequestOptions = {},
   ): Promise<ForwardReceivingEmailResponse> {
     const { emailId, to, from } = options;
     const passthrough = options.passthrough !== false;
@@ -79,29 +81,38 @@ export class Receiving {
     const originalSubject = email.subject || '(no subject)';
 
     if (passthrough) {
-      return this.forwardPassthrough(email, {
-        to,
-        from,
-        subject: originalSubject,
-      });
+      return this.forwardPassthrough(
+        email,
+        {
+          to,
+          from,
+          subject: originalSubject,
+        },
+        requestOptions,
+      );
     }
 
     const forwardSubject = originalSubject.startsWith('Fwd:')
       ? originalSubject
       : `Fwd: ${originalSubject}`;
 
-    return this.forwardWrapped(email, {
-      to,
-      from,
-      subject: forwardSubject,
-      text: 'text' in options ? options.text : undefined,
-      html: 'html' in options ? options.html : undefined,
-    });
+    return this.forwardWrapped(
+      email,
+      {
+        to,
+        from,
+        subject: forwardSubject,
+        text: 'text' in options ? options.text : undefined,
+        html: 'html' in options ? options.html : undefined,
+      },
+      requestOptions,
+    );
   }
 
   private async forwardPassthrough(
     email: GetReceivingEmailResponseSuccess,
     options: { to: string | string[]; from: string; subject: string },
+    requestOptions: ForwardReceivingEmailRequestOptions,
   ): Promise<ForwardReceivingEmailResponse> {
     const { to, from, subject } = options;
 
@@ -160,6 +171,7 @@ export class Receiving {
         html: parsed.html || undefined,
         attachments: attachments.length > 0 ? attachments : undefined,
       },
+      requestOptions,
     );
 
     return data;
@@ -174,6 +186,7 @@ export class Receiving {
       text?: string;
       html?: string;
     },
+    requestOptions: ForwardReceivingEmailRequestOptions,
   ): Promise<ForwardReceivingEmailResponse> {
     const { to, from, subject, text, html } = options;
 
@@ -221,6 +234,7 @@ export class Receiving {
           },
         ],
       },
+      requestOptions,
     );
 
     return data;

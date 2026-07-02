@@ -1112,5 +1112,111 @@ hello world`;
         );
       });
     });
+
+    describe('request options', () => {
+      const getEmailResponse: GetReceivingEmailResponseSuccess = {
+        object: 'email' as const,
+        id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+        to: ['received@example.com'],
+        from: 'original-sender@example.com',
+        created_at: '2023-04-07T23:13:52.669661+00:00',
+        subject: 'Original Subject',
+        html: '<p>hello world</p>',
+        text: 'hello world',
+        bcc: null,
+        cc: null,
+        reply_to: null,
+        received_for: [],
+        headers: {},
+        raw: {
+          download_url: 'https://example.com/raw-email-download',
+          expires_at: '2023-04-08T00:13:52.669661+00:00',
+        },
+        attachments: [],
+        message_id: 'msg_123',
+      };
+
+      const rawEmailContent =
+        'From: original-sender@example.com\r\nTo: received@example.com\r\nSubject: Original Subject\r\n\r\nhello world';
+
+      const forwardResponse: ForwardReceivingEmailResponseSuccess = {
+        id: 'new-email-id-123',
+      };
+
+      beforeEach(() => {
+        fetchMock.mockOnce(JSON.stringify(getEmailResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        fetchMock.mockOnce(rawEmailContent, {
+          status: 200,
+          headers: { 'content-type': 'message/rfc822' },
+        });
+
+        fetchMock.mockOnce(JSON.stringify(forwardResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+      });
+
+      it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
+        const idempotencyKey = 'forward:67d9bcdb-5a02-42d7-8da9-0d6feea18cff';
+
+        await resend.emails.receiving.forward(
+          {
+            emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+            to: 'forward@example.com',
+            from: 'sender@verified-domain.com',
+          },
+          { idempotencyKey },
+        );
+
+        const sendEmailCall = fetchMock.mock.calls[2];
+        expect(sendEmailCall[0]).toBe('https://api.resend.com/emails');
+
+        const headers = new Headers(sendEmailCall[1]?.headers);
+        expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
+
+        const getEmailCall = fetchMock.mock.calls[0];
+        const getEmailHeaders = new Headers(getEmailCall[1]?.headers);
+        expect(getEmailHeaders.has('Idempotency-Key')).toBe(false);
+      });
+
+      it('sends the Idempotency-Key header in wrapped mode', async () => {
+        const idempotencyKey = 'forward:67d9bcdb-5a02-42d7-8da9-0d6feea18cff';
+
+        await resend.emails.receiving.forward(
+          {
+            emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+            to: 'forward@example.com',
+            from: 'sender@verified-domain.com',
+            passthrough: false,
+            text: 'Forwarded email.',
+          },
+          { idempotencyKey },
+        );
+
+        const sendEmailCall = fetchMock.mock.calls[2];
+        expect(sendEmailCall[0]).toBe('https://api.resend.com/emails');
+
+        const headers = new Headers(sendEmailCall[1]?.headers);
+        expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
+      });
+
+      it('does not send the Idempotency-Key header when idempotencyKey is not provided', async () => {
+        await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+        });
+
+        const sendEmailCall = fetchMock.mock.calls[2];
+        expect(sendEmailCall[0]).toBe('https://api.resend.com/emails');
+
+        const headers = new Headers(sendEmailCall[1]?.headers);
+        expect(headers.has('Idempotency-Key')).toBe(false);
+      });
+    });
   });
 });
