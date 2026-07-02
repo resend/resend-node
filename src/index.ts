@@ -20,6 +20,7 @@ export * from './logs/interfaces';
 export * from './oauth-grants/interfaces';
 export { Resend, type ResendOptions } from './resend';
 export * from './segments/interfaces';
+export * from './suppressions/interfaces';
 export * from './templates/interfaces';
 export * from './topics/interfaces';
 export * from './webhooks/interfaces';
