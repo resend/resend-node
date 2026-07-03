@@ -23,7 +23,17 @@ const paper = tegami({
     github({
       repo: 'resend/resend-node',
       versionPr: {
-        base: 'main',
+        // Versioning happens on canary (version.yml): the Version Packages PR
+        // targets canary with the bumped versions and the publish lock.
+        // Publishing happens in release.yml: prereleases straight from
+        // canary, stable versions from main once canary is promoted.
+        //
+        // To enter prerelease mode, add to the tegami() options above:
+        //   packages: { resend: { prerelease: 'canary' } }
+        // Bumps then produce x.y.z-canary.N under the "canary" npm dist-tag.
+        // Removing it graduates the next release back to a stable version,
+        // replaying the changelogs consumed during the prerelease cycle.
+        base: 'canary',
         // Put the release version in the Version Packages PR title (e.g.
         // "chore: release 6.17.0"), matching this repo's existing release
         // commit convention and its PR title check.

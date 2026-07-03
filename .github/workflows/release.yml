@@ -1,20 +1,33 @@
 name: Release
 
+# Publishing half of the release flow (versioning runs on canary, see
+# version.yml). Publishes whatever the committed publish lock holds that
+# isn't on npm yet, then creates the git tag and GitHub release. Runs on both
+# branches, but each publishes a different channel:
+#
+#   - canary: prerelease versions only (x.y.z-canary.N, npm dist-tag
+#     "canary"), so prereleases ship as soon as their version PR merges.
+#     Stable versions never publish from here — they wait for promotion.
+#   - main: everything, once canary is promoted.
+#
+# Already-published versions are skipped, so re-runs, promotions with nothing
+# pending, and prereleases that already shipped from canary are safe no-ops.
 on:
   push:
     branches:
       - main
+      - canary
+  workflow_dispatch:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
-  contents: write # commit version bumps, push the Version Packages branch
+  contents: write # push git tags, create GitHub releases
   id-token: write # npm trusted publishing (OIDC) — no NPM_TOKEN needed
-  pull-requests: write # open the Version Packages PR
 
 jobs:
   release:
-    name: Version & publish
+    name: Publish
     # npm trusted publishing (OIDC) is only supported on GitHub-hosted runners,
     # so this job intentionally does not use the depot-* runners or a
     # container image like the rest of this repo's workflows.
@@ -39,11 +52,15 @@ jobs:
       - name: Install packages
         run: pnpm install --frozen-lockfile
 
-      # `tegami ci` publishes via `pnpm publish`, which runs this package's
-      # own `prepublishOnly` script (`pnpm run build`) — no separate build
-      # step needed here.
-      - name: Version & publish
-        run: pnpm tegami ci
+      - name: Check release channel
+        id: channel
+        run: echo "prerelease=$(node -p "require('./package.json').version.includes('-')")" >> "$GITHUB_OUTPUT"
+
+      # `tegami publish` publishes via `pnpm publish`, which runs this
+      # package's own `prepublishOnly` script (`pnpm run build`) — no separate
+      # build step needed here.
+      - name: Publish
+        if: github.ref_name == 'main' || steps.channel.outputs.prerelease == 'true'
+        run: pnpm tegami publish
         env:
           GITHUB_TOKEN: ${{ github.token }}
-
