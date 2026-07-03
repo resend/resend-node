@@ -44,11 +44,12 @@ const paper = tegami({
         // bumpVersion(), which would double-count the bump.
         create() {
           const version = this.graph.get('npm:resend')?.version;
-          return { title: version ? `chore: release ${version}` : 'chore: release' };
+          return {
+            title: version ? `chore: release ${version}` : 'chore: release',
+          };
         },
       },
     }),
   ],
 });
 void createCli(paper).parseAsync();
-
