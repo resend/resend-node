@@ -14,32 +14,25 @@ permissions:
 jobs:
   preview:
     name: Release preview
+    # No container image: tegami's git plugin needs the runner's git against
+    # the checkout workspace (same reason as version.yml). node:24-slim ships
+    # without git, so the container variant can't run tegami.
     runs-on: depot-ubuntu-22.04-2
     timeout-minutes: 10
-    container:
-      image: node:24-slim
     steps:
-      # node:24-slim ships without git or CA certs; install both before
-      # checkout so actions/checkout does a real clone (with history) instead
-      # of the REST tarball fallback, git can verify GitHub's TLS cert, and
-      # tegami's git plugin can spawn git.
-      - name: Install git
-        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates
-
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
 
-      # checkout only marks the workspace safe in a temporary git config that
-      # is discarded once it finishes. Re-add it to the persistent global
-      # config so tegami's git plugin doesn't hit dubious-ownership
-      # ("not in a git directory") on the root-owned checkout.
-      - name: Mark workspace as safe
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
       - name: pnpm setup
         uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+
+      - name: Setup Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          cache: pnpm
 
       - name: Install packages
         run: pnpm install --frozen-lockfile
