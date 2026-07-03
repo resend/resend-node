@@ -18,6 +18,7 @@ import { Emails } from './emails/emails';
 import { Events } from './events/events';
 import type { ErrorResponse, Response } from './interfaces';
 import { Logs } from './logs/logs';
+import { OAuthGrants } from './oauth-grants/oauth-grants';
 import { Segments } from './segments/segments';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
@@ -63,6 +64,7 @@ export class Resend {
   readonly emails = new Emails(this);
   readonly events = new Events(this);
   readonly logs = new Logs(this);
+  readonly oauthGrants = new OAuthGrants(this);
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
   readonly webhooks = new Webhooks(this);

@@ -17,6 +17,7 @@ export * from './emails/receiving/interfaces';
 export * from './events/interfaces';
 export type { ErrorResponse, Response } from './interfaces';
 export * from './logs/interfaces';
+export * from './oauth-grants/interfaces';
 export { Resend, type ResendOptions } from './resend';
 export * from './segments/interfaces';
 export * from './templates/interfaces';
