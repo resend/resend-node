@@ -22,6 +22,14 @@ const paper = tegami({
   plugins: [
     github({
       repo: 'resend/resend-node',
+      release: {
+        // Default title is `formatPackageVersion(name, version, distTag)`
+        // (e.g. "resend@6.17.0"), independent of the `git.tag` override
+        // below. Reuse `tag` so the release title and its tag/URL match.
+        create({ tag }) {
+          return { title: tag };
+        },
+      },
       versionPr: {
         // Versioning happens on canary (version.yml): the Version Packages PR
         // targets canary with the bumped versions and the publish lock.
