@@ -35,7 +35,7 @@
     "lint": "biome check .",
     "lint:fix": "biome check . --write",
     "prepublishOnly": "pnpm run build",
-    "tegami": "node scripts/tegami.mts",
+    "tegami": "node --experimental-strip-types scripts/tegami.mts",
     "test": "vitest run --exclude e2e",
     "test:dev": "cross-env TEST_MODE=dev vitest run --exclude e2e",
     "test:e2e": "vitest run e2e",
