@@ -1,0 +1,48 @@
+name: Tegami PR Comment
+
+# Posts the preview built by tegami-pr.yml as a PR comment. Triggered by
+# `workflow_run` so it runs in the base-repo context with write permissions,
+# without ever executing the PR's code.
+on:
+  workflow_run:
+    workflows: ['Tegami PR']
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: write
+
+jobs:
+  comment:
+    name: Post preview comment
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: depot-ubuntu-22.04-2
+    timeout-minutes: 10
+    container:
+      image: node:24-slim
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: pnpm setup
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Download preview
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: tegami-pr-preview
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - name: Post preview comment
+        run: pnpm tegami pr comment tegami-pr-preview.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
