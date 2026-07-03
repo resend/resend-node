@@ -31,6 +31,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      # checkout only marks the workspace safe in a temporary git config that
+      # is discarded once it finishes. Re-add it to the persistent global
+      # config so tegami's git plugin doesn't hit dubious-ownership
+      # ("not in a git directory") on the root-owned checkout.
+      - name: Mark workspace as safe
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: pnpm setup
         uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
 
