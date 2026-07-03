@@ -68,7 +68,8 @@ const paper = tegami({
       initPublishPlan({ plan }) {
         for (const [id, packagePlan] of plan.packages) {
           const version = this.graph.get(id)?.version;
-          if (version) packagePlan.git = { ...packagePlan.git, tag: `v${version}` };
+          if (version)
+            packagePlan.git = { ...packagePlan.git, tag: `v${version}` };
         }
       },
     },
