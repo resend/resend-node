@@ -1,0 +1,69 @@
+name: Version
+
+# Versioning half of the release flow (publishing runs on main, see
+# release.yml). On pushes to canary with pending changelogs (.tegami/*.md),
+# opens or updates the Version Packages PR against canary with the bumped
+# versions and the publish lock. While that lock is still unpublished, tegami
+# skips further versioning until main publishes it.
+on:
+  push:
+    branches:
+      - canary
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: read
+
+jobs:
+  version:
+    name: Version packages
+    # No container image: tegami commits and pushes the Version Packages
+    # branch, so it needs the runner's git against the checkout workspace.
+    runs-on: depot-ubuntu-22.04-2
+    timeout-minutes: 10
+    steps:
+      # Push the branch and open the PR as the resend-version-bump GitHub App
+      # instead of the default GITHUB_TOKEN: branches and PRs created with the
+      # default token don't trigger other workflows, so the Version Packages
+      # PR would never get its required CI checks. Same setup as
+      # react-email's bump.yml.
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: pnpm setup
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+
+      - name: Setup Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      # The GIT_* env vars override the github-actions[bot] identity that
+      # tegami's git plugin hardcodes in CI, so the version commit is authored
+      # by the bot that pushes it.
+      - name: Version packages
+        run: pnpm tegami version
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GIT_AUTHOR_NAME: resend-version-bump[bot]
+          GIT_AUTHOR_EMAIL: 277115511+resend-version-bump[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: resend-version-bump[bot]
+          GIT_COMMITTER_EMAIL: 277115511+resend-version-bump[bot]@users.noreply.github.com
