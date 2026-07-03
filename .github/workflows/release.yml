@@ -60,7 +60,7 @@ jobs:
       # package's own `prepublishOnly` script (`pnpm run build`) — no separate
       # build step needed here.
       - name: Publish
-        if: github.ref_name == 'main' || steps.channel.outputs.prerelease == 'true'
+        if: github.ref_name == 'main' || (github.ref_name == 'canary' && steps.channel.outputs.prerelease == 'true')
         run: pnpm tegami publish
         env:
           GITHUB_TOKEN: ${{ github.token }}
