@@ -19,11 +19,12 @@ jobs:
     container:
       image: node:24-slim
     steps:
-      # node:24-slim ships without git; install it before checkout so
-      # actions/checkout does a real clone (with history) instead of the
-      # REST tarball fallback, and so tegami's git plugin can spawn git.
+      # node:24-slim ships without git or CA certs; install both before
+      # checkout so actions/checkout does a real clone (with history) instead
+      # of the REST tarball fallback, git can verify GitHub's TLS cert, and
+      # tegami's git plugin can spawn git.
       - name: Install git
-        run: apt-get update && apt-get install -y --no-install-recommends git
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates
 
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
