@@ -22,6 +22,14 @@ const paper = tegami({
   plugins: [
     github({
       repo: 'resend/resend-node',
+      release: {
+        // Default title is `formatPackageVersion(name, version, distTag)`
+        // (e.g. "resend@6.17.0"), independent of the `git.tag` override
+        // below. Reuse `tag` so the release title and its tag/URL match.
+        create({ tag }) {
+          return { title: tag };
+        },
+      },
       versionPr: {
         // Versioning happens on canary (version.yml): the Version Packages PR
         // targets canary with the bumped versions and the publish lock.
@@ -50,6 +58,21 @@ const paper = tegami({
         },
       },
     }),
+    {
+      name: 'git-tag-format',
+      // The github plugin's git tags default to `resend@6.17.0`. This repo
+      // only ever publishes the one package, so drop that prefix and tag
+      // `v6.17.0` instead, matching this repo's pre-Tegami tags. Runs after
+      // the (enforce: "pre") git plugin's own `initPublishPlan`, which is
+      // what sets `git.tag` in the first place.
+      initPublishPlan({ plan }) {
+        for (const [id, packagePlan] of plan.packages) {
+          const version = this.graph.get(id)?.version;
+          if (version)
+            packagePlan.git = { ...packagePlan.git, tag: `v${version}` };
+        }
+      },
+    },
   ],
 });
 void createCli(paper).parseAsync();
