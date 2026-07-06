@@ -3,7 +3,12 @@ import { ApiKeys } from './api-keys/api-keys';
 import { Automations } from './automations/automations';
 import { Batch } from './batch/batch';
 import { Broadcasts } from './broadcasts/broadcasts';
-import type { GetOptions, PostOptions, PutOptions } from './common/interfaces';
+import type {
+  DeleteOptions,
+  GetOptions,
+  PostOptions,
+  PutOptions,
+} from './common/interfaces';
 import type { IdempotentRequest } from './common/interfaces/idempotent-request.interface';
 import type { PatchOptions } from './common/interfaces/patch-option.interface';
 import { ContactProperties } from './contact-properties/contact-properties';
@@ -13,6 +18,7 @@ import { Emails } from './emails/emails';
 import { Events } from './events/events';
 import type { ErrorResponse, Response } from './interfaces';
 import { Logs } from './logs/logs';
+import { OAuthGrants } from './oauth-grants/oauth-grants';
 import { Segments } from './segments/segments';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
@@ -20,16 +26,27 @@ import { Webhooks } from './webhooks/webhooks';
 
 const defaultBaseUrl = 'https://api.resend.com';
 const defaultUserAgent = `resend-node:${version}`;
-const baseUrl =
-  typeof process !== 'undefined' && process.env
+
+function getDefaultBaseUrl(): string {
+  return typeof process !== 'undefined' && process.env
     ? process.env.RESEND_BASE_URL || defaultBaseUrl
     : defaultBaseUrl;
-const userAgent =
-  typeof process !== 'undefined' && process.env
+}
+
+function getDefaultUserAgent(): string {
+  return typeof process !== 'undefined' && process.env
     ? process.env.RESEND_USER_AGENT || defaultUserAgent
     : defaultUserAgent;
+}
+
+export interface ResendOptions {
+  baseUrl?: string;
+  userAgent?: string;
+}
 
 export class Resend {
+  readonly baseUrl: string;
+  readonly userAgent: string;
   private readonly headers: Headers;
 
   readonly segments = new Segments(this);
@@ -47,11 +64,15 @@ export class Resend {
   readonly emails = new Emails(this);
   readonly events = new Events(this);
   readonly logs = new Logs(this);
+  readonly oauthGrants = new OAuthGrants(this);
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
   readonly webhooks = new Webhooks(this);
 
-  constructor(readonly key?: string) {
+  constructor(
+    readonly key?: string,
+    options?: ResendOptions,
+  ) {
     if (!key) {
       if (typeof process !== 'undefined' && process.env) {
         this.key = process.env.RESEND_API_KEY;
@@ -64,16 +85,19 @@ export class Resend {
       }
     }
 
+    this.baseUrl = options?.baseUrl ?? getDefaultBaseUrl();
+    this.userAgent = options?.userAgent ?? getDefaultUserAgent();
+
     this.headers = new Headers({
       Authorization: `Bearer ${this.key}`,
-      'User-Agent': userAgent,
+      'User-Agent': this.userAgent,
       'Content-Type': 'application/json',
     });
   }
 
   async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
     try {
-      const response = await fetch(`${baseUrl}${path}`, options);
+      const response = await fetch(`${this.baseUrl}${path}`, options);
 
       if (!response.ok) {
         try {
@@ -144,6 +168,13 @@ export class Resend {
     options: PostOptions & IdempotentRequest = {},
   ) {
     const headers = new Headers(this.headers);
+    const isFormData =
+      typeof FormData !== 'undefined' && entity instanceof FormData;
+
+    if (isFormData) {
+      headers.delete('Content-Type');
+    }
+
     if (options.headers) {
       for (const [key, value] of new Headers(options.headers).entries()) {
         headers.set(key, value);
@@ -154,7 +185,7 @@ export class Resend {
     }
     const requestOptions = {
       method: 'POST',
-      body: JSON.stringify(entity),
+      body: isFormData ? entity : JSON.stringify(entity),
       ...options,
       headers,
     };
@@ -212,11 +243,18 @@ export class Resend {
     return this.fetchRequest<T>(path, requestOptions);
   }
 
-  async delete<T>(path: string, query?: unknown) {
+  async delete<T>(path: string, query?: unknown, options: DeleteOptions = {}) {
+    const headers = new Headers(this.headers);
+    if (options.headers) {
+      for (const [key, value] of new Headers(options.headers).entries()) {
+        headers.set(key, value);
+      }
+    }
     const requestOptions = {
       method: 'DELETE',
-      body: JSON.stringify(query),
-      headers: this.headers,
+      body: query === undefined ? undefined : JSON.stringify(query),
+      ...options,
+      headers,
     };
 
     return this.fetchRequest<T>(path, requestOptions);

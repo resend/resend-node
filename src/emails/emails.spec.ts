@@ -122,6 +122,26 @@ describe('Emails', () => {
       expect(headers.has('Idempotency-Key')).toBe(true);
       expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
     });
+
+    it('does not mutate payload when using React component', async () => {
+      const mockReact = { type: 'div', props: { children: 'Hi' } };
+      const payload: CreateEmailOptions = {
+        from: 'admin@resend.com',
+        to: 'user@resend.com',
+        subject: 'React Email',
+        react: mockReact as React.ReactElement,
+      };
+      const originalPayload = { ...payload };
+
+      fetchMock.mockOnce(JSON.stringify({ id: 'id-123' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+
+      await resend.emails.create(payload);
+
+      expect(payload).toEqual(originalPayload);
+    });
   });
 
   describe('send', () => {
@@ -652,6 +672,7 @@ describe('Emails', () => {
         const response: GetEmailResponseSuccess = {
           object: 'email',
           id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          message_id: '<lc2vu8.gpa9o4@email.example.com>',
           to: ['zeno@resend.com'],
           from: 'bu@resend.com',
           created_at: '2023-04-07T23:13:52.669661+00:00',
@@ -684,6 +705,7 @@ describe('Emails', () => {
               "html": "<p>hello hello</p>",
               "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
               "last_event": "delivered",
+              "message_id": "<lc2vu8.gpa9o4@email.example.com>",
               "object": "email",
               "reply_to": null,
               "scheduled_at": null,
@@ -705,6 +727,7 @@ describe('Emails', () => {
         const response: GetEmailResponseSuccess = {
           object: 'email',
           id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          message_id: '<lc2vu8.gpa9o4@email.example.com>',
           to: ['zeno@resend.com'],
           from: 'bu@resend.com',
           created_at: '2023-04-07T23:13:52.669661+00:00',
@@ -740,6 +763,7 @@ describe('Emails', () => {
               "html": "<p>hello hello</p>",
               "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
               "last_event": "delivered",
+              "message_id": "<lc2vu8.gpa9o4@email.example.com>",
               "object": "email",
               "reply_to": null,
               "scheduled_at": null,
@@ -766,6 +790,7 @@ describe('Emails', () => {
       data: [
         {
           id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          message_id: '<lc2vu8.gpa9o4@email.example.com>',
           to: ['zeno@resend.com'],
           from: 'bu@resend.com',
           created_at: '2023-04-07T23:13:52.669661+00:00',

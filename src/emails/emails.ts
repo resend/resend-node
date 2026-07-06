@@ -1,4 +1,3 @@
-import type * as React from 'react';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import { render } from '../render';
@@ -50,13 +49,15 @@ export class Emails {
     payload: CreateEmailOptions,
     options: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
+    const body: CreateEmailOptions = { ...payload };
+
     if (payload.react) {
-      payload.html = await render(payload.react as React.ReactElement);
+      body.html = await render(payload.react);
     }
 
     const data = await this.resend.post<CreateEmailResponseSuccess>(
       '/emails',
-      parseEmailToApiOptions(payload),
+      parseEmailToApiOptions(body),
       options,
     );
 

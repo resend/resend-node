@@ -1,0 +1,11 @@
+core:changelogs:
+  - content: "---\npackages:\n  npm:resend:\n    type: patch\n---\n\n## remove resource field, it was a dead field\n"
+    filename: 2026-07-03-mr5e9nk7.md
+    v: 0.0.0
+core:packages:
+  - changelogIds:
+      - 2026-07-03-mr5e9nk7.md
+    id: npm:resend
+    updated: true
+npm:packages:
+  - id: npm:resend
