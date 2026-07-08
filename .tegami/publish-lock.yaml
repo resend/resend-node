@@ -1,10 +1,10 @@
 core:changelogs:
-  - content: "---\npackages:\n  npm:resend:\n    type: patch\n---\n\n## remove resource field, it was a dead field\n"
-    filename: 2026-07-03-mr5e9nk7.md
+  - content: "---\npackages:\n  npm:resend:\n    type: patch\n---\n\n## fix response types for removing contacts out of segments and removing api keys\n"
+    filename: 2026-07-08-mrcal1b4.md
     v: 0.0.0
 core:packages:
   - changelogIds:
-      - 2026-07-03-mr5e9nk7.md
+      - 2026-07-08-mrcal1b4.md
     id: npm:resend
     updated: true
 npm:packages:
