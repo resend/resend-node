@@ -227,6 +227,7 @@ describe('ContactSegments', () => {
 
       const response: RemoveContactSegmentResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+        audienceId: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
         deleted: true,
       };
 
@@ -238,6 +239,7 @@ describe('ContactSegments', () => {
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
+            "audienceId": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
             "deleted": true,
             "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
           },
@@ -257,6 +259,7 @@ describe('ContactSegments', () => {
 
       const response: RemoveContactSegmentResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+        audienceId: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
         deleted: true,
       };
 
@@ -268,6 +271,7 @@ describe('ContactSegments', () => {
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
+            "audienceId": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
             "deleted": true,
             "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223",
           },
