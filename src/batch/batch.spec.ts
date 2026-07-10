@@ -650,7 +650,7 @@ describe('Batch', () => {
       ]);
     });
 
-    it('forwards attachments in a batch email', async () => {
+    it('forwards attachments and tags in a batch email', async () => {
       const payload: CreateBatchOptions = [
         {
           from: 'bu@resend.com',
