@@ -649,5 +649,34 @@ describe('Batch', () => {
         },
       ]);
     });
+
+    it('forwards attachments in a batch email', async () => {
+      const payload: CreateBatchOptions = [
+        {
+          from: 'bu@resend.com',
+          to: 'zeno@resend.com',
+          subject: 'Hello World',
+          html: '<h1>Hello world</h1>',
+          tags: [{ name: 'category', value: 'confirm_email' }],
+          attachments: [{ content: 'aGVsbG8gd29ybGQ=', filename: 'hello.txt' }],
+        },
+      ];
+
+      mockSuccessResponse(
+        { data: [{ id: 'batch-with-attachment-1' }] },
+        { headers: {} },
+      );
+
+      await resend.batch.send(payload);
+
+      const lastCall = fetchMock.mock.calls[0];
+      const requestBody = JSON.parse(lastCall[1]?.body as string);
+      expect(requestBody[0].attachments).toEqual([
+        { content: 'aGVsbG8gd29ybGQ=', filename: 'hello.txt' },
+      ]);
+      expect(requestBody[0].tags).toEqual([
+        { name: 'category', value: 'confirm_email' },
+      ]);
+    });
   });
 });
