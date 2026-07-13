@@ -1,11 +1,12 @@
 core:changelogs:
-  - content: "---\npackages:\n  npm:resend:\n    type: patch\n---\n\n## fix response types for removing contacts out of segments and removing api keys\n"
-    filename: 2026-07-08-mrcal1b4.md
+  - content: "---\npackages:\n  npm:resend:\n    type: minor\n---\n\n## Add `resend.suppressions` with `add`, `get`, `list`, `remove`, and batch `add`/`remove` methods for managing suppression list entries\n"
+    filename: 2026-07-13-mrjlnp9f.md
     v: 0.0.0
 core:packages:
   - changelogIds:
-      - 2026-07-08-mrcal1b4.md
+      - 2026-07-13-mrjlnp9f.md
     id: npm:resend
     updated: true
 npm:packages:
-  - id: npm:resend
+  - distTag: canary
+    id: npm:resend
