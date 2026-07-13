@@ -1,3 +1,5 @@
+import type { PostOptions } from '../../../common/interfaces';
+import type { IdempotentRequest } from '../../../common/interfaces/idempotent-request.interface';
 import type { RequireAtLeastOne } from '../../../common/interfaces/require-at-least-one';
 import type { Response } from '../../../interfaces';
 
@@ -17,6 +19,10 @@ export type ForwardReceivingEmailOptions =
   | (ForwardReceivingEmailBaseOptions & {
       passthrough: false;
     } & RequireAtLeastOne<ForwardReceivingEmailBodyOptions>);
+
+export interface ForwardReceivingEmailRequestOptions
+  extends PostOptions,
+    IdempotentRequest {}
 
 export interface ForwardReceivingEmailResponseSuccess {
   id: string;

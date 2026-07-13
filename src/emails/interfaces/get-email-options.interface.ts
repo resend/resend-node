@@ -7,6 +7,7 @@ export interface GetEmailResponseSuccess {
   from: string;
   html: string | null;
   id: string;
+  message_id: string;
   last_event:
     | 'bounced'
     | 'canceled'
