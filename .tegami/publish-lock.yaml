@@ -1,0 +1,11 @@
+core:changelogs:
+  - content: "---\npackages:\n  npm:resend:\n    type: patch\n---\n\n## fix response types for removing contacts out of segments and removing api keys\n"
+    filename: 2026-07-08-mrcal1b4.md
+    v: 0.0.0
+core:packages:
+  - changelogIds:
+      - 2026-07-08-mrcal1b4.md
+    id: npm:resend
+    updated: true
+npm:packages:
+  - id: npm:resend

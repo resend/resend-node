@@ -1,6 +1,9 @@
 import type { Response } from '../../interfaces';
+import type { ApiKey } from './api-key';
 
-// biome-ignore lint/complexity/noBannedTypes: allow empty types
-export type RemoveApiKeyResponseSuccess = {};
+export type RemoveApiKeyResponseSuccess = Pick<ApiKey, 'id'> & {
+  object: 'api_key';
+  deleted: boolean;
+};
 
 export type RemoveApiKeyResponse = Response<RemoveApiKeyResponseSuccess>;

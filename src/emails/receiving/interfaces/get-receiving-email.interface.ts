@@ -27,6 +27,7 @@ export interface GetReceivingEmailResponseSuccess {
   bcc: string[] | null;
   cc: string[] | null;
   reply_to: string[] | null;
+  received_for: string[];
   html: string | null;
   text: string | null;
   headers: Record<string, string> | null;
@@ -40,3 +41,13 @@ export interface GetReceivingEmailResponseSuccess {
 
 export type GetReceivingEmailResponse =
   Response<GetReceivingEmailResponseSuccess>;
+
+export interface GetReceivingEmailOptions {
+  /**
+   * Controls how inline images are returned inside `html`. By default (or when
+   * set to `'data_uri'`), inline images appear in `html` as base64 `data:` URIs.
+   * Set to `'cid'` to keep the original `<img src="cid:..." />` references
+   * instead, each of which matches the `content_id` of an attachment.
+   */
+  html_format?: 'data_uri' | 'cid';
+}

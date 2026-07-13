@@ -7,6 +7,7 @@ export type RemoveContactSegmentOptions = ContactSegmentsBaseOptions & {
 
 export interface RemoveContactSegmentResponseSuccess {
   id: string;
+  audienceId: string;
   deleted: boolean;
 }
 

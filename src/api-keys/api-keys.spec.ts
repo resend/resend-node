@@ -402,7 +402,11 @@ describe('API Keys', () => {
 
   describe('remove', () => {
     const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
-    const response: RemoveApiKeyResponseSuccess = {};
+    const response: RemoveApiKeyResponseSuccess = {
+      object: 'api_key',
+      id,
+      deleted: true,
+    };
 
     it('removes an api key', async () => {
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -416,7 +420,11 @@ describe('API Keys', () => {
 
       await expect(resend.apiKeys.remove(id)).resolves.toMatchInlineSnapshot(`
         {
-          "data": {},
+          "data": {
+            "deleted": true,
+            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+            "object": "api_key",
+          },
           "error": null,
           "headers": {
             "content-type": "application/json",

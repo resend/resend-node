@@ -69,7 +69,6 @@ export class ContactImports {
       this.buildColumnMap(payload.columnMap ?? null),
     );
     this.appendField(formData, 'on_conflict', payload.onConflict ?? null);
-    this.appendField(formData, 'on_error', payload.onError ?? null);
     this.appendField(formData, 'segments', payload.segments ?? null);
     this.appendField(formData, 'topics', payload.topics ?? null);
 

@@ -1,6 +1,7 @@
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { parseDomainToApiOptions } from '../common/utils/parse-domain-to-api-options';
 import type { Resend } from '../resend';
+import { DomainClaims } from './claims/domain-claims';
 import type {
   CreateDomainOptions,
   CreateDomainRequestOptions,
@@ -31,7 +32,11 @@ import type {
 } from './interfaces/verify-domain.interface';
 
 export class Domains {
-  constructor(private readonly resend: Resend) {}
+  readonly claims: DomainClaims;
+
+  constructor(private readonly resend: Resend) {
+    this.claims = new DomainClaims(this.resend);
+  }
 
   async create(
     payload: CreateDomainOptions,
