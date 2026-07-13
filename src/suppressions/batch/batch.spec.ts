@@ -107,7 +107,9 @@ describe('Suppressions batch', () => {
         ids: ['e169aa45-1ecf-4183-9955-b1499d5701d3'],
       });
 
-      const [, options] = fetchMock.mock.calls[0];
+      const [url, options] = fetchMock.mock.calls[0];
+      expect(url).toContain('/suppressions/batch/remove');
+      expect(options?.method).toBe('POST');
       expect(JSON.parse(options?.body as string)).toEqual({
         ids: ['e169aa45-1ecf-4183-9955-b1499d5701d3'],
       });
