@@ -20,7 +20,7 @@ import type {
   RemoveSuppressionResponseSuccess,
 } from './interfaces/remove-suppression.interface';
 
-const missingIdentifierError = {
+const missingIdentifierError = () => ({
   data: null,
   headers: null,
   error: {
@@ -28,7 +28,7 @@ const missingIdentifierError = {
     statusCode: null,
     name: 'missing_required_field' as const,
   },
-};
+});
 
 export class Suppressions {
   readonly batch: Batch;
@@ -55,7 +55,7 @@ export class Suppressions {
 
   async get(idOrEmail: string): Promise<GetSuppressionResponse> {
     if (!idOrEmail) {
-      return missingIdentifierError;
+      return missingIdentifierError();
     }
 
     return this.resend.get<GetSuppressionResponseSuccess>(
@@ -65,7 +65,7 @@ export class Suppressions {
 
   async remove(idOrEmail: string): Promise<RemoveSuppressionResponse> {
     if (!idOrEmail) {
-      return missingIdentifierError;
+      return missingIdentifierError();
     }
 
     return this.resend.delete<RemoveSuppressionResponseSuccess>(
