@@ -57,10 +57,9 @@ describe('Suppressions', () => {
         object: 'suppression',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         email: 'blocked@example.com',
-        reason: 'bounce',
+        origin: 'bounce',
         source_id: null,
         created_at: '2024-01-16T18:12:26.514Z',
-        expires_at: null,
       };
       mockSuccessResponse(response, {});
 
@@ -72,10 +71,9 @@ describe('Suppressions', () => {
           "data": {
             "created_at": "2024-01-16T18:12:26.514Z",
             "email": "blocked@example.com",
-            "expires_at": null,
             "id": "fd61172c-cafc-40f5-b049-b45947779a29",
             "object": "suppression",
-            "reason": "bounce",
+            "origin": "bounce",
             "source_id": null,
           },
           "error": null,
@@ -172,10 +170,9 @@ describe('Suppressions', () => {
           object: 'suppression',
           id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
           email: 'blocked@example.com',
-          reason: 'complaint',
+          origin: 'complaint',
           source_id: null,
           created_at: '2023-04-07T23:13:52.669661+00:00',
-          expires_at: null,
         },
       ],
     };
@@ -192,14 +189,14 @@ describe('Suppressions', () => {
       expect(url).not.toContain('?');
     });
 
-    it('appends reason and pagination to the query', async () => {
+    it('appends origin and pagination to the query', async () => {
       mockSuccessResponse(listResponse, {});
 
       const resend = new Resend(API_KEY);
-      await resend.suppressions.list({ reason: 'bounce', limit: 50 });
+      await resend.suppressions.list({ origin: 'bounce', limit: 50 });
 
       const [url] = fetchMock.mock.calls[0];
-      expect(url).toContain('reason=bounce');
+      expect(url).toContain('origin=bounce');
       expect(url).toContain('limit=50');
     });
   });

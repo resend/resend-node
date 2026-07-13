@@ -5,11 +5,11 @@ import type {
 import type { Response } from '../../interfaces';
 import type {
   SuppressionListEntry,
-  SuppressionReason,
+  SuppressionOrigin,
 } from './suppression-list-entry';
 
 export type ListSuppressionsOptions = PaginationOptions & {
-  reason?: SuppressionReason;
+  origin?: SuppressionOrigin;
 };
 
 export type ListSuppressionsResponseSuccess = PaginatedData<

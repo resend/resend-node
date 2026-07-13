@@ -1,5 +1,6 @@
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
+import { Batch } from './batch/batch';
 import type {
   AddSuppressionOptions,
   AddSuppressionResponse,
@@ -30,7 +31,11 @@ const missingIdentifierError = {
 };
 
 export class Suppressions {
-  constructor(private readonly resend: Resend) {}
+  readonly batch: Batch;
+
+  constructor(private readonly resend: Resend) {
+    this.batch = new Batch(resend);
+  }
 
   async add(options: AddSuppressionOptions): Promise<AddSuppressionResponse> {
     return this.resend.post<AddSuppressionResponseSuccess>(
@@ -70,11 +75,11 @@ export class Suppressions {
 }
 
 function buildSuppressionsQuery(options: ListSuppressionsOptions): string {
-  const { reason, ...pagination } = options;
+  const { origin, ...pagination } = options;
   const searchParams = new URLSearchParams(buildPaginationQuery(pagination));
 
-  if (reason) {
-    searchParams.set('reason', reason);
+  if (origin) {
+    searchParams.set('origin', origin);
   }
 
   return searchParams.toString();

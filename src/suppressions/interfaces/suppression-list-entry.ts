@@ -1,11 +1,10 @@
-export type SuppressionReason = 'bounce' | 'complaint' | 'manual';
+export type SuppressionOrigin = 'bounce' | 'complaint' | 'manual';
 
 export interface SuppressionListEntry {
   object: 'suppression';
   id: string;
   email: string;
-  reason: SuppressionReason;
+  origin: SuppressionOrigin;
   source_id: string | null;
   created_at: string;
-  expires_at: string | null;
 }
