@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "esbuild": "0.28.0",
+    "esbuild": "0.28.1",
     "resend": "../.."
   },
   "scripts": {
