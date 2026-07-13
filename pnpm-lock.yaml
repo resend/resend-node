@@ -12,8 +12,8 @@ importers:
         specifier: '*'
         version: 2.0.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       postal-mime:
-        specifier: 2.7.4
-        version: 2.7.4
+        specifier: 2.7.5
+        version: 2.7.5
       standardwebhooks:
         specifier: 1.0.0
         version: 1.0.0
@@ -1288,8 +1288,8 @@ packages:
   pkg-types@1.3.1:
     resolution: {integrity: sha512-/Jm5M4RvtBFVkKWRu2BLUTNP8/M2a+UwuAX+ae4770q1qVGtfjG+WTCupoZixokjmHiry8uI+dlY8KXYV5HVVQ==}
 
-  postal-mime@2.7.4:
-    resolution: {integrity: sha512-0WdnFQYUrPGGTFu1uOqD2s7omwua8xaeYGdO6rb88oD5yJ/4pPHDA4sdWqfD8wQVfCny563n/HQS7zTFft+f/g==}
+  postal-mime@2.7.5:
+    resolution: {integrity: sha512-GNEXKvWFQnbgO5NlrGzVa0FmWzBZ24PersAWErttSg1Hjpf0ATxTwS5DOMGaOpTG6bUh5cTr7xi0jAD942wCJA==}
 
   postcss@8.5.14:
     resolution: {integrity: sha512-SoSL4+OSEtR99LHFZQiJLkT59C5B1amGO1NzTwj7TT1qCUgUO6hxOvzkOYxD+vMrXBM3XJIKzokoERdqQq/Zmg==}
@@ -2828,7 +2828,7 @@ snapshots:
       mlly: 1.8.0
       pathe: 2.0.3
 
-  postal-mime@2.7.4: {}
+  postal-mime@2.7.5: {}
 
   postcss@8.5.14:
     dependencies:
