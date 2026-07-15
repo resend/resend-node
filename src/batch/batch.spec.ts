@@ -152,6 +152,79 @@ describe('Batch', () => {
       const usedIdempotencyKey = lastCall[1]?.headers.get('Idempotency-Key');
       expect(usedIdempotencyKey).toBe(idempotencyKey);
     });
+
+    it('sends emails with tags and scheduledAt', async () => {
+      const payload: CreateBatchOptions = [
+        {
+          from: 'admin@resend.com',
+          to: 'user1@resend.com',
+          subject: 'Scheduled Email 1',
+          html: '<h1>Hello</h1>',
+          tags: [{ name: 'category', value: 'welcome' }],
+          scheduledAt: 'in 1 hour',
+        },
+        {
+          from: 'admin@resend.com',
+          to: 'user2@resend.com',
+          subject: 'Scheduled Email 2',
+          html: '<h1>Hi</h1>',
+          tags: [
+            { name: 'category', value: 'newsletter' },
+            { name: 'campaign', value: 'summer-2026' },
+          ],
+          scheduledAt: '2026-07-16T10:00:00.000Z',
+        },
+      ];
+
+      mockSuccessResponse(
+        {
+          data: [{ id: 'scheduled-batch-1' }, { id: 'scheduled-batch-2' }],
+        },
+        {
+          headers: {},
+        },
+      );
+
+      await resend.batch.create(payload);
+
+      const lastCall = fetchMock.mock.calls[0];
+      const requestBody = JSON.parse(lastCall[1]?.body as string);
+      expect(requestBody).toEqual([
+        {
+          attachments: undefined,
+          bcc: undefined,
+          cc: undefined,
+          from: 'admin@resend.com',
+          headers: undefined,
+          html: '<h1>Hello</h1>',
+          reply_to: undefined,
+          scheduled_at: 'in 1 hour',
+          subject: 'Scheduled Email 1',
+          tags: [{ name: 'category', value: 'welcome' }],
+          text: undefined,
+          to: 'user1@resend.com',
+          template: undefined,
+        },
+        {
+          attachments: undefined,
+          bcc: undefined,
+          cc: undefined,
+          from: 'admin@resend.com',
+          headers: undefined,
+          html: '<h1>Hi</h1>',
+          reply_to: undefined,
+          scheduled_at: '2026-07-16T10:00:00.000Z',
+          subject: 'Scheduled Email 2',
+          tags: [
+            { name: 'category', value: 'newsletter' },
+            { name: 'campaign', value: 'summer-2026' },
+          ],
+          text: undefined,
+          to: 'user2@resend.com',
+          template: undefined,
+        },
+      ]);
+    });
   });
 
   describe('send', () => {
@@ -593,6 +666,7 @@ describe('Batch', () => {
           to: 'subscriber@example.com',
           replyTo: 'noreply@example.com',
           scheduledAt: 'in 1 hour',
+          tags: [{ name: 'type', value: 'newsletter' }],
         },
       ];
 
@@ -636,7 +710,7 @@ describe('Batch', () => {
           reply_to: 'noreply@example.com',
           scheduled_at: 'in 1 hour',
           subject: 'Custom Subject Override',
-          tags: undefined,
+          tags: [{ name: 'type', value: 'newsletter' }],
           text: undefined,
           to: 'subscriber@example.com',
           template: {
