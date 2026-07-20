@@ -6,6 +6,7 @@ import type {
   CreateBroadcastOptions,
   CreateBroadcastResponseSuccess,
 } from './interfaces/create-broadcast-options.interface';
+import type { GetBroadcastMetricsResponseSuccess } from './interfaces/get-broadcast-metrics.interface';
 import type { GetBroadcastResponseSuccess } from './interfaces/get-broadcast.interface';
 import type { ListBroadcastsResponseSuccess } from './interfaces/list-broadcasts.interface';
 import type { RemoveBroadcastResponseSuccess } from './interfaces/remove-broadcast.interface';
@@ -584,6 +585,115 @@ describe('Broadcasts', () => {
             "subject": "hello world",
             "text": "Hello world",
             "topic_id": "9f31e56e-3083-46cf-8e96-c6995e0e576a",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+    });
+  });
+
+  describe('metrics', () => {
+    describe('when broadcast not found', () => {
+      it('returns error', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          statusCode: 404,
+          message: 'Broadcast not found',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = resend.broadcasts.metrics(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+        );
+
+        await expect(result).resolves.toMatchInlineSnapshot(`
+          {
+            "data": null,
+            "error": {
+              "message": "Broadcast not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+      });
+    });
+
+    it('retrieves broadcast metrics', async () => {
+      const response: GetBroadcastMetricsResponseSuccess = {
+        object: 'broadcast_metrics',
+        broadcast_id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+        total: 12345,
+        sent: 12000,
+        delivered: { count: 11800, rate: 98.3 },
+        opened: { count: 6000, rate: 50 },
+        clicked: { count: 1200, rate: 10 },
+        bounced: { count: 200, rate: 1.7 },
+        complained: { count: 12, rate: 0.1 },
+        unsubscribed: { count: 30, rate: 0.25 },
+        suppressed: { count: 5, rate: 0.04 },
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.broadcasts.metrics('559ac32e-9ef5-46fb-82a1-b76b840c0f7b'),
+      ).resolves.toMatchInlineSnapshot(`
+        {
+          "data": {
+            "bounced": {
+              "count": 200,
+              "rate": 1.7,
+            },
+            "broadcast_id": "559ac32e-9ef5-46fb-82a1-b76b840c0f7b",
+            "clicked": {
+              "count": 1200,
+              "rate": 10,
+            },
+            "complained": {
+              "count": 12,
+              "rate": 0.1,
+            },
+            "delivered": {
+              "count": 11800,
+              "rate": 98.3,
+            },
+            "object": "broadcast_metrics",
+            "opened": {
+              "count": 6000,
+              "rate": 50,
+            },
+            "sent": 12000,
+            "suppressed": {
+              "count": 5,
+              "rate": 0.04,
+            },
+            "total": 12345,
+            "unsubscribed": {
+              "count": 30,
+              "rate": 0.25,
+            },
           },
           "error": null,
           "headers": {

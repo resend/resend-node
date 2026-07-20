@@ -6,6 +6,10 @@ import type {
   CreateBroadcastRequestOptions,
 } from './interfaces/create-broadcast-options.interface';
 import type {
+  GetBroadcastMetricsResponse,
+  GetBroadcastMetricsResponseSuccess,
+} from './interfaces/get-broadcast-metrics.interface';
+import type {
   GetBroadcastResponse,
   GetBroadcastResponseSuccess,
 } from './interfaces/get-broadcast.interface';
@@ -85,6 +89,13 @@ export class Broadcasts {
   async get(id: string): Promise<GetBroadcastResponse> {
     const data = await this.resend.get<GetBroadcastResponseSuccess>(
       `/broadcasts/${id}`,
+    );
+    return data;
+  }
+
+  async metrics(id: string): Promise<GetBroadcastMetricsResponse> {
+    const data = await this.resend.get<GetBroadcastMetricsResponseSuccess>(
+      `/broadcasts/${id}/metrics`,
     );
     return data;
   }
