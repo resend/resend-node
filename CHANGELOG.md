@@ -1,3 +1,7 @@
+## resend@6.18.1-preview-test.0 (preview-test)
+
+### Test the preview release pipeline (no library changes)
+
 ## resend@6.18.0
 
 ### Support tags and scheduledAt in batch email options
