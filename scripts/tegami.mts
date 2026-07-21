@@ -7,11 +7,6 @@ import { createCli } from 'tegami/cli';
 import { github } from 'tegami/plugins/github';
 
 const paper = tegami({
-  packages: {
-    resend: {
-      prerelease: 'canary',
-    },
-  },
   npm: {
     client: 'pnpm',
     // npm trusted publishing (OIDC) — no NPM_TOKEN secret needed. This only
