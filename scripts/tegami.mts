@@ -12,6 +12,11 @@ import { github } from 'tegami/plugins/github';
 const releaseBranch = process.env.GITHUB_REF_NAME ?? 'canary';
 
 const paper = tegami({
+  packages: {
+    resend: {
+      prerelease: 'preview-test',
+    },
+  },
   npm: {
     client: 'pnpm',
     // npm trusted publishing (OIDC) — no NPM_TOKEN secret needed. This only
