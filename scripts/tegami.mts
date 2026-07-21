@@ -6,6 +6,11 @@ import { tegami } from 'tegami';
 import { createCli } from 'tegami/cli';
 import { github } from 'tegami/plugins/github';
 
+// The branch this run versions for. In CI this is the branch that triggered
+// the workflow (canary or a preview-* branch); locally it falls back to
+// canary.
+const releaseBranch = process.env.GITHUB_REF_NAME ?? 'canary';
+
 const paper = tegami({
   npm: {
     client: 'pnpm',
@@ -31,17 +36,28 @@ const paper = tegami({
         },
       },
       versionPr: {
-        // Versioning happens on canary (version.yml): the Version Packages PR
-        // targets canary with the bumped versions and the publish lock.
-        // Publishing happens in release.yml: prereleases straight from
-        // canary, stable versions from main once canary is promoted.
+        // Versioning happens per release branch (version.yml): the Version
+        // Packages PR targets whichever branch triggered the run — canary or
+        // a preview-* branch — with the bumped versions and the publish lock.
+        // Publishing happens in release.yml: prereleases straight from their
+        // own branch, stable versions from main once canary is promoted.
         //
         // To enter prerelease mode, add to the tegami() options above:
         //   packages: { resend: { prerelease: 'canary' } }
-        // Bumps then produce x.y.z-canary.N under the "canary" npm dist-tag.
-        // Removing it graduates the next release back to a stable version,
-        // replaying the changelogs consumed during the prerelease cycle.
-        base: 'canary',
+        // Bumps then produce x.y.z-canary.N under the "canary" npm dist-tag
+        // (the dist-tag defaults to the prerelease name). Removing it
+        // graduates the next release back to a stable version, replaying the
+        // changelogs consumed during the prerelease cycle.
+        //
+        // Single-feature betas use the same mechanism on their own branch:
+        // create preview-<feature> from canary and set
+        //   packages: { resend: { prerelease: 'preview-<feature>' } }
+        // there. Releases become x.y.z-preview-<feature>.N under the
+        // "preview-<feature>" dist-tag, leaving canary and latest untouched.
+        base: releaseBranch,
+        // Head branch per release branch, so concurrent lines (canary plus a
+        // preview) don't fight over a single tegami/version-packages branch.
+        branch: `tegami/version-packages-${releaseBranch}`,
         // Put the release version in the Version Packages PR title (e.g.
         // "chore: release 6.17.0"), matching this repo's existing release
         // commit convention and its PR title check.

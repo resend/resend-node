@@ -1,14 +1,16 @@
 name: Version
 
 # Versioning half of the release flow (publishing runs on main, see
-# release.yml). On pushes to canary with pending changelogs (.tegami/*.md),
-# opens or updates the Version Packages PR against canary with the bumped
-# versions and the publish lock. While that lock is still unpublished, tegami
-# skips further versioning until main publishes it.
+# release.yml). On pushes to canary or a preview-* branch with pending
+# changelogs (.tegami/*.md), opens or updates that branch's Version Packages
+# PR with the bumped versions and the publish lock (base and head branch are
+# derived per-branch in scripts/tegami.mts). While that lock is still
+# unpublished, tegami skips further versioning until it publishes.
 on:
   push:
     branches:
       - canary
+      - "preview-*"
   workflow_dispatch:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}

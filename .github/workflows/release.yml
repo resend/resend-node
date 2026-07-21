@@ -1,22 +1,26 @@
 name: Release
 
-# Publishing half of the release flow (versioning runs on canary, see
-# version.yml). Publishes whatever the committed publish lock holds that
-# isn't on npm yet, then creates the git tag and GitHub release. Runs on both
-# branches, but each publishes a different channel:
+# Publishing half of the release flow (versioning runs on canary and
+# preview-* branches, see version.yml). Publishes whatever the committed
+# publish lock holds that isn't on npm yet, then creates the git tag and
+# GitHub release. Each branch publishes a different channel:
 #
 #   - canary: prerelease versions only (x.y.z-canary.N, npm dist-tag
 #     "canary"), so prereleases ship as soon as their version PR merges.
 #     Stable versions never publish from here — they wait for promotion.
+#   - preview-<feature>: prerelease versions only, for single-feature betas
+#     (x.y.z-preview-<feature>.N under the "preview-<feature>" npm dist-tag —
+#     tegami derives the dist-tag from the branch's prerelease config).
 #   - main: everything, once canary is promoted.
 #
 # Already-published versions are skipped, so re-runs, promotions with nothing
-# pending, and prereleases that already shipped from canary are safe no-ops.
+# pending, and prereleases that already shipped from a branch are safe no-ops.
 on:
   push:
     branches:
       - main
       - canary
+      - "preview-*"
   workflow_dispatch:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
@@ -60,7 +64,7 @@ jobs:
       # package's own `prepublishOnly` script (`pnpm run build`) — no separate
       # build step needed here.
       - name: Publish
-        if: github.ref_name == 'main' || (github.ref_name == 'canary' && steps.channel.outputs.prerelease == 'true')
+        if: github.ref_name == 'main' || steps.channel.outputs.prerelease == 'true'
         run: pnpm tegami publish
         env:
           GITHUB_TOKEN: ${{ github.token }}
