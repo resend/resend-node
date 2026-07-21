@@ -1,12 +1,15 @@
 core:changelogs:
-  - content: "---\npackages:\n  npm:resend:\n    type: minor\n---\n\n## Add `resend.suppressions` with `add`, `get`, `list`, `remove`, and batch `add`/`remove` methods for managing suppression list entries\n"
+  - content: "---\npackages:\n  npm:resend:\n    type: minor\n---\n\n## Support tags and scheduledAt in batch email options\n"
+    filename: 2026-07-15-batch-tags-scheduled-at.md
+    v: 0.0.0
+  - content: "---\npackages:\n  npm:resend:\n    replay:\n      - exit-prerelease(npm:resend)\n---\n\n## Add `resend.suppressions` with `add`, `get`, `list`, `remove`, and batch `add`/`remove` methods for managing suppression list entries\n"
     filename: 2026-07-13-mrjlnp9f.md
     v: 0.0.0
 core:packages:
   - changelogIds:
+      - 2026-07-15-batch-tags-scheduled-at.md
       - 2026-07-13-mrjlnp9f.md
     id: npm:resend
     updated: true
 npm:packages:
-  - distTag: canary
-    id: npm:resend
+  - id: npm:resend
