@@ -15,7 +15,9 @@ export type WebhookEvent =
   | 'contact.deleted'
   | 'domain.created'
   | 'domain.updated'
-  | 'domain.deleted';
+  | 'domain.deleted'
+  | 'suppression.added'
+  | 'suppression.removed';
 
 interface BaseEmailEventData {
   broadcast_id?: string;
@@ -100,6 +102,14 @@ interface DomainEventData {
   created_at: string;
   region: string;
   records: DomainRecord[];
+}
+
+interface SuppressionEventData {
+  id: string;
+  email: string;
+  origin: 'bounce' | 'complaint' | 'manual';
+  source_id: string | null;
+  created_at: string;
 }
 
 export interface EmailSentEvent {
@@ -212,6 +222,18 @@ export interface DomainDeletedEvent {
   data: DomainEventData;
 }
 
+export interface SuppressionAddedEvent {
+  type: 'suppression.added';
+  created_at: string;
+  data: SuppressionEventData;
+}
+
+export interface SuppressionRemovedEvent {
+  type: 'suppression.removed';
+  created_at: string;
+  data: SuppressionEventData;
+}
+
 export type WebhookEventPayload =
   | EmailSentEvent
   | EmailScheduledEvent
@@ -229,4 +251,6 @@ export type WebhookEventPayload =
   | ContactDeletedEvent
   | DomainCreatedEvent
   | DomainUpdatedEvent
-  | DomainDeletedEvent;
+  | DomainDeletedEvent
+  | SuppressionAddedEvent
+  | SuppressionRemovedEvent;
