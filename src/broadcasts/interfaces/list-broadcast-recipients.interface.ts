@@ -47,18 +47,27 @@ type BroadcastRecipientLoose = BroadcastRecipientBase & {
   bounce_type?: BroadcastRecipientBounceType;
 };
 
+// Each check uses the `[T] extends [...]` tuple form to opt out of
+// distributive conditional types — a partial union like `'opened' |
+// 'clicked'` must fall through to `BroadcastRecipientLoose` below rather
+// than being evaluated member-by-member, which would incorrectly drop
+// `clicked_links` (present for 'clicked') instead of making it optional.
 export type BroadcastRecipient<
   T extends BroadcastRecipientEventType = BroadcastRecipientEventType,
-> = BroadcastRecipientEventType extends T
-  ? BroadcastRecipientLoose
-  : BroadcastRecipientBase &
-      (T extends 'opened' | 'clicked' ? { count: number } : unknown) &
-      (T extends 'clicked'
-        ? { clicked_links: BroadcastRecipientClickedLink[] }
-        : unknown) &
-      (T extends 'bounced'
-        ? { bounce_type: BroadcastRecipientBounceType }
-        : unknown);
+> = [T] extends ['clicked']
+  ? BroadcastRecipientBase & {
+      count: number;
+      clicked_links: BroadcastRecipientClickedLink[];
+    }
+  : [T] extends ['opened']
+    ? BroadcastRecipientBase & { count: number }
+    : [T] extends ['bounced']
+      ? BroadcastRecipientBase & { bounce_type: BroadcastRecipientBounceType }
+      : [T] extends [
+            'sent' | 'delivered' | 'complained' | 'unsubscribed' | 'suppressed',
+          ]
+        ? BroadcastRecipientBase
+        : BroadcastRecipientLoose;
 
 export type ListBroadcastRecipientsResponseSuccess<
   T extends BroadcastRecipientEventType = BroadcastRecipientEventType,
