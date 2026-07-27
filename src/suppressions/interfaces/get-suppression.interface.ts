@@ -1,6 +1,6 @@
 import type { Response } from '../../interfaces';
-import type { SuppressionListEntry } from './suppression-list-entry';
+import type { Suppression } from './suppression-list-entry';
 
-export type GetSuppressionResponseSuccess = SuppressionListEntry;
+export type GetSuppressionResponseSuccess = Suppression;
 
 export type GetSuppressionResponse = Response<GetSuppressionResponseSuccess>;
