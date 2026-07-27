@@ -167,7 +167,6 @@ describe('Suppressions', () => {
       has_more: false,
       data: [
         {
-          object: 'suppression',
           id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
           email: 'blocked@example.com',
           origin: 'complaint',
