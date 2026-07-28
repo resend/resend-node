@@ -23,6 +23,7 @@ import { Segments } from './segments/segments';
 import { Suppressions } from './suppressions/suppressions';
 import { Templates } from './templates/templates';
 import { Topics } from './topics/topics';
+import { Usage } from './usage/usage';
 import { Webhooks } from './webhooks/webhooks';
 
 const defaultBaseUrl = 'https://api.resend.com';
@@ -69,6 +70,7 @@ export class Resend {
   readonly suppressions = new Suppressions(this);
   readonly templates = new Templates(this);
   readonly topics = new Topics(this);
+  readonly usage = new Usage(this);
   readonly webhooks = new Webhooks(this);
 
   constructor(
