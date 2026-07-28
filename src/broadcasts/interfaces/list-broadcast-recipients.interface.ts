@@ -38,36 +38,33 @@ type BroadcastRecipientBase = {
   email: string;
 };
 
-// When `T` isn't pinned to a specific event type (the generic default, or a
-// dynamically-typed `type` value), every type-specific field is optional
-// rather than fully absent, since we can't rule any of them out statically.
 type BroadcastRecipientLoose = BroadcastRecipientBase & {
   count?: number;
   clicked_links?: BroadcastRecipientClickedLink[];
   bounce_type?: BroadcastRecipientBounceType;
 };
 
-// Each check uses the `[T] extends [...]` tuple form to opt out of
-// distributive conditional types — a partial union like `'opened' |
-// 'clicked'` must fall through to `BroadcastRecipientLoose` below rather
-// than being evaluated member-by-member, which would incorrectly drop
-// `clicked_links` (present for 'clicked') instead of making it optional.
+// True for a union of 2+ members (including the full default union), false
+// for a single literal. https://github.com/microsoft/TypeScript/issues/27024
+type IsUnion<T, B = T> = T extends B ? ([B] extends [T] ? false : true) : never;
+
+type BroadcastRecipientFieldsByType = {
+  sent: unknown;
+  delivered: unknown;
+  opened: { count: number };
+  clicked: { count: number; clicked_links: BroadcastRecipientClickedLink[] };
+  bounced: { bounce_type: BroadcastRecipientBounceType };
+  complained: unknown;
+  unsubscribed: unknown;
+  suppressed: unknown;
+};
+
 export type BroadcastRecipient<
   T extends BroadcastRecipientEventType = BroadcastRecipientEventType,
-> = [T] extends ['clicked']
-  ? BroadcastRecipientBase & {
-      count: number;
-      clicked_links: BroadcastRecipientClickedLink[];
-    }
-  : [T] extends ['opened']
-    ? BroadcastRecipientBase & { count: number }
-    : [T] extends ['bounced']
-      ? BroadcastRecipientBase & { bounce_type: BroadcastRecipientBounceType }
-      : [T] extends [
-            'sent' | 'delivered' | 'complained' | 'unsubscribed' | 'suppressed',
-          ]
-        ? BroadcastRecipientBase
-        : BroadcastRecipientLoose;
+> =
+  IsUnion<T> extends true
+    ? BroadcastRecipientLoose
+    : BroadcastRecipientBase & BroadcastRecipientFieldsByType[T];
 
 export type ListBroadcastRecipientsResponseSuccess<
   T extends BroadcastRecipientEventType = BroadcastRecipientEventType,
