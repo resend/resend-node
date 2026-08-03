@@ -23,6 +23,7 @@ interface BaseEmailEventData {
   broadcast_id?: string;
   created_at: string;
   email_id: string;
+  message_id: string;
   from: string;
   to: string[];
   subject: string;
