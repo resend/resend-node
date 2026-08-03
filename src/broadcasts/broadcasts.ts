@@ -10,6 +10,16 @@ import type {
   GetBroadcastResponseSuccess,
 } from './interfaces/get-broadcast.interface';
 import type {
+  GetBroadcastMetricsResponse,
+  GetBroadcastMetricsResponseSuccess,
+} from './interfaces/get-broadcast-metrics.interface';
+import type {
+  BroadcastRecipientEventType,
+  ListBroadcastRecipientsOptions,
+  ListBroadcastRecipientsResponse,
+  ListBroadcastRecipientsResponseSuccess,
+} from './interfaces/list-broadcast-recipients.interface';
+import type {
   ListBroadcastsOptions,
   ListBroadcastsResponse,
   ListBroadcastsResponseSuccess,
@@ -89,6 +99,27 @@ export class Broadcasts {
     return data;
   }
 
+  async metrics(id: string): Promise<GetBroadcastMetricsResponse> {
+    const data = await this.resend.get<GetBroadcastMetricsResponseSuccess>(
+      `/broadcasts/${id}/metrics`,
+    );
+    return data;
+  }
+
+  async recipients<T extends BroadcastRecipientEventType>(
+    id: string,
+    options: ListBroadcastRecipientsOptions<T>,
+  ): Promise<ListBroadcastRecipientsResponse<T>> {
+    const queryString = buildRecipientsQuery(
+      options as ListBroadcastRecipientsOptions,
+    );
+    const url = `/broadcasts/${id}/recipients?${queryString}`;
+
+    const data =
+      await this.resend.get<ListBroadcastRecipientsResponseSuccess<T>>(url);
+    return data;
+  }
+
   async remove(id: string): Promise<RemoveBroadcastResponse> {
     const data = await this.resend.delete<RemoveBroadcastResponseSuccess>(
       `/broadcasts/${id}`,
@@ -119,4 +150,21 @@ export class Broadcasts {
     );
     return data;
   }
+}
+
+function buildRecipientsQuery(options: ListBroadcastRecipientsOptions) {
+  const { type, email, bounceType, ...pagination } = options;
+  const searchParams = new URLSearchParams(buildPaginationQuery(pagination));
+
+  searchParams.set('type', type);
+
+  if (email !== undefined) {
+    searchParams.set('email', email);
+  }
+
+  if (bounceType !== undefined) {
+    searchParams.set('bounce_type', bounceType);
+  }
+
+  return searchParams.toString();
 }
