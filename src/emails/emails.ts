@@ -18,6 +18,11 @@ import type {
   GetEmailResponseSuccess,
 } from './interfaces/get-email-options.interface';
 import type {
+  GetEmailsMetricsOptions,
+  GetEmailsMetricsResponse,
+  GetEmailsMetricsResponseSuccess,
+} from './interfaces/get-metrics.interface';
+import type {
   ListEmailsOptions,
   ListEmailsResponse,
   ListEmailsResponseSuccess,
@@ -97,4 +102,59 @@ export class Emails {
     );
     return data;
   }
+
+  async metrics(
+    options: GetEmailsMetricsOptions = {},
+  ): Promise<GetEmailsMetricsResponse> {
+    const queryString = buildMetricsQuery(options);
+    const url = queryString
+      ? `/emails/metrics?${queryString}`
+      : '/emails/metrics';
+
+    const data = await this.resend.get<GetEmailsMetricsResponseSuccess>(url);
+    return data;
+  }
+}
+
+function buildMetricsQuery(options: GetEmailsMetricsOptions) {
+  const {
+    startDate,
+    endDate,
+    timezone,
+    granularity,
+    metrics,
+    dimensions,
+    filter,
+  } = options;
+  const searchParams = new URLSearchParams();
+
+  if (startDate !== undefined) {
+    searchParams.set('start_date', startDate);
+  }
+
+  if (endDate !== undefined) {
+    searchParams.set('end_date', endDate);
+  }
+
+  if (timezone !== undefined) {
+    searchParams.set('timezone', timezone);
+  }
+
+  if (granularity !== undefined) {
+    searchParams.set('granularity', granularity);
+  }
+
+  if (metrics !== undefined) {
+    searchParams.set('metrics', metrics.join(','));
+  }
+
+  if (dimensions !== undefined) {
+    searchParams.set('dimensions', dimensions.join(','));
+  }
+
+  if (filter?.domainId !== undefined) {
+    searchParams.set('filter[domain_id]', filter.domainId.join(','));
+  }
+
+  return searchParams.toString();
 }
