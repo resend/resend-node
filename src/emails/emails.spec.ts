@@ -936,6 +936,8 @@ describe('Emails', () => {
       const result = await resend.emails.metrics({
         startDate: '2026-07-01',
         endDate: '2026-07-08',
+        timezone: 'America/New_York',
+        granularity: 'daily',
         metrics: ['sent', 'delivered', 'open_rate'],
         dimensions: ['period', 'domain'],
         filter: { domainId: ['d91cd9bd-1176-4f47-2a4b-fce2d5399cbf'] },
@@ -949,7 +951,7 @@ describe('Emails', () => {
         },
       });
       expect(fetchMock.mock.calls[0][0]).toBe(
-        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cdomain&filter%5Bdomain_id%5D=d91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
+        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&timezone=America%2FNew_York&granularity=daily&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cdomain&filter%5Bdomain_id%5D=d91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
       );
     });
 
