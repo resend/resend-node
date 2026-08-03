@@ -117,43 +117,21 @@ export class Emails {
 }
 
 function buildMetricsQuery(options: GetEmailsMetricsOptions) {
-  const {
-    startDate,
-    endDate,
-    timezone,
-    granularity,
-    metrics,
-    dimensions,
-    filter,
-  } = options;
+  const params: Record<string, string | undefined> = {
+    start_date: options.startDate,
+    end_date: options.endDate,
+    timezone: options.timezone,
+    granularity: options.granularity,
+    metrics: options.metrics?.join(','),
+    dimensions: options.dimensions?.join(','),
+    'filter[domain_id]': options.filter?.domainId?.join(','),
+  };
+
   const searchParams = new URLSearchParams();
-
-  if (startDate !== undefined) {
-    searchParams.set('start_date', startDate);
-  }
-
-  if (endDate !== undefined) {
-    searchParams.set('end_date', endDate);
-  }
-
-  if (timezone !== undefined) {
-    searchParams.set('timezone', timezone);
-  }
-
-  if (granularity !== undefined) {
-    searchParams.set('granularity', granularity);
-  }
-
-  if (metrics !== undefined) {
-    searchParams.set('metrics', metrics.join(','));
-  }
-
-  if (dimensions !== undefined) {
-    searchParams.set('dimensions', dimensions.join(','));
-  }
-
-  if (filter?.domainId !== undefined) {
-    searchParams.set('filter[domain_id]', filter.domainId.join(','));
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined) {
+      searchParams.set(key, value);
+    }
   }
 
   return searchParams.toString();
