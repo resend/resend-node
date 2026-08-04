@@ -24,7 +24,7 @@ export type EmailMetric =
   | 'complaint_rate'
   | 'unsubscribe_rate';
 
-export type EmailMetricsDimension = 'period' | 'domain';
+export type EmailMetricsDimension = 'period' | 'domain' | 'email';
 
 export type EmailMetricsGranularity = 'hourly' | 'daily' | 'weekly';
 
@@ -73,6 +73,12 @@ export type GetEmailsMetricsOptions = {
      * Restrict the response to these sending domain IDs.
      */
     domainId?: string[];
+
+    /**
+     * Restrict the response to these email IDs. Cannot be combined with the
+     * `domain` dimension.
+     */
+    emailId?: string[];
   };
 };
 
@@ -82,6 +88,7 @@ export type EmailMetricsDataRow = EmailMetricsTotals & {
   period?: string;
   domain_id?: string;
   domain_name?: string;
+  email_id?: string;
 };
 
 export interface GetEmailsMetricsResponseSuccess {

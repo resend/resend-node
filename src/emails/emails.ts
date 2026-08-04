@@ -125,6 +125,7 @@ function buildMetricsQuery(options: GetEmailsMetricsOptions) {
     metrics: options.metrics?.join(','),
     dimensions: options.dimensions?.join(','),
     'filter[domain_id]': options.filter?.domainId?.join(','),
+    'filter[email_id]': options.filter?.emailId?.join(','),
   };
 
   const searchParams = new URLSearchParams();
