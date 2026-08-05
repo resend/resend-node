@@ -219,6 +219,8 @@ describe('Segments', () => {
         object: 'segments_metrics',
         metrics: ['all_contacts', 'subscribers', 'unsubscribers'],
         dimensions: [],
+        sort_by: 'date',
+        sort_order: 'desc',
         totals: {
           all_contacts: 12450,
           subscribers: 11800,
@@ -255,6 +257,8 @@ describe('Segments', () => {
         object: 'segments_metrics',
         metrics: ['all_contacts', 'subscribers', 'unsubscribers'],
         dimensions: [],
+        sort_by: 'date',
+        sort_order: 'desc',
         totals: {
           all_contacts: 12450,
           subscribers: 11800,
@@ -287,6 +291,8 @@ describe('Segments', () => {
         object: 'segments_metrics',
         metrics: ['all_contacts'],
         dimensions: ['segment'],
+        sort_by: 'date',
+        sort_order: 'desc',
         totals: {
           all_contacts: 4300,
         },
@@ -320,6 +326,53 @@ describe('Segments', () => {
 
       expect(fetchMock).toHaveBeenCalledWith(
         'https://api.resend.com/segments/metrics?metrics=all_contacts&dimensions=segment&filter%5Bsegment_id%5D=78261eea-8f8b-4381-83c6-79fa7120f1cf',
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
+    it('calls endpoint passing sortBy and sortOrder', async () => {
+      const response: GetSegmentsMetricsResponseSuccess = {
+        object: 'segments_metrics',
+        metrics: ['all_contacts'],
+        dimensions: ['segment'],
+        sort_by: 'date',
+        sort_order: 'asc',
+        totals: {
+          all_contacts: 4300,
+        },
+        data: [
+          {
+            segment_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
+            segment_name: 'Registered Users',
+            all_contacts: 4300,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response, {
+        headers: {},
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const result = await resend.segments.metrics({
+        dimensions: ['segment'],
+        sortBy: 'date',
+        sortOrder: 'asc',
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/segments/metrics?dimensions=segment&sort_by=date&sort_order=asc',
         expect.objectContaining({
           method: 'GET',
           headers: expect.any(Headers),

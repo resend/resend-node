@@ -80,6 +80,8 @@ function buildMetricsQuery(options: GetSegmentsMetricsOptions) {
     metrics: options.metrics?.join(','),
     dimensions: options.dimensions?.join(','),
     'filter[segment_id]': options.filter?.segmentId?.join(','),
+    sort_by: options.sortBy,
+    sort_order: options.sortOrder,
   };
 
   const searchParams = new URLSearchParams();
