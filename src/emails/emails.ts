@@ -18,6 +18,11 @@ import type {
   GetEmailResponseSuccess,
 } from './interfaces/get-email-options.interface';
 import type {
+  GetEmailsMetricsOptions,
+  GetEmailsMetricsResponse,
+  GetEmailsMetricsResponseSuccess,
+} from './interfaces/get-metrics.interface';
+import type {
   ListEmailsOptions,
   ListEmailsResponse,
   ListEmailsResponseSuccess,
@@ -97,4 +102,40 @@ export class Emails {
     );
     return data;
   }
+
+  async metrics(
+    options: GetEmailsMetricsOptions = {},
+  ): Promise<GetEmailsMetricsResponse> {
+    const queryString = buildMetricsQuery(options);
+    const url = queryString
+      ? `/emails/metrics?${queryString}`
+      : '/emails/metrics';
+
+    const data = await this.resend.get<GetEmailsMetricsResponseSuccess>(url);
+    return data;
+  }
+}
+
+function buildMetricsQuery(options: GetEmailsMetricsOptions) {
+  const params: Record<string, string | undefined> = {
+    start_date: options.startDate,
+    end_date: options.endDate,
+    timezone: options.timezone,
+    granularity: options.granularity,
+    metrics: options.metrics?.join(','),
+    dimensions: options.dimensions?.join(','),
+    'filter[domain_id]': options.filter?.domainId?.join(','),
+    'filter[email_id]': options.filter?.emailId?.join(','),
+    sort_by: options.sortBy,
+    sort_order: options.sortOrder,
+  };
+
+  const searchParams = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== '') {
+      searchParams.set(key, value);
+    }
+  }
+
+  return searchParams.toString();
 }
