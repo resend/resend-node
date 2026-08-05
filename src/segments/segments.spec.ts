@@ -6,6 +6,7 @@ import type {
   CreateSegmentOptions,
   CreateSegmentResponseSuccess,
 } from './interfaces/create-segment-options.interface';
+import type { GetSegmentsMetricsResponseSuccess } from './interfaces/get-metrics.interface';
 import type { GetSegmentResponseSuccess } from './interfaces/get-segment.interface';
 import type { ListSegmentsResponseSuccess } from './interfaces/list-segments.interface';
 import type { RemoveSegmentResponseSuccess } from './interfaces/remove-segment.interface';
@@ -209,6 +210,122 @@ describe('Segments', () => {
           }),
         );
       });
+    });
+  });
+
+  describe('metrics', () => {
+    it('calls endpoint with no options and returns the response', async () => {
+      const response: GetSegmentsMetricsResponseSuccess = {
+        object: 'segments_metrics',
+        metrics: ['all_contacts', 'subscribers', 'unsubscribers'],
+        dimensions: [],
+        totals: {
+          all_contacts: 12450,
+          subscribers: 11800,
+          unsubscribers: 650,
+        },
+      };
+
+      mockSuccessResponse(response, {
+        headers: {},
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const result = await resend.segments.metrics();
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/segments/metrics',
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
+    it('calls endpoint passing metrics, dimensions and filter[segment_id]', async () => {
+      const response: GetSegmentsMetricsResponseSuccess = {
+        object: 'segments_metrics',
+        metrics: ['all_contacts'],
+        dimensions: ['segment'],
+        totals: {
+          all_contacts: 4300,
+        },
+        data: [
+          {
+            segment_id: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
+            segment_name: 'Registered Users',
+            all_contacts: 4300,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response, {
+        headers: {},
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const result = await resend.segments.metrics({
+        metrics: ['all_contacts'],
+        dimensions: ['segment'],
+        filter: { segmentId: ['78261eea-8f8b-4381-83c6-79fa7120f1cf'] },
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/segments/metrics?metrics=all_contacts&dimensions=segment&filter%5Bsegment_id%5D=78261eea-8f8b-4381-83c6-79fa7120f1cf',
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
+    it('returns error when request fails', async () => {
+      const response: ErrorResponse = {
+        name: 'validation_error',
+        message:
+          'Invalid `metrics` value. Allowed: all_contacts, subscribers, unsubscribers.',
+        statusCode: 422,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const result = resend.segments.metrics();
+
+      await expect(result).resolves.toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "error": {
+            "message": "Invalid \`metrics\` value. Allowed: all_contacts, subscribers, unsubscribers.",
+            "name": "validation_error",
+            "statusCode": 422,
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
