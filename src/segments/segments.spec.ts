@@ -250,6 +250,38 @@ describe('Segments', () => {
       );
     });
 
+    it('omits query params when passed as empty arrays', async () => {
+      const response: GetSegmentsMetricsResponseSuccess = {
+        object: 'segments_metrics',
+        metrics: ['all_contacts', 'subscribers', 'unsubscribers'],
+        dimensions: [],
+        totals: {
+          all_contacts: 12450,
+          subscribers: 11800,
+          unsubscribers: 650,
+        },
+      };
+
+      mockSuccessResponse(response, {
+        headers: {},
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      await resend.segments.metrics({
+        metrics: [],
+        dimensions: [],
+        filter: { segmentId: [] },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/segments/metrics',
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
     it('calls endpoint passing metrics, dimensions and filter[segment_id]', async () => {
       const response: GetSegmentsMetricsResponseSuccess = {
         object: 'segments_metrics',
