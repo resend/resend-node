@@ -102,19 +102,20 @@ export type GetEmailsMetricsOptions = {
   };
 
   /**
-   * What to sort `data` by. Defaults to `date` when `dimensions` is exactly
+   * What to sort `data` by. Defaults to `date` when `dimensions` includes
    * `period`, or `sent` when `dimensions` is exactly `domain` or exactly
    * `email`.
    *
-   * `sortBy: 'date'` requires `dimensions` to be exactly `period`. A metric
-   * `sortBy` requires `dimensions` to be exactly one non-time dimension
-   * (`domain` or `email`).
+   * `sortBy: 'date'` requires `dimensions` to include `period` — this also
+   * works when `period` is combined with `domain` or `email`. A metric
+   * `sortBy` requires `dimensions` to be exactly one dimension other than
+   * `period` (`domain` or `email`).
    */
   sortBy?: EmailMetricsSortBy;
 
   /**
-   * The sort direction for `sortBy`. Defaults to `asc` for a `period`
-   * breakdown, `desc` otherwise.
+   * The sort direction for `sortBy`. Defaults to `asc` when `dimensions`
+   * includes `period`, `desc` otherwise.
    */
   sortOrder?: EmailMetricsSortOrder;
 };
