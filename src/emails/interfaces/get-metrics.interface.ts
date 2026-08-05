@@ -28,23 +28,7 @@ export type EmailMetricsDimension = 'period' | 'domain' | 'email';
 
 export type EmailMetricsGranularity = 'hourly' | 'daily' | 'weekly';
 
-export type SortableEmailMetric =
-  | 'received'
-  | 'delivered'
-  | 'complained'
-  | 'suppressed'
-  | 'bounced'
-  | 'bounced_transient'
-  | 'bounced_permanent'
-  | 'bounced_undetermined'
-  | 'opened'
-  | 'clicked'
-  | 'unsubscribed'
-  | 'delivery_delayed'
-  | 'failed'
-  | 'sent';
-
-export type EmailMetricsSortBy = 'date' | SortableEmailMetric;
+export type EmailMetricsSortBy = 'date' | EmailMetric;
 
 export type EmailMetricsSortOrder = 'asc' | 'desc';
 
@@ -103,13 +87,9 @@ export type GetEmailsMetricsOptions = {
 
   /**
    * What to sort `data` by. Defaults to `date` when `dimensions` includes
-   * `period`, or `sent` when `dimensions` is exactly `domain` or exactly
-   * `email`.
+   * `period`, or `sent` otherwise.
    *
-   * `sortBy: 'date'` requires `dimensions` to include `period` — this also
-   * works when `period` is combined with `domain` or `email`. A metric
-   * `sortBy` requires `dimensions` to be exactly one dimension other than
-   * `period` (`domain` or `email`).
+   * @link https://resend.com/docs/api-reference/emails/get-metrics#query-parameters
    */
   sortBy?: EmailMetricsSortBy;
 

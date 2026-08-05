@@ -1143,6 +1143,89 @@ describe('Emails', () => {
       );
     });
 
+    it('calls endpoint passing an engagement metric sortBy for a domain breakdown', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['unique_opened'],
+        dimensions: ['domain'],
+        granularity: 'daily',
+        sort_by: 'unique_opened',
+        sort_order: 'desc',
+        totals: {
+          unique_opened: 512,
+        },
+        data: [
+          {
+            domain_id: 'd91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
+            domain_name: 'example.com',
+            unique_opened: 128,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        dimensions: ['domain'],
+        metrics: ['unique_opened'],
+        sortBy: 'unique_opened',
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?metrics=unique_opened&dimensions=domain&sort_by=unique_opened',
+      );
+    });
+
+    it('calls endpoint passing a rate metric sortBy for an email breakdown', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['open_rate'],
+        dimensions: ['email'],
+        granularity: 'daily',
+        sort_by: 'open_rate',
+        sort_order: 'desc',
+        totals: {
+          open_rate: 42.5,
+        },
+        data: [
+          {
+            email_id: '3c9a1e0a-2b7d-4e0a-9e0a-2b7d4e0a9e0a',
+            open_rate: 63.4,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        dimensions: ['email'],
+        metrics: ['open_rate'],
+        sortBy: 'open_rate',
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?metrics=open_rate&dimensions=email&sort_by=open_rate',
+      );
+    });
+
     it('returns error when request fails', async () => {
       const response: ErrorResponse = {
         name: 'validation_error',
