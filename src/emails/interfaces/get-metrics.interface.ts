@@ -28,6 +28,26 @@ export type EmailMetricsDimension = 'period' | 'domain' | 'email';
 
 export type EmailMetricsGranularity = 'hourly' | 'daily' | 'weekly';
 
+export type SortableEmailMetric =
+  | 'received'
+  | 'delivered'
+  | 'complained'
+  | 'suppressed'
+  | 'bounced'
+  | 'bounced_transient'
+  | 'bounced_permanent'
+  | 'bounced_undetermined'
+  | 'opened'
+  | 'clicked'
+  | 'unsubscribed'
+  | 'delivery_delayed'
+  | 'failed'
+  | 'sent';
+
+export type EmailMetricsSortBy = 'date' | SortableEmailMetric;
+
+export type EmailMetricsSortOrder = 'asc' | 'desc';
+
 export type GetEmailsMetricsOptions = {
   /**
    * The start of the date range, as an ISO 8601 date or datetime.
@@ -80,6 +100,23 @@ export type GetEmailsMetricsOptions = {
      */
     emailId?: string[];
   };
+
+  /**
+   * What to sort `data` by. Defaults to `date` when `dimensions` is exactly
+   * `period`, or `sent` when `dimensions` is exactly `domain` or exactly
+   * `email`.
+   *
+   * `sortBy: 'date'` requires `dimensions` to be exactly `period`. A metric
+   * `sortBy` requires `dimensions` to be exactly one non-time dimension
+   * (`domain` or `email`).
+   */
+  sortBy?: EmailMetricsSortBy;
+
+  /**
+   * The sort direction for `sortBy`. Defaults to `asc` for a `period`
+   * breakdown, `desc` otherwise.
+   */
+  sortOrder?: EmailMetricsSortOrder;
 };
 
 export type EmailMetricsTotals = Partial<Record<EmailMetric, number>>;
@@ -98,6 +135,8 @@ export interface GetEmailsMetricsResponseSuccess {
   metrics: EmailMetric[];
   dimensions: EmailMetricsDimension[];
   granularity: EmailMetricsGranularity;
+  sort_by: EmailMetricsSortBy;
+  sort_order: EmailMetricsSortOrder;
   totals: EmailMetricsTotals;
   data?: EmailMetricsDataRow[];
 }

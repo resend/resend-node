@@ -126,11 +126,13 @@ function buildMetricsQuery(options: GetEmailsMetricsOptions) {
     dimensions: options.dimensions?.join(','),
     'filter[domain_id]': options.filter?.domainId?.join(','),
     'filter[email_id]': options.filter?.emailId?.join(','),
+    sort_by: options.sortBy,
+    sort_order: options.sortOrder,
   };
 
   const searchParams = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined) {
+    if (value !== undefined && value !== '') {
       searchParams.set(key, value);
     }
   }
