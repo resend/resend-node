@@ -129,7 +129,7 @@ export class Resend {
           };
         } catch (err) {
           if (err instanceof SyntaxError) {
-            const error = {
+            const error: ErrorResponse = {
               name: 'application_error',
               statusCode: response.status,
               message:
@@ -180,7 +180,7 @@ export class Resend {
         headers: Object.fromEntries(response.headers.entries()),
       };
     } catch {
-      const error = {
+      const error: ErrorResponse = {
         name: 'application_error',
         statusCode: null,
         message: 'Unable to fetch data. The request could not be resolved.',

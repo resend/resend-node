@@ -333,6 +333,7 @@ describe('Receiving', () => {
               bcc: null,
               cc: ['cc@example.com'],
               reply_to: ['reply@example.com'],
+              received_for: [],
               attachments: [
                 {
                   id: 'att_123',
@@ -354,6 +355,7 @@ describe('Receiving', () => {
               bcc: ['bcc@example.com'],
               cc: null,
               reply_to: null,
+              received_for: [],
               attachments: [],
               message_id: 'msg_012',
             },
@@ -392,6 +394,7 @@ describe('Receiving', () => {
                   "from": "sender@example.com",
                   "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
                   "message_id": "msg_789",
+                  "received_for": [],
                   "reply_to": [
                     "reply@example.com",
                   ],
@@ -410,6 +413,7 @@ describe('Receiving', () => {
                   "from": "sender2@example.com",
                   "id": "87e9bcdb-6b03-43e8-9ea0-1e7gffa19d00",
                   "message_id": "msg_012",
+                  "received_for": [],
                   "reply_to": null,
                   "subject": "Test inbound email 2",
                   "to": [
