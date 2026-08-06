@@ -286,7 +286,7 @@ describe('Segments', () => {
       );
     });
 
-    it('calls endpoint passing metrics, dimensions and filter[segment_id]', async () => {
+    it('calls endpoint passing metrics, dimensions and segment_id', async () => {
       const response: GetSegmentsMetricsResponseSuccess = {
         object: 'segments_metrics',
         metrics: ['all_contacts'],
@@ -325,7 +325,7 @@ describe('Segments', () => {
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        'https://api.resend.com/segments/metrics?metrics=all_contacts&dimensions=segment&filter%5Bsegment_id%5D=78261eea-8f8b-4381-83c6-79fa7120f1cf',
+        'https://api.resend.com/segments/metrics?metrics=all_contacts&dimensions=segment&segment_id=78261eea-8f8b-4381-83c6-79fa7120f1cf',
         expect.objectContaining({
           method: 'GET',
           headers: expect.any(Headers),
