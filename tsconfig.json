@@ -18,5 +18,6 @@
     "target": "es2017",
     "types": ["vitest/globals"]
   },
-  "include": ["src", "e2e"]
+  "include": ["src", "e2e"],
+  "exclude": ["e2e/esbuild", "e2e/nextjs"]
 }
