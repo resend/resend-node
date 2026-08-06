@@ -9,6 +9,9 @@ import type {
   CreateWebhookResponseSuccess,
 } from './interfaces/create-webhook-options.interface';
 import type { GetWebhookResponseSuccess } from './interfaces/get-webhook.interface';
+import type { GetWebhookEventResponseSuccess } from './interfaces/get-webhook-event.interface';
+import type { ListWebhookEventAttemptsResponseSuccess } from './interfaces/list-webhook-event-attempts.interface';
+import type { ListWebhookEventsResponseSuccess } from './interfaces/list-webhook-events.interface';
 import type { ListWebhooksResponseSuccess } from './interfaces/list-webhooks.interface';
 import type { RemoveWebhookResponseSuccess } from './interfaces/remove-webhook.interface';
 import type {
@@ -213,6 +216,221 @@ describe('Webhooks', () => {
 
         expect(fetchMock).toHaveBeenCalledWith(
           'https://api.resend.com/webhooks?limit=10',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
+  });
+
+  describe('events.list', () => {
+    const webhookId = '430eed87-632a-4ea6-90db-0aace67ec228';
+    const response: ListWebhookEventsResponseSuccess = {
+      has_more: false,
+      object: 'list',
+      data: [
+        {
+          id: 'msg_1srOrx2ZWZBpBUvZwXKQmoEYga2',
+          type: 'email.sent',
+          created_at: '2026-08-22T15:28:00.000Z',
+          status: 'success',
+        },
+      ],
+    };
+
+    describe('when no pagination options are provided', () => {
+      it('lists events', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = await resend.webhooks.events.list({ webhookId });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          `https://api.resend.com/webhooks/${webhookId}/events`,
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
+
+    describe('when pagination options are provided', () => {
+      it('passes limit and after params', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        await resend.webhooks.events.list({
+          webhookId,
+          limit: 10,
+          after: 'msg_1srOrx2ZWZBpBUvZwXKQmoEYga2',
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          `https://api.resend.com/webhooks/${webhookId}/events?limit=10&after=msg_1srOrx2ZWZBpBUvZwXKQmoEYga2`,
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
+  });
+
+  describe('events.get', () => {
+    const webhookId = '430eed87-632a-4ea6-90db-0aace67ec228';
+    const eventId = 'msg_1srOrx2ZWZBpBUvZwXKQmoEYga2';
+
+    it('gets an event', async () => {
+      const response: GetWebhookEventResponseSuccess = {
+        object: 'webhook_event',
+        id: eventId,
+        type: 'email.sent',
+        created_at: '2026-08-22T15:28:00.000Z',
+        status: 'success',
+        next_attempt_at: null,
+        payload: { type: 'email.sent', data: { email_id: 'abc' } },
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.webhooks.events.get({ webhookId, eventId });
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/webhooks/${webhookId}/events/${eventId}`,
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
+    describe('when event not found', () => {
+      it('returns error', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          message: 'Webhook event not found',
+          statusCode: 404,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = resend.webhooks.events.get({ webhookId, eventId });
+
+        await expect(result).resolves.toEqual({
+          data: null,
+          error: {
+            message: 'Webhook event not found',
+            name: 'not_found',
+            statusCode: 404,
+          },
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+      });
+    });
+  });
+
+  describe('events.attempts.list', () => {
+    const webhookId = '430eed87-632a-4ea6-90db-0aace67ec228';
+    const eventId = 'msg_1srOrx2ZWZBpBUvZwXKQmoEYga2';
+    const response: ListWebhookEventAttemptsResponseSuccess = {
+      has_more: false,
+      object: 'list',
+      data: [
+        {
+          id: 'atmpt_2ZbUCwvGmIT4mLIN6d3Yz0Ainbd',
+          http_status_code: 200,
+          response: '{"ok":true}',
+          sent_at: '2026-08-22T15:28:05.000Z',
+        },
+      ],
+    };
+
+    describe('when no pagination options are provided', () => {
+      it('lists attempts', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = await resend.webhooks.events.attempts.list({
+          webhookId,
+          eventId,
+        });
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          `https://api.resend.com/webhooks/${webhookId}/events/${eventId}/attempts`,
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
+
+    describe('when pagination options are provided', () => {
+      it('passes limit and after params', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        await resend.webhooks.events.attempts.list({
+          webhookId,
+          eventId,
+          limit: 10,
+          after: 'atmpt_2ZbUCwvGmIT4mLIN6d3Yz0Ainbd',
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          `https://api.resend.com/webhooks/${webhookId}/events/${eventId}/attempts?limit=10&after=atmpt_2ZbUCwvGmIT4mLIN6d3Yz0Ainbd`,
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
