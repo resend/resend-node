@@ -117,8 +117,8 @@ describe('ContactImports', () => {
             object: 'contact_import',
             id: '479e3145-dd38-476b-932c-529ceb705947',
             status: 'completed',
-            created_at: '2026-05-15T18:32:37.823Z',
-            completed_at: '2026-05-15T18:33:42.916Z',
+            created_at: '2026-05-15 18:32:37.823+00',
+            completed_at: '2026-05-15 18:33:42.916+00',
             counts: {
               total: 1200,
               created: 800,
@@ -140,7 +140,7 @@ describe('ContactImports', () => {
           "data": {
             "data": [
               {
-                "completed_at": "2026-05-15T18:33:42.916Z",
+                "completed_at": "2026-05-15 18:33:42.916+00",
                 "counts": {
                   "created": 800,
                   "failed": 25,
@@ -148,7 +148,7 @@ describe('ContactImports', () => {
                   "total": 1200,
                   "updated": 300,
                 },
-                "created_at": "2026-05-15T18:32:37.823Z",
+                "created_at": "2026-05-15 18:32:37.823+00",
                 "id": "479e3145-dd38-476b-932c-529ceb705947",
                 "object": "contact_import",
                 "status": "completed",
@@ -196,8 +196,8 @@ describe('ContactImports', () => {
         object: 'contact_import',
         id: '479e3145-dd38-476b-932c-529ceb705947',
         status: 'completed',
-        created_at: '2026-05-15T18:32:37.823Z',
-        completed_at: '2026-05-15T18:33:42.916Z',
+        created_at: '2026-05-15 18:32:37.823+00',
+        completed_at: '2026-05-15 18:33:42.916+00',
         counts: {
           total: 1200,
           created: 800,
@@ -215,7 +215,7 @@ describe('ContactImports', () => {
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
-            "completed_at": "2026-05-15T18:33:42.916Z",
+            "completed_at": "2026-05-15 18:33:42.916+00",
             "counts": {
               "created": 800,
               "failed": 25,
@@ -223,7 +223,7 @@ describe('ContactImports', () => {
               "total": 1200,
               "updated": 300,
             },
-            "created_at": "2026-05-15T18:32:37.823Z",
+            "created_at": "2026-05-15 18:32:37.823+00",
             "id": "479e3145-dd38-476b-932c-529ceb705947",
             "object": "contact_import",
             "status": "completed",

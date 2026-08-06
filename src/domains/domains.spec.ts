@@ -25,7 +25,7 @@ describe('Domains', () => {
       const response: CreateDomainResponseSuccess = {
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
         name: 'resend.com',
-        created_at: '2023-04-07T22:48:33.420498+00:00',
+        created_at: '2023-04-07 22:48:33.420498+00',
         status: 'not_started',
         capabilities: {
           sending: 'enabled',
@@ -103,7 +103,7 @@ describe('Domains', () => {
               "receiving": "enabled",
               "sending": "enabled",
             },
-            "created_at": "2023-04-07T22:48:33.420498+00:00",
+            "created_at": "2023-04-07 22:48:33.420498+00",
             "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
             "name": "resend.com",
             "records": [
@@ -211,7 +211,7 @@ describe('Domains', () => {
         const response: CreateDomainResponseSuccess = {
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
           name: 'resend.com',
-          created_at: '2023-04-07T22:48:33.420498+00:00',
+          created_at: '2023-04-07 22:48:33.420498+00',
           status: 'not_started',
           capabilities: {
             sending: 'enabled',
@@ -278,7 +278,7 @@ describe('Domains', () => {
                 "receiving": "enabled",
                 "sending": "enabled",
               },
-              "created_at": "2023-04-07T22:48:33.420498+00:00",
+              "created_at": "2023-04-07 22:48:33.420498+00",
               "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
               "name": "resend.com",
               "records": [
@@ -377,7 +377,7 @@ describe('Domains', () => {
         const response: CreateDomainResponseSuccess = {
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
           name: 'resend.com',
-          created_at: '2023-04-07T22:48:33.420498+00:00',
+          created_at: '2023-04-07 22:48:33.420498+00',
           status: 'not_started',
           capabilities: {
             sending: 'enabled',
@@ -435,7 +435,7 @@ describe('Domains', () => {
                 "receiving": "enabled",
                 "sending": "enabled",
               },
-              "created_at": "2023-04-07T22:48:33.420498+00:00",
+              "created_at": "2023-04-07 22:48:33.420498+00",
               "id": "3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222",
               "name": "resend.com",
               "records": [
@@ -482,7 +482,7 @@ describe('Domains', () => {
         const response: CreateDomainResponseSuccess = {
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
           name: 'resend.com',
-          created_at: '2023-04-07T22:48:33.420498+00:00',
+          created_at: '2023-04-07 22:48:33.420498+00',
           status: 'not_started',
           capabilities: {
             sending: 'enabled',
@@ -553,7 +553,7 @@ describe('Domains', () => {
         const response: CreateDomainResponseSuccess = {
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
           name: 'resend.com',
-          created_at: '2023-04-07T22:48:33.420498+00:00',
+          created_at: '2023-04-07 22:48:33.420498+00',
           status: 'not_started',
           capabilities: {
             sending: 'enabled',
@@ -601,7 +601,7 @@ describe('Domains', () => {
         const response: CreateDomainResponseSuccess = {
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
           name: 'resend.com',
-          created_at: '2023-04-07T22:48:33.420498+00:00',
+          created_at: '2023-04-07 22:48:33.420498+00',
           status: 'not_started',
           capabilities: {
             sending: 'disabled',
@@ -658,7 +658,7 @@ describe('Domains', () => {
         const response: CreateDomainResponseSuccess = {
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
           name: 'resend.com',
-          created_at: '2023-04-07T22:48:33.420498+00:00',
+          created_at: '2023-04-07 22:48:33.420498+00',
           status: 'not_started',
           capabilities: {
             sending: 'enabled',
@@ -724,7 +724,7 @@ describe('Domains', () => {
         const response: CreateDomainResponseSuccess = {
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87222',
           name: 'resend.com',
-          created_at: '2023-04-07T22:48:33.420498+00:00',
+          created_at: '2023-04-07 22:48:33.420498+00',
           status: 'not_started',
           capabilities: {
             sending: 'disabled',
@@ -778,7 +778,7 @@ describe('Domains', () => {
           id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
           name: 'resend.com',
           status: 'not_started',
-          created_at: '2023-04-07T23:13:52.669661+00:00',
+          created_at: '2023-04-07 23:13:52.669661+00',
           region: 'eu-west-1',
           capabilities: {
             sending: 'enabled',
@@ -789,7 +789,7 @@ describe('Domains', () => {
           id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
           name: 'react.email',
           status: 'not_started',
-          created_at: '2023-04-07T23:13:20.417116+00:00',
+          created_at: '2023-04-07 23:13:20.417116+00',
           region: 'us-east-1',
           capabilities: {
             sending: 'enabled',
@@ -949,7 +949,7 @@ describe('Domains', () => {
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'resend.com',
         status: 'not_started',
-        created_at: '2023-06-21T06:10:36.144Z',
+        created_at: '2023-06-21 06:10:36.144+00',
         region: 'us-east-1',
         open_tracking: true,
         click_tracking: true,
@@ -1030,7 +1030,7 @@ describe('Domains', () => {
               "sending": "enabled",
             },
             "click_tracking": true,
-            "created_at": "2023-06-21T06:10:36.144Z",
+            "created_at": "2023-06-21 06:10:36.144+00",
             "id": "fd61172c-cafc-40f5-b049-b45947779a29",
             "name": "resend.com",
             "object": "domain",
@@ -1105,7 +1105,7 @@ describe('Domains', () => {
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'resend.com',
         status: 'partially_verified',
-        created_at: '2023-06-21T06:10:36.144Z',
+        created_at: '2023-06-21 06:10:36.144+00',
         region: 'us-east-1',
         click_tracking: true,
         tracking_subdomain: 'track',
@@ -1152,7 +1152,7 @@ describe('Domains', () => {
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'resend.com',
         status: 'partially_failed',
-        created_at: '2023-06-21T06:10:36.144Z',
+        created_at: '2023-06-21 06:10:36.144+00',
         region: 'us-east-1',
         capabilities: {
           sending: 'enabled',

@@ -97,14 +97,14 @@ describe('ContactProperties', () => {
             key: 'country',
             type: 'string',
             fallback_value: 'unknown',
-            created_at: '2021-01-01T00:00:00.000Z',
+            created_at: '2021-01-01 00:00:00+00',
           },
           {
             id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
             key: 'edition',
             type: 'number',
             fallback_value: 1,
-            created_at: '2021-01-01T00:00:00.000Z',
+            created_at: '2021-01-01 00:00:00+00',
           },
         ],
         object: 'list',
@@ -121,14 +121,14 @@ describe('ContactProperties', () => {
   "data": {
     "data": [
       {
-        "createdAt": "2021-01-01T00:00:00.000Z",
+        "createdAt": "2021-01-01 00:00:00+00",
         "fallbackValue": "unknown",
         "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
         "key": "country",
         "type": "string",
       },
       {
-        "createdAt": "2021-01-01T00:00:00.000Z",
+        "createdAt": "2021-01-01 00:00:00+00",
         "fallbackValue": 1,
         "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
         "key": "edition",
@@ -155,7 +155,7 @@ describe('ContactProperties', () => {
         type: 'string',
         fallback_value: 'unknown',
         object: 'contact_property',
-        created_at: '2021-01-01T00:00:00.000Z',
+        created_at: '2021-01-01 00:00:00+00',
       };
       mockSuccessResponse(response, {
         headers: {},
@@ -166,7 +166,7 @@ describe('ContactProperties', () => {
       ).resolves.toMatchInlineSnapshot(`
 {
   "data": {
-    "createdAt": "2021-01-01T00:00:00.000Z",
+    "createdAt": "2021-01-01 00:00:00+00",
     "fallbackValue": "unknown",
     "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
     "key": "country",

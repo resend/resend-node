@@ -29,9 +29,9 @@ describe('get', () => {
       object: 'automation_run',
       id: 'wr_456',
       status: 'completed',
-      started_at: '2024-01-01T00:00:00.000Z',
-      completed_at: '2024-01-01T00:01:00.000Z',
-      created_at: '2024-01-01T00:00:00.000Z',
+      started_at: '2024-01-01 00:00:00+00',
+      completed_at: '2024-01-01 00:01:00+00',
+      created_at: '2024-01-01 00:00:00+00',
       steps: [
         {
           key: 'trigger_1',
@@ -39,9 +39,9 @@ describe('get', () => {
           status: 'completed',
           output: null,
           error: null,
-          started_at: '2024-01-01T00:00:00.000Z',
-          completed_at: '2024-01-01T00:00:01.000Z',
-          created_at: '2024-01-01T00:00:00.000Z',
+          started_at: '2024-01-01 00:00:00+00',
+          completed_at: '2024-01-01 00:00:01+00',
+          created_at: '2024-01-01 00:00:00+00',
         },
       ],
     };
@@ -54,20 +54,20 @@ describe('get', () => {
     ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
-            "completed_at": "2024-01-01T00:01:00.000Z",
-            "created_at": "2024-01-01T00:00:00.000Z",
+            "completed_at": "2024-01-01 00:01:00+00",
+            "created_at": "2024-01-01 00:00:00+00",
             "id": "wr_456",
             "object": "automation_run",
-            "started_at": "2024-01-01T00:00:00.000Z",
+            "started_at": "2024-01-01 00:00:00+00",
             "status": "completed",
             "steps": [
               {
-                "completed_at": "2024-01-01T00:00:01.000Z",
-                "created_at": "2024-01-01T00:00:00.000Z",
+                "completed_at": "2024-01-01 00:00:01+00",
+                "created_at": "2024-01-01 00:00:00+00",
                 "error": null,
                 "key": "trigger_1",
                 "output": null,
-                "started_at": "2024-01-01T00:00:00.000Z",
+                "started_at": "2024-01-01 00:00:00+00",
                 "status": "completed",
                 "type": "trigger",
               },
@@ -109,9 +109,9 @@ describe('list', () => {
         {
           id: 'wr_456',
           status: 'completed',
-          started_at: '2024-01-01T00:00:00.000Z',
-          completed_at: '2024-01-01T00:01:00.000Z',
-          created_at: '2024-01-01T00:00:00.000Z',
+          started_at: '2024-01-01 00:00:00+00',
+          completed_at: '2024-01-01 00:01:00+00',
+          created_at: '2024-01-01 00:00:00+00',
         },
       ],
       has_more: false,
@@ -127,10 +127,10 @@ describe('list', () => {
           "data": {
             "data": [
               {
-                "completed_at": "2024-01-01T00:01:00.000Z",
-                "created_at": "2024-01-01T00:00:00.000Z",
+                "completed_at": "2024-01-01 00:01:00+00",
+                "created_at": "2024-01-01 00:00:00+00",
                 "id": "wr_456",
-                "started_at": "2024-01-01T00:00:00.000Z",
+                "started_at": "2024-01-01 00:00:00+00",
                 "status": "completed",
               },
             ],
@@ -157,9 +157,9 @@ describe('list', () => {
         {
           id: 'wr_789',
           status: 'running',
-          started_at: '2024-01-02T00:00:00.000Z',
+          started_at: '2024-01-02 00:00:00+00',
           completed_at: null,
-          created_at: '2024-01-02T00:00:00.000Z',
+          created_at: '2024-01-02 00:00:00+00',
         },
       ],
       has_more: true,
@@ -176,9 +176,9 @@ describe('list', () => {
             "data": [
               {
                 "completed_at": null,
-                "created_at": "2024-01-02T00:00:00.000Z",
+                "created_at": "2024-01-02 00:00:00+00",
                 "id": "wr_789",
-                "started_at": "2024-01-02T00:00:00.000Z",
+                "started_at": "2024-01-02 00:00:00+00",
                 "status": "running",
               },
             ],

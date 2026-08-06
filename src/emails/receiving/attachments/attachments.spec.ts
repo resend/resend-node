@@ -61,7 +61,7 @@ describe('Receiving', () => {
           content_id: 'cid_123',
           content_disposition: 'attachment' as const,
           download_url: 'https://example.com/download/att_123',
-          expires_at: '2025-10-18T12:00:00Z',
+          expires_at: '2025-10-18 12:00:00+00',
         };
 
         fetchMock.mockOnceIf(
@@ -90,7 +90,7 @@ describe('Receiving', () => {
             content_disposition: 'attachment',
             content_id: 'cid_123',
             download_url: 'https://example.com/download/att_123',
-            expires_at: '2025-10-18T12:00:00Z',
+            expires_at: '2025-10-18 12:00:00+00',
           },
           error: null,
           headers: {
@@ -109,7 +109,7 @@ describe('Receiving', () => {
           content_id: 'cid_456',
           content_disposition: 'inline' as const,
           download_url: 'https://example.com/download/att_456',
-          expires_at: '2025-10-18T12:00:00Z',
+          expires_at: '2025-10-18 12:00:00+00',
         };
 
         fetchMock.mockOnceIf(
@@ -138,7 +138,7 @@ describe('Receiving', () => {
             content_disposition: 'inline',
             content_id: 'cid_456',
             download_url: 'https://example.com/download/att_456',
-            expires_at: '2025-10-18T12:00:00Z',
+            expires_at: '2025-10-18 12:00:00+00',
           },
           error: null,
           headers: {
@@ -155,7 +155,7 @@ describe('Receiving', () => {
           content_type: 'text/plain',
           content_disposition: 'attachment' as const,
           download_url: 'https://example.com/download/att_789',
-          expires_at: '2025-10-18T12:00:00Z',
+          expires_at: '2025-10-18 12:00:00+00',
         };
 
         fetchMock.mockOnceIf(
@@ -182,7 +182,7 @@ describe('Receiving', () => {
             content_type: 'text/plain',
             content_disposition: 'attachment',
             download_url: 'https://example.com/download/att_789',
-            expires_at: '2025-10-18T12:00:00Z',
+            expires_at: '2025-10-18 12:00:00+00',
           },
           error: null,
           headers: {
@@ -206,7 +206,7 @@ describe('Receiving', () => {
           content_id: 'cid_123',
           content_disposition: 'attachment' as const,
           download_url: 'https://example.com/download/att_123',
-          expires_at: '2025-10-18T12:00:00Z',
+          expires_at: '2025-10-18 12:00:00+00',
         },
         {
           id: 'att_456',
@@ -216,7 +216,7 @@ describe('Receiving', () => {
           content_id: 'cid_456',
           content_disposition: 'inline' as const,
           download_url: 'https://example.com/download/att_456',
-          expires_at: '2025-10-18T12:00:00Z',
+          expires_at: '2025-10-18 12:00:00+00',
         },
       ],
     };
@@ -281,7 +281,7 @@ describe('Receiving', () => {
               content_id: 'cid_123',
               content_disposition: 'attachment',
               download_url: 'https://example.com/download/att_123',
-              expires_at: '2025-10-18T12:00:00Z',
+              expires_at: '2025-10-18 12:00:00+00',
             },
             {
               id: 'att_456',
@@ -291,7 +291,7 @@ describe('Receiving', () => {
               content_id: 'cid_456',
               content_disposition: 'inline',
               download_url: 'https://example.com/download/att_456',
-              expires_at: '2025-10-18T12:00:00Z',
+              expires_at: '2025-10-18 12:00:00+00',
             },
           ],
         };
@@ -359,7 +359,7 @@ describe('Receiving', () => {
               content_id: 'cid_123',
               content_disposition: 'attachment',
               download_url: 'https://example.com/download/att_123',
-              expires_at: '2025-10-18T12:00:00Z',
+              expires_at: '2025-10-18 12:00:00+00',
             },
             {
               id: 'att_456',
@@ -369,7 +369,7 @@ describe('Receiving', () => {
               content_id: 'cid_456',
               content_disposition: 'inline',
               download_url: 'https://example.com/download/att_456',
-              expires_at: '2025-10-18T12:00:00Z',
+              expires_at: '2025-10-18 12:00:00+00',
             },
           ],
         };
@@ -408,7 +408,7 @@ describe('Receiving', () => {
               content_id: 'cid_123',
               content_disposition: 'attachment',
               download_url: 'https://example.com/download/att_123',
-              expires_at: '2025-10-18T12:00:00Z',
+              expires_at: '2025-10-18 12:00:00+00',
             },
             {
               id: 'att_456',
@@ -418,7 +418,7 @@ describe('Receiving', () => {
               content_id: 'cid_456',
               content_disposition: 'inline',
               download_url: 'https://example.com/download/att_456',
-              expires_at: '2025-10-18T12:00:00Z',
+              expires_at: '2025-10-18 12:00:00+00',
             },
           ],
         };
@@ -455,7 +455,7 @@ describe('Receiving', () => {
               content_id: 'cid_123',
               content_disposition: 'attachment',
               download_url: 'https://example.com/download/att_123',
-              expires_at: '2025-10-18T12:00:00Z',
+              expires_at: '2025-10-18 12:00:00+00',
             },
             {
               id: 'att_456',
@@ -465,7 +465,7 @@ describe('Receiving', () => {
               content_id: 'cid_456',
               content_disposition: 'inline',
               download_url: 'https://example.com/download/att_456',
-              expires_at: '2025-10-18T12:00:00Z',
+              expires_at: '2025-10-18 12:00:00+00',
             },
           ],
         };
@@ -502,7 +502,7 @@ describe('Receiving', () => {
               content_id: 'cid_123',
               content_disposition: 'attachment',
               download_url: 'https://example.com/download/att_123',
-              expires_at: '2025-10-18T12:00:00Z',
+              expires_at: '2025-10-18 12:00:00+00',
             },
             {
               id: 'att_456',
@@ -512,7 +512,7 @@ describe('Receiving', () => {
               content_id: 'cid_456',
               content_disposition: 'inline',
               download_url: 'https://example.com/download/att_456',
-              expires_at: '2025-10-18T12:00:00Z',
+              expires_at: '2025-10-18 12:00:00+00',
             },
           ],
         };

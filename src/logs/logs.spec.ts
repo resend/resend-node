@@ -19,7 +19,7 @@ describe('Logs', () => {
       data: [
         {
           id: '3d4a472d-bc6d-4dd2-aa9d-d3d11b549e55',
-          created_at: '2024-11-01T18:10:00.000Z',
+          created_at: '2024-11-01 18:10:00+00',
           endpoint: '/emails',
           method: 'POST',
           response_status: 200,
@@ -27,7 +27,7 @@ describe('Logs', () => {
         },
         {
           id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-          created_at: '2024-11-01T18:09:00.000Z',
+          created_at: '2024-11-01 18:09:00+00',
           endpoint: '/emails/batch',
           method: 'POST',
           response_status: 200,
@@ -149,7 +149,7 @@ describe('Logs', () => {
       const response: GetLogResponseSuccess = {
         object: 'log',
         id: '3d4a472d-bc6d-4dd2-aa9d-d3d11b549e55',
-        created_at: '2024-11-01T18:10:00.000Z',
+        created_at: '2024-11-01 18:10:00+00',
         endpoint: '/emails',
         method: 'POST',
         response_status: 200,
@@ -172,7 +172,7 @@ describe('Logs', () => {
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
-            "created_at": "2024-11-01T18:10:00.000Z",
+            "created_at": "2024-11-01 18:10:00+00",
             "endpoint": "/emails",
             "id": "3d4a472d-bc6d-4dd2-aa9d-d3d11b549e55",
             "method": "POST",
