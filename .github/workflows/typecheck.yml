@@ -1,0 +1,30 @@
+name: Typecheck
+on:
+  push:
+    branches:
+      - main
+      - canary
+  pull_request:
+permissions: 
+  contents: read
+  pull-requests: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  typecheck:
+    runs-on: depot-ubuntu-22.04-2
+    timeout-minutes: 10
+    container:
+      image: node:24-slim
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - name: pnpm setup
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+      - name: Install packages
+        run: pnpm install
+      - name: Run Typecheck
+        run: pnpm typecheck
+        env:
+          SKIP_ENV_VALIDATION: true
