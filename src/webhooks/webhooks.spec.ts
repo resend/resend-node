@@ -106,7 +106,7 @@ describe('Webhooks', () => {
       const response: GetWebhookResponseSuccess = {
         object: 'webhook',
         id: '430eed87-632a-4ea6-90db-0aace67ec228',
-        created_at: '2023-06-21T06:10:36.144Z',
+        created_at: '2023-06-21 06:10:36.144+00',
         status: 'enabled',
         endpoint: 'https://example.com/webhook',
         events: ['email.sent', 'email.delivered'],
@@ -125,7 +125,7 @@ describe('Webhooks', () => {
       await expect(resend.webhooks.get('1234')).resolves.toMatchInlineSnapshot(`
         {
           "data": {
-            "created_at": "2023-06-21T06:10:36.144Z",
+            "created_at": "2023-06-21 06:10:36.144+00",
             "endpoint": "https://example.com/webhook",
             "events": [
               "email.sent",
@@ -153,14 +153,14 @@ describe('Webhooks', () => {
         {
           id: '430eed87-632a-4ea6-90db-0aace67ec228',
           endpoint: 'https://example.com/webhook',
-          created_at: '2023-06-21T06:10:36.144Z',
+          created_at: '2023-06-21 06:10:36.144+00',
           status: 'enabled',
           events: ['email.sent', 'email.delivered'],
         },
         {
           id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
           endpoint: 'https://example.com/webhook2',
-          created_at: '2023-06-20T06:10:36.144Z',
+          created_at: '2023-06-20 06:10:36.144+00',
           status: 'enabled',
           events: ['email.bounced'],
         },

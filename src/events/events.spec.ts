@@ -193,8 +193,8 @@ describe('Events', () => {
         id: 'evt-123',
         name: 'user.created',
         schema: { name: 'string' },
-        created_at: '2025-01-01T00:00:00.000Z',
-        updated_at: '2025-01-01T00:00:00.000Z',
+        created_at: '2025-01-01 00:00:00+00',
+        updated_at: '2025-01-01 00:00:00+00',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -208,14 +208,14 @@ describe('Events', () => {
       expect(data).toMatchInlineSnapshot(`
         {
           "data": {
-            "created_at": "2025-01-01T00:00:00.000Z",
+            "created_at": "2025-01-01 00:00:00+00",
             "id": "evt-123",
             "name": "user.created",
             "object": "event",
             "schema": {
               "name": "string",
             },
-            "updated_at": "2025-01-01T00:00:00.000Z",
+            "updated_at": "2025-01-01 00:00:00+00",
           },
           "error": null,
           "headers": {
@@ -239,8 +239,8 @@ describe('Events', () => {
         id: 'evt-123',
         name: 'user.created',
         schema: null,
-        created_at: '2025-01-01T00:00:00.000Z',
-        updated_at: '2025-01-01T00:00:00.000Z',
+        created_at: '2025-01-01 00:00:00+00',
+        updated_at: '2025-01-01 00:00:00+00',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -271,15 +271,15 @@ describe('Events', () => {
           id: 'evt-123',
           name: 'user.created',
           schema: null,
-          created_at: '2025-01-01T00:00:00.000Z',
-          updated_at: '2025-01-01T00:00:00.000Z',
+          created_at: '2025-01-01 00:00:00+00',
+          updated_at: '2025-01-01 00:00:00+00',
         },
         {
           id: 'evt-456',
           name: 'user.updated',
           schema: null,
-          created_at: '2025-02-01T00:00:00.000Z',
-          updated_at: '2025-02-01T00:00:00.000Z',
+          created_at: '2025-02-01 00:00:00+00',
+          updated_at: '2025-02-01 00:00:00+00',
         },
       ],
     };

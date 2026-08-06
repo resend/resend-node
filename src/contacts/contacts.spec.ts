@@ -227,7 +227,7 @@ describe('Contacts', () => {
             {
               id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
               email: 'team@resend.com',
-              created_at: '2023-04-07T23:13:52.669661+00:00',
+              created_at: '2023-04-07 23:13:52.669661+00',
               unsubscribed: false,
               first_name: 'John',
               last_name: 'Smith',
@@ -235,7 +235,7 @@ describe('Contacts', () => {
             {
               id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
               email: 'team@react.email',
-              created_at: '2023-04-07T23:13:20.417116+00:00',
+              created_at: '2023-04-07 23:13:20.417116+00',
               unsubscribed: false,
               first_name: 'John',
               last_name: 'Smith',
@@ -279,7 +279,7 @@ describe('Contacts', () => {
               {
                 id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
                 email: 'team@resend.com',
-                created_at: '2023-04-07T23:13:52.669661+00:00',
+                created_at: '2023-04-07 23:13:52.669661+00',
                 unsubscribed: false,
                 first_name: 'John',
                 last_name: 'Smith',
@@ -287,7 +287,7 @@ describe('Contacts', () => {
               {
                 id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
                 email: 'team@react.email',
-                created_at: '2023-04-07T23:13:20.417116+00:00',
+                created_at: '2023-04-07 23:13:20.417116+00',
                 unsubscribed: false,
                 first_name: 'John',
                 last_name: 'Smith',
@@ -307,7 +307,7 @@ describe('Contacts', () => {
               "data": {
                 "data": [
                   {
-                    "created_at": "2023-04-07T23:13:52.669661+00:00",
+                    "created_at": "2023-04-07 23:13:52.669661+00",
                     "email": "team@resend.com",
                     "first_name": "John",
                     "id": "b6d24b8e-af0b-4c3c-be0c-359bbd97381e",
@@ -315,7 +315,7 @@ describe('Contacts', () => {
                     "unsubscribed": false,
                   },
                   {
-                    "created_at": "2023-04-07T23:13:20.417116+00:00",
+                    "created_at": "2023-04-07 23:13:20.417116+00",
                     "email": "team@react.email",
                     "first_name": "John",
                     "id": "ac7503ac-e027-4aea-94b3-b0acd46f65f9",
@@ -344,7 +344,7 @@ describe('Contacts', () => {
           {
             id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
             email: 'team@resend.com',
-            created_at: '2023-04-07T23:13:52.669661+00:00',
+            created_at: '2023-04-07 23:13:52.669661+00',
             unsubscribed: false,
             first_name: 'John',
             last_name: 'Smith',
@@ -484,7 +484,7 @@ describe('Contacts', () => {
         email: 'team@resend.com',
         first_name: '',
         last_name: '',
-        created_at: '2024-01-16T18:12:26.514Z',
+        created_at: '2024-01-16 18:12:26.514+00',
         unsubscribed: false,
         properties: {},
       };
@@ -506,7 +506,7 @@ describe('Contacts', () => {
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
-            "created_at": "2024-01-16T18:12:26.514Z",
+            "created_at": "2024-01-16 18:12:26.514+00",
             "email": "team@resend.com",
             "first_name": "",
             "id": "fd61172c-cafc-40f5-b049-b45947779a29",
@@ -530,7 +530,7 @@ describe('Contacts', () => {
         email: 'team@resend.com',
         first_name: '',
         last_name: '',
-        created_at: '2024-01-16T18:12:26.514Z',
+        created_at: '2024-01-16 18:12:26.514+00',
         unsubscribed: false,
         properties: {},
       };
@@ -552,7 +552,7 @@ describe('Contacts', () => {
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
-            "created_at": "2024-01-16T18:12:26.514Z",
+            "created_at": "2024-01-16 18:12:26.514+00",
             "email": "team@resend.com",
             "first_name": "",
             "id": "fd61172c-cafc-40f5-b049-b45947779a29",
@@ -577,7 +577,7 @@ describe('Contacts', () => {
           email: 'team@resend.com',
           first_name: '',
           last_name: '',
-          created_at: '2024-01-16T18:12:26.514Z',
+          created_at: '2024-01-16 18:12:26.514+00',
           unsubscribed: false,
           properties: {
             country: {
@@ -607,7 +607,7 @@ describe('Contacts', () => {
         ).resolves.toMatchInlineSnapshot(`
           {
             "data": {
-              "created_at": "2024-01-16T18:12:26.514Z",
+              "created_at": "2024-01-16 18:12:26.514+00",
               "email": "team@resend.com",
               "first_name": "",
               "id": "fd61172c-cafc-40f5-b049-b45947779a29",
@@ -640,7 +640,7 @@ describe('Contacts', () => {
           email: 'team@resend.com',
           first_name: '',
           last_name: '',
-          created_at: '2024-01-16T18:12:26.514Z',
+          created_at: '2024-01-16 18:12:26.514+00',
           unsubscribed: false,
           properties: {
             country: {
@@ -670,7 +670,7 @@ describe('Contacts', () => {
         ).resolves.toMatchInlineSnapshot(`
           {
             "data": {
-              "created_at": "2024-01-16T18:12:26.514Z",
+              "created_at": "2024-01-16 18:12:26.514+00",
               "email": "team@resend.com",
               "first_name": "",
               "id": "fd61172c-cafc-40f5-b049-b45947779a29",
@@ -702,7 +702,7 @@ describe('Contacts', () => {
           email: 'team@resend.com',
           first_name: '',
           last_name: '',
-          created_at: '2024-01-16T18:12:26.514Z',
+          created_at: '2024-01-16 18:12:26.514+00',
           properties: {
             country: {
               type: 'string',
@@ -729,7 +729,7 @@ describe('Contacts', () => {
         ).resolves.toMatchInlineSnapshot(`
           {
             "data": {
-              "created_at": "2024-01-16T18:12:26.514Z",
+              "created_at": "2024-01-16 18:12:26.514+00",
               "email": "team@resend.com",
               "first_name": "",
               "id": "fd61172c-cafc-40f5-b049-b45947779a29",
@@ -770,7 +770,7 @@ describe('Contacts', () => {
           email: 'team@resend.com',
           first_name: '',
           last_name: '',
-          created_at: '2024-01-16T18:12:26.514Z',
+          created_at: '2024-01-16 18:12:26.514+00',
           properties: {
             country: {
               type: 'string',
@@ -797,7 +797,7 @@ describe('Contacts', () => {
         ).resolves.toMatchInlineSnapshot(`
           {
             "data": {
-              "created_at": "2024-01-16T18:12:26.514Z",
+              "created_at": "2024-01-16 18:12:26.514+00",
               "email": "team@resend.com",
               "first_name": "",
               "id": "fd61172c-cafc-40f5-b049-b45947779a29",

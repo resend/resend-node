@@ -31,12 +31,12 @@ describe('ContactSegments', () => {
           {
             id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
             name: 'Test Segment',
-            created_at: '2021-01-01T00:00:00.000Z',
+            created_at: '2021-01-01 00:00:00+00',
           },
           {
             id: 'd7e1e488-ae2c-4255-a40c-a4db3af7ed0c',
             name: 'Another Segment',
-            created_at: '2021-01-02T00:00:00.000Z',
+            created_at: '2021-01-02 00:00:00+00',
           },
         ],
         has_more: false,
@@ -52,12 +52,12 @@ describe('ContactSegments', () => {
           "data": {
             "data": [
               {
-                "created_at": "2021-01-01T00:00:00.000Z",
+                "created_at": "2021-01-01 00:00:00+00",
                 "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
                 "name": "Test Segment",
               },
               {
-                "created_at": "2021-01-02T00:00:00.000Z",
+                "created_at": "2021-01-02 00:00:00+00",
                 "id": "d7e1e488-ae2c-4255-a40c-a4db3af7ed0c",
                 "name": "Another Segment",
               },
@@ -85,7 +85,7 @@ describe('ContactSegments', () => {
           {
             id: 'c7e1e488-ae2c-4255-a40c-a4db3af7ed0b',
             name: 'Test Segment',
-            created_at: '2021-01-01T00:00:00.000Z',
+            created_at: '2021-01-01 00:00:00+00',
           },
         ],
         has_more: true,
@@ -101,7 +101,7 @@ describe('ContactSegments', () => {
           "data": {
             "data": [
               {
-                "created_at": "2021-01-01T00:00:00.000Z",
+                "created_at": "2021-01-01 00:00:00+00",
                 "id": "c7e1e488-ae2c-4255-a40c-a4db3af7ed0b",
                 "name": "Test Segment",
               },

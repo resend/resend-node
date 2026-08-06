@@ -111,15 +111,15 @@ describe('list', () => {
         id: '49a3999c-0ce1-4ea6-ab68-afcd6dc2e794',
         name: 'Welcome Flow',
         status: 'enabled',
-        created_at: '2025-01-01T00:00:00.000Z',
-        updated_at: '2025-01-01T00:00:00.000Z',
+        created_at: '2025-01-01 00:00:00+00',
+        updated_at: '2025-01-01 00:00:00+00',
       },
       {
         id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
         name: 'Onboarding Flow',
         status: 'disabled',
-        created_at: '2025-02-01T00:00:00.000Z',
-        updated_at: '2025-02-01T00:00:00.000Z',
+        created_at: '2025-02-01 00:00:00+00',
+        updated_at: '2025-02-01 00:00:00+00',
       },
     ],
   };
@@ -302,8 +302,8 @@ describe('get', () => {
       id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
       name: 'Welcome Flow',
       status: 'enabled',
-      created_at: '2025-01-01T00:00:00.000Z',
-      updated_at: '2025-01-01T00:00:00.000Z',
+      created_at: '2025-01-01 00:00:00+00',
+      updated_at: '2025-01-01 00:00:00+00',
       steps: [
         {
           key: 'step-1',
@@ -329,7 +329,7 @@ describe('get', () => {
         {
           "data": {
             "connections": [],
-            "created_at": "2025-01-01T00:00:00.000Z",
+            "created_at": "2025-01-01 00:00:00+00",
             "id": "559ac32e-9ef5-46fb-82a1-b76b840c0f7b",
             "name": "Welcome Flow",
             "object": "automation",
@@ -343,7 +343,7 @@ describe('get', () => {
                 "type": "trigger",
               },
             ],
-            "updated_at": "2025-01-01T00:00:00.000Z",
+            "updated_at": "2025-01-01 00:00:00+00",
           },
           "error": null,
           "headers": {

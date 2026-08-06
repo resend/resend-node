@@ -59,7 +59,7 @@ describe('Suppressions', () => {
         email: 'blocked@example.com',
         origin: 'bounce',
         source_id: null,
-        created_at: '2024-01-16T18:12:26.514Z',
+        created_at: '2024-01-16 18:12:26.514+00',
       };
       mockSuccessResponse(response, {});
 
@@ -69,7 +69,7 @@ describe('Suppressions', () => {
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
-            "created_at": "2024-01-16T18:12:26.514Z",
+            "created_at": "2024-01-16 18:12:26.514+00",
             "email": "blocked@example.com",
             "id": "fd61172c-cafc-40f5-b049-b45947779a29",
             "object": "suppression",
@@ -171,7 +171,7 @@ describe('Suppressions', () => {
           email: 'blocked@example.com',
           origin: 'complaint',
           source_id: null,
-          created_at: '2023-04-07T23:13:52.669661+00:00',
+          created_at: '2023-04-07 23:13:52.669661+00',
         },
       ],
     };

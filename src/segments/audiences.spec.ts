@@ -94,12 +94,12 @@ describe('Audiences', () => {
         {
           id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
           name: 'resend.com',
-          created_at: '2023-04-07T23:13:52.669661+00:00',
+          created_at: '2023-04-07 23:13:52.669661+00',
         },
         {
           id: 'ac7503ac-e027-4aea-94b3-b0acd46f65f9',
           name: 'react.email',
-          created_at: '2023-04-07T23:13:20.417116+00:00',
+          created_at: '2023-04-07 23:13:20.417116+00',
         },
       ],
     };
@@ -253,7 +253,7 @@ describe('Audiences', () => {
         object: 'segment',
         id: 'fd61172c-cafc-40f5-b049-b45947779a29',
         name: 'resend.com',
-        created_at: '2023-06-21T06:10:36.144Z',
+        created_at: '2023-06-21 06:10:36.144+00',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -270,7 +270,7 @@ describe('Audiences', () => {
       ).resolves.toMatchInlineSnapshot(`
         {
           "data": {
-            "created_at": "2023-06-21T06:10:36.144Z",
+            "created_at": "2023-06-21 06:10:36.144+00",
             "id": "fd61172c-cafc-40f5-b049-b45947779a29",
             "name": "resend.com",
             "object": "segment",

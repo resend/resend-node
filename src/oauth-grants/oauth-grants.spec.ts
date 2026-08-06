@@ -26,7 +26,7 @@ describe('OAuthGrants', () => {
           id: '650e8400-e29b-41d4-a716-446655440001',
           client_id: '430eed87-632a-4ea6-90db-0aace67ec228',
           scopes: ['emails:send'],
-          created_at: '2023-06-21T06:10:36.144Z',
+          created_at: '2023-06-21 06:10:36.144+00',
           revoked_at: null,
           revoked_reason: null,
           client: {
@@ -38,8 +38,8 @@ describe('OAuthGrants', () => {
           id: '650e8400-e29b-41d4-a716-446655440002',
           client_id: '430eed87-632a-4ea6-90db-0aace67ec228',
           scopes: ['emails:send', 'domains:read'],
-          created_at: '2023-06-20T06:10:36.144Z',
-          revoked_at: '2023-06-22T06:10:36.144Z',
+          created_at: '2023-06-20 06:10:36.144+00',
+          revoked_at: '2023-06-22 06:10:36.144+00',
           revoked_reason: 'revoked_from_api',
           client: {
             name: 'Resend CLI',
