@@ -5,6 +5,10 @@ import {
 import { render } from '../render';
 import type { Resend } from '../resend';
 import type {
+  CancelBroadcastResponse,
+  CancelBroadcastResponseSuccess,
+} from './interfaces/cancel-broadcast.interface';
+import type {
   CreateBroadcastOptions,
   CreateBroadcastRequestOptions,
 } from './interfaces/create-broadcast-options.interface';
@@ -125,6 +129,13 @@ export class Broadcasts {
   async remove(id: string): Promise<RemoveBroadcastResponse> {
     const data = await this.resend.delete<RemoveBroadcastResponseSuccess>(
       `/broadcasts/${id}`,
+    );
+    return data;
+  }
+
+  async cancel(id: string): Promise<CancelBroadcastResponse> {
+    const data = await this.resend.post<CancelBroadcastResponseSuccess>(
+      `/broadcasts/${id}/cancel`,
     );
     return data;
   }

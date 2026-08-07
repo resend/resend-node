@@ -1,4 +1,5 @@
 export * from './broadcast';
+export * from './cancel-broadcast.interface';
 export * from './create-broadcast-options.interface';
 export * from './get-broadcast.interface';
 export * from './get-broadcast-metrics.interface';
