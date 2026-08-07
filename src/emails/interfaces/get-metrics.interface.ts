@@ -26,7 +26,7 @@ export type EmailMetric =
 
 export type EmailMetricsDimension = 'period' | 'domain' | 'email';
 
-export type EmailMetricsGranularity = 'hourly' | 'daily' | 'weekly';
+export type EmailMetricsGranularity = 'hourly' | 'daily' | 'weekly' | 'monthly';
 
 export type EmailMetricsSortBy = 'date' | EmailMetric;
 
