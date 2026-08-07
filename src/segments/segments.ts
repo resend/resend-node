@@ -78,7 +78,7 @@ function buildMetricsQuery(options: GetSegmentsMetricsOptions) {
   const params: Record<string, string | undefined> = {
     metrics: options.metrics?.join(','),
     dimensions: options.dimensions?.join(','),
-    'filter[segment_id]': options.filter?.segmentId?.join(','),
+    segment_id: options.filter?.segmentId?.join(','),
     sort_by: options.sortBy,
     sort_order: options.sortOrder,
   };
