@@ -955,11 +955,11 @@ describe('Emails', () => {
         },
       });
       expect(fetchMock.mock.calls[0][0]).toBe(
-        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&timezone=America%2FNew_York&granularity=daily&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cdomain&filter%5Bdomain_id%5D=d91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
+        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&timezone=America%2FNew_York&granularity=daily&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cdomain&domain_id=d91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
       );
     });
 
-    it('calls endpoint passing the email dimension and filter[email_id]', async () => {
+    it('calls endpoint passing the email dimension and email_id', async () => {
       const response: GetEmailsMetricsResponseSuccess = {
         object: 'metrics',
         start_date: '2026-07-01T00:00:00.000Z',
@@ -1005,7 +1005,7 @@ describe('Emails', () => {
         },
       });
       expect(fetchMock.mock.calls[0][0]).toBe(
-        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&timezone=America%2FNew_York&granularity=daily&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cemail&filter%5Bemail_id%5D=4dd369bc-aa82-4ff3-97de-514ae3000ee0',
+        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&timezone=America%2FNew_York&granularity=daily&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cemail&email_id=4dd369bc-aa82-4ff3-97de-514ae3000ee0',
       );
     });
 
