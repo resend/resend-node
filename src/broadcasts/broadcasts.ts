@@ -1,4 +1,7 @@
-import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import {
+  buildPaginationQuery,
+  buildPaginationUrl,
+} from '../common/utils/build-pagination-query';
 import { render } from '../render';
 import type { Resend } from '../resend';
 import type {

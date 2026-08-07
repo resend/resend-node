@@ -1,6 +1,7 @@
 import { Webhook } from 'standardwebhooks';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
+import { Events } from './events/events';
 import type {
   CreateWebhookOptions,
   CreateWebhookRequestOptions,
@@ -40,7 +41,11 @@ interface VerifyWebhookOptions {
 }
 
 export class Webhooks {
-  constructor(private readonly resend: Resend) {}
+  readonly events: Events;
+
+  constructor(private readonly resend: Resend) {
+    this.events = new Events(resend);
+  }
 
   async create(
     payload: CreateWebhookOptions,
