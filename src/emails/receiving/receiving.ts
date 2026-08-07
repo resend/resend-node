@@ -1,5 +1,5 @@
 import PostalMime from 'postal-mime';
-import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import { Attachments } from './attachments/attachments';
 import type {
@@ -49,10 +49,7 @@ export class Receiving {
   async list(
     options: ListReceivingEmailsOptions = {},
   ): Promise<ListReceivingEmailsResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString
-      ? `/emails/receiving?${queryString}`
-      : '/emails/receiving';
+    const url = buildPaginationUrl('/emails/receiving', options);
 
     const data = await this.resend.get<ListReceivingEmailsResponseSuccess>(url);
 

@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import type {
   AddContactSegmentOptions,
@@ -35,10 +35,7 @@ export class ContactSegments {
     }
 
     const identifier = options.email ? options.email : options.contactId;
-    const queryString = buildPaginationQuery(options);
-    const url = queryString
-      ? `/contacts/${identifier}/segments?${queryString}`
-      : `/contacts/${identifier}/segments`;
+    const url = buildPaginationUrl(`/contacts/${identifier}/segments`, options);
 
     const data = await this.resend.get<ListContactSegmentsResponseSuccess>(url);
     return data;

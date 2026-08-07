@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseDomainToApiOptions } from '../common/utils/parse-domain-to-api-options';
 import type { Resend } from '../resend';
 import { DomainClaims } from './claims/domain-claims';
@@ -51,8 +51,7 @@ export class Domains {
   }
 
   async list(options: ListDomainsOptions = {}): Promise<ListDomainsResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/domains?${queryString}` : '/domains';
+    const url = buildPaginationUrl('/domains', options);
 
     const data = await this.resend.get<ListDomainsResponseSuccess>(url);
     return data;

@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
   GetLogResponse,
@@ -14,8 +14,7 @@ export class Logs {
   constructor(private readonly resend: Resend) {}
 
   async list(options: ListLogsOptions = {}): Promise<ListLogsResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/logs?${queryString}` : '/logs';
+    const url = buildPaginationUrl('/logs', options);
     const data = await this.resend.get<ListLogsResponseSuccess>(url);
     return data;
   }

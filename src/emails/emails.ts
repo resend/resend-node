@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import { render } from '../render';
 import type { Resend } from '../resend';
@@ -73,8 +73,7 @@ export class Emails {
   }
 
   async list(options: ListEmailsOptions = {}): Promise<ListEmailsResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/emails?${queryString}` : '/emails';
+    const url = buildPaginationUrl('/emails', options);
 
     const data = await this.resend.get<ListEmailsResponseSuccess>(url);
 

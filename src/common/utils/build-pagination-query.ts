@@ -1,5 +1,14 @@
 import type { PaginationOptions } from '../interfaces/pagination-options.interface';
 
+export function buildPaginationUrl(
+  base: string,
+  options: PaginationOptions,
+): string {
+  const queryString = buildPaginationQuery(options);
+
+  return queryString ? `${base}?${queryString}` : base;
+}
+
 /**
  * Builds a query string from pagination options
  * @param options - Pagination options containing limit and either after or before (but not both)

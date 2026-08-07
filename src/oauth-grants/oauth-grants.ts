@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
   ListOAuthGrantsOptions,
@@ -16,8 +16,7 @@ export class OAuthGrants {
   async list(
     options: ListOAuthGrantsOptions = {},
   ): Promise<ListOAuthGrantsResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/oauth/grants?${queryString}` : '/oauth/grants';
+    const url = buildPaginationUrl('/oauth/grants', options);
 
     const data = await this.resend.get<ListOAuthGrantsResponseSuccess>(url);
     return data;
