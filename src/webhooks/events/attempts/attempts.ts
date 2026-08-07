@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../../../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../../../common/utils/build-pagination-query';
 import type { Resend } from '../../../resend';
 import type {
   ListWebhookEventAttemptsOptions,
@@ -14,10 +14,10 @@ export class Attempts {
   ): Promise<ListWebhookEventAttemptsResponse> {
     const { webhookId, eventId } = options;
 
-    const queryString = buildPaginationQuery(options);
-    const url = queryString
-      ? `/webhooks/${webhookId}/events/${eventId}/attempts?${queryString}`
-      : `/webhooks/${webhookId}/events/${eventId}/attempts`;
+    const url = buildPaginationUrl(
+      `/webhooks/${webhookId}/events/${eventId}/attempts`,
+      options,
+    );
 
     const data =
       await this.resend.get<ListWebhookEventAttemptsResponseSuccess>(url);
