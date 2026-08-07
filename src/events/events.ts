@@ -1,7 +1,4 @@
-import {
-  buildPaginationQuery,
-  buildPaginationUrl,
-} from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseEventToApiOptions } from '../common/utils/parse-automation-to-api-options';
 import type { Resend } from '../resend';
 import type {
