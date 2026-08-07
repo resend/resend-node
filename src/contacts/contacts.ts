@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import { ContactImports } from './imports/contact-imports';
 import type {
@@ -104,16 +104,12 @@ export class Contacts {
   async list(options: ListContactsOptions = {}): Promise<ListContactsResponse> {
     const segmentId = options.segmentId ?? options.audienceId;
     if (!segmentId) {
-      const queryString = buildPaginationQuery(options);
-      const url = queryString ? `/contacts?${queryString}` : '/contacts';
+      const url = buildPaginationUrl('/contacts', options);
       const data = await this.resend.get<ListContactsResponseSuccess>(url);
       return data;
     }
 
-    const queryString = buildPaginationQuery(options);
-    const url = queryString
-      ? `/segments/${segmentId}/contacts?${queryString}`
-      : `/segments/${segmentId}/contacts`;
+    const url = buildPaginationUrl(`/segments/${segmentId}/contacts`, options);
     const data = await this.resend.get<ListContactsResponseSuccess>(url);
     return data;
   }

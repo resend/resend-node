@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import {
   parseContactPropertyFromApi,
   parseContactPropertyToApiOptions,
@@ -45,10 +45,7 @@ export class ContactProperties {
   async list(
     options: ListContactPropertiesOptions = {},
   ): Promise<ListContactPropertiesResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString
-      ? `/contact-properties?${queryString}`
-      : '/contact-properties';
+    const url = buildPaginationUrl('/contact-properties', options);
 
     const response =
       await this.resend.get<ListContactPropertiesResponseSuccess>(url);

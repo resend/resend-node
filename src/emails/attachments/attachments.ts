@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import type {
   GetAttachmentOptions,
@@ -27,10 +27,7 @@ export class Attachments {
   ): Promise<ListAttachmentsResponse> {
     const { emailId } = options;
 
-    const queryString = buildPaginationQuery(options);
-    const url = queryString
-      ? `/emails/${emailId}/attachments?${queryString}`
-      : `/emails/${emailId}/attachments`;
+    const url = buildPaginationUrl(`/emails/${emailId}/attachments`, options);
 
     const data = await this.resend.get<ListAttachmentsResponseSuccess>(url);
 

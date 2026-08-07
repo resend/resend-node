@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
   CreateApiKeyOptions,
@@ -33,8 +33,7 @@ export class ApiKeys {
   }
 
   async list(options: ListApiKeysOptions = {}): Promise<ListApiKeysResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/api-keys?${queryString}` : '/api-keys';
+    const url = buildPaginationUrl('/api-keys', options);
 
     const data = await this.resend.get<ListApiKeysResponseSuccess>(url);
     return data;

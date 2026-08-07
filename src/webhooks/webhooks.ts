@@ -1,5 +1,5 @@
 import { Webhook } from 'standardwebhooks';
-import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
   CreateWebhookOptions,
@@ -63,8 +63,7 @@ export class Webhooks {
   }
 
   async list(options: ListWebhooksOptions = {}): Promise<ListWebhooksResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/webhooks?${queryString}` : '/webhooks';
+    const url = buildPaginationUrl('/webhooks', options);
 
     const data = await this.resend.get<ListWebhooksResponseSuccess>(url);
     return data;

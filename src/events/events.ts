@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseEventToApiOptions } from '../common/utils/parse-automation-to-api-options';
 import type { Resend } from '../resend';
 import type {
@@ -59,9 +59,7 @@ export class Events {
   }
 
   async list(options: ListEventsOptions = {}): Promise<ListEventsResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/events?${queryString}` : '/events';
-
+    const url = buildPaginationUrl('/events', options);
     const data = await this.resend.get<ListEventsResponseSuccess>(url);
     return data;
   }

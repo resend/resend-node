@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { render } from '../render';
 import type { Resend } from '../resend';
 import type {
@@ -75,8 +75,7 @@ export class Broadcasts {
   async list(
     options: ListBroadcastsOptions = {},
   ): Promise<ListBroadcastsResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/broadcasts?${queryString}` : '/broadcasts';
+    const url = buildPaginationUrl('/broadcasts', options);
 
     const data = await this.resend.get<ListBroadcastsResponseSuccess>(url);
     return data;

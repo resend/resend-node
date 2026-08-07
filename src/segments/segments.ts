@@ -1,4 +1,4 @@
-import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
   CreateSegmentOptions,
@@ -36,8 +36,7 @@ export class Segments {
   }
 
   async list(options: ListSegmentsOptions = {}): Promise<ListSegmentsResponse> {
-    const queryString = buildPaginationQuery(options);
-    const url = queryString ? `/segments?${queryString}` : '/segments';
+    const url = buildPaginationUrl('/segments', options);
 
     const data = await this.resend.get<ListSegmentsResponseSuccess>(url);
     return data;
