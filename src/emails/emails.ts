@@ -123,8 +123,8 @@ function buildMetricsQuery(options: GetEmailsMetricsOptions) {
     granularity: options.granularity,
     metrics: options.metrics?.join(','),
     dimensions: options.dimensions?.join(','),
-    'filter[domain_id]': options.filter?.domainId?.join(','),
-    'filter[email_id]': options.filter?.emailId?.join(','),
+    domain_id: options.filter?.domainId?.join(','),
+    email_id: options.filter?.emailId?.join(','),
     sort_by: options.sortBy,
     sort_order: options.sortOrder,
   };
