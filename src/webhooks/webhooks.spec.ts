@@ -304,7 +304,18 @@ describe('Webhooks', () => {
         created_at: '2026-08-22T15:28:00.000Z',
         status: 'success',
         next_attempt_at: null,
-        payload: { type: 'email.sent', data: { email_id: 'abc' } },
+        payload: {
+          type: 'email.sent',
+          created_at: '2026-08-22T15:28:00.000Z',
+          data: {
+            created_at: '2026-08-22T15:28:00.000Z',
+            email_id: 'abc',
+            message_id: '<abc@resend.dev>',
+            from: 'bu@resend.com',
+            to: ['zeno@resend.com'],
+            subject: 'Hello World',
+          },
+        },
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
