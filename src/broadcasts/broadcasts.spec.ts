@@ -2,6 +2,7 @@ import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
 import { mockSuccessResponse } from '../test-utils/mock-fetch';
+import type { CancelBroadcastResponseSuccess } from './interfaces/cancel-broadcast.interface';
 import type {
   CreateBroadcastOptions,
   CreateBroadcastResponseSuccess,
@@ -980,6 +981,76 @@ describe('Broadcasts', () => {
           },
         }
       `);
+    });
+  });
+
+  describe('cancel', () => {
+    it('cancels a broadcast', async () => {
+      const id = 'b01e0de9-7c27-4a53-bf38-2e3f98389a65';
+      const response: CancelBroadcastResponseSuccess = {
+        object: 'broadcast',
+        id,
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.broadcasts.cancel(id),
+      ).resolves.toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "b01e0de9-7c27-4a53-bf38-2e3f98389a65",
+            "object": "broadcast",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+    });
+
+    describe('when broadcast is not cancelable', () => {
+      it('returns error', async () => {
+        const response: ErrorResponse = {
+          name: 'validation_error',
+          statusCode: 403,
+          message: 'Only queued or scheduled broadcasts can be canceled',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 403,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = resend.broadcasts.cancel(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+        );
+
+        await expect(result).resolves.toMatchInlineSnapshot(`
+          {
+            "data": null,
+            "error": {
+              "message": "Only queued or scheduled broadcasts can be canceled",
+              "name": "validation_error",
+              "statusCode": 403,
+            },
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+      });
     });
   });
 
