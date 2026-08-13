@@ -2,6 +2,7 @@ export * from './broadcast';
 export * from './cancel-broadcast.interface';
 export * from './create-broadcast-options.interface';
 export * from './get-broadcast.interface';
+export * from './list-broadcast-clicked-links.interface';
 export * from './list-broadcast-recipients.interface';
 export * from './list-broadcasts.interface';
 export * from './remove-broadcast.interface';
