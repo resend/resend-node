@@ -9,6 +9,7 @@ import type {
 import type { GetAutomationResponseSuccess } from './interfaces/get-automation.interface';
 import type { ListAutomationsResponseSuccess } from './interfaces/list-automation.interface';
 import type { RemoveAutomationResponseSuccess } from './interfaces/remove-automation.interface';
+import type { DuplicateAutomationResponseSuccess } from './interfaces/duplicate-automation.interface';
 import type { StopAutomationResponseSuccess } from './interfaces/stop-automation.interface';
 import type { UpdateAutomationResponseSuccess } from './interfaces/update-automation.interface';
 
@@ -524,6 +525,45 @@ describe('update', () => {
         method: 'PATCH',
         headers: expect.any(Headers),
         body: JSON.stringify({ name: 'Updated Flow' }),
+      }),
+    );
+  });
+});
+
+describe('duplicate', () => {
+  it('duplicates an automation', async () => {
+    const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
+    const response: DuplicateAutomationResponseSuccess = {
+      object: 'automation',
+      id: 'e169aa45-1ecf-4183-9955-b1499d5701d3',
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+
+    const data = await resend.automations.duplicate(id);
+    expect(data).toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "e169aa45-1ecf-4183-9955-b1499d5701d3",
+            "object": "automation",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://api.resend.com/automations/${id}/duplicate`,
+      expect.objectContaining({
+        method: 'POST',
+        headers: expect.any(Headers),
       }),
     );
   });
