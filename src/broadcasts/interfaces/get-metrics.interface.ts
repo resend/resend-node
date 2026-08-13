@@ -71,13 +71,11 @@ export type GetBroadcastsMetricsOptions = {
    */
   dimensions?: BroadcastMetricsDimension[];
 
-  filter?: {
-    /**
-     * Restrict the response to these broadcast IDs (up to 100). When set,
-     * the date range is ignored unless `period` is also in `dimensions`.
-     */
-    broadcastId?: string[];
-  };
+  /**
+   * Restrict the response to these broadcast IDs (up to 100). When set,
+   * the date range is ignored unless `period` is also in `dimensions`.
+   */
+  broadcastId?: string[];
 };
 
 export type BroadcastMetricsTotals = Partial<Record<BroadcastMetric, number>>;

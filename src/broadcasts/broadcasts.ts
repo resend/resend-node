@@ -180,7 +180,7 @@ function buildMetricsQuery(options: GetBroadcastsMetricsOptions) {
     granularity: options.granularity,
     metrics: options.metrics?.join(','),
     dimensions: options.dimensions?.join(','),
-    broadcast_id: options.filter?.broadcastId?.join(','),
+    broadcast_id: options.broadcastId?.join(','),
   };
 
   const searchParams = new URLSearchParams();

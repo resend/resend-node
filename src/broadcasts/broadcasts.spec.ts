@@ -677,7 +677,7 @@ describe('Broadcasts', () => {
         granularity: 'daily',
         metrics: ['sent', 'delivered', 'open_rate'],
         dimensions: ['period', 'broadcast'],
-        filter: { broadcastId: ['559ac32e-9ef5-46fb-82a1-b76b840c0f7b'] },
+        broadcastId: ['559ac32e-9ef5-46fb-82a1-b76b840c0f7b'],
       });
 
       expect(result).toEqual({
@@ -718,7 +718,7 @@ describe('Broadcasts', () => {
 
       await resend.broadcasts.metrics({
         dimensions: ['broadcast'],
-        filter: { broadcastId: ['b1', 'b2'] },
+        broadcastId: ['b1', 'b2'],
       });
 
       expect(fetchMock.mock.calls[0][0]).toBe(
