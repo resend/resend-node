@@ -9,6 +9,7 @@ import type {
 } from './interfaces/create-broadcast-options.interface';
 import type { GetBroadcastResponseSuccess } from './interfaces/get-broadcast.interface';
 import type { GetBroadcastsMetricsResponseSuccess } from './interfaces/get-metrics.interface';
+import type { ListBroadcastClickedLinksResponseSuccess } from './interfaces/list-broadcast-clicked-links.interface';
 import type { ListBroadcastRecipientsResponseSuccess } from './interfaces/list-broadcast-recipients.interface';
 import type { ListBroadcastsResponseSuccess } from './interfaces/list-broadcasts.interface';
 import type { RemoveBroadcastResponseSuccess } from './interfaces/remove-broadcast.interface';
@@ -964,6 +965,139 @@ describe('Broadcasts', () => {
           headers: expect.any(Headers),
         }),
       );
+    });
+  });
+
+  describe('clickedLinks', () => {
+    const response: ListBroadcastClickedLinksResponseSuccess = {
+      object: 'list',
+      has_more: false,
+      data: [
+        {
+          id: 'b2Zmc2V0OjA',
+          url: 'https://resend.com/pricing',
+          clicks: 42,
+          unique_clicks: 30,
+        },
+        {
+          id: 'b2Zmc2V0OjE',
+          url: 'https://resend.com/docs',
+          clicks: 17,
+          unique_clicks: 15,
+        },
+      ],
+    };
+
+    describe('when no pagination options are provided', () => {
+      it('lists clicked links', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = await resend.broadcasts.clickedLinks(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+        );
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/clicked-links',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
+
+    describe('when pagination options are provided', () => {
+      it('passes limit param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.broadcasts.clickedLinks(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+          { limit: 1 },
+        );
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/clicked-links?limit=1',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+
+      it('passes after param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.broadcasts.clickedLinks(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+          { limit: 1, after: 'cursor-value' },
+        );
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/clicked-links?limit=1&after=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+
+      it('passes before param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.broadcasts.clickedLinks(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+          { limit: 1, before: 'cursor-value' },
+        );
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/clicked-links?limit=1&before=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
     });
   });
 
