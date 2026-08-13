@@ -17,9 +17,10 @@ import type {
   GetBroadcastResponseSuccess,
 } from './interfaces/get-broadcast.interface';
 import type {
-  GetBroadcastMetricsResponse,
-  GetBroadcastMetricsResponseSuccess,
-} from './interfaces/get-broadcast-metrics.interface';
+  GetBroadcastsMetricsOptions,
+  GetBroadcastsMetricsResponse,
+  GetBroadcastsMetricsResponseSuccess,
+} from './interfaces/get-metrics.interface';
 import type {
   BroadcastRecipientEventType,
   ListBroadcastRecipientsOptions,
@@ -105,10 +106,16 @@ export class Broadcasts {
     return data;
   }
 
-  async metrics(id: string): Promise<GetBroadcastMetricsResponse> {
-    const data = await this.resend.get<GetBroadcastMetricsResponseSuccess>(
-      `/broadcasts/${id}/metrics`,
-    );
+  async metrics(
+    options: GetBroadcastsMetricsOptions = {},
+  ): Promise<GetBroadcastsMetricsResponse> {
+    const queryString = buildMetricsQuery(options);
+    const url = queryString
+      ? `/broadcasts/metrics?${queryString}`
+      : '/broadcasts/metrics';
+
+    const data =
+      await this.resend.get<GetBroadcastsMetricsResponseSuccess>(url);
     return data;
   }
 
@@ -163,6 +170,27 @@ export class Broadcasts {
     );
     return data;
   }
+}
+
+function buildMetricsQuery(options: GetBroadcastsMetricsOptions) {
+  const params: Record<string, string | undefined> = {
+    start_date: options.startDate,
+    end_date: options.endDate,
+    timezone: options.timezone,
+    granularity: options.granularity,
+    metrics: options.metrics?.join(','),
+    dimensions: options.dimensions?.join(','),
+    broadcast_id: options.filter?.broadcastId?.join(','),
+  };
+
+  const searchParams = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== '') {
+      searchParams.set(key, value);
+    }
+  }
+
+  return searchParams.toString();
 }
 
 function buildRecipientsQuery(options: ListBroadcastRecipientsOptions) {
