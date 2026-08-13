@@ -6,10 +6,10 @@ import type {
   CreateAutomationOptions,
   CreateAutomationResponseSuccess,
 } from './interfaces/create-automation-options.interface';
+import type { DuplicateAutomationResponseSuccess } from './interfaces/duplicate-automation.interface';
 import type { GetAutomationResponseSuccess } from './interfaces/get-automation.interface';
 import type { ListAutomationsResponseSuccess } from './interfaces/list-automation.interface';
 import type { RemoveAutomationResponseSuccess } from './interfaces/remove-automation.interface';
-import type { DuplicateAutomationResponseSuccess } from './interfaces/duplicate-automation.interface';
 import type { StopAutomationResponseSuccess } from './interfaces/stop-automation.interface';
 import type { UpdateAutomationResponseSuccess } from './interfaces/update-automation.interface';
 
