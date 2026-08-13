@@ -22,6 +22,11 @@ import type {
   GetBroadcastsMetricsResponseSuccess,
 } from './interfaces/get-metrics.interface';
 import type {
+  ListBroadcastClickedLinksOptions,
+  ListBroadcastClickedLinksResponse,
+  ListBroadcastClickedLinksResponseSuccess,
+} from './interfaces/list-broadcast-clicked-links.interface';
+import type {
   BroadcastRecipientEventType,
   ListBroadcastRecipientsOptions,
   ListBroadcastRecipientsResponse,
@@ -130,6 +135,17 @@ export class Broadcasts {
 
     const data =
       await this.resend.get<ListBroadcastRecipientsResponseSuccess<T>>(url);
+    return data;
+  }
+
+  async clickedLinks(
+    id: string,
+    options: ListBroadcastClickedLinksOptions = {},
+  ): Promise<ListBroadcastClickedLinksResponse> {
+    const url = buildPaginationUrl(`/broadcasts/${id}/clicked-links`, options);
+
+    const data =
+      await this.resend.get<ListBroadcastClickedLinksResponseSuccess>(url);
     return data;
   }
 
