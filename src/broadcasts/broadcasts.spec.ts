@@ -8,7 +8,7 @@ import type {
   CreateBroadcastResponseSuccess,
 } from './interfaces/create-broadcast-options.interface';
 import type { GetBroadcastResponseSuccess } from './interfaces/get-broadcast.interface';
-import type { GetBroadcastMetricsResponseSuccess } from './interfaces/get-broadcast-metrics.interface';
+import type { GetBroadcastsMetricsResponseSuccess } from './interfaces/get-metrics.interface';
 import type { ListBroadcastRecipientsResponseSuccess } from './interfaces/list-broadcast-recipients.interface';
 import type { ListBroadcastsResponseSuccess } from './interfaces/list-broadcasts.interface';
 import type { RemoveBroadcastResponseSuccess } from './interfaces/remove-broadcast.interface';
@@ -598,73 +598,65 @@ describe('Broadcasts', () => {
   });
 
   describe('metrics', () => {
-    describe('when broadcast not found', () => {
-      it('returns error', async () => {
-        const response: ErrorResponse = {
-          name: 'not_found',
-          statusCode: 404,
-          message: 'Broadcast not found',
-        };
+    it('calls endpoint with no options and returns the response', async () => {
+      const response: GetBroadcastsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-06T00:00:00.000Z',
+        end_date: '2026-07-12T00:00:00.000Z',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: [],
+        granularity: 'daily',
+        totals: {
+          sent: 1204,
+          delivered: 1180,
+          open_rate: 50.0,
+        },
+      };
 
-        fetchMock.mockOnce(JSON.stringify(response), {
-          status: 404,
-          headers: {
-            'content-type': 'application/json',
-          },
-        });
-
-        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-
-        const result = resend.broadcasts.metrics(
-          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
-        );
-
-        await expect(result).resolves.toMatchInlineSnapshot(`
-          {
-            "data": null,
-            "error": {
-              "message": "Broadcast not found",
-              "name": "not_found",
-              "statusCode": 404,
-            },
-            "headers": {
-              "content-type": "application/json",
-            },
-          }
-        `);
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
       });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.broadcasts.metrics();
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/broadcasts/metrics',
+      );
     });
 
-    it('retrieves broadcast metrics', async () => {
-      const response: GetBroadcastMetricsResponseSuccess = {
-        object: 'broadcast_metrics',
-        broadcast_id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
-        status: 'sent',
-        created_at: '2026-12-01 19:32:22.980+00',
-        scheduled_at: '2026-12-02 19:32:22.980+00',
-        sent_at: '2026-12-02 19:32:22.980+00',
-        total: 1000,
-        sent: 995,
-        remaining: 0,
-        delivered: { total: 945, percentage: 94.5 },
-        opened: { total: 500, percentage: 50 },
-        clicked: { total: 100, percentage: 10 },
-        unsubscribed: { total: 20, percentage: 2 },
-        bounced: { total: 50, percentage: 5 },
-        complained: { total: 10, percentage: 1 },
-        suppressed: { total: 5, percentage: 0.5 },
-        clicked_links: [
+    it('calls endpoint passing date range, metrics, dimensions and filters', async () => {
+      const response: GetBroadcastsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'broadcast'],
+        granularity: 'daily',
+        totals: {
+          sent: 1204,
+          delivered: 1180,
+          open_rate: 50.0,
+        },
+        data: [
           {
-            url: 'https://resend.com/pricing',
-            clicks: 90,
-            unique_clicks: 65,
-            percentage: 6.5,
-          },
-          {
-            url: 'https://resend.com/docs',
-            clicks: 45,
-            unique_clicks: 35,
-            percentage: 3.5,
+            period: '2026-07-01',
+            id: '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+            name: 'Product Update July 2026',
+            sent: 172,
+            delivered: 169,
+            open_rate: 49.7,
           },
         ],
       };
@@ -678,64 +670,90 @@ describe('Broadcasts', () => {
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
-      await expect(
-        resend.broadcasts.metrics('559ac32e-9ef5-46fb-82a1-b76b840c0f7b'),
-      ).resolves.toMatchInlineSnapshot(`
+      const result = await resend.broadcasts.metrics({
+        startDate: '2026-07-01',
+        endDate: '2026-07-08',
+        timezone: 'America/New_York',
+        granularity: 'daily',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'broadcast'],
+        broadcastId: ['559ac32e-9ef5-46fb-82a1-b76b840c0f7b'],
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/broadcasts/metrics?start_date=2026-07-01&end_date=2026-07-08&timezone=America%2FNew_York&granularity=daily&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cbroadcast&broadcast_id=559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+      );
+    });
+
+    it('joins multiple broadcast_id filters into a single comma-separated param', async () => {
+      const response: GetBroadcastsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent'],
+        dimensions: ['broadcast'],
+        granularity: 'daily',
+        totals: { sent: 300 },
+        data: [
+          { id: 'b1', name: 'A', sent: 150 },
+          { id: 'b2', name: 'B', sent: 150 },
+        ],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await resend.broadcasts.metrics({
+        dimensions: ['broadcast'],
+        broadcastId: ['b1', 'b2'],
+      });
+
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/broadcasts/metrics?dimensions=broadcast&broadcast_id=b1%2Cb2',
+      );
+    });
+
+    it('returns error when request fails', async () => {
+      const response: ErrorResponse = {
+        name: 'validation_error',
+        message: 'Invalid `start_date`.',
+        statusCode: 422,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.broadcasts.metrics({
+        startDate: 'not-a-date',
+      });
+
+      expect(result).toMatchInlineSnapshot(`
         {
-          "data": {
-            "bounced": {
-              "percentage": 5,
-              "total": 50,
-            },
-            "broadcast_id": "559ac32e-9ef5-46fb-82a1-b76b840c0f7b",
-            "clicked": {
-              "percentage": 10,
-              "total": 100,
-            },
-            "clicked_links": [
-              {
-                "clicks": 90,
-                "percentage": 6.5,
-                "unique_clicks": 65,
-                "url": "https://resend.com/pricing",
-              },
-              {
-                "clicks": 45,
-                "percentage": 3.5,
-                "unique_clicks": 35,
-                "url": "https://resend.com/docs",
-              },
-            ],
-            "complained": {
-              "percentage": 1,
-              "total": 10,
-            },
-            "created_at": "2026-12-01 19:32:22.980+00",
-            "delivered": {
-              "percentage": 94.5,
-              "total": 945,
-            },
-            "object": "broadcast_metrics",
-            "opened": {
-              "percentage": 50,
-              "total": 500,
-            },
-            "remaining": 0,
-            "scheduled_at": "2026-12-02 19:32:22.980+00",
-            "sent": 995,
-            "sent_at": "2026-12-02 19:32:22.980+00",
-            "status": "sent",
-            "suppressed": {
-              "percentage": 0.5,
-              "total": 5,
-            },
-            "total": 1000,
-            "unsubscribed": {
-              "percentage": 2,
-              "total": 20,
-            },
+          "data": null,
+          "error": {
+            "message": "Invalid \`start_date\`.",
+            "name": "validation_error",
+            "statusCode": 422,
           },
-          "error": null,
           "headers": {
             "content-type": "application/json",
           },
