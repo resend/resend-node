@@ -7,6 +7,7 @@ import type {
   CreateEmailResponseSuccess,
 } from './interfaces/create-email-options.interface';
 import type { GetEmailResponseSuccess } from './interfaces/get-email-options.interface';
+import type { GetEmailsMetricsResponseSuccess } from './interfaces/get-metrics.interface';
 import type { ListEmailsResponseSuccess } from './interfaces/list-emails-options.interface';
 
 const fetchMocker = createFetchMock(vi);
@@ -870,6 +871,390 @@ describe('Emails', () => {
           'https://api.resend.com/emails?before=cursor123',
         );
       });
+    });
+  });
+
+  describe('metrics', () => {
+    it('calls endpoint with no options and returns the response', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: [],
+        granularity: 'daily',
+        sort_by: 'sent',
+        sort_order: 'desc',
+        totals: {
+          sent: 1204,
+          delivered: 1180,
+          open_rate: 50.0,
+        },
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics();
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics',
+      );
+    });
+
+    it('calls endpoint passing date range, metrics, dimensions and filters', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'domain'],
+        granularity: 'daily',
+        sort_by: 'date',
+        sort_order: 'asc',
+        totals: {
+          sent: 1204,
+          delivered: 1180,
+          open_rate: 50.0,
+        },
+        data: [
+          {
+            period: '2026-07-01',
+            domain_id: 'd91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
+            domain_name: 'example.com',
+            sent: 172,
+            delivered: 169,
+            open_rate: 49.7,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        startDate: '2026-07-01',
+        endDate: '2026-07-08',
+        timezone: 'America/New_York',
+        granularity: 'daily',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'domain'],
+        filter: { domainId: ['d91cd9bd-1176-4f47-2a4b-fce2d5399cbf'] },
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&timezone=America%2FNew_York&granularity=daily&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cdomain&domain_id=d91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
+      );
+    });
+
+    it('calls endpoint passing the email dimension and email_id', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'email'],
+        granularity: 'daily',
+        sort_by: 'date',
+        sort_order: 'asc',
+        totals: {
+          sent: 1204,
+          delivered: 1180,
+          open_rate: 50.0,
+        },
+        data: [
+          {
+            period: '2026-07-01',
+            email_id: '4dd369bc-aa82-4ff3-97de-514ae3000ee0',
+            sent: 172,
+            delivered: 169,
+            open_rate: 49.7,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        startDate: '2026-07-01',
+        endDate: '2026-07-08',
+        timezone: 'America/New_York',
+        granularity: 'daily',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'email'],
+        filter: { emailId: ['4dd369bc-aa82-4ff3-97de-514ae3000ee0'] },
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&timezone=America%2FNew_York&granularity=daily&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cemail&email_id=4dd369bc-aa82-4ff3-97de-514ae3000ee0',
+      );
+    });
+
+    it('calls endpoint passing sortBy=date and sortOrder for a period breakdown', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent'],
+        dimensions: ['period'],
+        granularity: 'daily',
+        sort_by: 'date',
+        sort_order: 'desc',
+        totals: {
+          sent: 1204,
+        },
+        data: [
+          { period: '2026-07-08', sent: 200 },
+          { period: '2026-07-01', sent: 150 },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        startDate: '2026-07-01',
+        endDate: '2026-07-08',
+        metrics: ['sent'],
+        dimensions: ['period'],
+        sortBy: 'date',
+        sortOrder: 'desc',
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&metrics=sent&dimensions=period&sort_by=date&sort_order=desc',
+      );
+    });
+
+    it('calls endpoint passing sortBy=date for a period+domain breakdown', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent'],
+        dimensions: ['period', 'domain'],
+        granularity: 'daily',
+        sort_by: 'date',
+        sort_order: 'asc',
+        totals: {
+          sent: 1204,
+        },
+        data: [
+          {
+            period: '2026-07-01',
+            domain_id: 'd91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
+            domain_name: 'example.com',
+            sent: 172,
+          },
+          {
+            period: '2026-07-08',
+            domain_id: 'd91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
+            domain_name: 'example.com',
+            sent: 200,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        metrics: ['sent'],
+        dimensions: ['period', 'domain'],
+        sortBy: 'date',
+        sortOrder: 'asc',
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?metrics=sent&dimensions=period%2Cdomain&sort_by=date&sort_order=asc',
+      );
+    });
+
+    it('calls endpoint passing a metric sortBy for a domain breakdown', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent'],
+        dimensions: ['domain'],
+        granularity: 'daily',
+        sort_by: 'sent',
+        sort_order: 'asc',
+        totals: {
+          sent: 1204,
+        },
+        data: [
+          {
+            domain_id: 'd91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
+            domain_name: 'example.com',
+            sent: 172,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        dimensions: ['domain'],
+        sortBy: 'sent',
+        sortOrder: 'asc',
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?dimensions=domain&sort_by=sent&sort_order=asc',
+      );
+    });
+
+    it('calls endpoint passing an engagement metric sortBy for a domain breakdown', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['unique_opened'],
+        dimensions: ['domain'],
+        granularity: 'daily',
+        sort_by: 'unique_opened',
+        sort_order: 'desc',
+        totals: {
+          unique_opened: 512,
+        },
+        data: [
+          {
+            domain_id: 'd91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
+            domain_name: 'example.com',
+            unique_opened: 128,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        dimensions: ['domain'],
+        metrics: ['unique_opened'],
+        sortBy: 'unique_opened',
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?metrics=unique_opened&dimensions=domain&sort_by=unique_opened',
+      );
+    });
+
+    it('calls endpoint passing a rate metric sortBy for an email breakdown', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['open_rate'],
+        dimensions: ['email'],
+        granularity: 'daily',
+        sort_by: 'open_rate',
+        sort_order: 'desc',
+        totals: {
+          open_rate: 42.5,
+        },
+        data: [
+          {
+            email_id: '3c9a1e0a-2b7d-4e0a-9e0a-2b7d4e0a9e0a',
+            open_rate: 63.4,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        dimensions: ['email'],
+        metrics: ['open_rate'],
+        sortBy: 'open_rate',
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?metrics=open_rate&dimensions=email&sort_by=open_rate',
+      );
+    });
+
+    it('returns error when request fails', async () => {
+      const response: ErrorResponse = {
+        name: 'validation_error',
+        message: 'Invalid `start_date`.',
+        statusCode: 422,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const result = await resend.emails.metrics({ startDate: 'not-a-date' });
+
+      expect(result).toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "error": {
+            "message": "Invalid \`start_date\`.",
+            "name": "validation_error",
+            "statusCode": 422,
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 });

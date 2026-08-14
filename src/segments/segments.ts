@@ -7,6 +7,11 @@ import type {
   CreateSegmentResponseSuccess,
 } from './interfaces/create-segment-options.interface';
 import type {
+  GetSegmentsMetricsOptions,
+  GetSegmentsMetricsResponse,
+  GetSegmentsMetricsResponseSuccess,
+} from './interfaces/get-metrics.interface';
+import type {
   GetSegmentResponse,
   GetSegmentResponseSuccess,
 } from './interfaces/get-segment.interface';
@@ -55,4 +60,35 @@ export class Segments {
     );
     return data;
   }
+
+  async metrics(
+    options: GetSegmentsMetricsOptions = {},
+  ): Promise<GetSegmentsMetricsResponse> {
+    const queryString = buildMetricsQuery(options);
+    const url = queryString
+      ? `/segments/metrics?${queryString}`
+      : '/segments/metrics';
+
+    const data = await this.resend.get<GetSegmentsMetricsResponseSuccess>(url);
+    return data;
+  }
+}
+
+function buildMetricsQuery(options: GetSegmentsMetricsOptions) {
+  const params: Record<string, string | undefined> = {
+    metrics: options.metrics?.join(','),
+    dimensions: options.dimensions?.join(','),
+    segment_id: options.filter?.segmentId?.join(','),
+    sort_by: options.sortBy,
+    sort_order: options.sortOrder,
+  };
+
+  const searchParams = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== '') {
+      searchParams.set(key, value);
+    }
+  }
+
+  return searchParams.toString();
 }

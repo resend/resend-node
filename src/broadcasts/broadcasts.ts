@@ -1,4 +1,7 @@
-import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import {
+  buildPaginationQuery,
+  buildPaginationUrl,
+} from '../common/utils/build-pagination-query';
 import { render } from '../render';
 import type { Resend } from '../resend';
 import type {
@@ -13,6 +16,22 @@ import type {
   GetBroadcastResponse,
   GetBroadcastResponseSuccess,
 } from './interfaces/get-broadcast.interface';
+import type {
+  GetBroadcastsMetricsOptions,
+  GetBroadcastsMetricsResponse,
+  GetBroadcastsMetricsResponseSuccess,
+} from './interfaces/get-metrics.interface';
+import type {
+  ListBroadcastClickedLinksOptions,
+  ListBroadcastClickedLinksResponse,
+  ListBroadcastClickedLinksResponseSuccess,
+} from './interfaces/list-broadcast-clicked-links.interface';
+import type {
+  BroadcastRecipientEventType,
+  ListBroadcastRecipientsOptions,
+  ListBroadcastRecipientsResponse,
+  ListBroadcastRecipientsResponseSuccess,
+} from './interfaces/list-broadcast-recipients.interface';
 import type {
   ListBroadcastsOptions,
   ListBroadcastsResponse,
@@ -92,6 +111,44 @@ export class Broadcasts {
     return data;
   }
 
+  async metrics(
+    options: GetBroadcastsMetricsOptions = {},
+  ): Promise<GetBroadcastsMetricsResponse> {
+    const queryString = buildMetricsQuery(options);
+    const url = queryString
+      ? `/broadcasts/metrics?${queryString}`
+      : '/broadcasts/metrics';
+
+    const data =
+      await this.resend.get<GetBroadcastsMetricsResponseSuccess>(url);
+    return data;
+  }
+
+  async recipients<T extends BroadcastRecipientEventType>(
+    id: string,
+    options: ListBroadcastRecipientsOptions<T>,
+  ): Promise<ListBroadcastRecipientsResponse<T>> {
+    const queryString = buildRecipientsQuery(
+      options as ListBroadcastRecipientsOptions,
+    );
+    const url = `/broadcasts/${id}/recipients?${queryString}`;
+
+    const data =
+      await this.resend.get<ListBroadcastRecipientsResponseSuccess<T>>(url);
+    return data;
+  }
+
+  async clickedLinks(
+    id: string,
+    options: ListBroadcastClickedLinksOptions = {},
+  ): Promise<ListBroadcastClickedLinksResponse> {
+    const url = buildPaginationUrl(`/broadcasts/${id}/clicked-links`, options);
+
+    const data =
+      await this.resend.get<ListBroadcastClickedLinksResponseSuccess>(url);
+    return data;
+  }
+
   async remove(id: string): Promise<RemoveBroadcastResponse> {
     const data = await this.resend.delete<RemoveBroadcastResponseSuccess>(
       `/broadcasts/${id}`,
@@ -129,4 +186,42 @@ export class Broadcasts {
     );
     return data;
   }
+}
+
+function buildMetricsQuery(options: GetBroadcastsMetricsOptions) {
+  const params: Record<string, string | undefined> = {
+    start_date: options.startDate,
+    end_date: options.endDate,
+    timezone: options.timezone,
+    granularity: options.granularity,
+    metrics: options.metrics?.join(','),
+    dimensions: options.dimensions?.join(','),
+    broadcast_id: options.broadcastId?.join(','),
+  };
+
+  const searchParams = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== '') {
+      searchParams.set(key, value);
+    }
+  }
+
+  return searchParams.toString();
+}
+
+function buildRecipientsQuery(options: ListBroadcastRecipientsOptions) {
+  const { type, email, bounceType, ...pagination } = options;
+  const searchParams = new URLSearchParams(buildPaginationQuery(pagination));
+
+  searchParams.set('type', type);
+
+  if (email !== undefined) {
+    searchParams.set('email', email);
+  }
+
+  if (bounceType !== undefined) {
+    searchParams.set('bounce_type', bounceType);
+  }
+
+  return searchParams.toString();
 }
