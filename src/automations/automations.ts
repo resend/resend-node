@@ -12,6 +12,10 @@ import type {
   CreateAutomationResponseSuccess,
 } from './interfaces/create-automation-options.interface';
 import type {
+  DuplicateAutomationResponse,
+  DuplicateAutomationResponseSuccess,
+} from './interfaces/duplicate-automation.interface';
+import type {
   GetAutomationResponse,
   GetAutomationResponseSuccess,
 } from './interfaces/get-automation.interface';
@@ -105,6 +109,13 @@ export class Automations {
     const data = await this.resend.patch<UpdateAutomationResponseSuccess>(
       `/automations/${id}`,
       apiPayload,
+    );
+    return data;
+  }
+
+  async duplicate(id: string): Promise<DuplicateAutomationResponse> {
+    const data = await this.resend.post<DuplicateAutomationResponseSuccess>(
+      `/automations/${id}/duplicate`,
     );
     return data;
   }
