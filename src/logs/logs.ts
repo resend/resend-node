@@ -15,7 +15,7 @@ export class Logs {
 
   async list(options: ListLogsOptions = {}): Promise<ListLogsResponse> {
     const url = buildPaginationUrl('/logs', options);
-    const data = await this.resend.get<ListLogsResponseSuccess>(url);
+    const data = await this.resend.get<ListLogsResponseSuccess>(url, options);
     return data;
   }
 

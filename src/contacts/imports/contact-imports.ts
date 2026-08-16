@@ -49,7 +49,7 @@ export class ContactImports {
       ? `/contacts/imports?${queryString}`
       : '/contacts/imports';
 
-    return this.resend.get<ListContactImportsResponseSuccess>(url);
+    return this.resend.get<ListContactImportsResponseSuccess>(url, options);
   }
 
   async get(id: string): Promise<GetContactImportResponse> {
