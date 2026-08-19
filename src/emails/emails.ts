@@ -23,6 +23,11 @@ import type {
   ListEmailsResponseSuccess,
 } from './interfaces/list-emails-options.interface';
 import type {
+  ShareEmailOptions,
+  ShareEmailResponse,
+  ShareEmailResponseSuccess,
+} from './interfaces/share-email-options.interface';
+import type {
   UpdateEmailOptions,
   UpdateEmailResponse,
   UpdateEmailResponseSuccess,
@@ -93,6 +98,17 @@ export class Emails {
   async cancel(id: string): Promise<CancelEmailResponse> {
     const data = await this.resend.post<CancelEmailResponseSuccess>(
       `/emails/${id}/cancel`,
+    );
+    return data;
+  }
+
+  async share(
+    id: string,
+    payload?: ShareEmailOptions,
+  ): Promise<ShareEmailResponse> {
+    const data = await this.resend.post<ShareEmailResponseSuccess>(
+      `/emails/${id}/share`,
+      { expires_in: payload?.expiresIn },
     );
     return data;
   }

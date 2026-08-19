@@ -8,6 +8,7 @@ import type {
 } from './interfaces/create-email-options.interface';
 import type { GetEmailResponseSuccess } from './interfaces/get-email-options.interface';
 import type { ListEmailsResponseSuccess } from './interfaces/list-emails-options.interface';
+import type { ShareEmailResponseSuccess } from './interfaces/share-email-options.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -869,6 +870,136 @@ describe('Emails', () => {
         expect(fetchMock.mock.calls[0][0]).toBe(
           'https://api.resend.com/emails?before=cursor123',
         );
+      });
+    });
+  });
+
+  describe('share', () => {
+    it('creates a share link with the default expiration', async () => {
+      const id = '67d9bcdb-5a02-42d7-8da9-0d6feea18cff';
+      const response: ShareEmailResponseSuccess = {
+        object: 'email',
+        id,
+        url: 'https://resend.com/share/abc123',
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await expect(resend.emails.share(id)).resolves.toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "67d9bcdb-5a02-42d7-8da9-0d6feea18cff",
+            "object": "email",
+            "url": "https://resend.com/share/abc123",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        `https://api.resend.com/emails/${id}/share`,
+      );
+      expect(fetchMock.mock.calls[0][1]?.body).toBe('{}');
+    });
+
+    it('creates a share link with a custom expiration', async () => {
+      const id = '67d9bcdb-5a02-42d7-8da9-0d6feea18cff';
+      const response: ShareEmailResponseSuccess = {
+        object: 'email',
+        id,
+        url: 'https://resend.com/share/abc123',
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.emails.share(id, { expiresIn: '10m' });
+
+      expect(fetchMock.mock.calls[0][1]?.body).toBe(
+        JSON.stringify({ expires_in: '10m' }),
+      );
+    });
+
+    describe('when expiresIn is malformed or exceeds 48 hours', () => {
+      it('returns a validation error', async () => {
+        const response: ErrorResponse = {
+          name: 'validation_error',
+          statusCode: 422,
+          message: 'expires_in must not exceed 48 hours',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 422,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const result = resend.emails.share(
+          '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          { expiresIn: '72h' },
+        );
+
+        await expect(result).resolves.toMatchInlineSnapshot(`
+          {
+            "data": null,
+            "error": {
+              "message": "expires_in must not exceed 48 hours",
+              "name": "validation_error",
+              "statusCode": 422,
+            },
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+      });
+    });
+
+    describe('when email is not found', () => {
+      it('returns error', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          statusCode: 404,
+          message: 'Email not found',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const result = resend.emails.share(
+          '61cda979-919d-4b9d-9638-c148b93ff410',
+        );
+
+        await expect(result).resolves.toMatchInlineSnapshot(`
+          {
+            "data": null,
+            "error": {
+              "message": "Email not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
       });
     });
   });
