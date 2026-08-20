@@ -8,6 +8,10 @@ import type {
 } from './interfaces/create-api-key-options.interface';
 import type { ListApiKeysResponseSuccess } from './interfaces/list-api-keys.interface';
 import type { RemoveApiKeyResponseSuccess } from './interfaces/remove-api-keys.interface';
+import type {
+  UpdateApiKeyOptions,
+  UpdateApiKeyResponseSuccess,
+} from './interfaces/update-api-key-options.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -397,6 +401,116 @@ describe('API Keys', () => {
           }),
         );
       });
+    });
+  });
+
+  describe('update', () => {
+    const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+
+    it('updates an api key name', async () => {
+      const payload: UpdateApiKeyOptions = {
+        name: 'New name',
+      };
+      const response: UpdateApiKeyResponseSuccess = {
+        object: 'api_key',
+        id,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.apiKeys.update(id, payload),
+      ).resolves.toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+            "object": "api_key",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+    });
+
+    it('throws error when missing name', async () => {
+      const payload: UpdateApiKeyOptions = {
+        name: '',
+      };
+      const response: ErrorResponse = {
+        message: 'String must contain at least 1 character(s)',
+        name: 'validation_error',
+        statusCode: 422,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = resend.apiKeys.update(id, payload);
+
+      await expect(result).resolves.toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "error": {
+            "message": "String must contain at least 1 character(s)",
+            "name": "validation_error",
+            "statusCode": 422,
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+    });
+
+    it('throws error when wrong id', async () => {
+      const response: ErrorResponse = {
+        name: 'not_found',
+        message: 'API key not found',
+        statusCode: 404,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 404,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = resend.apiKeys.update(
+        '34bd250e-615a-400c-be11-5912572ee15b',
+        { name: 'New name' },
+      );
+
+      await expect(result).resolves.toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "error": {
+            "message": "API key not found",
+            "name": "not_found",
+            "statusCode": 404,
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 
