@@ -7,6 +7,7 @@ import type {
   CreateEmailResponseSuccess,
 } from './interfaces/create-email-options.interface';
 import type { GetEmailResponseSuccess } from './interfaces/get-email-options.interface';
+import type { GetEmailsMetricsResponseSuccess } from './interfaces/get-metrics.interface';
 import type { ListEmailsResponseSuccess } from './interfaces/list-emails-options.interface';
 import type { ShareEmailResponseSuccess } from './interfaces/share-email-options.interface';
 
@@ -1001,6 +1002,216 @@ describe('Emails', () => {
           }
         `);
       });
+    });
+  });
+
+  describe('metrics', () => {
+    it('calls endpoint with no options and returns the response', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: [],
+        granularity: 'daily',
+        totals: {
+          sent: 1204,
+          delivered: 1180,
+          open_rate: 50.0,
+        },
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics();
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics',
+      );
+    });
+
+    it('calls endpoint passing date range, metrics, dimensions and domain_id', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'domain'],
+        granularity: 'daily',
+        totals: {
+          sent: 1204,
+          delivered: 1180,
+          open_rate: 50.0,
+        },
+        data: [
+          {
+            period: '2026-07-01',
+            domain_id: 'd91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
+            domain_name: 'example.com',
+            sent: 172,
+            delivered: 169,
+            open_rate: 49.7,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        startDate: '2026-07-01',
+        endDate: '2026-07-08',
+        timezone: 'America/New_York',
+        granularity: 'daily',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'domain'],
+        domainId: ['d91cd9bd-1176-4f47-2a4b-fce2d5399cbf'],
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&timezone=America%2FNew_York&granularity=daily&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cdomain&domain_id=d91cd9bd-1176-4f47-2a4b-fce2d5399cbf',
+      );
+    });
+
+    it('calls endpoint passing the email dimension and email_id', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'email'],
+        granularity: 'daily',
+        totals: {
+          sent: 1204,
+          delivered: 1180,
+          open_rate: 50.0,
+        },
+        data: [
+          {
+            period: '2026-07-01',
+            email_id: '4dd369bc-aa82-4ff3-97de-514ae3000ee0',
+            sent: 172,
+            delivered: 169,
+            open_rate: 49.7,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        startDate: '2026-07-01',
+        endDate: '2026-07-08',
+        timezone: 'America/New_York',
+        granularity: 'daily',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'email'],
+        emailId: ['4dd369bc-aa82-4ff3-97de-514ae3000ee0'],
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&timezone=America%2FNew_York&granularity=daily&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cemail&email_id=4dd369bc-aa82-4ff3-97de-514ae3000ee0',
+      );
+    });
+
+    it('calls endpoint passing the broadcast dimension and broadcast_id', async () => {
+      const response: GetEmailsMetricsResponseSuccess = {
+        object: 'metrics',
+        start_date: '2026-07-01T00:00:00.000Z',
+        end_date: '2026-07-08T00:00:00.000Z',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'broadcast'],
+        granularity: 'daily',
+        totals: {
+          sent: 1204,
+          delivered: 1180,
+          open_rate: 50.0,
+        },
+        data: [
+          {
+            period: '2026-07-01',
+            broadcast_id: '5a5a3b1e-3b1a-4b1a-8b1a-3b1a4b1a8b1a',
+            broadcast_name: 'July Newsletter',
+            sent: 172,
+            delivered: 169,
+            open_rate: 49.7,
+          },
+        ],
+      };
+
+      mockSuccessResponse(response);
+
+      const result = await resend.emails.metrics({
+        startDate: '2026-07-01',
+        endDate: '2026-07-08',
+        timezone: 'America/New_York',
+        granularity: 'daily',
+        metrics: ['sent', 'delivered', 'open_rate'],
+        dimensions: ['period', 'broadcast'],
+        broadcastId: ['5a5a3b1e-3b1a-4b1a-8b1a-3b1a4b1a8b1a'],
+      });
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/emails/metrics?start_date=2026-07-01&end_date=2026-07-08&timezone=America%2FNew_York&granularity=daily&metrics=sent%2Cdelivered%2Copen_rate&dimensions=period%2Cbroadcast&broadcast_id=5a5a3b1e-3b1a-4b1a-8b1a-3b1a4b1a8b1a',
+      );
+    });
+
+    it('returns error when request fails', async () => {
+      const response: ErrorResponse = {
+        name: 'validation_error',
+        message: 'Invalid `start_date`.',
+        statusCode: 422,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const result = await resend.emails.metrics({ startDate: 'not-a-date' });
+
+      expect(result).toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "error": {
+            "message": "Invalid \`start_date\`.",
+            "name": "validation_error",
+            "statusCode": 422,
+          },
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
     });
   });
 });
