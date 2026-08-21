@@ -1071,7 +1071,7 @@ describe('Emails', () => {
         granularity: 'daily',
         metrics: ['sent', 'delivered', 'open_rate'],
         dimensions: ['period', 'domain'],
-        filter: { domainId: ['d91cd9bd-1176-4f47-2a4b-fce2d5399cbf'] },
+        domainId: ['d91cd9bd-1176-4f47-2a4b-fce2d5399cbf'],
       });
 
       expect(result).toEqual({
@@ -1119,7 +1119,7 @@ describe('Emails', () => {
         granularity: 'daily',
         metrics: ['sent', 'delivered', 'open_rate'],
         dimensions: ['period', 'email'],
-        filter: { emailId: ['4dd369bc-aa82-4ff3-97de-514ae3000ee0'] },
+        emailId: ['4dd369bc-aa82-4ff3-97de-514ae3000ee0'],
       });
 
       expect(result).toEqual({
@@ -1168,7 +1168,7 @@ describe('Emails', () => {
         granularity: 'daily',
         metrics: ['sent', 'delivered', 'open_rate'],
         dimensions: ['period', 'broadcast'],
-        filter: { broadcastId: ['5a5a3b1e-3b1a-4b1a-8b1a-3b1a4b1a8b1a'] },
+        broadcastId: ['5a5a3b1e-3b1a-4b1a-8b1a-3b1a4b1a8b1a'],
       });
 
       expect(result).toEqual({

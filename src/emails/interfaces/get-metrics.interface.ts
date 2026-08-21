@@ -28,7 +28,7 @@ export type EmailMetricsDimension = 'period' | 'domain' | 'email' | 'broadcast';
 
 export type EmailMetricsGranularity = 'hourly' | 'daily' | 'weekly' | 'monthly';
 
-export type GetEmailsMetricsOptions = {
+type EmailMetricsCommonOptions = {
   /**
    * The start of the date range, as an ISO 8601 date or datetime.
    * Defaults to 6 days before `endDate`.
@@ -63,30 +63,44 @@ export type GetEmailsMetricsOptions = {
   metrics?: EmailMetric[];
 
   /**
-   * The dimensions to break the response down by. Defaults to `[]`, which
-   * returns a single `totals` row for the whole range, with no `data`.
+   * Restrict the response to these sending domain IDs.
    */
-  dimensions?: EmailMetricsDimension[];
-
-  filter?: {
-    /**
-     * Restrict the response to these sending domain IDs.
-     */
-    domainId?: string[];
-
-    /**
-     * Restrict the response to these email IDs. Cannot be combined with the
-     * `broadcast` dimension.
-     */
-    emailId?: string[];
-
-    /**
-     * Restrict the response to these broadcast IDs. Cannot be combined with
-     * the `email` dimension.
-     */
-    broadcastId?: string[];
-  };
+  domainId?: string[];
 };
+
+export type GetEmailsMetricsOptions = EmailMetricsCommonOptions &
+  (
+    | {
+        /**
+         * The dimensions to break the response down by. Defaults to `[]`,
+         * which returns a single `totals` row for the whole range, with no
+         * `data`. Cannot combine `broadcast` with `email`/`emailId`.
+         */
+        dimensions?: Exclude<EmailMetricsDimension, 'broadcast'>[];
+
+        /**
+         * Restrict the response to these email IDs. Cannot be combined with
+         * the `broadcast` dimension or `broadcastId`.
+         */
+        emailId?: string[];
+        broadcastId?: never;
+      }
+    | {
+        /**
+         * The dimensions to break the response down by. Defaults to `[]`,
+         * which returns a single `totals` row for the whole range, with no
+         * `data`. Cannot combine `email` with `broadcast`/`broadcastId`.
+         */
+        dimensions?: Exclude<EmailMetricsDimension, 'email'>[];
+
+        emailId?: never;
+        /**
+         * Restrict the response to these broadcast IDs. Cannot be combined
+         * with the `email` dimension or `emailId`.
+         */
+        broadcastId?: string[];
+      }
+  );
 
 export type EmailMetricsTotals = Partial<Record<EmailMetric, number>>;
 

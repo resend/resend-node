@@ -139,9 +139,9 @@ function buildMetricsQuery(options: GetEmailsMetricsOptions) {
     granularity: options.granularity,
     metrics: options.metrics?.join(','),
     dimensions: options.dimensions?.join(','),
-    domain_id: options.filter?.domainId?.join(','),
-    email_id: options.filter?.emailId?.join(','),
-    broadcast_id: options.filter?.broadcastId?.join(','),
+    domain_id: options.domainId?.join(','),
+    email_id: options.emailId?.join(','),
+    broadcast_id: options.broadcastId?.join(','),
   };
 
   const searchParams = new URLSearchParams();
