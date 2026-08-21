@@ -8,8 +8,8 @@ export type ListBroadcastClickedLinksOptions = PaginationOptions;
 
 export type BroadcastClickedLink = {
   /**
-   * An opaque cursor for this row, used only for pagination. It does not
-   * identify any entity in Resend.
+   * `id` is an opaque cursor for this row, used only for pagination.
+   * It does not identify any entity in Resend.
    */
   id: string;
   url: string;
