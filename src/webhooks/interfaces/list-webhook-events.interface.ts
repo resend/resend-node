@@ -1,4 +1,5 @@
 import type { Response } from '../../interfaces';
+import type { WebhookEvent } from './webhook-event.interface';
 
 export type WebhookEventLogStatus =
   | 'success'
@@ -8,7 +9,7 @@ export type WebhookEventLogStatus =
 
 export interface WebhookEventLog {
   id: string;
-  type: string;
+  type: WebhookEvent;
   created_at: string;
   status: WebhookEventLogStatus;
 }
