@@ -9,6 +9,24 @@ export type {
   GetWebhookResponseSuccess,
 } from './get-webhook.interface';
 export type {
+  GetWebhookEventOptions,
+  GetWebhookEventResponse,
+  GetWebhookEventResponseSuccess,
+} from './get-webhook-event.interface';
+export type {
+  ListWebhookEventAttemptsOptions,
+  ListWebhookEventAttemptsResponse,
+  ListWebhookEventAttemptsResponseSuccess,
+  WebhookEventAttempt,
+} from './list-webhook-event-attempts.interface';
+export type {
+  ListWebhookEventsOptions,
+  ListWebhookEventsResponse,
+  ListWebhookEventsResponseSuccess,
+  WebhookEventLog,
+  WebhookEventLogStatus,
+} from './list-webhook-events.interface';
+export type {
   ListWebhooksOptions,
   ListWebhooksResponse,
   ListWebhooksResponseSuccess,
