@@ -1,0 +1,27 @@
+src/api-keys/interfaces/api-key.ts
+  2125f76587e240ea 4
+src/api-keys/api-keys.spec.ts
+  2125f76587e240ea 284,290
+src/api-keys/interfaces/list-api-keys.interface.ts
+  2125f76587e240ea 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.10",
+  "base_commit_sha": "deb911829f58a77456a103dcda6eb2cb8f707b33",
+  "prompts": {
+    "2125f76587e240ea": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5691c78-7963-415a-b241-07669f6730e0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "João Melo <jopcmelo@gmail.com>",
+      "messages": [],
+      "total_additions": 4,
+      "total_deletions": 1,
+      "accepted_lines": 4,
+      "overriden_lines": 0
+    }
+  }
+}

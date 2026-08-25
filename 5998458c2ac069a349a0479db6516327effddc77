@@ -1,0 +1,19 @@
+package.json
+  s_a6cd714394bc21::t_dc4ad159e1b1cc 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "5998458c2ac069a349a0479db6516327effddc77",
+  "prompts": {},
+  "sessions": {
+    "s_a6cd714394bc21": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a62b2e71-32c2-4f96-be76-1e3903e0a2b0",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "João Melo <jopcmelo@gmail.com>"
+    }
+  }
+}
