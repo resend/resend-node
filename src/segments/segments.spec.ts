@@ -9,6 +9,10 @@ import type {
 import type { GetSegmentResponseSuccess } from './interfaces/get-segment.interface';
 import type { ListSegmentsResponseSuccess } from './interfaces/list-segments.interface';
 import type { RemoveSegmentResponseSuccess } from './interfaces/remove-segment.interface';
+import type {
+  UpdateSegmentOptions,
+  UpdateSegmentResponseSuccess,
+} from './interfaces/update-segment.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -274,6 +278,89 @@ describe('Segments', () => {
             "object": "segment",
           },
           "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+    });
+  });
+
+  describe('update', () => {
+    const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+
+    it('updates a segment name', async () => {
+      const payload: UpdateSegmentOptions = {
+        name: 'Updated Segment',
+      };
+      const response: UpdateSegmentResponseSuccess = {
+        object: 'segment',
+        id,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(
+        resend.segments.update(id, payload),
+      ).resolves.toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
+            "object": "segment",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/segments/${id}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify(payload),
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
+    it('throws error when segment not found', async () => {
+      const payload: UpdateSegmentOptions = {
+        name: 'Updated Segment',
+      };
+      const response: ErrorResponse = {
+        name: 'not_found',
+        message: 'Audience not found',
+        statusCode: 404,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 404,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = resend.segments.update(id, payload);
+
+      await expect(result).resolves.toMatchInlineSnapshot(`
+        {
+          "data": null,
+          "error": {
+            "message": "Audience not found",
+            "name": "not_found",
+            "statusCode": 404,
+          },
           "headers": {
             "content-type": "application/json",
           },
