@@ -5,8 +5,7 @@ export interface UpdateSegmentOptions {
   name: string;
 }
 
-export interface UpdateSegmentResponseSuccess
-  extends Pick<Segment, 'id' | 'name'> {
+export interface UpdateSegmentResponseSuccess extends Pick<Segment, 'id'> {
   object: 'segment';
 }
 

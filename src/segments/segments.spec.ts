@@ -296,7 +296,6 @@ describe('Segments', () => {
       const response: UpdateSegmentResponseSuccess = {
         object: 'segment',
         id,
-        name: 'Updated Segment',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -314,7 +313,6 @@ describe('Segments', () => {
         {
           "data": {
             "id": "5262504e-8ed7-4fac-bd16-0d4be94bc9f2",
-            "name": "Updated Segment",
             "object": "segment",
           },
           "error": null,
