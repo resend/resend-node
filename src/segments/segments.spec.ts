@@ -323,6 +323,15 @@ describe('Segments', () => {
           },
         }
       `);
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/segments/${id}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify(payload),
+          headers: expect.any(Headers),
+        }),
+      );
     });
 
     it('throws error when segment not found', async () => {
