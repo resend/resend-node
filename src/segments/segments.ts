@@ -19,6 +19,11 @@ import type {
   RemoveSegmentResponse,
   RemoveSegmentResponseSuccess,
 } from './interfaces/remove-segment.interface';
+import type {
+  UpdateSegmentOptions,
+  UpdateSegmentResponse,
+  UpdateSegmentResponseSuccess,
+} from './interfaces/update-segment.interface';
 
 export class Segments {
   constructor(private readonly resend: Resend) {}
@@ -45,6 +50,17 @@ export class Segments {
   async get(id: string): Promise<GetSegmentResponse> {
     const data = await this.resend.get<GetSegmentResponseSuccess>(
       `/segments/${id}`,
+    );
+    return data;
+  }
+
+  async update(
+    id: string,
+    payload: UpdateSegmentOptions,
+  ): Promise<UpdateSegmentResponse> {
+    const data = await this.resend.patch<UpdateSegmentResponseSuccess>(
+      `/segments/${id}`,
+      payload,
     );
     return data;
   }
