@@ -14,6 +14,7 @@ import type { ListWebhookEventAttemptsResponseSuccess } from './interfaces/list-
 import type { ListWebhookEventsResponseSuccess } from './interfaces/list-webhook-events.interface';
 import type { ListWebhooksResponseSuccess } from './interfaces/list-webhooks.interface';
 import type { RemoveWebhookResponseSuccess } from './interfaces/remove-webhook.interface';
+import type { ReplayWebhookEventResponseSuccess } from './interfaces/replay-webhook-event.interface';
 import type {
   UpdateWebhookOptions,
   UpdateWebhookResponseSuccess,
@@ -363,6 +364,80 @@ describe('Webhooks', () => {
         const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
         const result = resend.webhooks.events.get({ webhookId, eventId });
+
+        await expect(result).resolves.toEqual({
+          data: null,
+          error: {
+            message: 'Webhook event not found',
+            name: 'not_found',
+            statusCode: 404,
+          },
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+      });
+    });
+  });
+
+  describe('events.replay', () => {
+    const webhookId = '430eed87-632a-4ea6-90db-0aace67ec228';
+    const eventId = 'msg_1srOrx2ZWZBpBUvZwXKQmoEYga2';
+
+    it('replays an event', async () => {
+      const response: ReplayWebhookEventResponseSuccess = {
+        object: 'webhook_event',
+        id: eventId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.webhooks.events.replay({
+        webhookId,
+        eventId,
+      });
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/webhooks/${webhookId}/events/${eventId}/replay`,
+        expect.objectContaining({
+          method: 'POST',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
+    describe('when event not found', () => {
+      it('returns error', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          message: 'Webhook event not found',
+          statusCode: 404,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = resend.webhooks.events.replay({ webhookId, eventId });
 
         await expect(result).resolves.toEqual({
           data: null,
