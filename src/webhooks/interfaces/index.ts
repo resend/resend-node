@@ -37,6 +37,11 @@ export type {
   RemoveWebhookResponseSuccess,
 } from './remove-webhook.interface';
 export type {
+  ReplayWebhookEventOptions,
+  ReplayWebhookEventResponse,
+  ReplayWebhookEventResponseSuccess,
+} from './replay-webhook-event.interface';
+export type {
   UpdateWebhookOptions,
   UpdateWebhookResponse,
   UpdateWebhookResponseSuccess,

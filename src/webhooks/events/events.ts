@@ -10,6 +10,11 @@ import type {
   ListWebhookEventsResponse,
   ListWebhookEventsResponseSuccess,
 } from '../interfaces/list-webhook-events.interface';
+import type {
+  ReplayWebhookEventOptions,
+  ReplayWebhookEventResponse,
+  ReplayWebhookEventResponseSuccess,
+} from '../interfaces/replay-webhook-event.interface';
 import { Attempts } from './attempts/attempts';
 
 export class Events {
@@ -35,6 +40,17 @@ export class Events {
 
     const data = await this.resend.get<GetWebhookEventResponseSuccess>(
       `/webhooks/${webhookId}/events/${eventId}`,
+    );
+    return data;
+  }
+
+  async replay(
+    options: ReplayWebhookEventOptions,
+  ): Promise<ReplayWebhookEventResponse> {
+    const { webhookId, eventId } = options;
+
+    const data = await this.resend.post<ReplayWebhookEventResponseSuccess>(
+      `/webhooks/${webhookId}/events/${eventId}/replay`,
     );
     return data;
   }
