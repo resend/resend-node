@@ -70,7 +70,10 @@ export class Webhooks {
   async list(options: ListWebhooksOptions = {}): Promise<ListWebhooksResponse> {
     const url = buildPaginationUrl('/webhooks', options);
 
-    const data = await this.resend.get<ListWebhooksResponseSuccess>(url);
+    const data = await this.resend.get<ListWebhooksResponseSuccess>(
+      url,
+      options,
+    );
     return data;
   }
 

@@ -41,7 +41,10 @@ export class AutomationRuns {
       ? `/automations/${options.automationId}/runs?${qs}`
       : `/automations/${options.automationId}/runs`;
 
-    const data = await this.resend.get<ListAutomationRunsResponseSuccess>(url);
+    const data = await this.resend.get<ListAutomationRunsResponseSuccess>(
+      url,
+      options,
+    );
     return data;
   }
 }
