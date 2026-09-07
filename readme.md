@@ -134,6 +134,21 @@ console.log(`Email ${data.id} with a React template has been sent`);
 >});
 >```
 
+## Inboxes
+
+Create an inbox and list its threads:
+
+```js
+const { data: inbox } = await resend.inboxes.create({
+  email_address: 'support@example.com',
+  name: 'support',
+});
+
+const { data: threads } = await resend.inboxes.threads.list(inbox.id, {
+  folder: 'inbox',
+});
+```
+
 ## License
 
 MIT License

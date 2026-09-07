@@ -1,3 +1,7 @@
+## resend@6.27.0
+
+### Add `resend.inboxes` with nested `threads`, `threads.emails`, `labels`, and `drafts`
+
 ## resend@6.18.0
 
 ### Support tags and scheduledAt in batch email options
