@@ -37,7 +37,10 @@ export class ContactSegments {
     const identifier = options.email ? options.email : options.contactId;
     const url = buildPaginationUrl(`/contacts/${identifier}/segments`, options);
 
-    const data = await this.resend.get<ListContactSegmentsResponseSuccess>(url);
+    const data = await this.resend.get<ListContactSegmentsResponseSuccess>(
+      url,
+      options,
+    );
     return data;
   }
 

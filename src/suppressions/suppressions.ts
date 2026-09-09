@@ -50,7 +50,7 @@ export class Suppressions {
     const queryString = buildSuppressionsQuery(options);
     const url = queryString ? `/suppressions?${queryString}` : '/suppressions';
 
-    return this.resend.get<ListSuppressionsResponseSuccess>(url);
+    return this.resend.get<ListSuppressionsResponseSuccess>(url, options);
   }
 
   async get(idOrEmail: string): Promise<GetSuppressionResponse> {

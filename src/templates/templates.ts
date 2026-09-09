@@ -80,6 +80,7 @@ export class Templates {
   async list(options: PaginationOptions = {}): Promise<ListTemplatesResponse> {
     return this.resend.get<ListTemplatesResponseSuccess>(
       `/templates${getPaginationQueryProperties(options)}`,
+      options,
     );
   }
 

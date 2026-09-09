@@ -1,3 +1,5 @@
+import type { RequestOptions } from './request-options.interface';
+
 // Pagination options using cursor-based approach
 export type PaginationOptions = {
   /**
@@ -19,7 +21,8 @@ export type PaginationOptions = {
       before?: string;
       after?: never;
     }
-);
+) &
+  RequestOptions;
 
 export type PaginatedData<Data> = {
   object: 'list';

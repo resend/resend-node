@@ -8,6 +8,7 @@ import type {
   GetOptions,
   PostOptions,
   PutOptions,
+  RequestOptions,
 } from './common/interfaces';
 import type { IdempotentRequest } from './common/interfaces/idempotent-request.interface';
 import type { PatchOptions } from './common/interfaces/patch-option.interface';
@@ -16,7 +17,7 @@ import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import { Events } from './events/events';
-import type { ErrorResponse, Response } from './interfaces';
+import type { ErrorResponse, Response as ResendResponse } from './interfaces';
 import { Logs } from './logs/logs';
 import { OAuthGrants } from './oauth-grants/oauth-grants';
 import { Segments } from './segments/segments';
@@ -43,11 +44,37 @@ function getDefaultUserAgent(): string {
 export interface ResendOptions {
   baseUrl?: string;
   userAgent?: string;
+  /** Default timeout in milliseconds per request attempt for every request. */
+  timeoutMs?: number;
+  /** Default maximum number of retries for retryable failures. */
+  retries?: number;
 }
+
+function parseRetryAfter(value: string | null): number | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  const seconds = Number(value);
+  if (!Number.isNaN(seconds)) {
+    return seconds * 1000;
+  }
+
+  const date = Date.parse(value);
+  return Number.isNaN(date) ? undefined : Math.max(0, date - Date.now());
+}
+
+type RequestAttempt<T> = {
+  response: ResendResponse<T>;
+  retryable: boolean;
+  retryAfterMs?: number;
+};
 
 export class Resend {
   readonly baseUrl: string;
   readonly userAgent: string;
+  readonly timeoutMs?: number;
+  readonly retries?: number;
   private readonly headers: Headers;
 
   readonly segments = new Segments(this);
@@ -89,6 +116,8 @@ export class Resend {
 
     this.baseUrl = options?.baseUrl ?? getDefaultBaseUrl();
     this.userAgent = options?.userAgent ?? getDefaultUserAgent();
+    this.timeoutMs = options?.timeoutMs;
+    this.retries = options?.retries;
 
     this.headers = new Headers({
       Authorization: `Bearer ${this.key}`,
@@ -111,73 +140,91 @@ export class Resend {
     }
   }
 
-  async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
+  async fetchRequest<T>(
+    path: string,
+    options: RequestOptions & RequestInit = {},
+  ): Promise<ResendResponse<T>> {
+    const { signal, timeoutMs, retries, ...requestInit } = options;
+    const maxRetries = retries ?? this.retries ?? 0;
+    const timeout = timeoutMs ?? this.timeoutMs;
+
+    for (let attempt = 0; ; attempt++) {
+      let controller: AbortController | undefined;
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      let onAbort: (() => void) | undefined;
+      let effectiveSignal = signal;
+
+      if (timeout) {
+        controller = new AbortController();
+        effectiveSignal = controller.signal;
+
+        if (signal) {
+          if (signal.aborted) {
+            controller.abort();
+          } else {
+            onAbort = () => controller?.abort();
+            signal.addEventListener('abort', onAbort, { once: true });
+          }
+        }
+
+        timer = setTimeout(() => controller?.abort(), timeout);
+      }
+
+      let result: RequestAttempt<T>;
+      try {
+        result = await this.performRequest<T>(path, {
+          ...requestInit,
+          signal: effectiveSignal,
+        });
+      } finally {
+        if (timer) {
+          clearTimeout(timer);
+        }
+        if (onAbort) {
+          signal?.removeEventListener('abort', onAbort);
+        }
+      }
+
+      const retryable =
+        attempt < maxRetries && !effectiveSignal?.aborted && result.retryable;
+
+      if (!retryable) {
+        return result.response;
+      }
+
+      const backoffMs =
+        result.retryAfterMs ?? Math.min(500 * 2 ** attempt, 10_000);
+      await new Promise((resolve) =>
+        setTimeout(resolve, backoffMs + Math.random() * 250),
+      );
+    }
+  }
+
+  private async performRequest<T>(
+    path: string,
+    init: RequestInit,
+  ): Promise<RequestAttempt<T>> {
     try {
-      const response = await fetch(`${this.baseUrl}${path}`, options);
+      const response = await fetch(`${this.baseUrl}${path}`, init);
 
       if (!response.ok) {
-        try {
-          const rawError = await response.text();
-          const parsedError = JSON.parse(rawError);
-
-          this.logError(parsedError, path, response.status);
-
-          return {
-            data: null,
-            error: parsedError,
-            headers: Object.fromEntries(response.headers.entries()),
-          };
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            const error: ErrorResponse = {
-              name: 'application_error',
-              statusCode: response.status,
-              message:
-                'Internal server error. We are unable to process your request right now, please try again later.',
-            };
-
-            this.logError(error, path, response.status);
-
-            return {
-              data: null,
-              error,
-              headers: Object.fromEntries(response.headers.entries()),
-            };
-          }
-
-          const error: ErrorResponse = {
-            message: response.statusText,
-            statusCode: response.status,
-            name: 'application_error',
-          };
-
-          if (err instanceof Error) {
-            const errorWithMessage = { ...error, message: err.message };
-
-            this.logError(errorWithMessage, path, response.status);
-
-            return {
-              data: null,
-              error: errorWithMessage,
-              headers: Object.fromEntries(response.headers.entries()),
-            };
-          }
-
-          this.logError(error, path, response.status);
-
-          return {
-            data: null,
-            error,
-            headers: Object.fromEntries(response.headers.entries()),
-          };
-        }
+        return {
+          response: await this.buildErrorResponse(response, path),
+          retryable:
+            (response.status === 429 || response.status >= 500) &&
+            !init.signal?.aborted,
+          retryAfterMs: parseRetryAfter(response.headers.get('retry-after')),
+        };
       }
 
       const data = await response.json();
       return {
-        data,
-        error: null,
-        headers: Object.fromEntries(response.headers.entries()),
+        response: {
+          data,
+          error: null,
+          headers: Object.fromEntries(response.headers.entries()),
+        },
+        retryable: false,
       };
     } catch {
       const error: ErrorResponse = {
@@ -189,9 +236,73 @@ export class Resend {
       this.logError(error, path);
 
       return {
+        response: {
+          data: null,
+          error,
+          headers: null,
+        },
+        retryable: !init.signal?.aborted,
+      };
+    }
+  }
+
+  private async buildErrorResponse(
+    response: Response,
+    path: string,
+  ): Promise<ResendResponse<never>> {
+    try {
+      const rawError = await response.text();
+      const parsedError = JSON.parse(rawError);
+
+      this.logError(parsedError, path, response.status);
+
+      return {
+        data: null,
+        error: parsedError,
+        headers: Object.fromEntries(response.headers.entries()),
+      };
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        const error: ErrorResponse = {
+          name: 'application_error',
+          statusCode: response.status,
+          message:
+            'Internal server error. We are unable to process your request right now, please try again later.',
+        };
+
+        this.logError(error, path, response.status);
+
+        return {
+          data: null,
+          error,
+          headers: Object.fromEntries(response.headers.entries()),
+        };
+      }
+
+      const error: ErrorResponse = {
+        message: response.statusText,
+        statusCode: response.status,
+        name: 'application_error',
+      };
+
+      if (err instanceof Error) {
+        const errorWithMessage = { ...error, message: err.message };
+
+        this.logError(errorWithMessage, path, response.status);
+
+        return {
+          data: null,
+          error: errorWithMessage,
+          headers: Object.fromEntries(response.headers.entries()),
+        };
+      }
+
+      this.logError(error, path, response.status);
+
+      return {
         data: null,
         error,
-        headers: null,
+        headers: Object.fromEntries(response.headers.entries()),
       };
     }
   }
