@@ -42,6 +42,10 @@ export type {
   ReplayWebhookEventResponseSuccess,
 } from './replay-webhook-event.interface';
 export type {
+  RotateWebhookSigningSecretResponse,
+  RotateWebhookSigningSecretResponseSuccess,
+} from './rotate-webhook-signing-secret.interface';
+export type {
   UpdateWebhookOptions,
   UpdateWebhookResponse,
   UpdateWebhookResponseSuccess,
