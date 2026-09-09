@@ -22,6 +22,10 @@ import type {
   RemoveWebhookResponseSuccess,
 } from './interfaces/remove-webhook.interface';
 import type {
+  RotateWebhookSigningSecretResponse,
+  RotateWebhookSigningSecretResponseSuccess,
+} from './interfaces/rotate-webhook-signing-secret.interface';
+import type {
   UpdateWebhookOptions,
   UpdateWebhookResponse,
   UpdateWebhookResponseSuccess,
@@ -89,6 +93,16 @@ export class Webhooks {
     const data = await this.resend.delete<RemoveWebhookResponseSuccess>(
       `/webhooks/${id}`,
     );
+    return data;
+  }
+
+  async rotateSigningSecret(
+    id: string,
+  ): Promise<RotateWebhookSigningSecretResponse> {
+    const data =
+      await this.resend.post<RotateWebhookSigningSecretResponseSuccess>(
+        `/webhooks/${id}/signing-secret/rotate`,
+      );
     return data;
   }
 

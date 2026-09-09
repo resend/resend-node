@@ -15,6 +15,7 @@ import type { ListWebhookEventsResponseSuccess } from './interfaces/list-webhook
 import type { ListWebhooksResponseSuccess } from './interfaces/list-webhooks.interface';
 import type { RemoveWebhookResponseSuccess } from './interfaces/remove-webhook.interface';
 import type { ReplayWebhookEventResponseSuccess } from './interfaces/replay-webhook-event.interface';
+import type { RotateWebhookSigningSecretResponseSuccess } from './interfaces/rotate-webhook-signing-secret.interface';
 import type {
   UpdateWebhookOptions,
   UpdateWebhookResponseSuccess,
@@ -836,6 +837,77 @@ describe('Webhooks', () => {
             },
           }
         `);
+      });
+    });
+  });
+
+  describe('rotateSigningSecret', () => {
+    const id = '430eed87-632a-4ea6-90db-0aace67ec228';
+
+    it('rotates the signing secret', async () => {
+      const response: RotateWebhookSigningSecretResponseSuccess = {
+        object: 'webhook',
+        id,
+        signing_secret: 'whsec_MfKQ9r8GKYqrTwjUPD8ILPZIo2LaLaSw',
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.webhooks.rotateSigningSecret(id);
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/webhooks/${id}/signing-secret/rotate`,
+        expect.objectContaining({
+          method: 'POST',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
+    describe('when webhook not found', () => {
+      it('returns error', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          message: 'Webhook not found',
+          statusCode: 404,
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = resend.webhooks.rotateSigningSecret(id);
+
+        await expect(result).resolves.toEqual({
+          data: null,
+          error: {
+            message: 'Webhook not found',
+            name: 'not_found',
+            statusCode: 404,
+          },
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
       });
     });
   });
