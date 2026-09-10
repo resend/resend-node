@@ -2,10 +2,10 @@ import type { PostOptions } from '../../common/interfaces';
 import type { Response } from '../../interfaces';
 
 export interface CreateInboxOptions {
-  email_address: string;
+  emailAddress: string;
   name?: string;
   forwarding?: boolean;
-  friendly_name?: string;
+  friendlyName?: string;
 }
 
 export interface CreateInboxRequestOptions extends PostOptions {}

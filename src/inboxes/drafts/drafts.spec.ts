@@ -60,7 +60,7 @@ describe('Inbox drafts', () => {
     it('lists drafts', async () => {
       mockSuccessResponse(response, { headers: {} });
 
-      const data = await resend.inboxes.drafts.list(inboxId);
+      const data = await resend.inboxes.drafts.list({ inboxId });
 
       expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(
@@ -74,7 +74,7 @@ describe('Inbox drafts', () => {
     it('propagates the cursor', async () => {
       mockSuccessResponse(response, { headers: {} });
 
-      await resend.inboxes.drafts.list(inboxId, { cursor: 'cursor_drafts' });
+      await resend.inboxes.drafts.list({ inboxId, cursor: 'cursor_drafts' });
 
       expect(fetchMock).toHaveBeenCalledWith(
         `https://api.resend.com/inboxes/${inboxId}/drafts?cursor=cursor_drafts`,
@@ -94,7 +94,8 @@ describe('Inbox drafts', () => {
         },
       });
 
-      const data = await resend.inboxes.drafts.create(inboxId, {
+      const data = await resend.inboxes.drafts.create({
+        inboxId,
         to: ['ada@example.com'],
         subject: 'Hello',
         text: 'Hi',
@@ -114,6 +115,34 @@ describe('Inbox drafts', () => {
       );
     });
 
+    it('maps threadId and replyToEmailId to the API body', async () => {
+      fetchMock.mockOnce(JSON.stringify(draft), {
+        status: 201,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.create({
+        inboxId,
+        text: 'Thanks',
+        threadId: 'b2c3d4e5-0000-4000-8000-000000000000',
+        replyToEmailId: 'c3d4e5f6-0000-4000-8000-000000000000',
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            text: 'Thanks',
+            thread_id: 'b2c3d4e5-0000-4000-8000-000000000000',
+            reply_to_email_id: 'c3d4e5f6-0000-4000-8000-000000000000',
+          }),
+        }),
+      );
+    });
+
     it('returns a validation error', async () => {
       const error: ErrorResponse = {
         name: 'validation_error',
@@ -128,7 +157,7 @@ describe('Inbox drafts', () => {
         },
       });
 
-      const data = await resend.inboxes.drafts.create(inboxId, {});
+      const data = await resend.inboxes.drafts.create({ inboxId, text: '' });
 
       expect(data.error).toEqual(error);
       expect(data.data).toBeNull();
@@ -144,7 +173,7 @@ describe('Inbox drafts', () => {
         },
       });
 
-      const data = await resend.inboxes.drafts.get(inboxId, draftId);
+      const data = await resend.inboxes.drafts.get({ inboxId, draftId });
 
       expect(data.data).toEqual(draft);
     });
@@ -161,7 +190,9 @@ describe('Inbox drafts', () => {
         },
       });
 
-      const data = await resend.inboxes.drafts.update(inboxId, draftId, {
+      const data = await resend.inboxes.drafts.update({
+        inboxId,
+        draftId,
         subject: 'Updated',
       });
 
@@ -191,7 +222,7 @@ describe('Inbox drafts', () => {
         },
       });
 
-      const data = await resend.inboxes.drafts.remove(inboxId, draftId);
+      const data = await resend.inboxes.drafts.remove({ inboxId, draftId });
 
       expect(data.data).toEqual(response);
     });
@@ -213,7 +244,7 @@ describe('Inbox drafts', () => {
         },
       });
 
-      const data = await resend.inboxes.drafts.send(inboxId, draftId);
+      const data = await resend.inboxes.drafts.send({ inboxId, draftId });
 
       expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(

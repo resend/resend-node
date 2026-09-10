@@ -1,25 +1,30 @@
-import type { PostOptions } from '../../../common/interfaces';
+import type {
+  PostOptions,
+  RequireAtLeastOne,
+} from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
 import type { InboxDraft } from './draft';
 
-interface CreateInboxDraftContent {
+type CreateInboxDraftContent = RequireAtLeastOne<{
   to?: string | string[];
   cc?: string | string[];
   bcc?: string | string[];
   subject?: string | null;
   text?: string | null;
   html?: string | null;
-}
+}>;
 
-export type CreateInboxDraftOptions = CreateInboxDraftContent &
+export type CreateInboxDraftOptions = {
+  inboxId: string;
+} & CreateInboxDraftContent &
   (
     | {
-        thread_id: string;
-        reply_to_email_id: string;
+        threadId: string;
+        replyToEmailId: string;
       }
     | {
-        thread_id?: never;
-        reply_to_email_id?: never;
+        threadId?: never;
+        replyToEmailId?: never;
       }
   );
 

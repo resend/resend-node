@@ -6,10 +6,13 @@ import type {
 } from '../../interfaces/inbox';
 import type { InboxThreadLabel } from './thread';
 
-export type UpdateInboxThreadOptions = RequireAtLeastOne<{
+export type UpdateInboxThreadOptions = {
+  inboxId: string;
+  threadId: string;
+} & RequireAtLeastOne<{
   read?: boolean;
   folder?: MoveThreadFolder;
-  label_id?: string;
+  labelId?: string;
 }>;
 
 export interface UpdateInboxThreadResponseSuccess {

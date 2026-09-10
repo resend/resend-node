@@ -1,4 +1,4 @@
-## resend@6.27.0
+## resend@6.27.0-preview-inboxes.0
 
 ### Add `resend.inboxes` with nested `threads`, `threads.emails`, `labels`, and `drafts`
 

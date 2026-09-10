@@ -5,12 +5,16 @@ import type {
 import type { Response } from '../../../interfaces';
 import type { InboxMessage } from './thread';
 
-export type ReplyInboxThreadEmailOptions = RequireAtLeastOne<{
+export type ReplyInboxThreadEmailOptions = {
+  inboxId: string;
+  threadId: string;
+  emailId: string;
+} & RequireAtLeastOne<{
   html?: string;
   text?: string;
 }> & {
-  subject?: string;
-};
+    subject?: string;
+  };
 
 export interface ReplyInboxThreadEmailRequestOptions extends PostOptions {}
 

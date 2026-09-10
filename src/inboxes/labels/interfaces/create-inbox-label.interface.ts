@@ -3,6 +3,7 @@ import type { Response } from '../../../interfaces';
 import type { InboxLabelColor } from '../../interfaces/inbox';
 
 export interface CreateInboxLabelOptions {
+  inboxId: string;
   name: string;
   color?: InboxLabelColor;
 }

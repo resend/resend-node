@@ -39,9 +39,9 @@ describe('Inboxes', () => {
       });
 
       const data = await resend.inboxes.create({
-        email_address: 'support@example.com',
+        emailAddress: 'support@example.com',
         name: 'support',
-        friendly_name: 'Support',
+        friendlyName: 'Support',
       });
 
       expect(data).toMatchInlineSnapshot(`
@@ -93,7 +93,7 @@ describe('Inboxes', () => {
       });
 
       const data = await resend.inboxes.create({
-        email_address: '',
+        emailAddress: '',
       });
 
       expect(data).toMatchInlineSnapshot(`
@@ -287,6 +287,28 @@ describe('Inboxes', () => {
         expect.objectContaining({
           method: 'PATCH',
           body: JSON.stringify({ name: 'billing' }),
+        }),
+      );
+    });
+
+    it('maps friendlyName to friendly_name', async () => {
+      mockSuccessResponse(
+        {
+          object: 'inbox',
+          id: '430eed87-632a-4ea6-90db-0aace67ec228',
+        },
+        { headers: {} },
+      );
+
+      await resend.inboxes.update('430eed87-632a-4ea6-90db-0aace67ec228', {
+        friendlyName: 'Billing',
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/inboxes/430eed87-632a-4ea6-90db-0aace67ec228',
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ friendly_name: 'Billing' }),
         }),
       );
     });

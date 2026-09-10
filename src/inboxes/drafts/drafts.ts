@@ -7,6 +7,7 @@ import type {
   CreateInboxDraftResponseSuccess,
 } from './interfaces/create-inbox-draft.interface';
 import type {
+  GetInboxDraftOptions,
   GetInboxDraftResponse,
   GetInboxDraftResponseSuccess,
 } from './interfaces/get-inbox-draft.interface';
@@ -16,10 +17,12 @@ import type {
   ListInboxDraftsResponseSuccess,
 } from './interfaces/list-inbox-drafts.interface';
 import type {
+  RemoveInboxDraftOptions,
   RemoveInboxDraftResponse,
   RemoveInboxDraftResponseSuccess,
 } from './interfaces/remove-inbox-draft.interface';
 import type {
+  SendInboxDraftOptions,
   SendInboxDraftRequestOptions,
   SendInboxDraftResponse,
   SendInboxDraftResponseSuccess,
@@ -34,56 +37,60 @@ export class InboxDrafts {
   constructor(private readonly resend: Resend) {}
 
   async list(
-    inboxId: string,
-    options: ListInboxDraftsOptions = {},
+    options: ListInboxDraftsOptions,
   ): Promise<ListInboxDraftsResponse> {
-    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/drafts`, options);
+    const { inboxId, cursor } = options;
+    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/drafts`, { cursor });
     return this.resend.get<ListInboxDraftsResponseSuccess>(url);
   }
 
   async create(
-    inboxId: string,
     payload: CreateInboxDraftOptions,
     options: CreateInboxDraftRequestOptions = {},
   ): Promise<CreateInboxDraftResponse> {
+    const { inboxId, threadId, replyToEmailId, ...content } = payload;
     return this.resend.post<CreateInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts`,
-      payload,
+      {
+        ...content,
+        thread_id: threadId,
+        reply_to_email_id: replyToEmailId,
+      },
       options,
     );
   }
 
-  async get(inboxId: string, draftId: string): Promise<GetInboxDraftResponse> {
+  async get(options: GetInboxDraftOptions): Promise<GetInboxDraftResponse> {
+    const { inboxId, draftId } = options;
     return this.resend.get<GetInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}`,
     );
   }
 
   async update(
-    inboxId: string,
-    draftId: string,
-    payload: UpdateInboxDraftOptions,
+    options: UpdateInboxDraftOptions,
   ): Promise<UpdateInboxDraftResponse> {
+    const { inboxId, draftId, ...content } = options;
     return this.resend.patch<UpdateInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}`,
-      payload,
+      content,
     );
   }
 
   async remove(
-    inboxId: string,
-    draftId: string,
+    options: RemoveInboxDraftOptions,
   ): Promise<RemoveInboxDraftResponse> {
+    const { inboxId, draftId } = options;
     return this.resend.delete<RemoveInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}`,
     );
   }
 
   async send(
-    inboxId: string,
-    draftId: string,
+    payload: SendInboxDraftOptions,
     options: SendInboxDraftRequestOptions = {},
   ): Promise<SendInboxDraftResponse> {
+    const { inboxId, draftId } = payload;
     return this.resend.post<SendInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}/send`,
       undefined,
