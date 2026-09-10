@@ -2,6 +2,7 @@ import type { Resend } from '../../resend';
 import { buildInboxCursorUrl } from '../build-inbox-cursor-query';
 import { InboxThreadEmails } from './emails/emails';
 import type {
+  GetInboxThreadOptions,
   GetInboxThreadResponse,
   GetInboxThreadResponseSuccess,
 } from './interfaces/get-inbox-thread.interface';
@@ -11,6 +12,7 @@ import type {
   ListInboxThreadsResponseSuccess,
 } from './interfaces/list-inbox-threads.interface';
 import type {
+  RemoveInboxThreadOptions,
   RemoveInboxThreadResponse,
   RemoveInboxThreadResponseSuccess,
 } from './interfaces/remove-inbox-thread.interface';
@@ -28,37 +30,38 @@ export class InboxThreads {
   }
 
   async list(
-    inboxId: string,
-    options: ListInboxThreadsOptions = {},
+    options: ListInboxThreadsOptions,
   ): Promise<ListInboxThreadsResponse> {
-    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads`, options);
+    const { inboxId, ...query } = options;
+    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads`, query);
     return this.resend.get<ListInboxThreadsResponseSuccess>(url);
   }
 
-  async get(
-    inboxId: string,
-    threadId: string,
-  ): Promise<GetInboxThreadResponse> {
+  async get(options: GetInboxThreadOptions): Promise<GetInboxThreadResponse> {
+    const { inboxId, threadId } = options;
     return this.resend.get<GetInboxThreadResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}`,
     );
   }
 
   async update(
-    inboxId: string,
-    threadId: string,
-    payload: UpdateInboxThreadOptions,
+    options: UpdateInboxThreadOptions,
   ): Promise<UpdateInboxThreadResponse> {
+    const { inboxId, threadId, read, folder, labelId } = options;
     return this.resend.patch<UpdateInboxThreadResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}`,
-      payload,
+      {
+        read,
+        folder,
+        label_id: labelId,
+      },
     );
   }
 
   async remove(
-    inboxId: string,
-    threadId: string,
+    options: RemoveInboxThreadOptions,
   ): Promise<RemoveInboxThreadResponse> {
+    const { inboxId, threadId } = options;
     return this.resend.delete<RemoveInboxThreadResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}`,
     );

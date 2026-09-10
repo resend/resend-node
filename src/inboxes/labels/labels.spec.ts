@@ -36,7 +36,7 @@ describe('Inbox labels', () => {
 
       mockSuccessResponse(response, { headers: {} });
 
-      const data = await resend.inboxes.labels.list(inboxId);
+      const data = await resend.inboxes.labels.list({ inboxId });
 
       expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(
@@ -65,7 +65,8 @@ describe('Inbox labels', () => {
         },
       });
 
-      const data = await resend.inboxes.labels.create(inboxId, {
+      const data = await resend.inboxes.labels.create({
+        inboxId,
         name: 'Urgent',
         color: 'grass',
       });
@@ -94,7 +95,7 @@ describe('Inbox labels', () => {
         },
       });
 
-      const data = await resend.inboxes.labels.create(inboxId, { name: '' });
+      const data = await resend.inboxes.labels.create({ inboxId, name: '' });
 
       expect(data.error).toEqual(error);
       expect(data.data).toBeNull();
@@ -115,11 +116,20 @@ describe('Inbox labels', () => {
         },
       });
 
-      const data = await resend.inboxes.labels.update(inboxId, labelId, {
+      const data = await resend.inboxes.labels.update({
+        inboxId,
+        labelId,
         name: 'Later',
       });
 
       expect(data.data).toEqual(response);
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/labels/${labelId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ name: 'Later' }),
+        }),
+      );
     });
   });
 
@@ -138,9 +148,15 @@ describe('Inbox labels', () => {
         },
       });
 
-      const data = await resend.inboxes.labels.remove(inboxId, labelId);
+      const data = await resend.inboxes.labels.remove({ inboxId, labelId });
 
       expect(data.data).toEqual(response);
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/labels/${labelId}`,
+        expect.objectContaining({
+          method: 'DELETE',
+        }),
+      );
     });
   });
 });

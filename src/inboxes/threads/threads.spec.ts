@@ -63,7 +63,7 @@ describe('Inbox threads', () => {
     it('lists threads', async () => {
       mockSuccessResponse(response, { headers: {} });
 
-      const data = await resend.inboxes.threads.list(inboxId);
+      const data = await resend.inboxes.threads.list({ inboxId });
 
       expect(data).toEqual({
         data: response,
@@ -84,7 +84,8 @@ describe('Inbox threads', () => {
     it('propagates cursor and label filters', async () => {
       mockSuccessResponse(response, { headers: {} });
 
-      await resend.inboxes.threads.list(inboxId, {
+      await resend.inboxes.threads.list({
+        inboxId,
         folder: 'inbox',
         query: 'invoice',
         from: 'ada@example.com',
@@ -114,7 +115,8 @@ describe('Inbox threads', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.list(inboxId, {
+      const data = await resend.inboxes.threads.list({
+        inboxId,
         cursor: 'bad',
       });
 
@@ -145,7 +147,7 @@ describe('Inbox threads', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.get(inboxId, threadId);
+      const data = await resend.inboxes.threads.get({ inboxId, threadId });
 
       expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(
@@ -175,7 +177,9 @@ describe('Inbox threads', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.update(inboxId, threadId, {
+      const data = await resend.inboxes.threads.update({
+        inboxId,
+        threadId,
         read: true,
         folder: 'archive',
       });
@@ -186,6 +190,36 @@ describe('Inbox threads', () => {
         expect.objectContaining({
           method: 'PATCH',
           body: JSON.stringify({ read: true, folder: 'archive' }),
+        }),
+      );
+    });
+
+    it('maps labelId to label_id', async () => {
+      mockSuccessResponse(
+        {
+          object: 'inbox',
+          id: threadId,
+          subject: 'Billing question',
+          folder: 'inbox',
+          labels: [],
+          read: true,
+        },
+        { headers: {} },
+      );
+
+      await resend.inboxes.threads.update({
+        inboxId,
+        threadId,
+        labelId: 'a1b2c3d4-0000-4000-8000-000000000000',
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({
+            label_id: 'a1b2c3d4-0000-4000-8000-000000000000',
+          }),
         }),
       );
     });
@@ -206,9 +240,15 @@ describe('Inbox threads', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.remove(inboxId, threadId);
+      const data = await resend.inboxes.threads.remove({ inboxId, threadId });
 
       expect(data.data).toEqual(response);
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}`,
+        expect.objectContaining({
+          method: 'DELETE',
+        }),
+      );
     });
   });
 });

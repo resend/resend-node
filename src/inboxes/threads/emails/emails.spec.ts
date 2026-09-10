@@ -1,6 +1,7 @@
 import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../../interfaces';
 import { Resend } from '../../../resend';
+import type { ForwardInboxThreadEmailResponseSuccess } from '../interfaces/forward-inbox-thread-email.interface';
 import type { ReplyInboxThreadEmailResponseSuccess } from '../interfaces/reply-inbox-thread-email.interface';
 import type { InboxMessage } from '../interfaces/thread';
 
@@ -43,11 +44,11 @@ describe('Inbox thread emails', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.emails.get(
+      const data = await resend.inboxes.threads.emails.get({
         inboxId,
         threadId,
         emailId,
-      );
+      });
 
       expect(data.data).toEqual(message);
       expect(fetchMock).toHaveBeenCalledWith(
@@ -74,12 +75,12 @@ describe('Inbox thread emails', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.emails.reply(
+      const data = await resend.inboxes.threads.emails.reply({
         inboxId,
         threadId,
         emailId,
-        { text: 'Thanks, sent.' },
-      );
+        text: 'Thanks, sent.',
+      });
 
       expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(
@@ -105,12 +106,12 @@ describe('Inbox thread emails', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.emails.reply(
+      const data = await resend.inboxes.threads.emails.reply({
         inboxId,
         threadId,
         emailId,
-        { text: '' },
-      );
+        text: '',
+      });
 
       expect(data.error).toEqual(error);
       expect(data.data).toBeNull();
@@ -119,11 +120,19 @@ describe('Inbox thread emails', () => {
 
   describe('forward', () => {
     it('forwards a thread email', async () => {
-      const response: ReplyInboxThreadEmailResponseSuccess = {
-        ...message,
-        direction: 'outbound',
-        to: ['colleague@example.com'],
+      const response: ForwardInboxThreadEmailResponseSuccess = {
+        id: 'd4e5f6a7-0000-4000-8000-000000000000',
         email_id: 'd4e5f6a7-0000-4000-8000-000000000000',
+        direction: 'outbound',
+        from: 'support@example.com',
+        to: ['colleague@example.com'],
+        cc: [],
+        bcc: [],
+        html: null,
+        text: 'See below.',
+        attachments: [],
+        read: true,
+        received_at: '2026-09-01T00:00:00.000Z',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -133,12 +142,13 @@ describe('Inbox thread emails', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.emails.forward(
+      const data = await resend.inboxes.threads.emails.forward({
         inboxId,
         threadId,
         emailId,
-        { to: 'colleague@example.com', text: 'See below.' },
-      );
+        to: 'colleague@example.com',
+        text: 'See below.',
+      });
 
       expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(

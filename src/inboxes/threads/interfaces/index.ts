@@ -5,10 +5,12 @@ export type {
   ForwardInboxThreadEmailResponseSuccess,
 } from './forward-inbox-thread-email.interface';
 export type {
+  GetInboxThreadOptions,
   GetInboxThreadResponse,
   GetInboxThreadResponseSuccess,
 } from './get-inbox-thread.interface';
 export type {
+  GetInboxThreadEmailOptions,
   GetInboxThreadEmailResponse,
   GetInboxThreadEmailResponseSuccess,
 } from './get-inbox-thread-email.interface';
@@ -18,6 +20,7 @@ export type {
   ListInboxThreadsResponseSuccess,
 } from './list-inbox-threads.interface';
 export type {
+  RemoveInboxThreadOptions,
   RemoveInboxThreadResponse,
   RemoveInboxThreadResponseSuccess,
 } from './remove-inbox-thread.interface';
