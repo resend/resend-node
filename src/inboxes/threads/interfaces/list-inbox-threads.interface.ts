@@ -3,6 +3,7 @@ import type { InboxMessageFolder } from '../../interfaces/inbox';
 import type { InboxThread } from './thread';
 
 export interface ListInboxThreadsOptions {
+  inboxId: string;
   folder?: InboxMessageFolder;
   query?: string;
   from?: string;

@@ -6,10 +6,12 @@ import type {
   CreateInboxLabelResponseSuccess,
 } from './interfaces/create-inbox-label.interface';
 import type {
+  ListInboxLabelsOptions,
   ListInboxLabelsResponse,
   ListInboxLabelsResponseSuccess,
 } from './interfaces/list-inbox-labels.interface';
 import type {
+  RemoveInboxLabelOptions,
   RemoveInboxLabelResponse,
   RemoveInboxLabelResponseSuccess,
 } from './interfaces/remove-inbox-label.interface';
@@ -22,39 +24,40 @@ import type {
 export class InboxLabels {
   constructor(private readonly resend: Resend) {}
 
-  async list(inboxId: string): Promise<ListInboxLabelsResponse> {
+  async list(
+    options: ListInboxLabelsOptions,
+  ): Promise<ListInboxLabelsResponse> {
     return this.resend.get<ListInboxLabelsResponseSuccess>(
-      `/inboxes/${inboxId}/labels`,
+      `/inboxes/${options.inboxId}/labels`,
     );
   }
 
   async create(
-    inboxId: string,
     payload: CreateInboxLabelOptions,
     options: CreateInboxLabelRequestOptions = {},
   ): Promise<CreateInboxLabelResponse> {
+    const { inboxId, name, color } = payload;
     return this.resend.post<CreateInboxLabelResponseSuccess>(
       `/inboxes/${inboxId}/labels`,
-      payload,
+      { name, color },
       options,
     );
   }
 
   async update(
-    inboxId: string,
-    labelId: string,
-    payload: UpdateInboxLabelOptions,
+    options: UpdateInboxLabelOptions,
   ): Promise<UpdateInboxLabelResponse> {
+    const { inboxId, labelId, name, color } = options;
     return this.resend.patch<UpdateInboxLabelResponseSuccess>(
       `/inboxes/${inboxId}/labels/${labelId}`,
-      payload,
+      { name, color },
     );
   }
 
   async remove(
-    inboxId: string,
-    labelId: string,
+    options: RemoveInboxLabelOptions,
   ): Promise<RemoveInboxLabelResponse> {
+    const { inboxId, labelId } = options;
     return this.resend.delete<RemoveInboxLabelResponseSuccess>(
       `/inboxes/${inboxId}/labels/${labelId}`,
     );

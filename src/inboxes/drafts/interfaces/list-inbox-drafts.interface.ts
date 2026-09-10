@@ -2,6 +2,7 @@ import type { Response } from '../../../interfaces';
 import type { InboxDraftListItem } from './draft';
 
 export interface ListInboxDraftsOptions {
+  inboxId: string;
   cursor?: string;
 }
 

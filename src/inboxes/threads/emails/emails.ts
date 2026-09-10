@@ -6,6 +6,7 @@ import type {
   ForwardInboxThreadEmailResponseSuccess,
 } from '../interfaces/forward-inbox-thread-email.interface';
 import type {
+  GetInboxThreadEmailOptions,
   GetInboxThreadEmailResponse,
   GetInboxThreadEmailResponseSuccess,
 } from '../interfaces/get-inbox-thread-email.interface';
@@ -20,39 +21,34 @@ export class InboxThreadEmails {
   constructor(private readonly resend: Resend) {}
 
   async get(
-    inboxId: string,
-    threadId: string,
-    emailId: string,
+    options: GetInboxThreadEmailOptions,
   ): Promise<GetInboxThreadEmailResponse> {
+    const { inboxId, threadId, emailId } = options;
     return this.resend.get<GetInboxThreadEmailResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}`,
     );
   }
 
   async reply(
-    inboxId: string,
-    threadId: string,
-    emailId: string,
     payload: ReplyInboxThreadEmailOptions,
     options: ReplyInboxThreadEmailRequestOptions = {},
   ): Promise<ReplyInboxThreadEmailResponse> {
+    const { inboxId, threadId, emailId, html, text, subject } = payload;
     return this.resend.post<ReplyInboxThreadEmailResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
-      payload,
+      { html, text, subject },
       options,
     );
   }
 
   async forward(
-    inboxId: string,
-    threadId: string,
-    emailId: string,
     payload: ForwardInboxThreadEmailOptions,
     options: ForwardInboxThreadEmailRequestOptions = {},
   ): Promise<ForwardInboxThreadEmailResponse> {
+    const { inboxId, threadId, emailId, to, html, text, subject } = payload;
     return this.resend.post<ForwardInboxThreadEmailResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
-      payload,
+      { to, html, text, subject },
       options,
     );
   }

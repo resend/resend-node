@@ -45,7 +45,12 @@ export class Inboxes {
   ): Promise<CreateInboxResponse> {
     return this.resend.post<CreateInboxResponseSuccess>(
       '/inboxes',
-      payload,
+      {
+        email_address: payload.emailAddress,
+        name: payload.name,
+        forwarding: payload.forwarding,
+        friendly_name: payload.friendlyName,
+      },
       options,
     );
   }
@@ -63,10 +68,10 @@ export class Inboxes {
     id: string,
     payload: UpdateInboxOptions,
   ): Promise<UpdateInboxResponse> {
-    return this.resend.patch<UpdateInboxResponseSuccess>(
-      `/inboxes/${id}`,
-      payload,
-    );
+    return this.resend.patch<UpdateInboxResponseSuccess>(`/inboxes/${id}`, {
+      name: payload.name,
+      friendly_name: payload.friendlyName,
+    });
   }
 
   async remove(id: string): Promise<RemoveInboxResponse> {
