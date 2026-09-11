@@ -7,6 +7,7 @@ import type {
   CreateBroadcastOptions,
   CreateBroadcastResponseSuccess,
 } from './interfaces/create-broadcast-options.interface';
+import type { DuplicateBroadcastResponseSuccess } from './interfaces/duplicate-broadcast.interface';
 import type { GetBroadcastResponseSuccess } from './interfaces/get-broadcast.interface';
 import type { ListBroadcastClickedLinksResponseSuccess } from './interfaces/list-broadcast-clicked-links.interface';
 import type { ListBroadcastRecipientsResponseSuccess } from './interfaces/list-broadcast-recipients.interface';
@@ -1037,6 +1038,41 @@ describe('Broadcasts', () => {
           }
         `);
       });
+    });
+  });
+
+  describe('duplicate', () => {
+    it('duplicates a broadcast', async () => {
+      const response: DuplicateBroadcastResponseSuccess = {
+        object: 'broadcast',
+        id: '1f85ae38-f5b9-4c1f-8766-667a53970fea',
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 201,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await expect(
+        resend.broadcasts.duplicate('e6bd3843-3cc7-4c0d-b7fd-e01cbb514a16'),
+      ).resolves.toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "1f85ae38-f5b9-4c1f-8766-667a53970fea",
+            "object": "broadcast",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/broadcasts/e6bd3843-3cc7-4c0d-b7fd-e01cbb514a16/duplicate',
+        expect.objectContaining({ method: 'POST' }),
+      );
     });
   });
 

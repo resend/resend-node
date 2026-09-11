@@ -13,6 +13,10 @@ import type {
   CreateBroadcastRequestOptions,
 } from './interfaces/create-broadcast-options.interface';
 import type {
+  DuplicateBroadcastResponse,
+  DuplicateBroadcastResponseSuccess,
+} from './interfaces/duplicate-broadcast.interface';
+import type {
   GetBroadcastResponse,
   GetBroadcastResponseSuccess,
 } from './interfaces/get-broadcast.interface';
@@ -141,6 +145,13 @@ export class Broadcasts {
   async cancel(id: string): Promise<CancelBroadcastResponse> {
     const data = await this.resend.post<CancelBroadcastResponseSuccess>(
       `/broadcasts/${id}/cancel`,
+    );
+    return data;
+  }
+
+  async duplicate(id: string): Promise<DuplicateBroadcastResponse> {
+    const data = await this.resend.post<DuplicateBroadcastResponseSuccess>(
+      `/broadcasts/${id}/duplicate`,
     );
     return data;
   }
