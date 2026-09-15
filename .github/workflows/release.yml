@@ -25,6 +25,10 @@ jobs:
         id: meta
         run: |
           VERSION="$(node -p "require('./package.json').version")"
+          if ! node -e 'process.exit(/^\d+\.\d+\.\d+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$/.test(process.argv[1]) ? 0 : 1)' "$VERSION"; then
+            echo "::error::package.json version $VERSION is not a valid semver version"
+            exit 1
+          fi
           if [ "$GITHUB_REF_NAME" != "v$VERSION" ]; then
             echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $VERSION"
             exit 1
