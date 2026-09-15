@@ -1,0 +1,91 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*'
+concurrency:
+  group: release
+  cancel-in-progress: false
+permissions: {}
+jobs:
+  ci:
+    runs-on: depot-ubuntu-22.04-8
+    timeout-minutes: 15
+    container:
+      image: node:24-slim
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: Verify tag matches package.json version
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if [ "${{ github.ref_name }}" != "v$VERSION" ]; then
+            echo "::error::Tag ${{ github.ref_name }} does not match package.json version $VERSION"
+            exit 1
+          fi
+      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Test
+        run: pnpm test
+        env:
+          SKIP_ENV_VALIDATION: true
+      - name: Build
+        run: pnpm build
+  publish-npm:
+    needs: ci
+    # npm trusted publishing (OIDC) only works on GitHub-hosted runners without a container.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Determine npm tag
+        id: npm-tag
+        run: |
+          TAG="${{ github.ref_name }}"
+          if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "tag=latest" >> "$GITHUB_OUTPUT"
+          else
+            PRERELEASE="${TAG#v[0-9]*.[0-9]*.[0-9]*-}"
+            echo "tag=${PRERELEASE%%[-.]*}" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Publish to npm
+        run: npm publish --provenance --tag ${{ steps.npm-tag.outputs.tag }}
+  release:
+    # Runs after publish so a failed publish never leaves a GitHub release without a matching npm version.
+    needs: publish-npm
+    runs-on: depot-ubuntu-22.04-2
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Detect pre-release
+        id: meta
+        run: |
+          if [[ "${{ github.ref_name }}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+            echo "make_latest=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+            echo "make_latest=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3
+        with:
+          prerelease: ${{ steps.meta.outputs.prerelease }}
+          make_latest: ${{ steps.meta.outputs.make_latest }}
+          generate_release_notes: true
