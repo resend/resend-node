@@ -4,7 +4,7 @@ on:
     tags:
       - 'v*'
 concurrency:
-  group: release-${{ github.ref_name }}
+  group: release
   cancel-in-progress: false
 permissions: {}
 jobs:
@@ -74,7 +74,6 @@ jobs:
         run: pnpm build
   publish-npm:
     needs: ci
-    # npm trusted publishing rejects self-hosted runners, so this job cannot use the depot runners.
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -95,7 +94,6 @@ jobs:
           NPM_TAG: ${{ needs.ci.outputs.npm_tag }}
         run: npm publish --provenance --tag "$NPM_TAG"
   release:
-    # Publish first, so a failed npm publish never leaves a GitHub release without a package.
     needs: [ci, publish-npm]
     runs-on: depot-ubuntu-22.04-2
     timeout-minutes: 5
