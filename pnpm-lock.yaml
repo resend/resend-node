@@ -34,8 +34,8 @@ importers:
         specifier: 3.4.6
         version: 3.4.6
       '@types/node':
-        specifier: 24.13.3
-        version: 24.13.3
+        specifier: 24.13.4
+        version: 24.13.4
       '@types/react':
         specifier: 19.3.0
         version: 19.3.0
@@ -65,10 +65,10 @@ importers:
         version: 6.0.3
       vitest:
         specifier: 4.1.11
-        version: 4.1.11(@types/node@24.13.3)(vite@7.3.0(@types/node@24.13.3)(yaml@2.9.0))
+        version: 4.1.11(@types/node@24.13.4)(vite@7.3.0(@types/node@24.13.4)(yaml@2.9.0))
       vitest-fetch-mock:
         specifier: 0.4.5
-        version: 0.4.5(vitest@4.1.11(@types/node@24.13.3)(vite@7.3.0(@types/node@24.13.3)(yaml@2.9.0)))
+        version: 0.4.5(vitest@4.1.11(@types/node@24.13.4)(vite@7.3.0(@types/node@24.13.4)(yaml@2.9.0)))
 
 packages:
 
@@ -706,8 +706,8 @@ packages:
   '@types/mailparser@3.4.6':
     resolution: {integrity: sha512-wVV3cnIKzxTffaPH8iRnddX1zahbYB1ZEoAxyhoBo3TBCBuK6nZ8M8JYO/RhsCuuBVOw/DEN/t/ENbruwlxn6Q==}
 
-  '@types/node@24.13.3':
-    resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
+  '@types/node@24.13.4':
+    resolution: {integrity: sha512-YJ7EqCstVTzIr0fMr7qul/977en+pQHrfmuKIo6Zr9i75Be21dr3MovcfvGtyvi2HAUrRerWps5sMO9I7WaxDw==}
 
   '@types/react@19.3.0':
     resolution: {integrity: sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==}
@@ -2156,10 +2156,10 @@ snapshots:
 
   '@types/mailparser@3.4.6':
     dependencies:
-      '@types/node': 24.13.3
+      '@types/node': 24.13.4
       iconv-lite: 0.6.3
 
-  '@types/node@24.13.3':
+  '@types/node@24.13.4':
     dependencies:
       undici-types: 7.18.2
 
@@ -2169,7 +2169,7 @@ snapshots:
 
   '@types/set-cookie-parser@2.4.10':
     dependencies:
-      '@types/node': 24.13.3
+      '@types/node': 24.13.4
 
   '@vitest/expect@4.1.11':
     dependencies:
@@ -2180,13 +2180,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.11(vite@7.3.0(@types/node@24.13.3)(yaml@2.9.0))':
+  '@vitest/mocker@4.1.11(vite@7.3.0(@types/node@24.13.4)(yaml@2.9.0))':
     dependencies:
       '@vitest/spy': 4.1.11
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 7.3.0(@types/node@24.13.3)(yaml@2.9.0)
+      vite: 7.3.0(@types/node@24.13.4)(yaml@2.9.0)
 
   '@vitest/pretty-format@4.1.11':
     dependencies:
@@ -3058,7 +3058,7 @@ snapshots:
 
   verkit@0.4.0: {}
 
-  vite@7.3.0(@types/node@24.13.3)(yaml@2.9.0):
+  vite@7.3.0(@types/node@24.13.4)(yaml@2.9.0):
     dependencies:
       esbuild: 0.27.7
       fdir: 6.5.0(picomatch@4.0.7)
@@ -3067,18 +3067,18 @@ snapshots:
       rollup: 4.60.4
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 24.13.3
+      '@types/node': 24.13.4
       fsevents: 2.3.3
       yaml: 2.9.0
 
-  vitest-fetch-mock@0.4.5(vitest@4.1.11(@types/node@24.13.3)(vite@7.3.0(@types/node@24.13.3)(yaml@2.9.0))):
+  vitest-fetch-mock@0.4.5(vitest@4.1.11(@types/node@24.13.4)(vite@7.3.0(@types/node@24.13.4)(yaml@2.9.0))):
     dependencies:
-      vitest: 4.1.11(@types/node@24.13.3)(vite@7.3.0(@types/node@24.13.3)(yaml@2.9.0))
+      vitest: 4.1.11(@types/node@24.13.4)(vite@7.3.0(@types/node@24.13.4)(yaml@2.9.0))
 
-  vitest@4.1.11(@types/node@24.13.3)(vite@7.3.0(@types/node@24.13.3)(yaml@2.9.0)):
+  vitest@4.1.11(@types/node@24.13.4)(vite@7.3.0(@types/node@24.13.4)(yaml@2.9.0)):
     dependencies:
       '@vitest/expect': 4.1.11
-      '@vitest/mocker': 4.1.11(vite@7.3.0(@types/node@24.13.3)(yaml@2.9.0))
+      '@vitest/mocker': 4.1.11(vite@7.3.0(@types/node@24.13.4)(yaml@2.9.0))
       '@vitest/pretty-format': 4.1.11
       '@vitest/runner': 4.1.11
       '@vitest/snapshot': 4.1.11
@@ -3095,10 +3095,10 @@ snapshots:
       tinyexec: 1.2.4
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
-      vite: 7.3.0(@types/node@24.13.3)(yaml@2.9.0)
+      vite: 7.3.0(@types/node@24.13.4)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 24.13.3
+      '@types/node': 24.13.4
     transitivePeerDependencies:
       - msw
 
