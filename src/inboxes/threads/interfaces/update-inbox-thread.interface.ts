@@ -16,7 +16,7 @@ export type UpdateInboxThreadOptions = {
 }>;
 
 export interface UpdateInboxThreadResponseSuccess {
-  object: 'inbox';
+  object: 'inbox_thread';
   id: string;
   subject: string | null;
   folder: InboxMessageFolder;
