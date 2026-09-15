@@ -53,7 +53,7 @@
   },
   "homepage": "https://github.com/resend/resend-node#readme",
   "dependencies": {
-    "postal-mime": "2.7.5",
+    "postal-mime": "2.7.6",
     "standardwebhooks": "1.0.0"
   },
   "peerDependencies": {
