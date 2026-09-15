@@ -162,7 +162,7 @@ describe('Inbox threads', () => {
   describe('update', () => {
     it('updates a thread', async () => {
       const response: UpdateInboxThreadResponseSuccess = {
-        object: 'inbox',
+        object: 'inbox_thread',
         id: threadId,
         subject: 'Billing question',
         folder: 'archive',
@@ -197,7 +197,7 @@ describe('Inbox threads', () => {
     it('maps labelId to label_id', async () => {
       mockSuccessResponse(
         {
-          object: 'inbox',
+          object: 'inbox_thread',
           id: threadId,
           subject: 'Billing question',
           folder: 'inbox',
