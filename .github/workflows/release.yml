@@ -1,0 +1,108 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*'
+concurrency:
+  group: release
+  cancel-in-progress: false
+permissions: {}
+jobs:
+  ci:
+    runs-on: depot-ubuntu-22.04-8
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    container:
+      image: node:24-slim
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      stable: ${{ steps.meta.outputs.stable }}
+      npm_tag: ${{ steps.meta.outputs.npm_tag }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: Resolve release metadata
+        id: meta
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if [ "$GITHUB_REF_NAME" != "v$VERSION" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $VERSION"
+            exit 1
+          fi
+          if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            STABLE=true
+            NPM_TAG=latest
+          else
+            STABLE=false
+            PRERELEASE="${VERSION#*-}"
+            NPM_TAG="${PRERELEASE%.*}"
+          fi
+          {
+            echo "version=$VERSION"
+            echo "stable=$STABLE"
+            echo "npm_tag=$NPM_TAG"
+          } >> "$GITHUB_OUTPUT"
+      - name: Verify the version is newer than latest
+        if: steps.meta.outputs.stable == 'true'
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          CURRENT="$(npm view resend@latest version)"
+          node -e '
+            const [next, current] = process.argv.slice(1).map((v) => v.split(".").map(Number));
+            for (let i = 0; i < 3; i++) {
+              if (next[i] > current[i]) process.exit(0);
+              if (next[i] < current[i]) process.exit(1);
+            }
+            process.exit(1);
+          ' "$VERSION" "$CURRENT" || {
+            echo "::error::$VERSION is not newer than the current latest $CURRENT, so it must not move the latest dist-tag"
+            exit 1
+          }
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Test
+        run: pnpm test
+        env:
+          SKIP_ENV_VALIDATION: true
+      - name: Build
+        run: pnpm build
+  publish-npm:
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Publish to npm
+        env:
+          NPM_TAG: ${{ needs.ci.outputs.npm_tag }}
+        run: npm publish --provenance --tag "$NPM_TAG"
+  release:
+    needs: [ci, publish-npm]
+    runs-on: depot-ubuntu-22.04-2
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3
+        with:
+          prerelease: ${{ needs.ci.outputs.stable != 'true' }}
+          make_latest: ${{ needs.ci.outputs.stable == 'true' }}
+          generate_release_notes: true
