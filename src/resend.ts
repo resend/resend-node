@@ -16,6 +16,7 @@ import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import { Events } from './events/events';
+import { Inboxes } from './inboxes/inboxes';
 import type { ErrorResponse, Response } from './interfaces';
 import { Logs } from './logs/logs';
 import { OAuthGrants } from './oauth-grants/oauth-grants';
@@ -64,6 +65,7 @@ export class Resend {
   readonly domains = new Domains(this);
   readonly emails = new Emails(this);
   readonly events = new Events(this);
+  readonly inboxes = new Inboxes(this);
   readonly logs = new Logs(this);
   readonly oauthGrants = new OAuthGrants(this);
   readonly suppressions = new Suppressions(this);
