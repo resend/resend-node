@@ -29,14 +29,17 @@ jobs:
             echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $VERSION"
             exit 1
           fi
-          if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            STABLE=true
-            NPM_TAG=latest
-          else
-            STABLE=false
-            PRERELEASE="${VERSION#*-}"
-            NPM_TAG="${PRERELEASE%.*}"
-          fi
+          case "$VERSION" in
+            *-*)
+              STABLE=false
+              PRERELEASE="${VERSION#*-}"
+              NPM_TAG="${PRERELEASE%.*}"
+              ;;
+            *)
+              STABLE=true
+              NPM_TAG=latest
+              ;;
+          esac
           {
             echo "version=$VERSION"
             echo "stable=$STABLE"
