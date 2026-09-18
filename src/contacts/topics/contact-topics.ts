@@ -54,6 +54,6 @@ export class ContactTopics {
     const identifier = options.email ? options.email : options.id;
     const url = buildPaginationUrl(`/contacts/${identifier}/topics`, options);
 
-    return this.resend.get<ListContactTopicsResponseSuccess>(url);
+    return this.resend.get<ListContactTopicsResponseSuccess>(url, options);
   }
 }
