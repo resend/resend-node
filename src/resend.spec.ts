@@ -1,9 +1,6 @@
 import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from './resend';
-import {
-  mockErrorResponse,
-  mockSuccessResponse,
-} from './test-utils/mock-fetch';
+import { mockSuccessResponse } from './test-utils/mock-fetch';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -136,22 +133,7 @@ describe('Resend', () => {
     });
   });
 
-  describe('timeout', () => {
-    it('aborts the request when the configured timeoutMs is exceeded', async () => {
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
-        timeoutMs: 5,
-      });
-      mockNeverResolvingFetch();
-
-      const result = await resend.apiKeys.list();
-
-      expect(result.error?.message).toBe(
-        'Unable to fetch data. The request could not be resolved.',
-      );
-      const init = fetchMock.mock.calls[0][1];
-      expect((init as RequestInit).signal?.aborted).toBe(true);
-    });
-
+  describe('cancellation', () => {
     it('cancels the request when the provided signal aborts', async () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       const controller = new AbortController();
@@ -195,110 +177,4 @@ describe('Resend', () => {
       }
     });
   });
-
-  describe('retries', () => {
-    it('retries on HTTP 429 and honors the Retry-After header', async () => {
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
-        retries: 2,
-      });
-      fetchMock.mockResponses(
-        [
-          '{}',
-          {
-            status: 429,
-            headers: { 'content-type': 'application/json', 'retry-after': '0' },
-          },
-        ],
-        [
-          '{"id": "key-123"}',
-          { status: 200, headers: { 'content-type': 'application/json' } },
-        ],
-      );
-
-      const result = await resend.apiKeys.list();
-
-      expect(fetchMock).toHaveBeenCalledTimes(2);
-      expect(result.data).toEqual({ id: 'key-123' });
-    });
-
-    it('retries on HTTP 500', async () => {
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
-        retries: 1,
-      });
-      fetchMock.mockResponses(
-        [
-          '{}',
-          {
-            status: 500,
-            headers: { 'content-type': 'application/json', 'retry-after': '0' },
-          },
-        ],
-        [
-          '{"id": "key-123"}',
-          { status: 200, headers: { 'content-type': 'application/json' } },
-        ],
-      );
-
-      const result = await resend.apiKeys.list();
-
-      expect(fetchMock).toHaveBeenCalledTimes(2);
-      expect(result.data).toEqual({ id: 'key-123' });
-    });
-
-    it('does not retry on non-retryable status codes', async () => {
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
-        retries: 2,
-      });
-      mockErrorResponse({ name: 'invalid_parameter', message: 'nope' });
-
-      const result = await resend.apiKeys.list();
-
-      expect(fetchMock).toHaveBeenCalledTimes(1);
-      expect(result.error).toEqual({
-        name: 'invalid_parameter',
-        message: 'nope',
-      });
-    });
-
-    it('per-request retries override the constructor default', async () => {
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
-        retries: 0,
-      });
-      fetchMock.mockResponses(
-        [
-          '{}',
-          {
-            status: 429,
-            headers: { 'content-type': 'application/json', 'retry-after': '0' },
-          },
-        ],
-        [
-          '{"id": "key-123"}',
-          { status: 200, headers: { 'content-type': 'application/json' } },
-        ],
-      );
-
-      const result = await resend.apiKeys.list({ retries: 1 });
-
-      expect(fetchMock).toHaveBeenCalledTimes(2);
-      expect(result.data).toEqual({ id: 'key-123' });
-    });
-  });
 });
-
-function mockNeverResolvingFetch() {
-  fetchMock.mockOnce((request) => {
-    return new Promise<never>((_resolve, reject) => {
-      if (request.signal.aborted) {
-        reject(new DOMException('The operation was aborted.', 'AbortError'));
-        return;
-      }
-      request.signal.addEventListener(
-        'abort',
-        () =>
-          reject(new DOMException('The operation was aborted.', 'AbortError')),
-        { once: true },
-      );
-    });
-  });
-}

@@ -136,25 +136,17 @@ console.log(`Email ${data.id} with a React template has been sent`);
 
 ## Request options
 
-`timeoutMs` and `retries` can be set as defaults for all requests, or overridden per call:
-
-```ts
-const resend = new Resend('re_xxx', {
-  timeoutMs: 10_000, // abort each request attempt after 10s
-  retries: 3, // retry 429s, 5xx, and network errors
-});
-
-// override for a single request
-await resend.emails.send({ ... }, { timeoutMs: 30_000, retries: 1 });
-```
-
-When retrying, a `Retry-After` response header is honored; otherwise exponential backoff is applied. Timeouts and aborts are not retried. To cancel a request manually, pass an `AbortSignal`:
+You can pass an `AbortSignal` in request options to cancel requests or set custom timeouts:
 
 ```ts
 const controller = new AbortController();
 await resend.emails.send({ ... }, { signal: controller.signal });
+
+// Or with a timeout (Node.js 18+)
+await resend.emails.send({ ... }, { signal: AbortSignal.timeout(5000) });
 ```
 
 ## License
 
 MIT License
+
