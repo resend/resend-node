@@ -29,7 +29,10 @@ export class Attachments {
 
     const url = buildPaginationUrl(`/emails/${emailId}/attachments`, options);
 
-    const data = await this.resend.get<ListAttachmentsResponseSuccess>(url);
+    const data = await this.resend.get<ListAttachmentsResponseSuccess>(
+      url,
+      options,
+    );
 
     return data;
   }

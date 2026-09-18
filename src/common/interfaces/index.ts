@@ -8,4 +8,5 @@ export * from './pagination-options.interface';
 export * from './patch-option.interface';
 export * from './post-option.interface';
 export * from './put-option.interface';
+export * from './request-options.interface';
 export * from './require-at-least-one';
