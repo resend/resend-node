@@ -132,4 +132,362 @@ describe('Resend', () => {
       expect(headers.get('User-Agent')).toBe(customUserAgent);
     });
   });
+
+  describe('autoRetry', () => {
+    it('does not retry by default when autoRetry is not configured', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      fetchMock.mockResponseOnce('{}', {
+        status: 429,
+        headers: { 'content-type': 'application/json' },
+      });
+
+      const result = await resend.apiKeys.list();
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(result.error).not.toBeNull();
+    });
+
+    it('retries on HTTP 429 when autoRetry is true and honors Retry-After header', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: true,
+      });
+      fetchMock.mockResponses(
+        [
+          '{}',
+          {
+            status: 429,
+            headers: { 'content-type': 'application/json', 'retry-after': '0' },
+          },
+        ],
+        [
+          '{"id": "key-123"}',
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ],
+      );
+
+      const result = await resend.apiKeys.list();
+
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      expect(result.data).toEqual({ id: 'key-123' });
+    });
+
+    it('retries on HTTP 500 when autoRetry with maxRetries is configured', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: { maxRetries: 2 },
+      });
+      fetchMock.mockResponses(
+        [
+          '{}',
+          {
+            status: 500,
+            headers: { 'content-type': 'application/json', 'retry-after': '0' },
+          },
+        ],
+        [
+          '{"id": "key-123"}',
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ],
+      );
+
+      const result = await resend.apiKeys.list();
+
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      expect(result.data).toEqual({ id: 'key-123' });
+    });
+
+    it('does not retry on non-retryable 4xx status codes', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: true,
+      });
+      fetchMock.mockResponseOnce(
+        JSON.stringify({ name: 'invalid_parameter', message: 'invalid' }),
+        { status: 400, headers: { 'content-type': 'application/json' } },
+      );
+
+      const result = await resend.apiKeys.list();
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(result.error).toEqual({
+        name: 'invalid_parameter',
+        message: 'invalid',
+      });
+    });
+
+    it('per-request autoRetry enables retries when client default is disabled', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      fetchMock.mockResponses(
+        [
+          '{}',
+          {
+            status: 429,
+            headers: { 'content-type': 'application/json', 'retry-after': '0' },
+          },
+        ],
+        [
+          '{"id": "key-123"}',
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ],
+      );
+
+      const result = await resend.apiKeys.list({ autoRetry: true });
+
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      expect(result.data).toEqual({ id: 'key-123' });
+    });
+
+    it('per-request autoRetry: false disables retries when client default is enabled', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: true,
+      });
+      fetchMock.mockResponseOnce('{}', {
+        status: 429,
+        headers: { 'content-type': 'application/json' },
+      });
+
+      const result = await resend.apiKeys.list({ autoRetry: false });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(result.error).not.toBeNull();
+    });
+
+    it('retries on network fetch errors when autoRetry is enabled', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: true,
+      });
+      fetchMock.mockRejectOnce(new Error('Network connection failed'));
+      fetchMock.mockResponseOnce('{"id": "key-123"}', {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+
+      const result = await resend.apiKeys.list();
+
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      expect(result.data).toEqual({ id: 'key-123' });
+    });
+
+    it('honors HTTP-Date formatted Retry-After header', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: true,
+      });
+      const futureDate = new Date(Date.now() + 10).toUTCString();
+      fetchMock.mockResponses(
+        [
+          '{}',
+          {
+            status: 429,
+            headers: {
+              'content-type': 'application/json',
+              'retry-after': futureDate,
+            },
+          },
+        ],
+        [
+          '{"id": "key-123"}',
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ],
+      );
+
+      const result = await resend.apiKeys.list();
+
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      expect(result.data).toEqual({ id: 'key-123' });
+    });
+
+    it('stops retrying when AbortSignal is aborted during retry backoff', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: { maxRetries: 3 },
+      });
+      const controller = new AbortController();
+
+      fetchMock.mockResponses(
+        [
+          '{}',
+          {
+            status: 429,
+            headers: {
+              'content-type': 'application/json',
+              'retry-after': '5',
+            },
+          },
+        ],
+        [
+          '{"id": "key-123"}',
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ],
+      );
+
+      const promise = resend.apiKeys.list({ signal: controller.signal });
+      // Abort during backoff
+      setTimeout(() => controller.abort(), 20);
+
+      const result = await promise;
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(result.error).not.toBeNull();
+    });
+
+    it('returns the last error when all retries are exhausted', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: { maxRetries: 2 },
+      });
+      fetchMock.mockResponses(
+        [
+          JSON.stringify({
+            name: 'rate_limit_exceeded',
+            message: 'Rate limit',
+          }),
+          {
+            status: 429,
+            headers: { 'content-type': 'application/json', 'retry-after': '0' },
+          },
+        ],
+        [
+          JSON.stringify({
+            name: 'rate_limit_exceeded',
+            message: 'Rate limit',
+          }),
+          {
+            status: 429,
+            headers: { 'content-type': 'application/json', 'retry-after': '0' },
+          },
+        ],
+        [
+          JSON.stringify({
+            name: 'rate_limit_exceeded',
+            message: 'Final failure',
+          }),
+          { status: 429, headers: { 'content-type': 'application/json' } },
+        ],
+      );
+
+      const result = await resend.apiKeys.list();
+
+      // Initial attempt (1) + 2 retries = 3 total requests
+      expect(fetchMock).toHaveBeenCalledTimes(3);
+      expect(result.error?.message).toBe('Final failure');
+    });
+
+    it('falls back to backoff when Retry-After is malformed', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: true,
+      });
+      fetchMock.mockResponses(
+        [
+          '{}',
+          {
+            status: 429,
+            headers: {
+              'content-type': 'application/json',
+              'retry-after': 'not-a-number-or-date',
+            },
+          },
+        ],
+        [
+          '{"id": "key-123"}',
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ],
+      );
+
+      const result = await resend.apiKeys.list();
+
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      expect(result.data).toEqual({ id: 'key-123' });
+    });
+
+    it('retries POST requests when autoRetry is enabled', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: true,
+      });
+      fetchMock.mockResponses(
+        [
+          '{}',
+          {
+            status: 500,
+            headers: { 'content-type': 'application/json' },
+          },
+        ],
+        [
+          '{"id": "email-123"}',
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ],
+      );
+
+      const result = await resend.emails.send({
+        from: 'onboarding@resend.dev',
+        to: 'user@example.com',
+        subject: 'Hello',
+        html: '<p>Hi</p>',
+      });
+
+      expect(fetchMock).toHaveBeenCalledTimes(2);
+      expect(result.data).toEqual({ id: 'email-123' });
+    });
+
+    it('does not retry when a 200 response has an invalid non-JSON body', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: true,
+      });
+      fetchMock.mockResponseOnce(
+        '<html>502 Bad Gateway from Cloudflare</html>',
+        {
+          status: 200,
+          headers: { 'content-type': 'text/html' },
+        },
+      );
+
+      const result = await resend.apiKeys.list();
+
+      // Must NOT retry - should fail on the first attempt
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(result.data).toBeNull();
+      expect(result.error?.name).toBe('application_error');
+      expect(result.error?.statusCode).toBeNull();
+    });
+
+    it('handles HTTP 204 No Content without error or retry', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: true,
+      });
+      fetchMock.mockOnce(async () => new Response(null, { status: 204 }));
+
+      const result = await resend.fetchRequest('/test', { method: 'DELETE' });
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(result.error).toBeNull();
+      expect(result.data).toBeNull();
+    });
+
+    it('caps excessively large Retry-After values to 60 seconds', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop', {
+        autoRetry: { maxRetries: 1 },
+      });
+      const controller = new AbortController();
+
+      fetchMock.mockResponses(
+        [
+          '{}',
+          {
+            status: 429,
+            headers: {
+              'content-type': 'application/json',
+              'retry-after': '3600', // 1 hour
+            },
+          },
+        ],
+        [
+          '{"id": "key-123"}',
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ],
+      );
+
+      const promise = resend.apiKeys.list({ signal: controller.signal });
+      // Abort after 10ms so test doesn't wait
+      setTimeout(() => controller.abort(), 10);
+
+      const result = await promise;
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      expect(result.error).not.toBeNull();
+    });
+  });
 });
