@@ -49,6 +49,10 @@ jobs:
               NPM_TAG=latest
               ;;
           esac
+          if [ "$STABLE" = false ] && [ "$NPM_TAG" = latest ]; then
+            echo "::error::$VERSION is a prerelease, so its dist-tag cannot be latest"
+            exit 1
+          fi
           {
             echo "version=$VERSION"
             echo "stable=$STABLE"
