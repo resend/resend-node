@@ -66,6 +66,33 @@ jobs:
             echo "::error::$VERSION is not newer than the current latest $CURRENT, so it must not move the latest dist-tag"
             exit 1
           }
+      - name: Verify the release commit is on canary and main
+        if: steps.meta.outputs.stable == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node -e '
+            const [repo, tag, token] = process.argv.slice(1);
+            (async () => {
+              for (const branch of ["canary", "main"]) {
+                const res = await fetch(`https://api.github.com/repos/${repo}/compare/${branch}...${tag}`, {
+                  headers: { authorization: `Bearer ${token}`, accept: "application/vnd.github+json" },
+                });
+                if (!res.ok) {
+                  console.error(`::error::Could not compare ${tag} with ${branch}: HTTP ${res.status}`);
+                  process.exit(1);
+                }
+                const { status } = await res.json();
+                if (status !== "identical" && status !== "behind") {
+                  console.error(`::error::${tag} is not on ${branch} (compare status: ${status}). Merge into canary, promote canary to main, then tag main.`);
+                  process.exit(1);
+                }
+              }
+            })().catch((error) => {
+              console.error(`::error::${error.message}`);
+              process.exit(1);
+            });
+          ' "$GITHUB_REPOSITORY" "$GITHUB_REF_NAME" "$GH_TOKEN"
       - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
