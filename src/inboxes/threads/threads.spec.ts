@@ -41,7 +41,6 @@ describe('Inbox threads', () => {
     const response: ListInboxThreadsResponseSuccess = {
       object: 'list',
       has_more: true,
-      next_cursor: 'cursor_abc',
       data: [
         {
           id: threadId,
@@ -81,7 +80,7 @@ describe('Inbox threads', () => {
       );
     });
 
-    it('propagates cursor and label filters', async () => {
+    it('propagates pagination and label filters', async () => {
       mockSuccessResponse(response, { headers: {} });
 
       await resend.inboxes.threads.list({
@@ -90,11 +89,12 @@ describe('Inbox threads', () => {
         query: 'invoice',
         from: 'ada@example.com',
         label: ['label-1', 'label-2'],
-        cursor: 'cursor_abc',
+        limit: 10,
+        after: threadId,
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads?folder=inbox&query=invoice&from=ada%40example.com&cursor=cursor_abc&label=label-1&label=label-2`,
+        `https://api.resend.com/inboxes/${inboxId}/threads?folder=inbox&query=invoice&from=ada%40example.com&limit=10&after=${threadId}&label=label-1&label=label-2`,
         expect.objectContaining({
           method: 'GET',
         }),
@@ -105,7 +105,7 @@ describe('Inbox threads', () => {
       const error: ErrorResponse = {
         name: 'validation_error',
         statusCode: 422,
-        message: 'The `cursor` is invalid.',
+        message: 'The `after` parameter must be a valid UUID.',
       };
 
       fetchMock.mockOnce(JSON.stringify(error), {
@@ -117,7 +117,7 @@ describe('Inbox threads', () => {
 
       const data = await resend.inboxes.threads.list({
         inboxId,
-        cursor: 'bad',
+        after: 'bad',
       });
 
       expect(data.error).toEqual(error);
@@ -134,10 +134,7 @@ describe('Inbox threads', () => {
         folder: 'inbox',
         labels: [],
         read: true,
-        messages: {
-          has_more: false,
-          data: [message],
-        },
+        messages: [message],
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {

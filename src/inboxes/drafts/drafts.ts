@@ -39,8 +39,12 @@ export class InboxDrafts {
   async list(
     options: ListInboxDraftsOptions,
   ): Promise<ListInboxDraftsResponse> {
-    const { inboxId, cursor } = options;
-    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/drafts`, { cursor });
+    const { inboxId, limit, after, before } = options;
+    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/drafts`, {
+      limit,
+      after,
+      before,
+    });
     return this.resend.get<ListInboxDraftsResponseSuccess>(url);
   }
 

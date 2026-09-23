@@ -23,7 +23,6 @@ describe('Inbox labels', () => {
     it('lists labels', async () => {
       const response: ListInboxLabelsResponseSuccess = {
         object: 'list',
-        has_more: false,
         data: [
           {
             id: labelId,
