@@ -22,6 +22,9 @@ export interface ForwardInboxThreadEmailResponseSuccess {
   to: string[];
   cc: string[];
   bcc: string[];
+  reply_to: string[];
+  subject: string | null;
+  message_id: string | null;
   html: string | null;
   text: string | null;
   attachments: InboxMessageAttachment[];

@@ -7,10 +7,7 @@ export interface GetInboxThreadOptions {
 }
 
 export interface GetInboxThreadResponseSuccess extends InboxThreadSummary {
-  messages: {
-    has_more: boolean;
-    data: InboxMessage[];
-  };
+  messages: InboxMessage[];
 }
 
 export type GetInboxThreadResponse = Response<GetInboxThreadResponseSuccess>;

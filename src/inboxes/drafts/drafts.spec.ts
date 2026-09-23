@@ -40,7 +40,6 @@ describe('Inbox drafts', () => {
     const response: ListInboxDraftsResponseSuccess = {
       object: 'list',
       has_more: true,
-      next_cursor: 'cursor_drafts',
       data: [
         {
           id: draftId,
@@ -71,13 +70,17 @@ describe('Inbox drafts', () => {
       );
     });
 
-    it('propagates the cursor', async () => {
+    it('propagates the id cursor', async () => {
       mockSuccessResponse(response, { headers: {} });
 
-      await resend.inboxes.drafts.list({ inboxId, cursor: 'cursor_drafts' });
+      await resend.inboxes.drafts.list({
+        inboxId,
+        after: draftId,
+        limit: 20,
+      });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/drafts?cursor=cursor_drafts`,
+        `https://api.resend.com/inboxes/${inboxId}/drafts?limit=20&after=${draftId}`,
         expect.objectContaining({
           method: 'GET',
         }),

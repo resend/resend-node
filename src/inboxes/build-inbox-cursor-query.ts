@@ -1,9 +1,11 @@
 export interface InboxCursorQueryOptions {
-  cursor?: string;
   folder?: string;
   query?: string;
   from?: string;
   label?: string | string[];
+  limit?: number;
+  after?: string;
+  before?: string;
 }
 
 export function buildInboxCursorUrl(
@@ -24,8 +26,16 @@ export function buildInboxCursorUrl(
     searchParams.set('from', options.from);
   }
 
-  if (options.cursor !== undefined) {
-    searchParams.set('cursor', options.cursor);
+  if (options.limit !== undefined) {
+    searchParams.set('limit', String(options.limit));
+  }
+
+  if (options.after !== undefined) {
+    searchParams.set('after', options.after);
+  }
+
+  if (options.before !== undefined) {
+    searchParams.set('before', options.before);
   }
 
   const labels =

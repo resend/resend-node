@@ -1,15 +1,14 @@
+import type { PaginationOptions } from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
 import type { InboxDraftListItem } from './draft';
 
-export interface ListInboxDraftsOptions {
+export type ListInboxDraftsOptions = {
   inboxId: string;
-  cursor?: string;
-}
+} & PaginationOptions;
 
 export interface ListInboxDraftsResponseSuccess {
   object: 'list';
   has_more: boolean;
-  next_cursor: string | null;
   data: InboxDraftListItem[];
 }
 

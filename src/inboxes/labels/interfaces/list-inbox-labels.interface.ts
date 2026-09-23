@@ -7,7 +7,6 @@ export interface ListInboxLabelsOptions {
 
 export interface ListInboxLabelsResponseSuccess {
   object: 'list';
-  has_more: boolean;
   data: InboxLabel[];
 }
 

@@ -1,20 +1,19 @@
+import type { PaginationOptions } from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
 import type { InboxMessageFolder } from '../../interfaces/inbox';
 import type { InboxThread } from './thread';
 
-export interface ListInboxThreadsOptions {
+export type ListInboxThreadsOptions = {
   inboxId: string;
   folder?: InboxMessageFolder;
   query?: string;
   from?: string;
   label?: string | string[];
-  cursor?: string;
-}
+} & PaginationOptions;
 
 export interface ListInboxThreadsResponseSuccess {
   object: 'list';
   has_more: boolean;
-  next_cursor: string | null;
   data: InboxThread[];
 }
 
