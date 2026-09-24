@@ -871,6 +871,44 @@ describe('Contacts', () => {
         }
       `);
     });
+
+    it('sends string, number, boolean and null property values', async () => {
+      const payload: UpdateContactOptions = {
+        id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+        properties: {
+          country: 'Canada',
+          edition: 1,
+          vip: true,
+          nickname: null,
+        },
+      };
+      const response = {
+        id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+        object: 'contact',
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await resend.contacts.update(payload);
+
+      expect(fetchMock.mock.calls[0][0]).toBe(
+        'https://api.resend.com/contacts/3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223',
+      );
+      expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string)).toEqual({
+        properties: {
+          country: 'Canada',
+          edition: 1,
+          vip: true,
+          nickname: null,
+        },
+      });
+    });
   });
 
   describe('remove', () => {
