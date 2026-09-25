@@ -132,4 +132,49 @@ describe('Resend', () => {
       expect(headers.get('User-Agent')).toBe(customUserAgent);
     });
   });
+
+  describe('cancellation', () => {
+    it('cancels the request when the provided signal aborts', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const controller = new AbortController();
+      const fetchStub = vi.fn((_url: string, init?: RequestInit) => {
+        return new Promise<never>((_resolve, reject) => {
+          if (!init?.signal) {
+            reject(new Error('No AbortSignal passed to fetch'));
+            return;
+          }
+          if (init.signal.aborted) {
+            reject(
+              new DOMException('The operation was aborted.', 'AbortError'),
+            );
+            return;
+          }
+          init.signal.addEventListener(
+            'abort',
+            () =>
+              reject(
+                new DOMException('The operation was aborted.', 'AbortError'),
+              ),
+            { once: true },
+          );
+        });
+      });
+      vi.stubGlobal('fetch', fetchStub);
+
+      try {
+        const promise = resend.apiKeys.list({ signal: controller.signal });
+        controller.abort();
+        const result = await promise;
+
+        expect(result.error?.message).toBe(
+          'Unable to fetch data. The request could not be resolved.',
+        );
+        expect(
+          (fetchStub.mock.calls[0][1] as RequestInit).signal?.aborted,
+        ).toBe(true);
+      } finally {
+        vi.unstubAllGlobals();
+      }
+    });
+  });
 });
