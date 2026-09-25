@@ -1,7 +1,23 @@
 import type { Response } from '../../interfaces';
 
+export interface GetEmailResponseBounce {
+  message: string | null;
+  type: 'Undetermined' | 'Transient' | 'Permanent' | null;
+  subType:
+    | 'Undetermined'
+    | 'General'
+    | 'NoEmail'
+    | 'MailboxFull'
+    | 'MessageTooLarge'
+    | 'ContentRejected'
+    | 'AttachmentRejected'
+    | null;
+  diagnosticCode?: string[];
+}
+
 export interface GetEmailResponseSuccess {
   bcc: string[] | null;
+  bounce?: GetEmailResponseBounce;
   cc: string[] | null;
   created_at: string;
   from: string;
