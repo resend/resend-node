@@ -4,10 +4,12 @@ import { Automations } from './automations/automations';
 import { Batch } from './batch/batch';
 import { Broadcasts } from './broadcasts/broadcasts';
 import type {
+  AutoRetryOption,
   DeleteOptions,
   GetOptions,
   PostOptions,
   PutOptions,
+  RequestOptions,
 } from './common/interfaces';
 import type { IdempotentRequest } from './common/interfaces/idempotent-request.interface';
 import type { PatchOptions } from './common/interfaces/patch-option.interface';
@@ -16,7 +18,7 @@ import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import { Events } from './events/events';
-import type { ErrorResponse, Response } from './interfaces';
+import type { ErrorResponse, Response as ResendResponse } from './interfaces';
 import { Logs } from './logs/logs';
 import { OAuthGrants } from './oauth-grants/oauth-grants';
 import { Segments } from './segments/segments';
@@ -40,14 +42,64 @@ function getDefaultUserAgent(): string {
     : defaultUserAgent;
 }
 
+function parseRetryAfter(value: string | null): number | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  let delayMs: number | undefined;
+  const seconds = Number(value);
+  if (!Number.isNaN(seconds)) {
+    delayMs = seconds * 1000;
+  } else {
+    const date = Date.parse(value);
+    if (!Number.isNaN(date)) {
+      delayMs = Math.max(0, date - Date.now());
+    }
+  }
+
+  if (delayMs !== undefined) {
+    // Cap at 60 seconds to prevent unbounded blocking
+    return Math.min(delayMs, 60_000);
+  }
+
+  return undefined;
+}
+
+function resolveMaxRetries(
+  perRequest?: AutoRetryOption,
+  clientDefault?: AutoRetryOption,
+): number {
+  const target = perRequest !== undefined ? perRequest : clientDefault;
+  if (target === true) {
+    return 2;
+  }
+  if (typeof target === 'object' && target !== null) {
+    return target.maxRetries ?? 2;
+  }
+  return 0;
+}
+
+type RequestAttempt<T> = {
+  response: ResendResponse<T>;
+  retryable: boolean;
+  retryAfterMs?: number;
+};
+
 export interface ResendOptions {
   baseUrl?: string;
   userAgent?: string;
+  /**
+   * Automatic retry configuration for retryable failures (HTTP 429, 5xx, and network errors).
+   * Disabled by default (`false`). Set to `true` (defaults to 2 retries) or `{ maxRetries: number }`.
+   */
+  autoRetry?: AutoRetryOption;
 }
 
 export class Resend {
   readonly baseUrl: string;
   readonly userAgent: string;
+  readonly autoRetry?: AutoRetryOption;
   private readonly headers: Headers;
 
   readonly segments = new Segments(this);
@@ -89,6 +141,7 @@ export class Resend {
 
     this.baseUrl = options?.baseUrl ?? getDefaultBaseUrl();
     this.userAgent = options?.userAgent ?? getDefaultUserAgent();
+    this.autoRetry = options?.autoRetry;
 
     this.headers = new Headers({
       Authorization: `Bearer ${this.key}`,
@@ -111,73 +164,130 @@ export class Resend {
     }
   }
 
-  async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
-    try {
-      const response = await fetch(`${this.baseUrl}${path}`, options);
+  async fetchRequest<T>(
+    path: string,
+    options: RequestOptions & RequestInit = {},
+  ): Promise<ResendResponse<T>> {
+    const { autoRetry, signal, ...requestInit } = options;
+    const maxRetries = resolveMaxRetries(autoRetry, this.autoRetry);
 
-      if (!response.ok) {
-        try {
-          const rawError = await response.text();
-          const parsedError = JSON.parse(rawError);
+    for (let attempt = 0; ; attempt++) {
+      const result = await this.performRequest<T>(path, {
+        ...requestInit,
+        signal,
+      });
 
-          this.logError(parsedError, path, response.status);
+      const retryable =
+        attempt < maxRetries && !signal?.aborted && result.retryable;
 
-          return {
-            data: null,
-            error: parsedError,
-            headers: Object.fromEntries(response.headers.entries()),
-          };
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            const error: ErrorResponse = {
-              name: 'application_error',
-              statusCode: response.status,
-              message:
-                'Internal server error. We are unable to process your request right now, please try again later.',
-            };
+      if (!retryable) {
+        return result.response;
+      }
 
-            this.logError(error, path, response.status);
+      const backoffMs =
+        result.retryAfterMs ?? Math.min(500 * 2 ** attempt, 10_000);
+      const delayMs = backoffMs + Math.random() * 250;
 
-            return {
-              data: null,
-              error,
-              headers: Object.fromEntries(response.headers.entries()),
-            };
+      await new Promise<void>((resolve) => {
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        let onAbort: (() => void) | undefined;
+
+        if (signal) {
+          if (signal.aborted) {
+            return resolve();
           }
-
-          const error: ErrorResponse = {
-            message: response.statusText,
-            statusCode: response.status,
-            name: 'application_error',
+          onAbort = () => {
+            if (timer) clearTimeout(timer);
+            resolve();
           };
-
-          if (err instanceof Error) {
-            const errorWithMessage = { ...error, message: err.message };
-
-            this.logError(errorWithMessage, path, response.status);
-
-            return {
-              data: null,
-              error: errorWithMessage,
-              headers: Object.fromEntries(response.headers.entries()),
-            };
-          }
-
-          this.logError(error, path, response.status);
-
-          return {
-            data: null,
-            error,
-            headers: Object.fromEntries(response.headers.entries()),
-          };
+          signal.addEventListener('abort', onAbort, { once: true });
         }
+
+        timer = setTimeout(() => {
+          if (onAbort) signal?.removeEventListener('abort', onAbort);
+          resolve();
+        }, delayMs);
+      });
+
+      if (signal?.aborted) {
+        return result.response;
+      }
+    }
+  }
+
+  private async performRequest<T>(
+    path: string,
+    init: RequestInit,
+  ): Promise<RequestAttempt<T>> {
+    let response: Response;
+    try {
+      response = await fetch(`${this.baseUrl}${path}`, init);
+    } catch {
+      const error: ErrorResponse = {
+        name: 'application_error',
+        statusCode: null,
+        message: 'Unable to fetch data. The request could not be resolved.',
+      };
+
+      this.logError(error, path);
+
+      return {
+        response: {
+          data: null,
+          error,
+          headers: null,
+        },
+        retryable: !init.signal?.aborted,
+      };
+    }
+
+    if (!response.ok) {
+      let errorResponse: ResendResponse<never>;
+      try {
+        errorResponse = await this.buildErrorResponse(response, path);
+      } catch {
+        const error: ErrorResponse = {
+          name: 'application_error',
+          statusCode: response.status,
+          message: response.statusText || 'Unable to fetch data.',
+        };
+        this.logError(error, path, response.status);
+        errorResponse = {
+          data: null,
+          error,
+          headers: null,
+        };
+      }
+
+      return {
+        response: errorResponse,
+        retryable:
+          (response.status === 429 || response.status >= 500) &&
+          !init.signal?.aborted,
+        retryAfterMs: parseRetryAfter(response.headers.get('retry-after')),
+      };
+    }
+
+    try {
+      if (response.status === 204) {
+        return {
+          response: {
+            data: null as T,
+            error: null,
+            headers: Object.fromEntries(response.headers.entries()),
+          },
+          retryable: false,
+        };
       }
 
       const data = await response.json();
       return {
-        data,
-        error: null,
-        headers: Object.fromEntries(response.headers.entries()),
+        response: {
+          data,
+          error: null,
+          headers: Object.fromEntries(response.headers.entries()),
+        },
+        retryable: false,
       };
     } catch {
       const error: ErrorResponse = {
@@ -189,9 +299,73 @@ export class Resend {
       this.logError(error, path);
 
       return {
+        response: {
+          data: null,
+          error,
+          headers: null,
+        },
+        retryable: false,
+      };
+    }
+  }
+
+  private async buildErrorResponse(
+    response: Response,
+    path: string,
+  ): Promise<ResendResponse<never>> {
+    try {
+      const rawError = await response.text();
+      const parsedError = JSON.parse(rawError);
+
+      this.logError(parsedError, path, response.status);
+
+      return {
+        data: null,
+        error: parsedError,
+        headers: Object.fromEntries(response.headers.entries()),
+      };
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        const error: ErrorResponse = {
+          name: 'application_error',
+          statusCode: response.status,
+          message:
+            'Internal server error. We are unable to process your request right now, please try again later.',
+        };
+
+        this.logError(error, path, response.status);
+
+        return {
+          data: null,
+          error,
+          headers: Object.fromEntries(response.headers.entries()),
+        };
+      }
+
+      const error: ErrorResponse = {
+        message: response.statusText,
+        statusCode: response.status,
+        name: 'application_error',
+      };
+
+      if (err instanceof Error) {
+        const errorWithMessage = { ...error, message: err.message };
+
+        this.logError(errorWithMessage, path, response.status);
+
+        return {
+          data: null,
+          error: errorWithMessage,
+          headers: Object.fromEntries(response.headers.entries()),
+        };
+      }
+
+      this.logError(error, path, response.status);
+
+      return {
         data: null,
         error,
-        headers: null,
+        headers: Object.fromEntries(response.headers.entries()),
       };
     }
   }

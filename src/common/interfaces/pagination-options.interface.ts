@@ -1,25 +1,27 @@
+import type { RequestOptions } from './request-options.interface';
+
 // Pagination options using cursor-based approach
-export type PaginationOptions = {
+export type PaginationOptions = RequestOptions & {
   /**
    * Maximum number of items to return (1-100, default: 20)
    */
   limit?: number;
 } & (
-  | {
-      /**
-       * Get items after this cursor (cannot be used with 'before')
-       */
-      after?: string;
-      before?: never;
-    }
-  | {
-      /**
-       * Get items before this cursor (cannot be used with 'after')
-       */
-      before?: string;
-      after?: never;
-    }
-);
+    | {
+        /**
+         * Get items after this cursor (cannot be used with 'before')
+         */
+        after?: string;
+        before?: never;
+      }
+    | {
+        /**
+         * Get items before this cursor (cannot be used with 'after')
+         */
+        before?: string;
+        after?: never;
+      }
+  );
 
 export type PaginatedData<Data> = {
   object: 'list';

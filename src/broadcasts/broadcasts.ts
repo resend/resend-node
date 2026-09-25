@@ -99,7 +99,10 @@ export class Broadcasts {
   ): Promise<ListBroadcastsResponse> {
     const url = buildPaginationUrl('/broadcasts', options);
 
-    const data = await this.resend.get<ListBroadcastsResponseSuccess>(url);
+    const data = await this.resend.get<ListBroadcastsResponseSuccess>(
+      url,
+      options,
+    );
     return data;
   }
 
@@ -119,8 +122,9 @@ export class Broadcasts {
     );
     const url = `/broadcasts/${id}/recipients?${queryString}`;
 
-    const data =
-      await this.resend.get<ListBroadcastRecipientsResponseSuccess<T>>(url);
+    const data = await this.resend.get<
+      ListBroadcastRecipientsResponseSuccess<T>
+    >(url, options as ListBroadcastRecipientsOptions);
     return data;
   }
 
@@ -131,7 +135,10 @@ export class Broadcasts {
     const url = buildPaginationUrl(`/broadcasts/${id}/clicked-links`, options);
 
     const data =
-      await this.resend.get<ListBroadcastClickedLinksResponseSuccess>(url);
+      await this.resend.get<ListBroadcastClickedLinksResponseSuccess>(
+        url,
+        options,
+      );
     return data;
   }
 
