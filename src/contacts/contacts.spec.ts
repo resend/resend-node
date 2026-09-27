@@ -823,11 +823,47 @@ describe('Contacts', () => {
         `);
 
         expect(fetchMock).toHaveBeenCalledWith(
-          'https://api.resend.com/contacts/team@resend.com',
+          'https://api.resend.com/contacts/team%40resend.com',
           expect.objectContaining({
             method: 'GET',
             headers: expect.any(Headers),
           }),
+        );
+      });
+    });
+
+    describe('path encoding', () => {
+      it('encodes a `#` in the email so it is not treated as a fragment', async () => {
+        mockSuccessResponse({}, {});
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        await resend.contacts.get({ email: 'john#doe@example.com' });
+
+        const [url] = fetchMock.mock.calls[0];
+        expect(url).toBe(
+          'https://api.resend.com/contacts/john%23doe%40example.com',
+        );
+      });
+
+      it('encodes a `/` in the email so it stays one path segment', async () => {
+        mockSuccessResponse({}, {});
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        await resend.contacts.get({ email: 'a/b@example.com' });
+
+        const [url] = fetchMock.mock.calls[0];
+        expect(url).toBe('https://api.resend.com/contacts/a%2Fb%40example.com');
+      });
+
+      it('leaves a plain id unchanged', async () => {
+        mockSuccessResponse({}, {});
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        await resend.contacts.get('fd61172c-cafc-40f5-b049-b45947779a29');
+
+        const [url] = fetchMock.mock.calls[0];
+        expect(url).toBe(
+          'https://api.resend.com/contacts/fd61172c-cafc-40f5-b049-b45947779a29',
         );
       });
     });

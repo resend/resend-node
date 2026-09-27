@@ -1,4 +1,5 @@
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   ListOAuthGrantsOptions,
@@ -24,7 +25,7 @@ export class OAuthGrants {
 
   async revoke(id: string): Promise<RevokeOAuthGrantResponse> {
     const data = await this.resend.delete<RevokeOAuthGrantResponseSuccess>(
-      `/oauth/grants/${id}`,
+      path`/oauth/grants/${id}`,
     );
     return data;
   }

@@ -1,3 +1,4 @@
+import { path } from '../../common/utils/path';
 import type { Resend } from '../../resend';
 import type {
   ClaimDomainOptions,
@@ -38,14 +39,14 @@ export class DomainClaims {
 
   async get(domainId: string): Promise<GetDomainClaimResponse> {
     const data = await this.resend.get<GetDomainClaimResponseSuccess>(
-      `/domains/${domainId}/claim`,
+      path`/domains/${domainId}/claim`,
     );
     return data;
   }
 
   async verify(domainId: string): Promise<VerifyDomainClaimResponse> {
     const data = await this.resend.post<VerifyDomainClaimResponseSuccess>(
-      `/domains/${domainId}/claim/verify`,
+      path`/domains/${domainId}/claim/verify`,
     );
     return data;
   }

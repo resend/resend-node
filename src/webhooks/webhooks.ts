@@ -1,5 +1,6 @@
 import { Webhook } from 'standardwebhooks';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import { Events } from './events/events';
 import type {
@@ -65,7 +66,7 @@ export class Webhooks {
 
   async get(id: string): Promise<GetWebhookResponse> {
     const data = await this.resend.get<GetWebhookResponseSuccess>(
-      `/webhooks/${id}`,
+      path`/webhooks/${id}`,
     );
 
     return data;
@@ -83,7 +84,7 @@ export class Webhooks {
     payload: UpdateWebhookOptions,
   ): Promise<UpdateWebhookResponse> {
     const data = await this.resend.patch<UpdateWebhookResponseSuccess>(
-      `/webhooks/${id}`,
+      path`/webhooks/${id}`,
       payload,
     );
     return data;
@@ -91,7 +92,7 @@ export class Webhooks {
 
   async remove(id: string): Promise<RemoveWebhookResponse> {
     const data = await this.resend.delete<RemoveWebhookResponseSuccess>(
-      `/webhooks/${id}`,
+      path`/webhooks/${id}`,
     );
     return data;
   }
@@ -101,7 +102,7 @@ export class Webhooks {
   ): Promise<RotateWebhookSigningSecretResponse> {
     const data =
       await this.resend.post<RotateWebhookSigningSecretResponseSuccess>(
-        `/webhooks/${id}/signing-secret/rotate`,
+        path`/webhooks/${id}/signing-secret/rotate`,
       );
     return data;
   }

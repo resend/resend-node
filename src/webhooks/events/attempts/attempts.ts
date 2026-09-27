@@ -1,4 +1,5 @@
 import { buildPaginationUrl } from '../../../common/utils/build-pagination-query';
+import { path } from '../../../common/utils/path';
 import type { Resend } from '../../../resend';
 import type {
   ListWebhookEventAttemptsOptions,
@@ -15,7 +16,7 @@ export class Attempts {
     const { webhookId, eventId } = options;
 
     const url = buildPaginationUrl(
-      `/webhooks/${webhookId}/events/${eventId}/attempts`,
+      path`/webhooks/${webhookId}/events/${eventId}/attempts`,
       options,
     );
 

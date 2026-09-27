@@ -1,4 +1,5 @@
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   CreateSegmentOptions,
@@ -49,7 +50,7 @@ export class Segments {
 
   async get(id: string): Promise<GetSegmentResponse> {
     const data = await this.resend.get<GetSegmentResponseSuccess>(
-      `/segments/${id}`,
+      path`/segments/${id}`,
     );
     return data;
   }
@@ -59,7 +60,7 @@ export class Segments {
     payload: UpdateSegmentOptions,
   ): Promise<UpdateSegmentResponse> {
     const data = await this.resend.patch<UpdateSegmentResponseSuccess>(
-      `/segments/${id}`,
+      path`/segments/${id}`,
       payload,
     );
     return data;
@@ -67,7 +68,7 @@ export class Segments {
 
   async remove(id: string): Promise<RemoveSegmentResponse> {
     const data = await this.resend.delete<RemoveSegmentResponseSuccess>(
-      `/segments/${id}`,
+      path`/segments/${id}`,
     );
     return data;
   }

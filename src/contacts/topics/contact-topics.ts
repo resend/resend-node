@@ -1,4 +1,5 @@
 import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
+import { path } from '../../common/utils/path';
 import type { Resend } from '../../resend';
 import type {
   ListContactTopicsOptions,
@@ -31,7 +32,7 @@ export class ContactTopics {
 
     const identifier = payload.email ? payload.email : payload.id;
     return this.resend.patch<UpdateContactTopicsResponseSuccess>(
-      `/contacts/${identifier}/topics`,
+      path`/contacts/${identifier}/topics`,
       payload.topics,
     );
   }
@@ -52,7 +53,10 @@ export class ContactTopics {
     }
 
     const identifier = options.email ? options.email : options.id;
-    const url = buildPaginationUrl(`/contacts/${identifier}/topics`, options);
+    const url = buildPaginationUrl(
+      path`/contacts/${identifier}/topics`,
+      options,
+    );
 
     return this.resend.get<ListContactTopicsResponseSuccess>(url);
   }

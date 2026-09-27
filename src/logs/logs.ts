@@ -1,4 +1,5 @@
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   GetLogResponse,
@@ -20,7 +21,9 @@ export class Logs {
   }
 
   async get(id: string): Promise<GetLogResponse> {
-    const data = await this.resend.get<GetLogResponseSuccess>(`/logs/${id}`);
+    const data = await this.resend.get<GetLogResponseSuccess>(
+      path`/logs/${id}`,
+    );
     return data;
   }
 }

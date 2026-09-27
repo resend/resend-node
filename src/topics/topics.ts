@@ -1,3 +1,4 @@
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   CreateTopicOptions,
@@ -55,7 +56,7 @@ export class Topics {
       };
     }
     const data = await this.resend.get<GetTopicResponseSuccess>(
-      `/topics/${id}`,
+      path`/topics/${id}`,
     );
 
     return data;
@@ -75,7 +76,7 @@ export class Topics {
     }
 
     const data = await this.resend.patch<UpdateTopicResponseSuccess>(
-      `/topics/${payload.id}`,
+      path`/topics/${payload.id}`,
       payload,
     );
 
@@ -96,7 +97,7 @@ export class Topics {
     }
 
     const data = await this.resend.delete<RemoveTopicResponseSuccess>(
-      `/topics/${id}`,
+      path`/topics/${id}`,
     );
 
     return data;

@@ -2,6 +2,7 @@ import {
   buildPaginationQuery,
   buildPaginationUrl,
 } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import { render } from '../render';
 import type { Resend } from '../resend';
 import type {
@@ -87,7 +88,7 @@ export class Broadcasts {
     payload?: SendBroadcastOptions,
   ): Promise<SendBroadcastResponse> {
     const data = await this.resend.post<SendBroadcastResponseSuccess>(
-      `/broadcasts/${id}/send`,
+      path`/broadcasts/${id}/send`,
       { scheduled_at: payload?.scheduledAt },
     );
 
@@ -105,7 +106,7 @@ export class Broadcasts {
 
   async get(id: string): Promise<GetBroadcastResponse> {
     const data = await this.resend.get<GetBroadcastResponseSuccess>(
-      `/broadcasts/${id}`,
+      path`/broadcasts/${id}`,
     );
     return data;
   }
@@ -117,7 +118,7 @@ export class Broadcasts {
     const queryString = buildRecipientsQuery(
       options as ListBroadcastRecipientsOptions,
     );
-    const url = `/broadcasts/${id}/recipients?${queryString}`;
+    const url = `${path`/broadcasts/${id}/recipients`}?${queryString}`;
 
     const data =
       await this.resend.get<ListBroadcastRecipientsResponseSuccess<T>>(url);
@@ -128,7 +129,10 @@ export class Broadcasts {
     id: string,
     options: ListBroadcastClickedLinksOptions = {},
   ): Promise<ListBroadcastClickedLinksResponse> {
-    const url = buildPaginationUrl(`/broadcasts/${id}/clicked-links`, options);
+    const url = buildPaginationUrl(
+      path`/broadcasts/${id}/clicked-links`,
+      options,
+    );
 
     const data =
       await this.resend.get<ListBroadcastClickedLinksResponseSuccess>(url);
@@ -137,21 +141,21 @@ export class Broadcasts {
 
   async remove(id: string): Promise<RemoveBroadcastResponse> {
     const data = await this.resend.delete<RemoveBroadcastResponseSuccess>(
-      `/broadcasts/${id}`,
+      path`/broadcasts/${id}`,
     );
     return data;
   }
 
   async cancel(id: string): Promise<CancelBroadcastResponse> {
     const data = await this.resend.post<CancelBroadcastResponseSuccess>(
-      `/broadcasts/${id}/cancel`,
+      path`/broadcasts/${id}/cancel`,
     );
     return data;
   }
 
   async duplicate(id: string): Promise<DuplicateBroadcastResponse> {
     const data = await this.resend.post<DuplicateBroadcastResponseSuccess>(
-      `/broadcasts/${id}/duplicate`,
+      path`/broadcasts/${id}/duplicate`,
     );
     return data;
   }
@@ -163,7 +167,7 @@ export class Broadcasts {
     const html = payload.react ? await render(payload.react) : payload.html;
 
     const data = await this.resend.patch<UpdateBroadcastResponseSuccess>(
-      `/broadcasts/${id}`,
+      path`/broadcasts/${id}`,
       {
         name: payload.name,
         segment_id: payload.segmentId,

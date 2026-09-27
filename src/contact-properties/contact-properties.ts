@@ -3,6 +3,7 @@ import {
   parseContactPropertyFromApi,
   parseContactPropertyToApiOptions,
 } from '../common/utils/parse-contact-properties-to-api-options';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   CreateContactPropertyOptions,
@@ -79,7 +80,7 @@ export class ContactProperties {
       };
     }
     const response = await this.resend.get<GetContactPropertyResponseSuccess>(
-      `/contact-properties/${id}`,
+      path`/contact-properties/${id}`,
     );
 
     if (response.data) {
@@ -113,7 +114,7 @@ export class ContactProperties {
 
     const apiOptions = parseContactPropertyToApiOptions(payload);
     const data = await this.resend.patch<UpdateContactPropertyResponseSuccess>(
-      `/contact-properties/${payload.id}`,
+      path`/contact-properties/${payload.id}`,
       apiOptions,
     );
     return data;
@@ -132,7 +133,7 @@ export class ContactProperties {
       };
     }
     const data = await this.resend.delete<RemoveContactPropertyResponseSuccess>(
-      `/contact-properties/${id}`,
+      path`/contact-properties/${id}`,
     );
     return data;
   }

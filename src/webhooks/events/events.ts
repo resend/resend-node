@@ -1,4 +1,5 @@
 import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
+import { path } from '../../common/utils/path';
 import type { Resend } from '../../resend';
 import type {
   GetWebhookEventOptions,
@@ -29,7 +30,10 @@ export class Events {
   ): Promise<ListWebhookEventsResponse> {
     const { webhookId } = options;
 
-    const url = buildPaginationUrl(`/webhooks/${webhookId}/events`, options);
+    const url = buildPaginationUrl(
+      path`/webhooks/${webhookId}/events`,
+      options,
+    );
 
     const data = await this.resend.get<ListWebhookEventsResponseSuccess>(url);
     return data;
@@ -39,7 +43,7 @@ export class Events {
     const { webhookId, eventId } = options;
 
     const data = await this.resend.get<GetWebhookEventResponseSuccess>(
-      `/webhooks/${webhookId}/events/${eventId}`,
+      path`/webhooks/${webhookId}/events/${eventId}`,
     );
     return data;
   }
@@ -50,7 +54,7 @@ export class Events {
     const { webhookId, eventId } = options;
 
     const data = await this.resend.post<ReplayWebhookEventResponseSuccess>(
-      `/webhooks/${webhookId}/events/${eventId}/replay`,
+      path`/webhooks/${webhookId}/events/${eventId}/replay`,
     );
     return data;
   }

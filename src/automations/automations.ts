@@ -5,6 +5,7 @@ import {
   parseConnection,
   parseStepConfig,
 } from '../common/utils/parse-automation-to-api-options';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   CreateAutomationOptions,
@@ -75,14 +76,14 @@ export class Automations {
 
   async get(id: string): Promise<GetAutomationResponse> {
     const data = await this.resend.get<GetAutomationResponseSuccess>(
-      `/automations/${id}`,
+      path`/automations/${id}`,
     );
     return data;
   }
 
   async remove(id: string): Promise<RemoveAutomationResponse> {
     const data = await this.resend.delete<RemoveAutomationResponseSuccess>(
-      `/automations/${id}`,
+      path`/automations/${id}`,
     );
     return data;
   }
@@ -107,7 +108,7 @@ export class Automations {
     }
 
     const data = await this.resend.patch<UpdateAutomationResponseSuccess>(
-      `/automations/${id}`,
+      path`/automations/${id}`,
       apiPayload,
     );
     return data;
@@ -115,14 +116,14 @@ export class Automations {
 
   async duplicate(id: string): Promise<DuplicateAutomationResponse> {
     const data = await this.resend.post<DuplicateAutomationResponseSuccess>(
-      `/automations/${id}/duplicate`,
+      path`/automations/${id}/duplicate`,
     );
     return data;
   }
 
   async stop(id: string): Promise<StopAutomationResponse> {
     const data = await this.resend.post<StopAutomationResponseSuccess>(
-      `/automations/${id}/stop`,
+      path`/automations/${id}/stop`,
     );
     return data;
   }

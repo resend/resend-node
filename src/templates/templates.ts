@@ -1,6 +1,7 @@
 import type { PaginationOptions } from '../common/interfaces';
 import { getPaginationQueryProperties } from '../common/utils/get-pagination-query-properties';
 import { parseTemplateToApiOptions } from '../common/utils/parse-template-to-api-options';
+import { path } from '../common/utils/path';
 import { render } from '../render';
 import type { Resend } from '../resend';
 import { ChainableTemplateResult } from './chainable-template-result';
@@ -65,14 +66,14 @@ export class Templates {
 
   async remove(identifier: string): Promise<RemoveTemplateResponse> {
     const data = await this.resend.delete<RemoveTemplateResponseSuccess>(
-      `/templates/${identifier}`,
+      path`/templates/${identifier}`,
     );
     return data;
   }
 
   async get(identifier: string): Promise<GetTemplateResponse> {
     const data = await this.resend.get<GetTemplateResponseSuccess>(
-      `/templates/${identifier}`,
+      path`/templates/${identifier}`,
     );
     return data;
   }
@@ -87,7 +88,7 @@ export class Templates {
     identifier: string,
   ): ChainableTemplateResult<DuplicateTemplateResponse> {
     const promiseDuplicate = this.resend.post<DuplicateTemplateResponseSuccess>(
-      `/templates/${identifier}/duplicate`,
+      path`/templates/${identifier}/duplicate`,
     );
     return new ChainableTemplateResult(
       promiseDuplicate,
@@ -97,7 +98,7 @@ export class Templates {
 
   async publish(identifier: string): Promise<PublishTemplateResponse> {
     const data = await this.resend.post<PublishTemplateResponseSuccess>(
-      `/templates/${identifier}/publish`,
+      path`/templates/${identifier}/publish`,
     );
     return data;
   }
@@ -107,7 +108,7 @@ export class Templates {
     payload: UpdateTemplateOptions,
   ): Promise<UpdateTemplateResponse> {
     const data = await this.resend.patch<UpdateTemplateResponseSuccess>(
-      `/templates/${identifier}`,
+      path`/templates/${identifier}`,
       parseTemplateToApiOptions(payload),
     );
     return data;

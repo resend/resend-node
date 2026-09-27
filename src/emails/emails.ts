@@ -1,5 +1,6 @@
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
+import { path } from '../common/utils/path';
 import { render } from '../render';
 import type { Resend } from '../resend';
 import { Attachments } from './attachments/attachments';
@@ -76,7 +77,7 @@ export class Emails {
 
   async get(id: string): Promise<GetEmailResponse> {
     const data = await this.resend.get<GetEmailResponseSuccess>(
-      `/emails/${id}`,
+      path`/emails/${id}`,
     );
 
     return data;
@@ -92,7 +93,7 @@ export class Emails {
 
   async update(payload: UpdateEmailOptions): Promise<UpdateEmailResponse> {
     const data = await this.resend.patch<UpdateEmailResponseSuccess>(
-      `/emails/${payload.id}`,
+      path`/emails/${payload.id}`,
       {
         scheduled_at: payload.scheduledAt,
       },
@@ -102,7 +103,7 @@ export class Emails {
 
   async cancel(id: string): Promise<CancelEmailResponse> {
     const data = await this.resend.post<CancelEmailResponseSuccess>(
-      `/emails/${id}/cancel`,
+      path`/emails/${id}/cancel`,
     );
     return data;
   }
@@ -112,7 +113,7 @@ export class Emails {
     payload?: ShareEmailOptions,
   ): Promise<ShareEmailResponse> {
     const data = await this.resend.post<ShareEmailResponseSuccess>(
-      `/emails/${id}/share`,
+      path`/emails/${id}/share`,
       { expires_in: payload?.expiresIn },
     );
     return data;

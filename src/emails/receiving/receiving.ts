@@ -1,5 +1,6 @@
 import PostalMime from 'postal-mime';
 import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
+import { path } from '../../common/utils/path';
 import type { Resend } from '../../resend';
 import { Attachments } from './attachments/attachments';
 import type {
@@ -37,11 +38,10 @@ export class Receiving {
     }
 
     const queryString = searchParams.toString();
-    const path = queryString
-      ? `/emails/receiving/${id}?${queryString}`
-      : `/emails/receiving/${id}`;
+    const basePath = path`/emails/receiving/${id}`;
+    const url = queryString ? `${basePath}?${queryString}` : basePath;
 
-    const data = await this.resend.get<GetReceivingEmailResponseSuccess>(path);
+    const data = await this.resend.get<GetReceivingEmailResponseSuccess>(url);
 
     return data;
   }

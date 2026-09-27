@@ -1,4 +1,5 @@
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import { ContactImports } from './imports/contact-imports';
 import type {
@@ -71,7 +72,7 @@ export class Contacts {
       }
 
       const data = await this.resend.post<CreateContactResponseSuccess>(
-        `/audiences/${payload.audienceId}/contacts`,
+        path`/audiences/${payload.audienceId}/contacts`,
         {
           unsubscribed: payload.unsubscribed,
           email: payload.email,
@@ -109,14 +110,19 @@ export class Contacts {
       return data;
     }
 
-    const url = buildPaginationUrl(`/segments/${segmentId}/contacts`, options);
+    const url = buildPaginationUrl(
+      path`/segments/${segmentId}/contacts`,
+      options,
+    );
     const data = await this.resend.get<ListContactsResponseSuccess>(url);
     return data;
   }
 
   async get(options: GetContactOptions): Promise<GetContactResponse> {
     if (typeof options === 'string') {
-      return this.resend.get<GetContactResponseSuccess>(`/contacts/${options}`);
+      return this.resend.get<GetContactResponseSuccess>(
+        path`/contacts/${options}`,
+      );
     }
 
     if (!options.id && !options.email) {
@@ -133,12 +139,12 @@ export class Contacts {
 
     if (!options.audienceId) {
       return this.resend.get<GetContactResponseSuccess>(
-        `/contacts/${options?.email ? options?.email : options?.id}`,
+        path`/contacts/${options?.email ? options?.email : options?.id}`,
       );
     }
 
     return this.resend.get<GetContactResponseSuccess>(
-      `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
+      path`/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
     );
   }
 
@@ -157,7 +163,7 @@ export class Contacts {
 
     if (!options.audienceId) {
       const data = await this.resend.patch<UpdateContactResponseSuccess>(
-        `/contacts/${options?.email ? options?.email : options?.id}`,
+        path`/contacts/${options?.email ? options?.email : options?.id}`,
         {
           unsubscribed: options.unsubscribed,
           first_name: options.firstName,
@@ -169,7 +175,7 @@ export class Contacts {
     }
 
     const data = await this.resend.patch<UpdateContactResponseSuccess>(
-      `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
+      path`/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
       {
         unsubscribed: options.unsubscribed,
         first_name: options.firstName,
@@ -183,7 +189,7 @@ export class Contacts {
   async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
     if (typeof payload === 'string') {
       return this.resend.delete<RemoveContactsResponseSuccess>(
-        `/contacts/${payload}`,
+        path`/contacts/${payload}`,
       );
     }
 
@@ -201,12 +207,12 @@ export class Contacts {
 
     if (!payload.audienceId) {
       return this.resend.delete<RemoveContactsResponseSuccess>(
-        `/contacts/${payload?.email ? payload?.email : payload?.id}`,
+        path`/contacts/${payload?.email ? payload?.email : payload?.id}`,
       );
     }
 
     return this.resend.delete<RemoveContactsResponseSuccess>(
-      `/audiences/${payload.audienceId}/contacts/${
+      path`/audiences/${payload.audienceId}/contacts/${
         payload?.email ? payload?.email : payload?.id
       }`,
     );
