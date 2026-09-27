@@ -132,4 +132,36 @@ describe('Resend', () => {
       expect(headers.get('User-Agent')).toBe(customUserAgent);
     });
   });
+
+  describe('dot segments in the request path', () => {
+    it.each([
+      ['emails.get', (r: Resend) => r.emails.get('..')],
+      ['emails.cancel', (r: Resend) => r.emails.cancel('..')],
+      ['domains.remove', (r: Resend) => r.domains.remove('.')],
+      ['contacts.get', (r: Resend) => r.contacts.get({ email: '..' })],
+    ])('%s returns an error without sending the request', async (_, call) => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await expect(call(resend)).resolves.toEqual({
+        data: null,
+        error: {
+          message: 'Path parameters cannot be `.` or `..`.',
+          statusCode: null,
+          name: 'invalid_parameter',
+        },
+        headers: null,
+      });
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it('still sends ids that only contain dots', async () => {
+      mockSuccessResponse({}, {});
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      await resend.emails.get('...');
+
+      const [url] = fetchMock.mock.calls[0];
+      expect(url).toBe('https://api.resend.com/emails/...');
+    });
+  });
 });

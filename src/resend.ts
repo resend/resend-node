@@ -11,6 +11,7 @@ import type {
 } from './common/interfaces';
 import type { IdempotentRequest } from './common/interfaces/idempotent-request.interface';
 import type { PatchOptions } from './common/interfaces/patch-option.interface';
+import { hasDotSegment } from './common/utils/path';
 import { ContactProperties } from './contact-properties/contact-properties';
 import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
@@ -114,6 +115,18 @@ export class Resend {
   }
 
   async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
+    if (hasDotSegment(path)) {
+      return {
+        data: null,
+        error: {
+          message: 'Path parameters cannot be `.` or `..`.',
+          statusCode: null,
+          name: 'invalid_parameter',
+        },
+        headers: null,
+      };
+    }
+
     try {
       const response = await fetch(`${this.baseUrl}${path}`, options);
 
