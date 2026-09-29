@@ -1,3 +1,7 @@
+## resend@6.28.1-preview-inboxes.2
+
+### Add the `inbox.*` webhook events to `WebhookEvent` and `WebhookEventPayload`
+
 ## resend@6.28.1-preview-inboxes.1
 
 ### Align inbox thread, draft, and label types with the public API
