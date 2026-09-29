@@ -53,6 +53,7 @@ export type {
 export type {
   ContactCreatedEvent,
   ContactDeletedEvent,
+  ContactTopicsUpdatedEvent,
   ContactUpdatedEvent,
   DomainCreatedEvent,
   DomainDeletedEvent,
@@ -70,6 +71,9 @@ export type {
   EmailSuppressedEvent,
   SuppressionAddedEvent,
   SuppressionRemovedEvent,
+  TopicCreatedEvent,
+  TopicDeletedEvent,
+  TopicUpdatedEvent,
   WebhookEvent,
   WebhookEventPayload,
 } from './webhook-event.interface';
