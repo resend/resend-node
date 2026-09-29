@@ -1,3 +1,11 @@
+import type { InboxDraft } from '../../inboxes/drafts/interfaces/draft';
+import type { InboxMessageFolder } from '../../inboxes/interfaces/inbox';
+import type {
+  InboxMessage,
+  InboxThreadLabel,
+  InboxThreadSummary,
+} from '../../inboxes/threads/interfaces/thread';
+
 export type WebhookEvent =
   | 'email.sent'
   | 'email.scheduled'
@@ -17,7 +25,21 @@ export type WebhookEvent =
   | 'domain.updated'
   | 'domain.deleted'
   | 'suppression.added'
-  | 'suppression.removed';
+  | 'suppression.removed'
+  | 'inbox.created'
+  | 'inbox.updated'
+  | 'inbox.deleted'
+  | 'inbox.thread.created'
+  | 'inbox.thread.folder.updated'
+  | 'inbox.thread.assigned'
+  | 'inbox.thread.unassigned'
+  | 'inbox.thread.labels.updated'
+  | 'inbox.email.received'
+  | 'inbox.email.sent'
+  | 'inbox.draft.created'
+  | 'inbox.draft.updated'
+  | 'inbox.draft.sent'
+  | 'inbox.draft.deleted';
 
 interface BaseEmailEventData {
   broadcast_id?: string;
@@ -111,6 +133,30 @@ interface SuppressionEventData {
   origin: 'bounce' | 'complaint' | 'manual';
   source_id: string | null;
   created_at: string;
+}
+
+interface InboxEventInbox {
+  object: 'inbox';
+  id: string;
+  name: string;
+  email_address: string;
+  domain_id: string;
+  receiving_address: string | null;
+  friendly_name: string | null;
+  unread: number;
+  created_at: string;
+}
+
+interface InboxEventData {
+  source: 'api' | 'dashboard' | 'agent' | 'system';
+  inbox_id: string;
+  thread_id?: string;
+  email_id?: string;
+  draft_id?: string;
+  thread?: InboxThreadSummary;
+  email?: Omit<InboxMessage, 'html' | 'text'>;
+  draft?: Omit<InboxDraft, 'html' | 'text'>;
+  inbox?: InboxEventInbox;
 }
 
 export interface EmailSentEvent {
@@ -235,6 +281,102 @@ export interface SuppressionRemovedEvent {
   data: SuppressionEventData;
 }
 
+export interface InboxCreatedEvent {
+  type: 'inbox.created';
+  created_at: string;
+  data: InboxEventData;
+}
+
+export interface InboxUpdatedEvent {
+  type: 'inbox.updated';
+  created_at: string;
+  data: InboxEventData;
+}
+
+export interface InboxDeletedEvent {
+  type: 'inbox.deleted';
+  created_at: string;
+  data: InboxEventData;
+}
+
+export interface InboxThreadCreatedEvent {
+  type: 'inbox.thread.created';
+  created_at: string;
+  data: InboxEventData;
+}
+
+export interface InboxThreadFolderUpdatedEvent {
+  type: 'inbox.thread.folder.updated';
+  created_at: string;
+  data: InboxEventData & {
+    from: InboxMessageFolder;
+    to: InboxMessageFolder;
+  };
+}
+
+export interface InboxThreadAssignedEvent {
+  type: 'inbox.thread.assigned';
+  created_at: string;
+  data: InboxEventData & {
+    assignee_email: string | null;
+    assigned_by_email: string | null;
+    previous_assignee_email: string | null;
+  };
+}
+
+export interface InboxThreadUnassignedEvent {
+  type: 'inbox.thread.unassigned';
+  created_at: string;
+  data: InboxEventData & {
+    previous_assignee_email: string | null;
+  };
+}
+
+export interface InboxThreadLabelsUpdatedEvent {
+  type: 'inbox.thread.labels.updated';
+  created_at: string;
+  data: InboxEventData & {
+    added: InboxThreadLabel[];
+    removed: InboxThreadLabel[];
+  };
+}
+
+export interface InboxEmailReceivedEvent {
+  type: 'inbox.email.received';
+  created_at: string;
+  data: InboxEventData;
+}
+
+export interface InboxEmailSentEvent {
+  type: 'inbox.email.sent';
+  created_at: string;
+  data: InboxEventData;
+}
+
+export interface InboxDraftCreatedEvent {
+  type: 'inbox.draft.created';
+  created_at: string;
+  data: InboxEventData;
+}
+
+export interface InboxDraftUpdatedEvent {
+  type: 'inbox.draft.updated';
+  created_at: string;
+  data: InboxEventData;
+}
+
+export interface InboxDraftSentEvent {
+  type: 'inbox.draft.sent';
+  created_at: string;
+  data: InboxEventData;
+}
+
+export interface InboxDraftDeletedEvent {
+  type: 'inbox.draft.deleted';
+  created_at: string;
+  data: InboxEventData;
+}
+
 export type WebhookEventPayload =
   | EmailSentEvent
   | EmailScheduledEvent
@@ -254,4 +396,18 @@ export type WebhookEventPayload =
   | DomainUpdatedEvent
   | DomainDeletedEvent
   | SuppressionAddedEvent
-  | SuppressionRemovedEvent;
+  | SuppressionRemovedEvent
+  | InboxCreatedEvent
+  | InboxUpdatedEvent
+  | InboxDeletedEvent
+  | InboxThreadCreatedEvent
+  | InboxThreadFolderUpdatedEvent
+  | InboxThreadAssignedEvent
+  | InboxThreadUnassignedEvent
+  | InboxThreadLabelsUpdatedEvent
+  | InboxEmailReceivedEvent
+  | InboxEmailSentEvent
+  | InboxDraftCreatedEvent
+  | InboxDraftUpdatedEvent
+  | InboxDraftSentEvent
+  | InboxDraftDeletedEvent;
