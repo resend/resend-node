@@ -77,6 +77,21 @@ describe('Batch', () => {
       expect(sentHeaders().get('Idempotency-Key')).toBe('key-123');
       expect(sentHeaders().get('X-Trace-Id')).toBe('trace-123');
     });
+
+    it.each([
+      null,
+      false,
+      0,
+      '',
+    ])('treats %o headers as no custom headers', async (headers) => {
+      mockSuccessResponse({ data: [] });
+
+      await resend.batch.send(payload, {
+        headers: headers as unknown as HeadersInit,
+      });
+
+      expect(sentHeaders().get('x-batch-validation')).toBe('strict');
+    });
   });
 
   describe('create', () => {
