@@ -53,7 +53,10 @@ export class Domains {
   async list(options: ListDomainsOptions = {}): Promise<ListDomainsResponse> {
     const url = buildPaginationUrl('/domains', options);
 
-    const data = await this.resend.get<ListDomainsResponseSuccess>(url);
+    const data = await this.resend.get<ListDomainsResponseSuccess>(
+      url,
+      options,
+    );
     return data;
   }
 

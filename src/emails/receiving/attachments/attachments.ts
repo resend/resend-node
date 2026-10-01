@@ -32,7 +32,10 @@ export class Attachments {
       options,
     );
 
-    const data = await this.resend.get<ListAttachmentsResponseSuccess>(url);
+    const data = await this.resend.get<ListAttachmentsResponseSuccess>(
+      url,
+      options,
+    );
 
     return data;
   }

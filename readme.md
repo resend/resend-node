@@ -134,6 +134,45 @@ console.log(`Email ${data.id} with a React template has been sent`);
 >});
 >```
 
+## Automatic retries
+
+You can enable automatic retries for rate limits (HTTP 429), server errors (HTTP 5xx), and network failures:
+
+```ts
+// Enable retries globally (defaults to 2 retries)
+const resend = new Resend('re_xxx', {
+  autoRetry: true,
+});
+
+// Or customize max retries
+const resend = new Resend('re_xxx', {
+  autoRetry: { maxRetries: 3 },
+});
+
+// Override or disable on a single request
+await resend.emails.send({ ... }, { autoRetry: false });
+```
+
+When retrying, `Retry-After` headers (up to 60s) are honored; otherwise exponential backoff with jitter is applied.
+
+### Idempotency with retries
+
+When retrying non-idempotent operations like `emails.send()` or `batch.send()`, pass an `idempotencyKey` to ensure requests can be retried safely without creating duplicates:
+
+```ts
+await resend.emails.send(
+  {
+    from: 'you@example.com',
+    to: 'user@gmail.com',
+    subject: 'Order Confirmation',
+    html: '<p>Thank you for your order!</p>',
+  },
+  {
+    idempotencyKey: 'order_tx_12345',
+  },
+);
+```
+
 ## License
 
 MIT License

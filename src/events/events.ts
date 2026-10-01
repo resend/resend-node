@@ -60,7 +60,7 @@ export class Events {
 
   async list(options: ListEventsOptions = {}): Promise<ListEventsResponse> {
     const url = buildPaginationUrl('/events', options);
-    const data = await this.resend.get<ListEventsResponseSuccess>(url);
+    const data = await this.resend.get<ListEventsResponseSuccess>(url, options);
     return data;
   }
 

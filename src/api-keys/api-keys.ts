@@ -40,7 +40,10 @@ export class ApiKeys {
   async list(options: ListApiKeysOptions = {}): Promise<ListApiKeysResponse> {
     const url = buildPaginationUrl('/api-keys', options);
 
-    const data = await this.resend.get<ListApiKeysResponseSuccess>(url);
+    const data = await this.resend.get<ListApiKeysResponseSuccess>(
+      url,
+      options,
+    );
     return data;
   }
 
