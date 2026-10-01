@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
@@ -40,16 +41,26 @@ export class Segments {
     return data;
   }
 
-  async list(options: ListSegmentsOptions = {}): Promise<ListSegmentsResponse> {
+  async list(
+    options: ListSegmentsOptions = {},
+    requestOptions: RequestOptions = {},
+  ): Promise<ListSegmentsResponse> {
     const url = buildPaginationUrl('/segments', options);
 
-    const data = await this.resend.get<ListSegmentsResponseSuccess>(url);
+    const data = await this.resend.get<ListSegmentsResponseSuccess>(
+      url,
+      requestOptions,
+    );
     return data;
   }
 
-  async get(id: string): Promise<GetSegmentResponse> {
+  async get(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetSegmentResponse> {
     const data = await this.resend.get<GetSegmentResponseSuccess>(
       `/segments/${id}`,
+      requestOptions,
     );
     return data;
   }
@@ -57,17 +68,24 @@ export class Segments {
   async update(
     id: string,
     payload: UpdateSegmentOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateSegmentResponse> {
     const data = await this.resend.patch<UpdateSegmentResponseSuccess>(
       `/segments/${id}`,
       payload,
+      requestOptions,
     );
     return data;
   }
 
-  async remove(id: string): Promise<RemoveSegmentResponse> {
+  async remove(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveSegmentResponse> {
     const data = await this.resend.delete<RemoveSegmentResponseSuccess>(
       `/segments/${id}`,
+      undefined,
+      requestOptions,
     );
     return data;
   }

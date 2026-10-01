@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
@@ -37,27 +38,40 @@ export class ApiKeys {
     return data;
   }
 
-  async list(options: ListApiKeysOptions = {}): Promise<ListApiKeysResponse> {
+  async list(
+    options: ListApiKeysOptions = {},
+    requestOptions: RequestOptions = {},
+  ): Promise<ListApiKeysResponse> {
     const url = buildPaginationUrl('/api-keys', options);
 
-    const data = await this.resend.get<ListApiKeysResponseSuccess>(url);
+    const data = await this.resend.get<ListApiKeysResponseSuccess>(
+      url,
+      requestOptions,
+    );
     return data;
   }
 
   async update(
     id: string,
     payload: UpdateApiKeyOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateApiKeyResponse> {
     const data = await this.resend.patch<UpdateApiKeyResponseSuccess>(
       `/api-keys/${id}`,
       payload,
+      requestOptions,
     );
     return data;
   }
 
-  async remove(id: string): Promise<RemoveApiKeyResponse> {
+  async remove(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveApiKeyResponse> {
     const data = await this.resend.delete<RemoveApiKeyResponseSuccess>(
       `/api-keys/${id}`,
+      undefined,
+      requestOptions,
     );
     return data;
   }

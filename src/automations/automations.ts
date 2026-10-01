@@ -1,4 +1,5 @@
 import { AutomationRuns } from '../automation-runs/automation-runs';
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import {
   parseAutomationToApiOptions,
@@ -47,10 +48,12 @@ export class Automations {
 
   async create(
     payload: CreateAutomationOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<CreateAutomationResponse> {
     const data = await this.resend.post<CreateAutomationResponseSuccess>(
       '/automations',
       parseAutomationToApiOptions(payload),
+      requestOptions,
     );
 
     return data;
@@ -58,6 +61,7 @@ export class Automations {
 
   async list(
     options: ListAutomationsOptions = {},
+    requestOptions: RequestOptions = {},
   ): Promise<ListAutomationsResponse> {
     const queryString = buildPaginationQuery(options);
     const params = [queryString];
@@ -69,20 +73,32 @@ export class Automations {
     const qs = params.filter(Boolean).join('&');
     const url = qs ? `/automations?${qs}` : '/automations';
 
-    const data = await this.resend.get<ListAutomationsResponseSuccess>(url);
-    return data;
-  }
-
-  async get(id: string): Promise<GetAutomationResponse> {
-    const data = await this.resend.get<GetAutomationResponseSuccess>(
-      `/automations/${id}`,
+    const data = await this.resend.get<ListAutomationsResponseSuccess>(
+      url,
+      requestOptions,
     );
     return data;
   }
 
-  async remove(id: string): Promise<RemoveAutomationResponse> {
+  async get(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetAutomationResponse> {
+    const data = await this.resend.get<GetAutomationResponseSuccess>(
+      `/automations/${id}`,
+      requestOptions,
+    );
+    return data;
+  }
+
+  async remove(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveAutomationResponse> {
     const data = await this.resend.delete<RemoveAutomationResponseSuccess>(
       `/automations/${id}`,
+      undefined,
+      requestOptions,
     );
     return data;
   }
@@ -90,6 +106,7 @@ export class Automations {
   async update(
     id: string,
     payload: UpdateAutomationOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateAutomationResponse> {
     const apiPayload: Record<string, unknown> = {};
 
@@ -109,20 +126,31 @@ export class Automations {
     const data = await this.resend.patch<UpdateAutomationResponseSuccess>(
       `/automations/${id}`,
       apiPayload,
+      requestOptions,
     );
     return data;
   }
 
-  async duplicate(id: string): Promise<DuplicateAutomationResponse> {
+  async duplicate(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<DuplicateAutomationResponse> {
     const data = await this.resend.post<DuplicateAutomationResponseSuccess>(
       `/automations/${id}/duplicate`,
+      undefined,
+      requestOptions,
     );
     return data;
   }
 
-  async stop(id: string): Promise<StopAutomationResponse> {
+  async stop(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<StopAutomationResponse> {
     const data = await this.resend.post<StopAutomationResponseSuccess>(
       `/automations/${id}/stop`,
+      undefined,
+      requestOptions,
     );
     return data;
   }

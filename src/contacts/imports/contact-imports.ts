@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import type {
@@ -37,6 +38,7 @@ export class ContactImports {
 
   async list(
     options: ListContactImportsOptions = {},
+    requestOptions: RequestOptions = {},
   ): Promise<ListContactImportsResponse> {
     const searchParams = new URLSearchParams(buildPaginationQuery(options));
 
@@ -49,12 +51,19 @@ export class ContactImports {
       ? `/contacts/imports?${queryString}`
       : '/contacts/imports';
 
-    return this.resend.get<ListContactImportsResponseSuccess>(url);
+    return this.resend.get<ListContactImportsResponseSuccess>(
+      url,
+      requestOptions,
+    );
   }
 
-  async get(id: string): Promise<GetContactImportResponse> {
+  async get(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetContactImportResponse> {
     return this.resend.get<GetContactImportResponseSuccess>(
       `/contacts/imports/${id}`,
+      requestOptions,
     );
   }
 

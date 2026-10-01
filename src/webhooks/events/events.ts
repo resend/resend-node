@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import type {
@@ -26,31 +27,42 @@ export class Events {
 
   async list(
     options: ListWebhookEventsOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<ListWebhookEventsResponse> {
     const { webhookId } = options;
 
     const url = buildPaginationUrl(`/webhooks/${webhookId}/events`, options);
 
-    const data = await this.resend.get<ListWebhookEventsResponseSuccess>(url);
+    const data = await this.resend.get<ListWebhookEventsResponseSuccess>(
+      url,
+      requestOptions,
+    );
     return data;
   }
 
-  async get(options: GetWebhookEventOptions): Promise<GetWebhookEventResponse> {
+  async get(
+    options: GetWebhookEventOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetWebhookEventResponse> {
     const { webhookId, eventId } = options;
 
     const data = await this.resend.get<GetWebhookEventResponseSuccess>(
       `/webhooks/${webhookId}/events/${eventId}`,
+      requestOptions,
     );
     return data;
   }
 
   async replay(
     options: ReplayWebhookEventOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<ReplayWebhookEventResponse> {
     const { webhookId, eventId } = options;
 
     const data = await this.resend.post<ReplayWebhookEventResponseSuccess>(
       `/webhooks/${webhookId}/events/${eventId}/replay`,
+      undefined,
+      requestOptions,
     );
     return data;
   }

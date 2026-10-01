@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import type {
@@ -12,11 +13,15 @@ import type {
 export class Attachments {
   constructor(private readonly resend: Resend) {}
 
-  async get(options: GetAttachmentOptions): Promise<GetAttachmentResponse> {
+  async get(
+    options: GetAttachmentOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetAttachmentResponse> {
     const { emailId, id } = options;
 
     const data = await this.resend.get<GetAttachmentResponseSuccess>(
       `/emails/${emailId}/attachments/${id}`,
+      requestOptions,
     );
 
     return data;
@@ -24,12 +29,16 @@ export class Attachments {
 
   async list(
     options: ListAttachmentsOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<ListAttachmentsResponse> {
     const { emailId } = options;
 
     const url = buildPaginationUrl(`/emails/${emailId}/attachments`, options);
 
-    const data = await this.resend.get<ListAttachmentsResponseSuccess>(url);
+    const data = await this.resend.get<ListAttachmentsResponseSuccess>(
+      url,
+      requestOptions,
+    );
 
     return data;
   }

@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
@@ -16,15 +17,18 @@ export class AutomationRuns {
 
   async get(
     options: GetAutomationRunOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<GetAutomationRunResponse> {
     const data = await this.resend.get<GetAutomationRunResponseSuccess>(
       `/automations/${options.automationId}/runs/${options.runId}`,
+      requestOptions,
     );
     return data;
   }
 
   async list(
     options: ListAutomationRunsOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<ListAutomationRunsResponse> {
     const queryString = buildPaginationQuery(options);
     const searchParams = new URLSearchParams(queryString);
@@ -41,7 +45,10 @@ export class AutomationRuns {
       ? `/automations/${options.automationId}/runs?${qs}`
       : `/automations/${options.automationId}/runs`;
 
-    const data = await this.resend.get<ListAutomationRunsResponseSuccess>(url);
+    const data = await this.resend.get<ListAutomationRunsResponseSuccess>(
+      url,
+      requestOptions,
+    );
     return data;
   }
 }

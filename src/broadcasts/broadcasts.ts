@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import {
   buildPaginationQuery,
   buildPaginationUrl,
@@ -85,10 +86,12 @@ export class Broadcasts {
   async send(
     id: string,
     payload?: SendBroadcastOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<SendBroadcastResponse> {
     const data = await this.resend.post<SendBroadcastResponseSuccess>(
       `/broadcasts/${id}/send`,
       { scheduled_at: payload?.scheduledAt },
+      requestOptions,
     );
 
     return data;
@@ -96,16 +99,24 @@ export class Broadcasts {
 
   async list(
     options: ListBroadcastsOptions = {},
+    requestOptions: RequestOptions = {},
   ): Promise<ListBroadcastsResponse> {
     const url = buildPaginationUrl('/broadcasts', options);
 
-    const data = await this.resend.get<ListBroadcastsResponseSuccess>(url);
+    const data = await this.resend.get<ListBroadcastsResponseSuccess>(
+      url,
+      requestOptions,
+    );
     return data;
   }
 
-  async get(id: string): Promise<GetBroadcastResponse> {
+  async get(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetBroadcastResponse> {
     const data = await this.resend.get<GetBroadcastResponseSuccess>(
       `/broadcasts/${id}`,
+      requestOptions,
     );
     return data;
   }
@@ -113,45 +124,66 @@ export class Broadcasts {
   async recipients<T extends BroadcastRecipientEventType>(
     id: string,
     options: ListBroadcastRecipientsOptions<T>,
+    requestOptions: RequestOptions = {},
   ): Promise<ListBroadcastRecipientsResponse<T>> {
     const queryString = buildRecipientsQuery(
       options as ListBroadcastRecipientsOptions,
     );
     const url = `/broadcasts/${id}/recipients?${queryString}`;
 
-    const data =
-      await this.resend.get<ListBroadcastRecipientsResponseSuccess<T>>(url);
+    const data = await this.resend.get<
+      ListBroadcastRecipientsResponseSuccess<T>
+    >(url, requestOptions);
     return data;
   }
 
   async clickedLinks(
     id: string,
     options: ListBroadcastClickedLinksOptions = {},
+    requestOptions: RequestOptions = {},
   ): Promise<ListBroadcastClickedLinksResponse> {
     const url = buildPaginationUrl(`/broadcasts/${id}/clicked-links`, options);
 
     const data =
-      await this.resend.get<ListBroadcastClickedLinksResponseSuccess>(url);
+      await this.resend.get<ListBroadcastClickedLinksResponseSuccess>(
+        url,
+        requestOptions,
+      );
     return data;
   }
 
-  async remove(id: string): Promise<RemoveBroadcastResponse> {
+  async remove(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveBroadcastResponse> {
     const data = await this.resend.delete<RemoveBroadcastResponseSuccess>(
       `/broadcasts/${id}`,
+      undefined,
+      requestOptions,
     );
     return data;
   }
 
-  async cancel(id: string): Promise<CancelBroadcastResponse> {
+  async cancel(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<CancelBroadcastResponse> {
     const data = await this.resend.post<CancelBroadcastResponseSuccess>(
       `/broadcasts/${id}/cancel`,
+      undefined,
+      requestOptions,
     );
     return data;
   }
 
-  async duplicate(id: string): Promise<DuplicateBroadcastResponse> {
+  async duplicate(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<DuplicateBroadcastResponse> {
     const data = await this.resend.post<DuplicateBroadcastResponseSuccess>(
       `/broadcasts/${id}/duplicate`,
+      undefined,
+      requestOptions,
     );
     return data;
   }
@@ -159,6 +191,7 @@ export class Broadcasts {
   async update(
     id: string,
     payload: UpdateBroadcastOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateBroadcastResponse> {
     const html = payload.react ? await render(payload.react) : payload.html;
 
@@ -176,6 +209,7 @@ export class Broadcasts {
         preview_text: payload.previewText,
         topic_id: payload.topicId,
       },
+      requestOptions,
     );
     return data;
   }

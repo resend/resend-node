@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import type { Resend } from '../../resend';
 import type {
   ClaimDomainOptions,
@@ -36,16 +37,25 @@ export class DomainClaims {
     return data;
   }
 
-  async get(domainId: string): Promise<GetDomainClaimResponse> {
+  async get(
+    domainId: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetDomainClaimResponse> {
     const data = await this.resend.get<GetDomainClaimResponseSuccess>(
       `/domains/${domainId}/claim`,
+      requestOptions,
     );
     return data;
   }
 
-  async verify(domainId: string): Promise<VerifyDomainClaimResponse> {
+  async verify(
+    domainId: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<VerifyDomainClaimResponse> {
     const data = await this.resend.post<VerifyDomainClaimResponseSuccess>(
       `/domains/${domainId}/claim/verify`,
+      undefined,
+      requestOptions,
     );
     return data;
   }
