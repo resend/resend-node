@@ -136,14 +136,31 @@ console.log(`Email ${data.id} with a React template has been sent`);
 
 ## Request options
 
-Methods that accept request options, such as `emails.send`, take an `AbortSignal` to cancel a request or set a timeout:
+Every method takes request options as its last argument. Use `signal` to cancel a request or set a timeout, and `headers` to add request headers:
 
 ```ts
 const controller = new AbortController();
 await resend.emails.send({ ... }, { signal: controller.signal });
 
-// Or with a timeout (Node.js 18+)
-await resend.emails.send({ ... }, { signal: AbortSignal.timeout(5000) });
+// With a timeout (Node.js 18+) and a custom header
+await resend.emails.list(
+  { limit: 50 },
+  { signal: AbortSignal.timeout(5000), headers: { 'X-Trace-Id': traceId } },
+);
+```
+
+When a method has an optional argument before the request options, pass `undefined` in its place:
+
+```ts
+await resend.broadcasts.send(broadcastId, undefined, { signal });
+```
+
+A chained `publish()` sends a separate request, so it takes its own options:
+
+```ts
+await resend.templates
+  .create({ name: 'welcome', html: '<p>Hi</p>' }, { signal })
+  .publish({ signal });
 ```
 
 ## License

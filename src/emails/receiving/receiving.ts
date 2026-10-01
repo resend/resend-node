@@ -1,5 +1,7 @@
 import PostalMime from 'postal-mime';
+import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
+import type { ErrorResponse } from '../../interfaces';
 import type { Resend } from '../../resend';
 import { Attachments } from './attachments/attachments';
 import type {
@@ -29,6 +31,7 @@ export class Receiving {
   async get(
     id: string,
     options: GetReceivingEmailOptions = {},
+    requestOptions: RequestOptions = {},
   ): Promise<GetReceivingEmailResponse> {
     const searchParams = new URLSearchParams();
 
@@ -41,17 +44,24 @@ export class Receiving {
       ? `/emails/receiving/${id}?${queryString}`
       : `/emails/receiving/${id}`;
 
-    const data = await this.resend.get<GetReceivingEmailResponseSuccess>(path);
+    const data = await this.resend.get<GetReceivingEmailResponseSuccess>(
+      path,
+      requestOptions,
+    );
 
     return data;
   }
 
   async list(
     options: ListReceivingEmailsOptions = {},
+    requestOptions: RequestOptions = {},
   ): Promise<ListReceivingEmailsResponse> {
     const url = buildPaginationUrl('/emails/receiving', options);
 
-    const data = await this.resend.get<ListReceivingEmailsResponseSuccess>(url);
+    const data = await this.resend.get<ListReceivingEmailsResponseSuccess>(
+      url,
+      requestOptions,
+    );
 
     return data;
   }
@@ -63,7 +73,11 @@ export class Receiving {
     const { emailId, to, from } = options;
     const passthrough = options.passthrough !== false;
 
-    const emailResponse = await this.get(emailId);
+    const emailResponse = await this.get(
+      emailId,
+      {},
+      { signal: requestOptions.signal },
+    );
 
     if (emailResponse.error) {
       return {
@@ -125,23 +139,16 @@ export class Receiving {
       };
     }
 
-    const rawResponse = await fetch(email.raw.download_url);
+    const raw = await this.downloadRaw(
+      email.raw.download_url,
+      requestOptions.signal,
+    );
 
-    if (!rawResponse.ok) {
-      return {
-        data: null,
-        error: {
-          name: 'application_error',
-          message: 'Failed to download raw email content',
-          statusCode: rawResponse.status,
-        },
-        headers: null,
-      };
+    if (raw.error) {
+      return { data: null, error: raw.error, headers: null };
     }
 
-    const rawEmailContent = await rawResponse.text();
-
-    const parsed = await PostalMime.parse(rawEmailContent, {
+    const parsed = await PostalMime.parse(raw.content, {
       attachmentEncoding: 'base64',
     });
 
@@ -199,21 +206,14 @@ export class Receiving {
       };
     }
 
-    const rawResponse = await fetch(email.raw.download_url);
+    const raw = await this.downloadRaw(
+      email.raw.download_url,
+      requestOptions.signal,
+    );
 
-    if (!rawResponse.ok) {
-      return {
-        data: null,
-        error: {
-          name: 'application_error',
-          message: 'Failed to download raw email content',
-          statusCode: rawResponse.status,
-        },
-        headers: null,
-      };
+    if (raw.error) {
+      return { data: null, error: raw.error, headers: null };
     }
-
-    const rawEmailContent = await rawResponse.text();
 
     const data = await this.resend.post<ForwardReceivingEmailResponseSuccess>(
       '/emails',
@@ -226,7 +226,7 @@ export class Receiving {
         attachments: [
           {
             filename: 'forwarded_message.eml',
-            content: Buffer.from(rawEmailContent).toString('base64'),
+            content: Buffer.from(raw.content).toString('base64'),
             content_type: 'message/rfc822',
           },
         ],
@@ -235,5 +235,38 @@ export class Receiving {
     );
 
     return data;
+  }
+
+  private async downloadRaw(
+    url: string,
+    signal: AbortSignal | undefined,
+  ): Promise<
+    { content: string; error: null } | { content: null; error: ErrorResponse }
+  > {
+    try {
+      const response = await fetch(url, { signal });
+
+      if (!response.ok) {
+        return {
+          content: null,
+          error: {
+            name: 'application_error',
+            message: 'Failed to download raw email content',
+            statusCode: response.status,
+          },
+        };
+      }
+
+      return { content: await response.text(), error: null };
+    } catch {
+      return {
+        content: null,
+        error: {
+          name: 'application_error',
+          message: 'Failed to download raw email content',
+          statusCode: null,
+        },
+      };
+    }
   }
 }

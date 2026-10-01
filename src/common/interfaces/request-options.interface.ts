@@ -1,4 +1,4 @@
 export interface RequestOptions {
-  /** Optional AbortSignal to cancel the request. */
+  headers?: HeadersInit;
   signal?: AbortSignal;
 }

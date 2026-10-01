@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import type { CreateTemplateResponse } from './interfaces/create-template-options.interface';
 import type { DuplicateTemplateResponse } from './interfaces/duplicate-template.interface';
 import type { PublishTemplateResponse } from './interfaces/publish-template.interface';
@@ -10,6 +11,7 @@ export class ChainableTemplateResult<
     private readonly promise: Promise<T>,
     private readonly publishFn: (
       id: string,
+      requestOptions?: RequestOptions,
     ) => Promise<PublishTemplateResponse>,
   ) {}
 
@@ -24,7 +26,9 @@ export class ChainableTemplateResult<
     return this.promise.then(onfulfilled, onrejected);
   }
 
-  async publish(): Promise<PublishTemplateResponse> {
+  async publish(
+    requestOptions: RequestOptions = {},
+  ): Promise<PublishTemplateResponse> {
     const { data, error } = await this.promise;
 
     if (error) {
@@ -34,6 +38,6 @@ export class ChainableTemplateResult<
         error,
       };
     }
-    return this.publishFn(data.id);
+    return this.publishFn(data.id, requestOptions);
   }
 }

@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import type { Resend } from '../../resend';
 import type {
   ClaimDomainOptions,
@@ -19,7 +20,7 @@ export class DomainClaims {
 
   async create(
     payload: ClaimDomainOptions,
-    options: ClaimDomainRequestOptions = {},
+    requestOptions: ClaimDomainRequestOptions = {},
   ): Promise<ClaimDomainResponse> {
     const data = await this.resend.post<ClaimDomainResponseSuccess>(
       '/domains/claim',
@@ -31,21 +32,30 @@ export class DomainClaims {
         click_tracking: payload.clickTracking,
         tracking_subdomain: payload.trackingSubdomain,
       },
-      options,
+      requestOptions,
     );
     return data;
   }
 
-  async get(domainId: string): Promise<GetDomainClaimResponse> {
+  async get(
+    domainId: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetDomainClaimResponse> {
     const data = await this.resend.get<GetDomainClaimResponseSuccess>(
       `/domains/${domainId}/claim`,
+      requestOptions,
     );
     return data;
   }
 
-  async verify(domainId: string): Promise<VerifyDomainClaimResponse> {
+  async verify(
+    domainId: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<VerifyDomainClaimResponse> {
     const data = await this.resend.post<VerifyDomainClaimResponseSuccess>(
       `/domains/${domainId}/claim/verify`,
+      undefined,
+      requestOptions,
     );
     return data;
   }

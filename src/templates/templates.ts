@@ -1,4 +1,5 @@
 import type { PaginationOptions } from '../common/interfaces';
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { getPaginationQueryProperties } from '../common/utils/get-pagination-query-properties';
 import { parseTemplateToApiOptions } from '../common/utils/parse-template-to-api-options';
 import { render } from '../render';
@@ -6,6 +7,7 @@ import type { Resend } from '../resend';
 import { ChainableTemplateResult } from './chainable-template-result';
 import type {
   CreateTemplateOptions,
+  CreateTemplateRequestOptions,
   CreateTemplateResponse,
   CreateTemplateResponseSuccess,
 } from './interfaces/create-template-options.interface';
@@ -40,8 +42,9 @@ export class Templates {
 
   create(
     payload: CreateTemplateOptions,
+    requestOptions: CreateTemplateRequestOptions = {},
   ): ChainableTemplateResult<CreateTemplateResponse> {
-    const createPromise = this.performCreate(payload);
+    const createPromise = this.performCreate(payload, requestOptions);
     return new ChainableTemplateResult(createPromise, this.publish.bind(this));
   }
   // This creation process is being done separately from the public create so that
@@ -50,6 +53,7 @@ export class Templates {
   // Promise<ChainableTemplateResult<CreateTemplateResponse>> which wouldn't be chainable.
   private async performCreate(
     payload: CreateTemplateOptions,
+    requestOptions: CreateTemplateRequestOptions,
   ): Promise<CreateTemplateResponse> {
     const body: CreateTemplateOptions = { ...payload };
 
@@ -60,34 +64,51 @@ export class Templates {
     return this.resend.post<CreateTemplateResponseSuccess>(
       '/templates',
       parseTemplateToApiOptions(body),
+      requestOptions,
     );
   }
 
-  async remove(identifier: string): Promise<RemoveTemplateResponse> {
+  async remove(
+    identifier: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveTemplateResponse> {
     const data = await this.resend.delete<RemoveTemplateResponseSuccess>(
       `/templates/${identifier}`,
+      undefined,
+      requestOptions,
     );
     return data;
   }
 
-  async get(identifier: string): Promise<GetTemplateResponse> {
+  async get(
+    identifier: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetTemplateResponse> {
     const data = await this.resend.get<GetTemplateResponseSuccess>(
       `/templates/${identifier}`,
+      requestOptions,
     );
     return data;
   }
 
-  async list(options: PaginationOptions = {}): Promise<ListTemplatesResponse> {
+  async list(
+    options: PaginationOptions = {},
+    requestOptions: RequestOptions = {},
+  ): Promise<ListTemplatesResponse> {
     return this.resend.get<ListTemplatesResponseSuccess>(
       `/templates${getPaginationQueryProperties(options)}`,
+      requestOptions,
     );
   }
 
   duplicate(
     identifier: string,
+    requestOptions: RequestOptions = {},
   ): ChainableTemplateResult<DuplicateTemplateResponse> {
     const promiseDuplicate = this.resend.post<DuplicateTemplateResponseSuccess>(
       `/templates/${identifier}/duplicate`,
+      undefined,
+      requestOptions,
     );
     return new ChainableTemplateResult(
       promiseDuplicate,
@@ -95,9 +116,14 @@ export class Templates {
     );
   }
 
-  async publish(identifier: string): Promise<PublishTemplateResponse> {
+  async publish(
+    identifier: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<PublishTemplateResponse> {
     const data = await this.resend.post<PublishTemplateResponseSuccess>(
       `/templates/${identifier}/publish`,
+      undefined,
+      requestOptions,
     );
     return data;
   }
@@ -105,10 +131,12 @@ export class Templates {
   async update(
     identifier: string,
     payload: UpdateTemplateOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateTemplateResponse> {
     const data = await this.resend.patch<UpdateTemplateResponseSuccess>(
       `/templates/${identifier}`,
       parseTemplateToApiOptions(payload),
+      requestOptions,
     );
     return data;
   }
