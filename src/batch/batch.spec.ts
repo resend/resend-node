@@ -15,6 +15,47 @@ describe('Batch', () => {
   afterEach(() => fetchMock.resetMocks());
   afterAll(() => fetchMocker.disableMocks());
 
+  describe('request headers', () => {
+    const payload: CreateBatchOptions = [
+      {
+        from: 'admin@resend.com',
+        to: 'user@resend.com',
+        subject: 'Hello',
+        text: 'Hello',
+      },
+    ];
+
+    function sentHeaders() {
+      return new Headers(fetchMock.mock.calls[0][1]?.headers);
+    }
+
+    it.each([
+      ['a plain object', { 'X-Trace-Id': 'trace-123' }],
+      ['a Headers instance', new Headers({ 'X-Trace-Id': 'trace-123' })],
+      [
+        'an array of pairs',
+        [['X-Trace-Id', 'trace-123']] as [string, string][],
+      ],
+    ])('sends custom headers passed as %s', async (_, headers) => {
+      mockSuccessResponse({ data: [] });
+
+      await resend.batch.send(payload, { headers });
+
+      expect(sentHeaders().get('X-Trace-Id')).toBe('trace-123');
+      expect(sentHeaders().get('x-batch-validation')).toBe('strict');
+    });
+
+    it('lets a custom x-batch-validation header win in any casing', async () => {
+      mockSuccessResponse({ data: [] });
+
+      await resend.batch.send(payload, {
+        headers: { 'X-Batch-Validation': 'permissive' },
+      });
+
+      expect(sentHeaders().get('x-batch-validation')).toBe('permissive');
+    });
+  });
+
   describe('create', () => {
     it('sends multiple emails', async () => {
       const payload: CreateBatchOptions = [

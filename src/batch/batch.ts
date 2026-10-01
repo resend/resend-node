@@ -34,16 +34,17 @@ export class Batch {
       emails.push(parseEmailToApiOptions(email));
     }
 
+    const headers = new Headers({
+      'x-batch-validation': requestOptions?.batchValidation ?? 'strict',
+    });
+    for (const [key, value] of new Headers(requestOptions?.headers)) {
+      headers.set(key, value);
+    }
+
     const data = await this.resend.post<CreateBatchSuccessResponse<Options>>(
       '/emails/batch',
       emails,
-      {
-        ...requestOptions,
-        headers: {
-          'x-batch-validation': requestOptions?.batchValidation ?? 'strict',
-          ...requestOptions?.headers,
-        },
-      },
+      { ...requestOptions, headers },
     );
 
     return data;
