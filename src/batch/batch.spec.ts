@@ -54,6 +54,29 @@ describe('Batch', () => {
 
       expect(sentHeaders().get('x-batch-validation')).toBe('permissive');
     });
+
+    it('lets a custom x-batch-validation header win over the batchValidation option', async () => {
+      mockSuccessResponse({ data: [] });
+
+      await resend.batch.send(payload, {
+        batchValidation: 'strict',
+        headers: { 'X-Batch-Validation': 'permissive' },
+      });
+
+      expect(sentHeaders().get('x-batch-validation')).toBe('permissive');
+    });
+
+    it('sends the idempotency key together with custom headers', async () => {
+      mockSuccessResponse({ data: [] });
+
+      await resend.batch.send(payload, {
+        idempotencyKey: 'key-123',
+        headers: new Headers({ 'X-Trace-Id': 'trace-123' }),
+      });
+
+      expect(sentHeaders().get('Idempotency-Key')).toBe('key-123');
+      expect(sentHeaders().get('X-Trace-Id')).toBe('trace-123');
+    });
   });
 
   describe('create', () => {
