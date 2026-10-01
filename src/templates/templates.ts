@@ -7,6 +7,7 @@ import type { Resend } from '../resend';
 import { ChainableTemplateResult } from './chainable-template-result';
 import type {
   CreateTemplateOptions,
+  CreateTemplateRequestOptions,
   CreateTemplateResponse,
   CreateTemplateResponseSuccess,
 } from './interfaces/create-template-options.interface';
@@ -41,7 +42,7 @@ export class Templates {
 
   create(
     payload: CreateTemplateOptions,
-    requestOptions: RequestOptions = {},
+    requestOptions: CreateTemplateRequestOptions = {},
   ): ChainableTemplateResult<CreateTemplateResponse> {
     const createPromise = this.performCreate(payload, requestOptions);
     return new ChainableTemplateResult(createPromise, this.publish.bind(this));
@@ -52,7 +53,7 @@ export class Templates {
   // Promise<ChainableTemplateResult<CreateTemplateResponse>> which wouldn't be chainable.
   private async performCreate(
     payload: CreateTemplateOptions,
-    requestOptions: RequestOptions,
+    requestOptions: CreateTemplateRequestOptions,
   ): Promise<CreateTemplateResponse> {
     const body: CreateTemplateOptions = { ...payload };
 

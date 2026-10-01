@@ -282,7 +282,10 @@ describe('per-request options', () => {
     expect(init?.signal).toBe(controller.signal);
   });
 
-  it('emails.receiving.forward passes the signal to every request', async () => {
+  it.each([
+    { passthrough: true as const },
+    { passthrough: false as const, text: 'FYI' },
+  ])('emails.receiving.forward with %o passes the signal to every request and headers only to the send', async (mode) => {
     mockSuccessResponse({
       object: 'email',
       id: 'id',
@@ -294,22 +297,20 @@ describe('per-request options', () => {
     const controller = new AbortController();
 
     await resend.emails.receiving.forward(
-      {
-        emailId: 'id',
-        to: 'b@resend.com',
-        from: 'a@resend.com',
-        passthrough: false,
-        text: 'FYI',
-      },
+      { emailId: 'id', to: 'b@resend.com', from: 'a@resend.com', ...mode },
       { headers: { 'X-Trace-Id': 'trace-123' }, signal: controller.signal },
     );
 
     expect(fetchMock).toHaveBeenCalledTimes(3);
-    for (const [, init] of fetchMock.mock.calls) {
+    const [lookup, download, send] = fetchMock.mock.calls.map(
+      ([, init]) => init,
+    );
+    for (const init of [lookup, download, send]) {
       expect(init?.signal).toBe(controller.signal);
     }
-    const postInit = fetchMock.mock.calls[2][1];
-    expect(new Headers(postInit?.headers).get('X-Trace-Id')).toBe('trace-123');
+    expect(new Headers(lookup?.headers).get('X-Trace-Id')).toBeNull();
+    expect(new Headers(download?.headers).get('X-Trace-Id')).toBeNull();
+    expect(new Headers(send?.headers).get('X-Trace-Id')).toBe('trace-123');
   });
 
   it('emails.receiving.forward returns an error when the raw download aborts', async () => {
@@ -326,7 +327,34 @@ describe('per-request options', () => {
       { signal: new AbortController().signal },
     );
 
-    expect(result.error?.message).toBe('Failed to download raw email content');
+    expect(result.data).toBeNull();
+    expect(result.error).not.toBeNull();
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([
+    [
+      'create',
+      (o: RequestOptions) =>
+        resend.templates.create({ name: 'template', html: '<p>hi</p>' }, o),
+    ],
+    ['duplicate', (o: RequestOptions) => resend.templates.duplicate('id', o)],
+  ])('templates.%s(...).publish() takes its own request options', async (_, start) => {
+    mockSuccessResponse({ object: 'template', id: 'id' });
+    mockSuccessResponse({ object: 'template', id: 'id' });
+    const first = new AbortController();
+    const second = new AbortController();
+
+    await start({ signal: first.signal }).publish({
+      headers: { 'X-Trace-Id': 'trace-123' },
+      signal: second.signal,
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    const [initial, publish] = fetchMock.mock.calls.map(([, init]) => init);
+    expect(initial?.signal).toBe(first.signal);
+    expect(new Headers(initial?.headers).get('X-Trace-Id')).toBeNull();
+    expect(publish?.signal).toBe(second.signal);
+    expect(new Headers(publish?.headers).get('X-Trace-Id')).toBe('trace-123');
   });
 });

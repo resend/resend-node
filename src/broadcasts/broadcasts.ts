@@ -43,6 +43,7 @@ import type {
 } from './interfaces/remove-broadcast.interface';
 import type {
   SendBroadcastOptions,
+  SendBroadcastRequestOptions,
   SendBroadcastResponse,
   SendBroadcastResponseSuccess,
 } from './interfaces/send-broadcast-options.interface';
@@ -86,7 +87,7 @@ export class Broadcasts {
   async send(
     id: string,
     payload?: SendBroadcastOptions,
-    requestOptions: RequestOptions = {},
+    requestOptions: SendBroadcastRequestOptions = {},
   ): Promise<SendBroadcastResponse> {
     const data = await this.resend.post<SendBroadcastResponseSuccess>(
       `/broadcasts/${id}/send`,

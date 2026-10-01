@@ -1,13 +1,14 @@
-import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
 import type { Resend } from '../../resend';
 import type {
   ListContactTopicsOptions,
+  ListContactTopicsRequestOptions,
   ListContactTopicsResponse,
   ListContactTopicsResponseSuccess,
 } from './interfaces/list-contact-topics.interface';
 import type {
   UpdateContactTopicsOptions,
+  UpdateContactTopicsRequestOptions,
   UpdateContactTopicsResponse,
   UpdateContactTopicsResponseSuccess,
 } from './interfaces/update-contact-topics.interface';
@@ -17,7 +18,7 @@ export class ContactTopics {
 
   async update(
     payload: UpdateContactTopicsOptions,
-    requestOptions: RequestOptions = {},
+    requestOptions: UpdateContactTopicsRequestOptions = {},
   ): Promise<UpdateContactTopicsResponse> {
     if (!payload.id && !payload.email) {
       return {
@@ -41,7 +42,7 @@ export class ContactTopics {
 
   async list(
     options: ListContactTopicsOptions,
-    requestOptions: RequestOptions = {},
+    requestOptions: ListContactTopicsRequestOptions = {},
   ): Promise<ListContactTopicsResponse> {
     if (!options.id && !options.email) {
       return {
