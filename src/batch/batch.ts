@@ -38,7 +38,7 @@ export class Batch {
       'x-batch-validation': requestOptions?.batchValidation ?? 'strict',
     });
     for (const [key, value] of new Headers(
-      requestOptions?.headers ?? undefined,
+      requestOptions?.headers || undefined,
     )) {
       headers.set(key, value);
     }
