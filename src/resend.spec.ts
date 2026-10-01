@@ -184,5 +184,85 @@ describe('Resend', () => {
         vi.unstubAllGlobals();
       }
     });
+
+    it('returns the network failure result when the abort hits an error body', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const controller = new AbortController();
+      controller.abort();
+      const response = new Response(null, { status: 400 });
+      vi.spyOn(response, 'text').mockRejectedValue(
+        new DOMException('This operation was aborted', 'AbortError'),
+      );
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => response),
+      );
+
+      try {
+        const result = await resend.emails.get('id', {
+          signal: controller.signal,
+        });
+
+        expect(result).toEqual({
+          data: null,
+          error: {
+            name: 'application_error',
+            statusCode: null,
+            message: 'Unable to fetch data. The request could not be resolved.',
+          },
+          headers: null,
+        });
+      } finally {
+        vi.unstubAllGlobals();
+      }
+    });
+
+    it('does not log an aborted request', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const consoleError = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      const controller = new AbortController();
+      controller.abort();
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => {
+          throw controller.signal.reason;
+        }),
+      );
+
+      try {
+        await resend.emails.get('id', { signal: controller.signal });
+
+        expect(consoleError).not.toHaveBeenCalled();
+      } finally {
+        vi.unstubAllGlobals();
+        consoleError.mockRestore();
+      }
+    });
+
+    it('still logs a network failure', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const consoleError = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(async () => {
+          throw new TypeError('fetch failed');
+        }),
+      );
+
+      try {
+        await resend.emails.get('id', {
+          signal: new AbortController().signal,
+        });
+
+        expect(consoleError).toHaveBeenCalledTimes(1);
+      } finally {
+        vi.unstubAllGlobals();
+        consoleError.mockRestore();
+      }
+    });
   });
 });

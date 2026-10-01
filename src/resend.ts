@@ -114,6 +114,8 @@ export class Resend {
   }
 
   async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
+    const { signal } = options as RequestInit;
+
     try {
       const response = await fetch(`${this.baseUrl}${path}`, options);
 
@@ -130,6 +132,10 @@ export class Resend {
             headers: Object.fromEntries(response.headers.entries()),
           };
         } catch (err) {
+          if (signal?.aborted) {
+            throw err;
+          }
+
           if (err instanceof SyntaxError) {
             const error: ErrorResponse = {
               name: 'application_error',
@@ -188,7 +194,9 @@ export class Resend {
         message: 'Unable to fetch data. The request could not be resolved.',
       };
 
-      this.logError(error, path);
+      if (!signal?.aborted) {
+        this.logError(error, path);
+      }
 
       return {
         data: null,

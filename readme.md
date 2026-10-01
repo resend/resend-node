@@ -149,6 +149,16 @@ await resend.emails.list(
 );
 ```
 
+An aborted request returns the same error as a network failure. Check `signal.aborted` to tell them apart:
+
+```ts
+const { error } = await resend.emails.list({}, { signal });
+
+if (error && signal.aborted) {
+  // The request was cancelled or timed out.
+}
+```
+
 When a method has an optional argument before the request options, pass `undefined` in its place:
 
 ```ts
