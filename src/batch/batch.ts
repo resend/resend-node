@@ -37,7 +37,9 @@ export class Batch {
     const headers = new Headers({
       'x-batch-validation': requestOptions?.batchValidation ?? 'strict',
     });
-    for (const [key, value] of new Headers(requestOptions?.headers)) {
+    for (const [key, value] of new Headers(
+      requestOptions?.headers ?? undefined,
+    )) {
       headers.set(key, value);
     }
 
