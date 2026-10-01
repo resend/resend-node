@@ -44,7 +44,7 @@ export type CreateBatchSuccessResponse<
 } & (Options['batchValidation'] extends 'permissive'
   ? {
       /**
-       * Only present when header "x-batch-validation" is set to 'permissive'.
+       * Only present when `batchValidation` is set to 'permissive'.
        */
       errors: {
         /**
@@ -55,7 +55,7 @@ export type CreateBatchSuccessResponse<
          * The error message for the failed email
          */
         message: string;
-      }[]; // This always being an array depends on us doing https://github.com/resend/resend-api/pull/2025/files#r2303897690
+      }[];
     }
   : Record<string, never>);
 
