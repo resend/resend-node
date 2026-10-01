@@ -45,16 +45,16 @@ export class Contacts {
 
   async create(
     payload: CreateContactOptions,
-    options?: CreateContactRequestOptions,
+    requestOptions?: CreateContactRequestOptions,
   ): Promise<CreateContactResponse>;
   async create(
     payload: LegacyCreateContactOptions,
-    options?: CreateContactRequestOptions,
+    requestOptions?: CreateContactRequestOptions,
   ): Promise<CreateContactResponse>;
 
   async create(
     payload: CreateContactOptions | LegacyCreateContactOptions,
-    options: CreateContactRequestOptions = {},
+    requestOptions: CreateContactRequestOptions = {},
   ): Promise<CreateContactResponse> {
     // Legacy create contact endpoint
     if ('audienceId' in payload) {
@@ -80,7 +80,7 @@ export class Contacts {
           last_name: payload.lastName,
           properties: payload.properties,
         },
-        options,
+        requestOptions,
       );
       return data;
     }
@@ -97,7 +97,7 @@ export class Contacts {
         segments: payload.segments,
         topics: payload.topics,
       },
-      options,
+      requestOptions,
     );
     return data;
   }

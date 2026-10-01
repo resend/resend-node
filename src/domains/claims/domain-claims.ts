@@ -20,7 +20,7 @@ export class DomainClaims {
 
   async create(
     payload: ClaimDomainOptions,
-    options: ClaimDomainRequestOptions = {},
+    requestOptions: ClaimDomainRequestOptions = {},
   ): Promise<ClaimDomainResponse> {
     const data = await this.resend.post<ClaimDomainResponseSuccess>(
       '/domains/claim',
@@ -32,7 +32,7 @@ export class DomainClaims {
         click_tracking: payload.clickTracking,
         tracking_subdomain: payload.trackingSubdomain,
       },
-      options,
+      requestOptions,
     );
     return data;
   }

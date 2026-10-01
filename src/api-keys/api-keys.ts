@@ -27,12 +27,12 @@ export class ApiKeys {
 
   async create(
     payload: CreateApiKeyOptions,
-    options: CreateApiKeyRequestOptions = {},
+    requestOptions: CreateApiKeyRequestOptions = {},
   ): Promise<CreateApiKeyResponse> {
     const data = await this.resend.post<CreateApiKeyResponseSuccess>(
       '/api-keys',
       payload,
-      options,
+      requestOptions,
     );
 
     return data;

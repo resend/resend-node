@@ -51,14 +51,14 @@ export class Emails {
 
   async send(
     payload: CreateEmailOptions,
-    options: CreateEmailRequestOptions = {},
+    requestOptions: CreateEmailRequestOptions = {},
   ) {
-    return this.create(payload, options);
+    return this.create(payload, requestOptions);
   }
 
   async create(
     payload: CreateEmailOptions,
-    options: CreateEmailRequestOptions = {},
+    requestOptions: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
     const body: CreateEmailOptions = { ...payload };
 
@@ -69,7 +69,7 @@ export class Emails {
     const data = await this.resend.post<CreateEmailResponseSuccess>(
       '/emails',
       parseEmailToApiOptions(body),
-      options,
+      requestOptions,
     );
 
     return data;

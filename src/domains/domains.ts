@@ -41,12 +41,12 @@ export class Domains {
 
   async create(
     payload: CreateDomainOptions,
-    options: CreateDomainRequestOptions = {},
+    requestOptions: CreateDomainRequestOptions = {},
   ): Promise<CreateDomainResponse> {
     const data = await this.resend.post<CreateDomainResponseSuccess>(
       '/domains',
       parseDomainToApiOptions(payload),
-      options,
+      requestOptions,
     );
     return data;
   }

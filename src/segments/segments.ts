@@ -31,12 +31,12 @@ export class Segments {
 
   async create(
     payload: CreateSegmentOptions,
-    options: CreateSegmentRequestOptions = {},
+    requestOptions: CreateSegmentRequestOptions = {},
   ): Promise<CreateSegmentResponse> {
     const data = await this.resend.post<CreateSegmentResponseSuccess>(
       '/segments',
       payload,
-      options,
+      requestOptions,
     );
     return data;
   }

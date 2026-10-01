@@ -25,14 +25,14 @@ export class ContactImports {
 
   async create(
     payload: CreateContactImportOptions,
-    options: CreateContactImportRequestOptions = {},
+    requestOptions: CreateContactImportRequestOptions = {},
   ): Promise<CreateContactImportResponse> {
     const formData = this.buildCreateFormData(payload);
 
     return this.resend.post<CreateContactImportResponseSuccess>(
       '/contacts/imports',
       formData,
-      options,
+      requestOptions,
     );
   }
 

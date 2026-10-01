@@ -58,7 +58,7 @@ export class Broadcasts {
 
   async create(
     payload: CreateBroadcastOptions,
-    options: CreateBroadcastRequestOptions = {},
+    requestOptions: CreateBroadcastRequestOptions = {},
   ): Promise<SendBroadcastResponse> {
     const html = payload.react ? await render(payload.react) : payload.html;
 
@@ -78,7 +78,7 @@ export class Broadcasts {
         send: payload.send,
         scheduled_at: payload.scheduledAt,
       },
-      options,
+      requestOptions,
     );
 
     return data;

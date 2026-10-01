@@ -54,12 +54,12 @@ export class Webhooks {
 
   async create(
     payload: CreateWebhookOptions,
-    options: CreateWebhookRequestOptions = {},
+    requestOptions: CreateWebhookRequestOptions = {},
   ): Promise<CreateWebhookResponse> {
     const data = await this.resend.post<CreateWebhookResponseSuccess>(
       '/webhooks',
       payload,
-      options,
+      requestOptions,
     );
     return data;
   }

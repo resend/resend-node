@@ -14,14 +14,14 @@ export class Batch {
 
   async send<Options extends CreateBatchRequestOptions>(
     payload: CreateBatchOptions,
-    options?: Options,
+    requestOptions?: Options,
   ): Promise<CreateBatchResponse<Options>> {
-    return this.create(payload, options);
+    return this.create(payload, requestOptions);
   }
 
   async create<Options extends CreateBatchRequestOptions>(
     payload: CreateBatchOptions,
-    options?: Options,
+    requestOptions?: Options,
   ): Promise<CreateBatchResponse<Options>> {
     const emails: EmailApiOptions[] = [];
 
@@ -38,10 +38,10 @@ export class Batch {
       '/emails/batch',
       emails,
       {
-        ...options,
+        ...requestOptions,
         headers: {
-          'x-batch-validation': options?.batchValidation ?? 'strict',
-          ...options?.headers,
+          'x-batch-validation': requestOptions?.batchValidation ?? 'strict',
+          ...requestOptions?.headers,
         },
       },
     );
