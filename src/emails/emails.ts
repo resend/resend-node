@@ -85,7 +85,7 @@ export class Emails {
   async list(options: ListEmailsOptions = {}): Promise<ListEmailsResponse> {
     const url = buildPaginationUrl('/emails', options);
 
-    const data = await this.resend.get<ListEmailsResponseSuccess>(url, options);
+    const data = await this.resend.get<ListEmailsResponseSuccess>(url);
 
     return data;
   }

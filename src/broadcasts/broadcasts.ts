@@ -99,10 +99,7 @@ export class Broadcasts {
   ): Promise<ListBroadcastsResponse> {
     const url = buildPaginationUrl('/broadcasts', options);
 
-    const data = await this.resend.get<ListBroadcastsResponseSuccess>(
-      url,
-      options,
-    );
+    const data = await this.resend.get<ListBroadcastsResponseSuccess>(url);
     return data;
   }
 

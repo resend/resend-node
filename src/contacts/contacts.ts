@@ -105,18 +105,12 @@ export class Contacts {
     const segmentId = options.segmentId ?? options.audienceId;
     if (!segmentId) {
       const url = buildPaginationUrl('/contacts', options);
-      const data = await this.resend.get<ListContactsResponseSuccess>(
-        url,
-        options,
-      );
+      const data = await this.resend.get<ListContactsResponseSuccess>(url);
       return data;
     }
 
     const url = buildPaginationUrl(`/segments/${segmentId}/contacts`, options);
-    const data = await this.resend.get<ListContactsResponseSuccess>(
-      url,
-      options,
-    );
+    const data = await this.resend.get<ListContactsResponseSuccess>(url);
     return data;
   }
 

@@ -8,7 +8,6 @@ import type {
   GetOptions,
   PostOptions,
   PutOptions,
-  RequestOptions,
 } from './common/interfaces';
 import type { IdempotentRequest } from './common/interfaces/idempotent-request.interface';
 import type { PatchOptions } from './common/interfaces/patch-option.interface';
@@ -17,7 +16,7 @@ import { Contacts } from './contacts/contacts';
 import { Domains } from './domains/domains';
 import { Emails } from './emails/emails';
 import { Events } from './events/events';
-import type { ErrorResponse, Response as ResendResponse } from './interfaces';
+import type { ErrorResponse, Response } from './interfaces';
 import { Logs } from './logs/logs';
 import { OAuthGrants } from './oauth-grants/oauth-grants';
 import { Segments } from './segments/segments';
@@ -114,10 +113,7 @@ export class Resend {
     }
   }
 
-  async fetchRequest<T>(
-    path: string,
-    options: RequestOptions & RequestInit = {},
-  ): Promise<ResendResponse<T>> {
+  async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {
     try {
       const response = await fetch(`${this.baseUrl}${path}`, options);
 

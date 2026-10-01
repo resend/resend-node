@@ -48,7 +48,7 @@ export class ContactProperties {
     const url = buildPaginationUrl('/contact-properties', options);
 
     const response =
-      await this.resend.get<ListContactPropertiesResponseSuccess>(url, options);
+      await this.resend.get<ListContactPropertiesResponseSuccess>(url);
 
     if (response.data) {
       return {

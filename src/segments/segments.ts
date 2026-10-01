@@ -43,10 +43,7 @@ export class Segments {
   async list(options: ListSegmentsOptions = {}): Promise<ListSegmentsResponse> {
     const url = buildPaginationUrl('/segments', options);
 
-    const data = await this.resend.get<ListSegmentsResponseSuccess>(
-      url,
-      options,
-    );
+    const data = await this.resend.get<ListSegmentsResponseSuccess>(url);
     return data;
   }
 

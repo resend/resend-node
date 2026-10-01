@@ -18,10 +18,7 @@ export class OAuthGrants {
   ): Promise<ListOAuthGrantsResponse> {
     const url = buildPaginationUrl('/oauth/grants', options);
 
-    const data = await this.resend.get<ListOAuthGrantsResponseSuccess>(
-      url,
-      options,
-    );
+    const data = await this.resend.get<ListOAuthGrantsResponseSuccess>(url);
     return data;
   }
 

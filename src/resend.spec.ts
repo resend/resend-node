@@ -162,7 +162,15 @@ describe('Resend', () => {
       vi.stubGlobal('fetch', fetchStub);
 
       try {
-        const promise = resend.apiKeys.list({ signal: controller.signal });
+        const promise = resend.emails.send(
+          {
+            from: 'admin@resend.com',
+            to: 'user@resend.com',
+            subject: 'Hello',
+            text: 'Hello',
+          },
+          { signal: controller.signal },
+        );
         controller.abort();
         const result = await promise;
 

@@ -51,10 +51,7 @@ export class Receiving {
   ): Promise<ListReceivingEmailsResponse> {
     const url = buildPaginationUrl('/emails/receiving', options);
 
-    const data = await this.resend.get<ListReceivingEmailsResponseSuccess>(
-      url,
-      options,
-    );
+    const data = await this.resend.get<ListReceivingEmailsResponseSuccess>(url);
 
     return data;
   }

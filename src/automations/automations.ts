@@ -69,10 +69,7 @@ export class Automations {
     const qs = params.filter(Boolean).join('&');
     const url = qs ? `/automations?${qs}` : '/automations';
 
-    const data = await this.resend.get<ListAutomationsResponseSuccess>(
-      url,
-      options,
-    );
+    const data = await this.resend.get<ListAutomationsResponseSuccess>(url);
     return data;
   }
 
