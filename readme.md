@@ -149,13 +149,13 @@ await resend.emails.list(
 );
 ```
 
-An aborted request returns a network-failure error. To tell a cancel apart from a real failure, check `signal.aborted` and do not match on the error message:
+An aborted request returns a network-failure error with a `null` status code. To tell a cancel apart from a real failure, check the status code and `signal.aborted`, and do not match on the error message:
 
 ```ts
 const signal = AbortSignal.timeout(5000);
 const { error } = await resend.emails.list({}, { signal });
 
-if (error && signal.aborted) {
+if (error?.statusCode === null && signal.aborted) {
   // The request was cancelled or timed out.
 }
 ```
