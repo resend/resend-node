@@ -185,59 +185,84 @@ describe('Resend', () => {
       }
     });
 
-    it('returns the network failure result when the abort hits an error body', async () => {
-      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      const controller = new AbortController();
-      controller.abort();
-      const response = new Response(null, { status: 400 });
-      vi.spyOn(response, 'text').mockRejectedValue(
-        new DOMException('This operation was aborted', 'AbortError'),
-      );
+    const networkFailure = {
+      data: null,
+      error: {
+        name: 'application_error',
+        statusCode: null,
+        message: 'Unable to fetch data. The request could not be resolved.',
+      },
+      headers: null,
+    };
+
+    function stubResponse(
+      status: number,
+      readBody: 'text' | 'json',
+      rejection: unknown,
+    ) {
+      const response = new Response(null, { status });
+      vi.spyOn(response, readBody).mockRejectedValue(rejection);
       vi.stubGlobal(
         'fetch',
         vi.fn(async () => response),
       );
+    }
+
+    it.each([
+      ['an AbortError', undefined],
+      ['a string reason', 'user left the page'],
+    ])('returns the network failure result when the abort hits an error body, with %s', async (_, reason) => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const controller = new AbortController();
+      controller.abort(reason);
+      stubResponse(400, 'text', controller.signal.reason);
 
       try {
         const result = await resend.emails.get('id', {
           signal: controller.signal,
         });
 
-        expect(result).toEqual({
-          data: null,
-          error: {
-            name: 'application_error',
-            statusCode: null,
-            message: 'Unable to fetch data. The request could not be resolved.',
-          },
-          headers: null,
-        });
+        expect(result).toEqual(networkFailure);
       } finally {
         vi.unstubAllGlobals();
       }
     });
 
-    it('does not log an aborted request', async () => {
+    it('returns the network failure result when the abort hits a success body', async () => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      const consoleError = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
       const controller = new AbortController();
       controller.abort();
-      vi.stubGlobal(
-        'fetch',
-        vi.fn(async () => {
-          throw controller.signal.reason;
-        }),
-      );
+      stubResponse(200, 'json', controller.signal.reason);
 
       try {
-        await resend.emails.get('id', { signal: controller.signal });
+        const result = await resend.emails.get('id', {
+          signal: controller.signal,
+        });
 
-        expect(consoleError).not.toHaveBeenCalled();
+        expect(result).toEqual(networkFailure);
       } finally {
         vi.unstubAllGlobals();
-        consoleError.mockRestore();
+      }
+    });
+
+    it('keeps the status code when an error body read fails for another reason', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const controller = new AbortController();
+      controller.abort();
+      stubResponse(500, 'text', new Error('socket hang up'));
+
+      try {
+        const result = await resend.emails.get('id', {
+          signal: controller.signal,
+        });
+
+        expect(result.error).toEqual({
+          name: 'application_error',
+          statusCode: 500,
+          message: 'socket hang up',
+        });
+      } finally {
+        vi.unstubAllGlobals();
       }
     });
 

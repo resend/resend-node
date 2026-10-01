@@ -132,7 +132,7 @@ export class Resend {
             headers: Object.fromEntries(response.headers.entries()),
           };
         } catch (err) {
-          if (signal?.aborted) {
+          if (signal?.aborted && err === signal.reason) {
             throw err;
           }
 
@@ -194,9 +194,7 @@ export class Resend {
         message: 'Unable to fetch data. The request could not be resolved.',
       };
 
-      if (!signal?.aborted) {
-        this.logError(error, path);
-      }
+      this.logError(error, path);
 
       return {
         data: null,
