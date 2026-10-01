@@ -134,6 +134,19 @@ console.log(`Email ${data.id} with a React template has been sent`);
 >});
 >```
 
+## Request options
+
+Methods that accept request options, such as `emails.send`, take an `AbortSignal` to cancel a request or set a timeout:
+
+```ts
+const controller = new AbortController();
+await resend.emails.send({ ... }, { signal: controller.signal });
+
+// Or with a timeout (Node.js 18+)
+await resend.emails.send({ ... }, { signal: AbortSignal.timeout(5000) });
+```
+
 ## License
 
 MIT License
+
