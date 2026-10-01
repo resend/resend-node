@@ -9,6 +9,24 @@ export type {
   GetWebhookResponseSuccess,
 } from './get-webhook.interface';
 export type {
+  GetWebhookEventOptions,
+  GetWebhookEventResponse,
+  GetWebhookEventResponseSuccess,
+} from './get-webhook-event.interface';
+export type {
+  ListWebhookEventAttemptsOptions,
+  ListWebhookEventAttemptsResponse,
+  ListWebhookEventAttemptsResponseSuccess,
+  WebhookEventAttempt,
+} from './list-webhook-event-attempts.interface';
+export type {
+  ListWebhookEventsOptions,
+  ListWebhookEventsResponse,
+  ListWebhookEventsResponseSuccess,
+  WebhookEventLog,
+  WebhookEventLogStatus,
+} from './list-webhook-events.interface';
+export type {
   ListWebhooksOptions,
   ListWebhooksResponse,
   ListWebhooksResponseSuccess,
@@ -19,6 +37,15 @@ export type {
   RemoveWebhookResponseSuccess,
 } from './remove-webhook.interface';
 export type {
+  ReplayWebhookEventOptions,
+  ReplayWebhookEventResponse,
+  ReplayWebhookEventResponseSuccess,
+} from './replay-webhook-event.interface';
+export type {
+  RotateWebhookSigningSecretResponse,
+  RotateWebhookSigningSecretResponseSuccess,
+} from './rotate-webhook-signing-secret.interface';
+export type {
   UpdateWebhookOptions,
   UpdateWebhookResponse,
   UpdateWebhookResponseSuccess,
@@ -26,6 +53,7 @@ export type {
 export type {
   ContactCreatedEvent,
   ContactDeletedEvent,
+  ContactTopicsUpdatedEvent,
   ContactUpdatedEvent,
   DomainCreatedEvent,
   DomainDeletedEvent,
@@ -43,6 +71,9 @@ export type {
   EmailSuppressedEvent,
   SuppressionAddedEvent,
   SuppressionRemovedEvent,
+  TopicCreatedEvent,
+  TopicDeletedEvent,
+  TopicUpdatedEvent,
   WebhookEvent,
   WebhookEventPayload,
 } from './webhook-event.interface';

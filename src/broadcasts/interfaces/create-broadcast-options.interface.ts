@@ -7,19 +7,19 @@ interface EmailRenderOptions {
   /**
    * The React component used to write the message.
    *
-   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
    */
   react: React.ReactNode;
   /**
    * The HTML version of the message.
    *
-   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
    */
   html: string;
   /**
    * The plain text version of the message.
    *
-   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
    */
   text: string;
 }
@@ -28,7 +28,7 @@ interface SegmentOptions {
   /**
    * The id of the segment you want to send to
    *
-   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
    */
   segmentId: string;
   /**
@@ -43,7 +43,7 @@ type SendBroadcastOnCreationOptions =
        * Whether to send the broadcast immediately or keep it as a draft.
        * If not provided or set to false, the broadcast will be created as a draft.
        *
-       * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+       * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
        */
       send: true;
       /**
@@ -51,7 +51,7 @@ type SendBroadcastOnCreationOptions =
        * The date should be in ISO 8601 format (e.g: 2024-08-05T11:52:01.858Z)
        * or relative time (eg: in 2 days).
        *
-       * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+       * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
        */
       scheduledAt?: string;
     }
@@ -60,7 +60,7 @@ type SendBroadcastOnCreationOptions =
        * Whether to send the broadcast immediately or keep it as a draft.
        * If not provided or set to false, the broadcast will be created as a draft.
        *
-       * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+       * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
        */
       send?: false;
       /**
@@ -68,7 +68,7 @@ type SendBroadcastOnCreationOptions =
        * The date should be in ISO 8601 format (e.g: 2024-08-05T11:52:01.858Z)
        * or relative time (eg: in 2 days).
        *
-       * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+       * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
        */
       scheduledAt?: never;
     };
@@ -77,37 +77,37 @@ interface CreateBroadcastBaseOptions {
   /**
    * The name of the broadcast
    *
-   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
    */
   name?: string;
   /**
    * A short snippet of text displayed as a preview in recipients' inboxes, often shown below or beside the subject line.
    *
-   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
    */
   previewText?: string;
   /**
    * Sender email address. To include a friendly name, use the format `"Your Name <sender@domain.com>"`
    *
-   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
    */
   from: string;
   /**
    * Reply-to email address. For multiple addresses, send as an array of strings.
    *
-   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
    */
   replyTo?: string | string[];
   /**
    * Email subject.
    *
-   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
    */
   subject: string;
   /**
    * The id of the topic you want to send to
    *
-   * @link https://resend.com/docs/api-reference/broadcasts/create#body-parameters
+   * @link https://resend.com/docs/api-reference/broadcasts/create-broadcast#body-parameters
    */
   topicId?: string | null;
 }

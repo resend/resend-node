@@ -2,7 +2,7 @@ import type { Response } from '../../interfaces';
 import type { Contact, SelectingField } from './contact';
 
 interface UpdateContactPropertiesOptions {
-  [key: string]: string | number | null;
+  [key: string]: string | number | boolean | null;
 }
 
 export type UpdateContactOptions = {

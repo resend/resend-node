@@ -7,7 +7,10 @@ import type {
   CreateBroadcastOptions,
   CreateBroadcastResponseSuccess,
 } from './interfaces/create-broadcast-options.interface';
+import type { DuplicateBroadcastResponseSuccess } from './interfaces/duplicate-broadcast.interface';
 import type { GetBroadcastResponseSuccess } from './interfaces/get-broadcast.interface';
+import type { ListBroadcastClickedLinksResponseSuccess } from './interfaces/list-broadcast-clicked-links.interface';
+import type { ListBroadcastRecipientsResponseSuccess } from './interfaces/list-broadcast-recipients.interface';
 import type { ListBroadcastsResponseSuccess } from './interfaces/list-broadcasts.interface';
 import type { RemoveBroadcastResponseSuccess } from './interfaces/remove-broadcast.interface';
 import type { UpdateBroadcastResponseSuccess } from './interfaces/update-broadcast.interface';
@@ -595,6 +598,344 @@ describe('Broadcasts', () => {
     });
   });
 
+  describe('recipients', () => {
+    describe('when broadcast not found', () => {
+      it('returns error', async () => {
+        const response: ErrorResponse = {
+          name: 'not_found',
+          statusCode: 404,
+          message: 'Broadcast not found',
+        };
+
+        fetchMock.mockOnce(JSON.stringify(response), {
+          status: 404,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = resend.broadcasts.recipients(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+          { type: 'clicked' },
+        );
+
+        await expect(result).resolves.toMatchInlineSnapshot(`
+          {
+            "data": null,
+            "error": {
+              "message": "Broadcast not found",
+              "name": "not_found",
+              "statusCode": 404,
+            },
+            "headers": {
+              "content-type": "application/json",
+            },
+          }
+        `);
+      });
+    });
+
+    it('lists broadcast recipients filtered by type', async () => {
+      const response: ListBroadcastRecipientsResponseSuccess<'clicked'> = {
+        object: 'list',
+        has_more: true,
+        data: [
+          {
+            id: 'b2Zmc2V0OjA',
+            contact_id: 'e169aa45-1ecf-4183-9955-b1499d5701d3',
+            email: 'carter@example.com',
+            count: 3,
+            clicked_links: [
+              { url: 'https://resend.com/pricing', clicks: 2 },
+              { url: 'https://resend.com/docs', clicks: 1 },
+            ],
+          },
+          {
+            id: 'b2Zmc2V0OjE',
+            contact_id: null,
+            email: 'dana@example.com',
+            count: 1,
+            clicked_links: [{ url: 'https://resend.com/pricing', clicks: 1 }],
+          },
+        ],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.broadcasts.recipients(
+        '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+        { type: 'clicked', limit: 20 },
+      );
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/recipients?limit=20&type=clicked',
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
+    it('passes email and bounceType filters', async () => {
+      const response: ListBroadcastRecipientsResponseSuccess<'bounced'> = {
+        object: 'list',
+        has_more: false,
+        data: [
+          {
+            id: 'b2Zmc2V0OjA',
+            contact_id: null,
+            email: 'bounced@example.com',
+            bounce_type: 'permanent',
+          },
+        ],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.broadcasts.recipients(
+        '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+        {
+          type: 'bounced',
+          email: 'bounced@example.com',
+          bounceType: 'permanent',
+        },
+      );
+
+      expect(result).toEqual({
+        data: response,
+        error: null,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/recipients?type=bounced&email=bounced%40example.com&bounce_type=permanent',
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
+    it('passes after cursor for pagination', async () => {
+      const response: ListBroadcastRecipientsResponseSuccess = {
+        object: 'list',
+        has_more: false,
+        data: [],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await resend.broadcasts.recipients(
+        '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+        { type: 'opened', limit: 10, after: 'cursor-value' },
+      );
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/recipients?limit=10&after=cursor-value&type=opened',
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
+    it('passes before cursor for pagination', async () => {
+      const response: ListBroadcastRecipientsResponseSuccess = {
+        object: 'list',
+        has_more: false,
+        data: [],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      await resend.broadcasts.recipients(
+        '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+        { type: 'opened', limit: 10, before: 'cursor-value' },
+      );
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/recipients?limit=10&before=cursor-value&type=opened',
+        expect.objectContaining({
+          method: 'GET',
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+  });
+
+  describe('clickedLinks', () => {
+    const response: ListBroadcastClickedLinksResponseSuccess = {
+      object: 'list',
+      has_more: false,
+      data: [
+        {
+          id: 'b2Zmc2V0OjA',
+          url: 'https://resend.com/pricing',
+          clicks: 42,
+          unique_clicks: 30,
+        },
+        {
+          id: 'b2Zmc2V0OjE',
+          url: 'https://resend.com/docs',
+          clicks: 17,
+          unique_clicks: 15,
+        },
+      ],
+    };
+
+    describe('when no pagination options are provided', () => {
+      it('lists clicked links', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+        const result = await resend.broadcasts.clickedLinks(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+        );
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/clicked-links',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
+
+    describe('when pagination options are provided', () => {
+      it('passes limit param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.broadcasts.clickedLinks(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+          { limit: 1 },
+        );
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/clicked-links?limit=1',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+
+      it('passes after param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.broadcasts.clickedLinks(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+          { limit: 1, after: 'cursor-value' },
+        );
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/clicked-links?limit=1&after=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+
+      it('passes before param and returns a response', async () => {
+        mockSuccessResponse(response, {
+          headers: {},
+        });
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.broadcasts.clickedLinks(
+          '559ac32e-9ef5-46fb-82a1-b76b840c0f7b',
+          { limit: 1, before: 'cursor-value' },
+        );
+        expect(result).toEqual({
+          data: response,
+          error: null,
+          headers: {
+            'content-type': 'application/json',
+          },
+        });
+
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/broadcasts/559ac32e-9ef5-46fb-82a1-b76b840c0f7b/clicked-links?limit=1&before=cursor-value',
+          expect.objectContaining({
+            method: 'GET',
+            headers: expect.any(Headers),
+          }),
+        );
+      });
+    });
+  });
+
   describe('remove', () => {
     it('removes a broadcast', async () => {
       const id = 'b01e0de9-7c27-4a53-bf38-2e3f98389a65';
@@ -697,6 +1038,41 @@ describe('Broadcasts', () => {
           }
         `);
       });
+    });
+  });
+
+  describe('duplicate', () => {
+    it('duplicates a broadcast', async () => {
+      const response: DuplicateBroadcastResponseSuccess = {
+        object: 'broadcast',
+        id: '1f85ae38-f5b9-4c1f-8766-667a53970fea',
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 201,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await expect(
+        resend.broadcasts.duplicate('e6bd3843-3cc7-4c0d-b7fd-e01cbb514a16'),
+      ).resolves.toMatchInlineSnapshot(`
+        {
+          "data": {
+            "id": "1f85ae38-f5b9-4c1f-8766-667a53970fea",
+            "object": "broadcast",
+          },
+          "error": null,
+          "headers": {
+            "content-type": "application/json",
+          },
+        }
+      `);
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/broadcasts/e6bd3843-3cc7-4c0d-b7fd-e01cbb514a16/duplicate',
+        expect.objectContaining({ method: 'POST' }),
+      );
     });
   });
 

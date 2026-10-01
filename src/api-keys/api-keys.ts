@@ -15,6 +15,11 @@ import type {
   RemoveApiKeyResponse,
   RemoveApiKeyResponseSuccess,
 } from './interfaces/remove-api-keys.interface';
+import type {
+  UpdateApiKeyOptions,
+  UpdateApiKeyResponse,
+  UpdateApiKeyResponseSuccess,
+} from './interfaces/update-api-key-options.interface';
 
 export class ApiKeys {
   constructor(private readonly resend: Resend) {}
@@ -38,6 +43,17 @@ export class ApiKeys {
     const data = await this.resend.get<ListApiKeysResponseSuccess>(
       url,
       options,
+    );
+    return data;
+  }
+
+  async update(
+    id: string,
+    payload: UpdateApiKeyOptions,
+  ): Promise<UpdateApiKeyResponse> {
+    const data = await this.resend.patch<UpdateApiKeyResponseSuccess>(
+      `/api-keys/${id}`,
+      payload,
     );
     return data;
   }

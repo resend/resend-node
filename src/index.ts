@@ -24,4 +24,5 @@ export * from './suppressions/batch/interfaces';
 export * from './suppressions/interfaces';
 export * from './templates/interfaces';
 export * from './topics/interfaces';
+export * from './usage/interfaces';
 export * from './webhooks/interfaces';

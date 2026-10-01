@@ -13,11 +13,15 @@ export type WebhookEvent =
   | 'contact.created'
   | 'contact.updated'
   | 'contact.deleted'
+  | 'contact.topics.updated'
   | 'domain.created'
   | 'domain.updated'
   | 'domain.deleted'
   | 'suppression.added'
-  | 'suppression.removed';
+  | 'suppression.removed'
+  | 'topic.created'
+  | 'topic.updated'
+  | 'topic.deleted';
 
 interface BaseEmailEventData {
   broadcast_id?: string;
@@ -81,9 +85,17 @@ interface ContactEventData {
   created_at: string;
   updated_at: string;
   email: string;
-  first_name?: string;
-  last_name?: string;
+  first_name?: string | null;
+  last_name?: string | null;
   unsubscribed: boolean;
+}
+
+interface ContactTopicsEventData {
+  email: string;
+  topics: {
+    id: string;
+    subscription: 'opt_in' | 'opt_out';
+  }[];
 }
 
 interface DomainRecord {
@@ -111,6 +123,16 @@ interface SuppressionEventData {
   origin: 'bounce' | 'complaint' | 'manual';
   source_id: string | null;
   created_at: string;
+}
+
+interface TopicEventData {
+  id: string;
+  name: string;
+  description: string | null;
+  default_subscription: 'opt_in' | 'opt_out';
+  deleted: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface EmailSentEvent {
@@ -205,6 +227,12 @@ export interface ContactDeletedEvent {
   data: ContactEventData;
 }
 
+export interface ContactTopicsUpdatedEvent {
+  type: 'contact.topics.updated';
+  created_at: string;
+  data: ContactTopicsEventData;
+}
+
 export interface DomainCreatedEvent {
   type: 'domain.created';
   created_at: string;
@@ -235,6 +263,24 @@ export interface SuppressionRemovedEvent {
   data: SuppressionEventData;
 }
 
+export interface TopicCreatedEvent {
+  type: 'topic.created';
+  created_at: string;
+  data: TopicEventData;
+}
+
+export interface TopicUpdatedEvent {
+  type: 'topic.updated';
+  created_at: string;
+  data: TopicEventData;
+}
+
+export interface TopicDeletedEvent {
+  type: 'topic.deleted';
+  created_at: string;
+  data: TopicEventData;
+}
+
 export type WebhookEventPayload =
   | EmailSentEvent
   | EmailScheduledEvent
@@ -250,8 +296,12 @@ export type WebhookEventPayload =
   | ContactCreatedEvent
   | ContactUpdatedEvent
   | ContactDeletedEvent
+  | ContactTopicsUpdatedEvent
   | DomainCreatedEvent
   | DomainUpdatedEvent
   | DomainDeletedEvent
   | SuppressionAddedEvent
-  | SuppressionRemovedEvent;
+  | SuppressionRemovedEvent
+  | TopicCreatedEvent
+  | TopicUpdatedEvent
+  | TopicDeletedEvent;

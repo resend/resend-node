@@ -1,6 +1,7 @@
 import { Webhook } from 'standardwebhooks';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
+import { Events } from './events/events';
 import type {
   CreateWebhookOptions,
   CreateWebhookRequestOptions,
@@ -21,6 +22,10 @@ import type {
   RemoveWebhookResponseSuccess,
 } from './interfaces/remove-webhook.interface';
 import type {
+  RotateWebhookSigningSecretResponse,
+  RotateWebhookSigningSecretResponseSuccess,
+} from './interfaces/rotate-webhook-signing-secret.interface';
+import type {
   UpdateWebhookOptions,
   UpdateWebhookResponse,
   UpdateWebhookResponseSuccess,
@@ -40,7 +45,11 @@ interface VerifyWebhookOptions {
 }
 
 export class Webhooks {
-  constructor(private readonly resend: Resend) {}
+  readonly events: Events;
+
+  constructor(private readonly resend: Resend) {
+    this.events = new Events(resend);
+  }
 
   async create(
     payload: CreateWebhookOptions,
@@ -87,6 +96,16 @@ export class Webhooks {
     const data = await this.resend.delete<RemoveWebhookResponseSuccess>(
       `/webhooks/${id}`,
     );
+    return data;
+  }
+
+  async rotateSigningSecret(
+    id: string,
+  ): Promise<RotateWebhookSigningSecretResponse> {
+    const data =
+      await this.resend.post<RotateWebhookSigningSecretResponseSuccess>(
+        `/webhooks/${id}/signing-secret/rotate`,
+      );
     return data;
   }
 

@@ -47,7 +47,7 @@ export interface DomainSpfRecord {
   record: 'SPF';
   name: string;
   value: string;
-  type: 'MX' | 'TXT';
+  type: 'MX' | 'TXT' | 'CNAME';
   ttl: string;
   status: DomainRecordStatus;
   routing_policy?: string;
