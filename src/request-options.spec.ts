@@ -141,6 +141,67 @@ const calls: Record<string, Call> = {
   'events.update': (o) => resend.events.update('id', { schema: null }, o),
   'events.remove': (o) => resend.events.remove('id', o),
 
+  'inboxes.create': (o) =>
+    resend.inboxes.create({ emailAddress: 'a@resend.com' }, o),
+  'inboxes.list': (o) => resend.inboxes.list({}, o),
+  'inboxes.get': (o) => resend.inboxes.get('id', o),
+  'inboxes.update': (o) => resend.inboxes.update('id', { name: 'inbox' }, o),
+  'inboxes.remove': (o) => resend.inboxes.remove('id', o),
+  'inboxes.drafts.create': (o) =>
+    resend.inboxes.drafts.create({ inboxId: 'id', subject: 's' }, o),
+  'inboxes.drafts.list': (o) =>
+    resend.inboxes.drafts.list({ inboxId: 'id' }, o),
+  'inboxes.drafts.get': (o) =>
+    resend.inboxes.drafts.get({ inboxId: 'id', draftId: 'id' }, o),
+  'inboxes.drafts.update': (o) =>
+    resend.inboxes.drafts.update(
+      { inboxId: 'id', draftId: 'id', subject: 's' },
+      o,
+    ),
+  'inboxes.drafts.remove': (o) =>
+    resend.inboxes.drafts.remove({ inboxId: 'id', draftId: 'id' }, o),
+  'inboxes.drafts.send': (o) =>
+    resend.inboxes.drafts.send({ inboxId: 'id', draftId: 'id' }, o),
+  'inboxes.labels.create': (o) =>
+    resend.inboxes.labels.create({ inboxId: 'id', name: 'label' }, o),
+  'inboxes.labels.list': (o) =>
+    resend.inboxes.labels.list({ inboxId: 'id' }, o),
+  'inboxes.labels.update': (o) =>
+    resend.inboxes.labels.update(
+      { inboxId: 'id', labelId: 'id', name: 'label' },
+      o,
+    ),
+  'inboxes.labels.remove': (o) =>
+    resend.inboxes.labels.remove({ inboxId: 'id', labelId: 'id' }, o),
+  'inboxes.threads.list': (o) =>
+    resend.inboxes.threads.list({ inboxId: 'id' }, o),
+  'inboxes.threads.get': (o) =>
+    resend.inboxes.threads.get({ inboxId: 'id', threadId: 'id' }, o),
+  'inboxes.threads.update': (o) =>
+    resend.inboxes.threads.update(
+      { inboxId: 'id', threadId: 'id', read: true },
+      o,
+    ),
+  'inboxes.threads.remove': (o) =>
+    resend.inboxes.threads.remove({ inboxId: 'id', threadId: 'id' }, o),
+  'inboxes.threads.emails.list': (o) =>
+    resend.inboxes.threads.emails.list({ inboxId: 'id', threadId: 'id' }, o),
+  'inboxes.threads.emails.get': (o) =>
+    resend.inboxes.threads.emails.get(
+      { inboxId: 'id', threadId: 'id', emailId: 'id' },
+      o,
+    ),
+  'inboxes.threads.emails.reply': (o) =>
+    resend.inboxes.threads.emails.reply(
+      { inboxId: 'id', threadId: 'id', emailId: 'id', text: 't' },
+      o,
+    ),
+  'inboxes.threads.emails.forward': (o) =>
+    resend.inboxes.threads.emails.forward(
+      { inboxId: 'id', threadId: 'id', emailId: 'id', to: 'b@resend.com' },
+      o,
+    ),
+
   'logs.list': (o) => resend.logs.list({}, o),
   'logs.get': (o) => resend.logs.get('id', o),
 

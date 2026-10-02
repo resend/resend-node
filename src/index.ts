@@ -15,6 +15,7 @@ export * from './emails/attachments/interfaces';
 export * from './emails/interfaces';
 export * from './emails/receiving/interfaces';
 export * from './events/interfaces';
+export * from './inboxes/interfaces';
 export type { ErrorResponse, Response } from './interfaces';
 export * from './logs/interfaces';
 export * from './oauth-grants/interfaces';
