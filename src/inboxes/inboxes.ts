@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import { InboxDrafts } from './drafts/drafts';
@@ -55,28 +56,47 @@ export class Inboxes {
     );
   }
 
-  async list(options: ListInboxesOptions = {}): Promise<ListInboxesResponse> {
+  async list(
+    options: ListInboxesOptions = {},
+    requestOptions: RequestOptions = {},
+  ): Promise<ListInboxesResponse> {
     const url = buildPaginationUrl('/inboxes', options);
-    return this.resend.get<ListInboxesResponseSuccess>(url);
+    return this.resend.get<ListInboxesResponseSuccess>(url, requestOptions);
   }
 
-  async get(idOrEmail: string): Promise<GetInboxResponse> {
+  async get(
+    idOrEmail: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetInboxResponse> {
     return this.resend.get<GetInboxResponseSuccess>(
       `/inboxes/${encodeURIComponent(idOrEmail)}`,
+      requestOptions,
     );
   }
 
   async update(
     id: string,
     payload: UpdateInboxOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxResponse> {
-    return this.resend.patch<UpdateInboxResponseSuccess>(`/inboxes/${id}`, {
-      name: payload.name,
-      from_name: payload.fromName,
-    });
+    return this.resend.patch<UpdateInboxResponseSuccess>(
+      `/inboxes/${id}`,
+      {
+        name: payload.name,
+        from_name: payload.fromName,
+      },
+      requestOptions,
+    );
   }
 
-  async remove(id: string): Promise<RemoveInboxResponse> {
-    return this.resend.delete<RemoveInboxResponseSuccess>(`/inboxes/${id}`);
+  async remove(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveInboxResponse> {
+    return this.resend.delete<RemoveInboxResponseSuccess>(
+      `/inboxes/${id}`,
+      undefined,
+      requestOptions,
+    );
   }
 }

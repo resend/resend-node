@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import type { Resend } from '../../resend';
 import { buildInboxCursorUrl } from '../build-inbox-cursor-query';
 import { InboxThreadEmails } from './emails/emails';
@@ -31,21 +32,30 @@ export class InboxThreads {
 
   async list(
     options: ListInboxThreadsOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<ListInboxThreadsResponse> {
     const { inboxId, ...query } = options;
     const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads`, query);
-    return this.resend.get<ListInboxThreadsResponseSuccess>(url);
+    return this.resend.get<ListInboxThreadsResponseSuccess>(
+      url,
+      requestOptions,
+    );
   }
 
-  async get(options: GetInboxThreadOptions): Promise<GetInboxThreadResponse> {
+  async get(
+    options: GetInboxThreadOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetInboxThreadResponse> {
     const { inboxId, threadId } = options;
     return this.resend.get<GetInboxThreadResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}`,
+      requestOptions,
     );
   }
 
   async update(
     options: UpdateInboxThreadOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxThreadResponse> {
     const { inboxId, threadId, read, folder, labelId } = options;
     return this.resend.patch<UpdateInboxThreadResponseSuccess>(
@@ -55,15 +65,19 @@ export class InboxThreads {
         folder,
         label_id: labelId,
       },
+      requestOptions,
     );
   }
 
   async remove(
     options: RemoveInboxThreadOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<RemoveInboxThreadResponse> {
     const { inboxId, threadId } = options;
     return this.resend.delete<RemoveInboxThreadResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}`,
+      undefined,
+      requestOptions,
     );
   }
 }

@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../../../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../../../common/utils/build-pagination-query';
 import type { Resend } from '../../../resend';
 import type {
@@ -28,21 +29,27 @@ export class InboxThreadEmails {
 
   async list(
     options: ListInboxThreadEmailsOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<ListInboxThreadEmailsResponse> {
     const { inboxId, threadId, ...pagination } = options;
     const url = buildPaginationUrl(
       `/inboxes/${inboxId}/threads/${threadId}/emails`,
       pagination,
     );
-    return this.resend.get<ListInboxThreadEmailsResponseSuccess>(url);
+    return this.resend.get<ListInboxThreadEmailsResponseSuccess>(
+      url,
+      requestOptions,
+    );
   }
 
   async get(
     options: GetInboxThreadEmailOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<GetInboxThreadEmailResponse> {
     const { inboxId, threadId, emailId } = options;
     return this.resend.get<GetInboxThreadEmailResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}`,
+      requestOptions,
     );
   }
 

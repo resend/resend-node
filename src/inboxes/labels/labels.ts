@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import type { Resend } from '../../resend';
 import type {
   CreateInboxLabelOptions,
@@ -26,9 +27,11 @@ export class InboxLabels {
 
   async list(
     options: ListInboxLabelsOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<ListInboxLabelsResponse> {
     return this.resend.get<ListInboxLabelsResponseSuccess>(
       `/inboxes/${options.inboxId}/labels`,
+      requestOptions,
     );
   }
 
@@ -46,20 +49,25 @@ export class InboxLabels {
 
   async update(
     options: UpdateInboxLabelOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxLabelResponse> {
     const { inboxId, labelId, name, color } = options;
     return this.resend.patch<UpdateInboxLabelResponseSuccess>(
       `/inboxes/${inboxId}/labels/${labelId}`,
       { name, color },
+      requestOptions,
     );
   }
 
   async remove(
     options: RemoveInboxLabelOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<RemoveInboxLabelResponse> {
     const { inboxId, labelId } = options;
     return this.resend.delete<RemoveInboxLabelResponseSuccess>(
       `/inboxes/${inboxId}/labels/${labelId}`,
+      undefined,
+      requestOptions,
     );
   }
 }

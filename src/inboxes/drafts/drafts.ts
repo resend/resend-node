@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import type { Resend } from '../../resend';
 import { buildInboxCursorUrl } from '../build-inbox-cursor-query';
 import type {
@@ -38,6 +39,7 @@ export class InboxDrafts {
 
   async list(
     options: ListInboxDraftsOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<ListInboxDraftsResponse> {
     const { inboxId, limit, after, before } = options;
     const url = buildInboxCursorUrl(`/inboxes/${inboxId}/drafts`, {
@@ -45,7 +47,7 @@ export class InboxDrafts {
       after,
       before,
     });
-    return this.resend.get<ListInboxDraftsResponseSuccess>(url);
+    return this.resend.get<ListInboxDraftsResponseSuccess>(url, requestOptions);
   }
 
   async create(
@@ -64,29 +66,38 @@ export class InboxDrafts {
     );
   }
 
-  async get(options: GetInboxDraftOptions): Promise<GetInboxDraftResponse> {
+  async get(
+    options: GetInboxDraftOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetInboxDraftResponse> {
     const { inboxId, draftId } = options;
     return this.resend.get<GetInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}`,
+      requestOptions,
     );
   }
 
   async update(
     options: UpdateInboxDraftOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxDraftResponse> {
     const { inboxId, draftId, ...content } = options;
     return this.resend.patch<UpdateInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}`,
       content,
+      requestOptions,
     );
   }
 
   async remove(
     options: RemoveInboxDraftOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<RemoveInboxDraftResponse> {
     const { inboxId, draftId } = options;
     return this.resend.delete<RemoveInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}`,
+      undefined,
+      requestOptions,
     );
   }
 
