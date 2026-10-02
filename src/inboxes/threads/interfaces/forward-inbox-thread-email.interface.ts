@@ -1,12 +1,14 @@
 import type { PostOptions } from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
-import type { InboxMessageAttachment } from './thread';
+import type { ReplyInboxThreadEmailResponseSuccess } from './reply-inbox-thread-email.interface';
 
 export interface ForwardInboxThreadEmailOptions {
   inboxId: string;
   threadId: string;
   emailId: string;
   to: string | string[];
+  cc?: string | string[];
+  bcc?: string | string[];
   html?: string;
   text?: string;
   subject?: string;
@@ -14,23 +16,8 @@ export interface ForwardInboxThreadEmailOptions {
 
 export interface ForwardInboxThreadEmailRequestOptions extends PostOptions {}
 
-export interface ForwardInboxThreadEmailResponseSuccess {
-  id: string;
-  email_id: string;
-  direction: 'outbound';
-  from: string;
-  to: string[];
-  cc: string[];
-  bcc: string[];
-  reply_to: string[];
-  subject: string | null;
-  message_id: string | null;
-  html: string | null;
-  text: string | null;
-  attachments: InboxMessageAttachment[];
-  read: boolean;
-  received_at: string;
-}
+export type ForwardInboxThreadEmailResponseSuccess =
+  ReplyInboxThreadEmailResponseSuccess;
 
 export type ForwardInboxThreadEmailResponse =
   Response<ForwardInboxThreadEmailResponseSuccess>;

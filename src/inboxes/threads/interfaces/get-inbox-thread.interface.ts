@@ -1,13 +1,11 @@
 import type { Response } from '../../../interfaces';
-import type { InboxMessage, InboxThreadSummary } from './thread';
+import type { InboxThreadSummary } from './thread';
 
 export interface GetInboxThreadOptions {
   inboxId: string;
   threadId: string;
 }
 
-export interface GetInboxThreadResponseSuccess extends InboxThreadSummary {
-  messages: InboxMessage[];
-}
+export type GetInboxThreadResponseSuccess = InboxThreadSummary;
 
 export type GetInboxThreadResponse = Response<GetInboxThreadResponseSuccess>;

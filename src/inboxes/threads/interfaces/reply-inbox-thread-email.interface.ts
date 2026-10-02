@@ -13,12 +13,15 @@ export type ReplyInboxThreadEmailOptions = {
   html?: string;
   text?: string;
 }> & {
+    cc?: string | string[];
+    bcc?: string | string[];
     subject?: string;
   };
 
 export interface ReplyInboxThreadEmailRequestOptions extends PostOptions {}
 
 export type ReplyInboxThreadEmailResponseSuccess = InboxMessage & {
+  direction: 'outbound';
   email_id: string;
 };
 

@@ -3,7 +3,7 @@ import type { Response } from '../../interfaces';
 
 export type UpdateInboxOptions = RequireAtLeastOne<{
   name?: string;
-  friendlyName?: string;
+  fromName?: string;
 }>;
 
 export interface UpdateInboxResponseSuccess {

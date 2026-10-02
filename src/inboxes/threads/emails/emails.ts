@@ -1,3 +1,4 @@
+import { buildPaginationUrl } from '../../../common/utils/build-pagination-query';
 import type { Resend } from '../../../resend';
 import type {
   ForwardInboxThreadEmailOptions,
@@ -11,6 +12,11 @@ import type {
   GetInboxThreadEmailResponseSuccess,
 } from '../interfaces/get-inbox-thread-email.interface';
 import type {
+  ListInboxThreadEmailsOptions,
+  ListInboxThreadEmailsResponse,
+  ListInboxThreadEmailsResponseSuccess,
+} from '../interfaces/list-inbox-thread-emails.interface';
+import type {
   ReplyInboxThreadEmailOptions,
   ReplyInboxThreadEmailRequestOptions,
   ReplyInboxThreadEmailResponse,
@@ -19,6 +25,17 @@ import type {
 
 export class InboxThreadEmails {
   constructor(private readonly resend: Resend) {}
+
+  async list(
+    options: ListInboxThreadEmailsOptions,
+  ): Promise<ListInboxThreadEmailsResponse> {
+    const { inboxId, threadId, ...pagination } = options;
+    const url = buildPaginationUrl(
+      `/inboxes/${inboxId}/threads/${threadId}/emails`,
+      pagination,
+    );
+    return this.resend.get<ListInboxThreadEmailsResponseSuccess>(url);
+  }
 
   async get(
     options: GetInboxThreadEmailOptions,
@@ -33,10 +50,11 @@ export class InboxThreadEmails {
     payload: ReplyInboxThreadEmailOptions,
     options: ReplyInboxThreadEmailRequestOptions = {},
   ): Promise<ReplyInboxThreadEmailResponse> {
-    const { inboxId, threadId, emailId, html, text, subject } = payload;
+    const { inboxId, threadId, emailId, cc, bcc, html, text, subject } =
+      payload;
     return this.resend.post<ReplyInboxThreadEmailResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
-      { html, text, subject },
+      { cc, bcc, html, text, subject },
       options,
     );
   }
@@ -45,10 +63,11 @@ export class InboxThreadEmails {
     payload: ForwardInboxThreadEmailOptions,
     options: ForwardInboxThreadEmailRequestOptions = {},
   ): Promise<ForwardInboxThreadEmailResponse> {
-    const { inboxId, threadId, emailId, to, html, text, subject } = payload;
+    const { inboxId, threadId, emailId, to, cc, bcc, html, text, subject } =
+      payload;
     return this.resend.post<ForwardInboxThreadEmailResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
-      { to, html, text, subject },
+      { to, cc, bcc, html, text, subject },
       options,
     );
   }

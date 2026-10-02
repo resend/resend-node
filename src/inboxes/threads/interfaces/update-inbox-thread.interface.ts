@@ -1,10 +1,7 @@
 import type { RequireAtLeastOne } from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
-import type {
-  InboxMessageFolder,
-  MoveThreadFolder,
-} from '../../interfaces/inbox';
-import type { InboxThreadLabel } from './thread';
+import type { MoveThreadFolder } from '../../interfaces/inbox';
+import type { InboxThreadSummary } from './thread';
 
 export type UpdateInboxThreadOptions = {
   inboxId: string;
@@ -12,17 +9,11 @@ export type UpdateInboxThreadOptions = {
 } & RequireAtLeastOne<{
   read?: boolean;
   folder?: MoveThreadFolder;
+  /** Applies the label to the thread. Labels cannot be removed through this endpoint. */
   labelId?: string;
 }>;
 
-export interface UpdateInboxThreadResponseSuccess {
-  object: 'inbox_thread';
-  id: string;
-  subject: string | null;
-  folder: InboxMessageFolder;
-  labels: InboxThreadLabel[];
-  read: boolean;
-}
+export type UpdateInboxThreadResponseSuccess = InboxThreadSummary;
 
 export type UpdateInboxThreadResponse =
   Response<UpdateInboxThreadResponseSuccess>;

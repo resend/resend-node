@@ -25,9 +25,11 @@ describe('Inboxes', () => {
         name: 'support',
         email_address: 'support@example.com',
         domain_id: 'd91cd9bd-1176-453e-8fc1-8880d0486fdc',
-        forwarding_address: null,
-        friendly_name: 'Support',
+        receiving_address: null,
+        from_name: 'Support',
         unread: 0,
+        drafts: 0,
+        last_received: null,
         created_at: '2026-09-01T00:00:00.000Z',
       };
 
@@ -41,7 +43,7 @@ describe('Inboxes', () => {
       const data = await resend.inboxes.create({
         emailAddress: 'support@example.com',
         name: 'support',
-        friendlyName: 'Support',
+        fromName: 'Support',
       });
 
       expect(data).toMatchInlineSnapshot(`
@@ -49,12 +51,14 @@ describe('Inboxes', () => {
           "data": {
             "created_at": "2026-09-01T00:00:00.000Z",
             "domain_id": "d91cd9bd-1176-453e-8fc1-8880d0486fdc",
+            "drafts": 0,
             "email_address": "support@example.com",
-            "forwarding_address": null,
-            "friendly_name": "Support",
+            "from_name": "Support",
             "id": "430eed87-632a-4ea6-90db-0aace67ec228",
+            "last_received": null,
             "name": "support",
             "object": "inbox",
+            "receiving_address": null,
             "unread": 0,
           },
           "error": null,
@@ -72,7 +76,7 @@ describe('Inboxes', () => {
           body: JSON.stringify({
             email_address: 'support@example.com',
             name: 'support',
-            friendly_name: 'Support',
+            from_name: 'Support',
           }),
         }),
       );
@@ -121,7 +125,7 @@ describe('Inboxes', () => {
           id: '430eed87-632a-4ea6-90db-0aace67ec228',
           name: 'support',
           email_address: 'support@example.com',
-          friendly_name: 'Support',
+          from_name: 'Support',
           unread: 2,
           last_received: '2026-09-01T00:00:00.000Z',
         },
@@ -179,11 +183,13 @@ describe('Inboxes', () => {
         id: '430eed87-632a-4ea6-90db-0aace67ec228',
         name: 'support',
         email_address: 'support@example.com',
-        forwarding_address: null,
-        friendly_name: 'Support',
+        domain_id: 'd91cd9bd-1176-453e-8fc1-8880d0486fdc',
+        receiving_address: null,
+        from_name: 'Support',
         unread: 2,
         drafts: 1,
         last_received: '2026-09-01T00:00:00.000Z',
+        created_at: '2026-09-01T00:00:00.000Z',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -200,14 +206,16 @@ describe('Inboxes', () => {
       expect(data).toMatchInlineSnapshot(`
         {
           "data": {
+            "created_at": "2026-09-01T00:00:00.000Z",
+            "domain_id": "d91cd9bd-1176-453e-8fc1-8880d0486fdc",
             "drafts": 1,
             "email_address": "support@example.com",
-            "forwarding_address": null,
-            "friendly_name": "Support",
+            "from_name": "Support",
             "id": "430eed87-632a-4ea6-90db-0aace67ec228",
             "last_received": "2026-09-01T00:00:00.000Z",
             "name": "support",
             "object": "inbox",
+            "receiving_address": null,
             "unread": 2,
           },
           "error": null,
@@ -216,6 +224,19 @@ describe('Inboxes', () => {
           },
         }
       `);
+    });
+
+    it('gets an inbox by email address', async () => {
+      mockSuccessResponse({}, { headers: {} });
+
+      await resend.inboxes.get('support+billing@example.com');
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/inboxes/support%2Bbilling%40example.com',
+        expect.objectContaining({
+          method: 'GET',
+        }),
+      );
     });
 
     it('returns an error when the inbox is not found', async () => {
@@ -291,7 +312,7 @@ describe('Inboxes', () => {
       );
     });
 
-    it('maps friendlyName to friendly_name', async () => {
+    it('maps fromName to from_name', async () => {
       mockSuccessResponse(
         {
           object: 'inbox',
@@ -301,14 +322,14 @@ describe('Inboxes', () => {
       );
 
       await resend.inboxes.update('430eed87-632a-4ea6-90db-0aace67ec228', {
-        friendlyName: 'Billing',
+        fromName: 'Billing',
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
         'https://api.resend.com/inboxes/430eed87-632a-4ea6-90db-0aace67ec228',
         expect.objectContaining({
           method: 'PATCH',
-          body: JSON.stringify({ friendly_name: 'Billing' }),
+          body: JSON.stringify({ from_name: 'Billing' }),
         }),
       );
     });

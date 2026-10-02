@@ -5,7 +5,6 @@ import { mockSuccessResponse } from '../../test-utils/mock-fetch';
 import type { GetInboxThreadResponseSuccess } from './interfaces/get-inbox-thread.interface';
 import type { ListInboxThreadsResponseSuccess } from './interfaces/list-inbox-threads.interface';
 import type { RemoveInboxThreadResponseSuccess } from './interfaces/remove-inbox-thread.interface';
-import type { InboxMessage } from './interfaces/thread';
 import type { UpdateInboxThreadResponseSuccess } from './interfaces/update-inbox-thread.interface';
 
 const fetchMocker = createFetchMock(vi);
@@ -15,23 +14,6 @@ const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
 const inboxId = '430eed87-632a-4ea6-90db-0aace67ec228';
 const threadId = 'b2c3d4e5-0000-4000-8000-000000000000';
-
-const message: InboxMessage = {
-  id: 'c3d4e5f6-0000-4000-8000-000000000000',
-  direction: 'inbound',
-  from: 'Ada Lovelace <ada@example.com>',
-  to: ['support@example.com'],
-  cc: [],
-  bcc: [],
-  reply_to: ['replies@example.com'],
-  subject: 'Billing question',
-  message_id: '<billing@example.com>',
-  html: null,
-  text: 'Please send the invoice.',
-  attachments: [],
-  read: true,
-  received_at: '2026-09-01T00:00:00.000Z',
-};
 
 describe('Inbox threads', () => {
   afterEach(() => fetchMock.resetMocks());
@@ -87,14 +69,13 @@ describe('Inbox threads', () => {
         inboxId,
         folder: 'inbox',
         query: 'invoice',
-        from: 'ada@example.com',
         label: ['label-1', 'label-2'],
         limit: 10,
         after: threadId,
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads?folder=inbox&query=invoice&from=ada%40example.com&limit=10&after=${threadId}&label=label-1&label=label-2`,
+        `https://api.resend.com/inboxes/${inboxId}/threads?folder=inbox&query=invoice&limit=10&after=${threadId}&label=label-1&label=label-2`,
         expect.objectContaining({
           method: 'GET',
         }),
@@ -134,7 +115,6 @@ describe('Inbox threads', () => {
         folder: 'inbox',
         labels: [],
         read: true,
-        messages: [message],
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {

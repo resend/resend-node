@@ -15,6 +15,11 @@ export type {
   GetInboxThreadEmailResponseSuccess,
 } from './get-inbox-thread-email.interface';
 export type {
+  ListInboxThreadEmailsOptions,
+  ListInboxThreadEmailsResponse,
+  ListInboxThreadEmailsResponseSuccess,
+} from './list-inbox-thread-emails.interface';
+export type {
   ListInboxThreadsOptions,
   ListInboxThreadsResponse,
   ListInboxThreadsResponseSuccess,

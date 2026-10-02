@@ -2,6 +2,7 @@ import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../../interfaces';
 import { Resend } from '../../../resend';
 import type { ForwardInboxThreadEmailResponseSuccess } from '../interfaces/forward-inbox-thread-email.interface';
+import type { ListInboxThreadEmailsResponseSuccess } from '../interfaces/list-inbox-thread-emails.interface';
 import type { ReplyInboxThreadEmailResponseSuccess } from '../interfaces/reply-inbox-thread-email.interface';
 import type { InboxMessage } from '../interfaces/thread';
 
@@ -34,6 +35,62 @@ const message: InboxMessage = {
 describe('Inbox thread emails', () => {
   afterEach(() => fetchMock.resetMocks());
   afterAll(() => fetchMocker.disableMocks());
+
+  describe('list', () => {
+    it('lists thread emails', async () => {
+      const response: ListInboxThreadEmailsResponseSuccess = {
+        object: 'list',
+        has_more: false,
+        data: [message],
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const data = await resend.inboxes.threads.emails.list({
+        inboxId,
+        threadId,
+      });
+
+      expect(data.data).toEqual(response);
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails`,
+        expect.objectContaining({
+          method: 'GET',
+        }),
+      );
+    });
+
+    it('lists thread emails with pagination', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'list', has_more: false, data: [] }),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+
+      await resend.inboxes.threads.emails.list({
+        inboxId,
+        threadId,
+        limit: 10,
+        after: emailId,
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails?limit=10&after=${emailId}`,
+        expect.objectContaining({
+          method: 'GET',
+        }),
+      );
+    });
+  });
 
   describe('get', () => {
     it('gets a thread email', async () => {
@@ -88,6 +145,36 @@ describe('Inbox thread emails', () => {
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({ text: 'Thanks, sent.' }),
+        }),
+      );
+    });
+
+    it('sends cc and bcc', async () => {
+      fetchMock.mockOnce(JSON.stringify({}), {
+        status: 201,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.threads.emails.reply({
+        inboxId,
+        threadId,
+        emailId,
+        text: 'Thanks, sent.',
+        cc: 'manager@example.com',
+        bcc: ['audit@example.com', 'archive@example.com'],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            cc: 'manager@example.com',
+            bcc: ['audit@example.com', 'archive@example.com'],
+            text: 'Thanks, sent.',
+          }),
         }),
       );
     });
@@ -160,6 +247,38 @@ describe('Inbox thread emails', () => {
           method: 'POST',
           body: JSON.stringify({
             to: 'colleague@example.com',
+            text: 'See below.',
+          }),
+        }),
+      );
+    });
+
+    it('sends cc and bcc', async () => {
+      fetchMock.mockOnce(JSON.stringify({}), {
+        status: 201,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.threads.emails.forward({
+        inboxId,
+        threadId,
+        emailId,
+        to: ['colleague@example.com'],
+        cc: ['manager@example.com'],
+        bcc: 'audit@example.com',
+        text: 'See below.',
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            to: ['colleague@example.com'],
+            cc: ['manager@example.com'],
+            bcc: 'audit@example.com',
             text: 'See below.',
           }),
         }),

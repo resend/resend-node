@@ -1,4 +1,5 @@
 import type { InboxDraft } from '../../inboxes/drafts/interfaces/draft';
+import type { GetInboxResponseSuccess } from '../../inboxes/interfaces/get-inbox.interface';
 import type { InboxMessageFolder } from '../../inboxes/interfaces/inbox';
 import type {
   InboxMessage,
@@ -157,18 +158,6 @@ interface TopicEventData {
   updated_at: string;
 }
 
-interface InboxEventInbox {
-  object: 'inbox';
-  id: string;
-  name: string;
-  email_address: string;
-  domain_id: string;
-  receiving_address: string | null;
-  friendly_name: string | null;
-  unread: number;
-  created_at: string;
-}
-
 interface InboxEventData {
   source: 'api' | 'dashboard' | 'agent' | 'system';
   inbox_id: string;
@@ -178,7 +167,7 @@ interface InboxEventData {
   thread?: InboxThreadSummary;
   email?: Omit<InboxMessage, 'html' | 'text'>;
   draft?: Omit<InboxDraft, 'html' | 'text'>;
-  inbox?: InboxEventInbox;
+  inbox?: GetInboxResponseSuccess;
 }
 
 export interface EmailSentEvent {

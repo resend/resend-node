@@ -7,7 +7,6 @@ export type ListInboxThreadsOptions = {
   inboxId: string;
   folder?: InboxMessageFolder;
   query?: string;
-  from?: string;
   label?: string | string[];
 } & PaginationOptions;
 

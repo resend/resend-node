@@ -37,7 +37,7 @@ export interface Inbox {
   id: string;
   name: string | null;
   email_address: string;
-  friendly_name: string | null;
+  from_name: string | null;
   unread: number;
   last_received: string | null;
 }

@@ -49,7 +49,7 @@ export class Inboxes {
         email_address: payload.emailAddress,
         name: payload.name,
         forwarding: payload.forwarding,
-        friendly_name: payload.friendlyName,
+        from_name: payload.fromName,
       },
       options,
     );
@@ -60,8 +60,10 @@ export class Inboxes {
     return this.resend.get<ListInboxesResponseSuccess>(url);
   }
 
-  async get(id: string): Promise<GetInboxResponse> {
-    return this.resend.get<GetInboxResponseSuccess>(`/inboxes/${id}`);
+  async get(idOrEmail: string): Promise<GetInboxResponse> {
+    return this.resend.get<GetInboxResponseSuccess>(
+      `/inboxes/${encodeURIComponent(idOrEmail)}`,
+    );
   }
 
   async update(
@@ -70,7 +72,7 @@ export class Inboxes {
   ): Promise<UpdateInboxResponse> {
     return this.resend.patch<UpdateInboxResponseSuccess>(`/inboxes/${id}`, {
       name: payload.name,
-      friendly_name: payload.friendlyName,
+      from_name: payload.fromName,
     });
   }
 
