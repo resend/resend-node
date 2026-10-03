@@ -1,6 +1,7 @@
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
+import { path } from '../common/utils/path';
 import { render } from '../render';
 import type { Resend } from '../resend';
 import { Attachments } from './attachments/attachments';
@@ -80,7 +81,7 @@ export class Emails {
     requestOptions: RequestOptions = {},
   ): Promise<GetEmailResponse> {
     const data = await this.resend.get<GetEmailResponseSuccess>(
-      `/emails/${id}`,
+      path`/emails/${id}`,
       requestOptions,
     );
 
@@ -106,7 +107,7 @@ export class Emails {
     requestOptions: RequestOptions = {},
   ): Promise<UpdateEmailResponse> {
     const data = await this.resend.patch<UpdateEmailResponseSuccess>(
-      `/emails/${payload.id}`,
+      path`/emails/${payload.id}`,
       {
         scheduled_at: payload.scheduledAt,
       },
@@ -120,7 +121,7 @@ export class Emails {
     requestOptions: RequestOptions = {},
   ): Promise<CancelEmailResponse> {
     const data = await this.resend.post<CancelEmailResponseSuccess>(
-      `/emails/${id}/cancel`,
+      path`/emails/${id}/cancel`,
       undefined,
       requestOptions,
     );
@@ -133,7 +134,7 @@ export class Emails {
     requestOptions: RequestOptions = {},
   ): Promise<ShareEmailResponse> {
     const data = await this.resend.post<ShareEmailResponseSuccess>(
-      `/emails/${id}/share`,
+      path`/emails/${id}/share`,
       { expires_in: payload?.expiresIn },
       requestOptions,
     );

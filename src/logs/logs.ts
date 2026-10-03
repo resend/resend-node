@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   GetLogResponse,
@@ -31,7 +32,7 @@ export class Logs {
     requestOptions: RequestOptions = {},
   ): Promise<GetLogResponse> {
     const data = await this.resend.get<GetLogResponseSuccess>(
-      `/logs/${id}`,
+      path`/logs/${id}`,
       requestOptions,
     );
     return data;

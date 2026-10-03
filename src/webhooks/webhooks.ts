@@ -1,6 +1,7 @@
 import { Webhook } from 'standardwebhooks';
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import { Events } from './events/events';
 import type {
@@ -69,7 +70,7 @@ export class Webhooks {
     requestOptions: RequestOptions = {},
   ): Promise<GetWebhookResponse> {
     const data = await this.resend.get<GetWebhookResponseSuccess>(
-      `/webhooks/${id}`,
+      path`/webhooks/${id}`,
       requestOptions,
     );
 
@@ -95,7 +96,7 @@ export class Webhooks {
     requestOptions: RequestOptions = {},
   ): Promise<UpdateWebhookResponse> {
     const data = await this.resend.patch<UpdateWebhookResponseSuccess>(
-      `/webhooks/${id}`,
+      path`/webhooks/${id}`,
       payload,
       requestOptions,
     );
@@ -107,7 +108,7 @@ export class Webhooks {
     requestOptions: RequestOptions = {},
   ): Promise<RemoveWebhookResponse> {
     const data = await this.resend.delete<RemoveWebhookResponseSuccess>(
-      `/webhooks/${id}`,
+      path`/webhooks/${id}`,
       undefined,
       requestOptions,
     );
@@ -120,7 +121,7 @@ export class Webhooks {
   ): Promise<RotateWebhookSigningSecretResponse> {
     const data =
       await this.resend.post<RotateWebhookSigningSecretResponseSuccess>(
-        `/webhooks/${id}/signing-secret/rotate`,
+        path`/webhooks/${id}/signing-secret/rotate`,
         undefined,
         requestOptions,
       );

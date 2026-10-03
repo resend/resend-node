@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   ListOAuthGrantsOptions,
@@ -32,7 +33,7 @@ export class OAuthGrants {
     requestOptions: RequestOptions = {},
   ): Promise<RevokeOAuthGrantResponse> {
     const data = await this.resend.delete<RevokeOAuthGrantResponseSuccess>(
-      `/oauth/grants/${id}`,
+      path`/oauth/grants/${id}`,
       undefined,
       requestOptions,
     );

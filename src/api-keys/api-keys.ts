@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   CreateApiKeyOptions,
@@ -57,7 +58,7 @@ export class ApiKeys {
     requestOptions: RequestOptions = {},
   ): Promise<UpdateApiKeyResponse> {
     const data = await this.resend.patch<UpdateApiKeyResponseSuccess>(
-      `/api-keys/${id}`,
+      path`/api-keys/${id}`,
       payload,
       requestOptions,
     );
@@ -69,7 +70,7 @@ export class ApiKeys {
     requestOptions: RequestOptions = {},
   ): Promise<RemoveApiKeyResponse> {
     const data = await this.resend.delete<RemoveApiKeyResponseSuccess>(
-      `/api-keys/${id}`,
+      path`/api-keys/${id}`,
       undefined,
       requestOptions,
     );

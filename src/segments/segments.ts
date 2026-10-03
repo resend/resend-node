@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   CreateSegmentOptions,
@@ -59,7 +60,7 @@ export class Segments {
     requestOptions: RequestOptions = {},
   ): Promise<GetSegmentResponse> {
     const data = await this.resend.get<GetSegmentResponseSuccess>(
-      `/segments/${id}`,
+      path`/segments/${id}`,
       requestOptions,
     );
     return data;
@@ -71,7 +72,7 @@ export class Segments {
     requestOptions: RequestOptions = {},
   ): Promise<UpdateSegmentResponse> {
     const data = await this.resend.patch<UpdateSegmentResponseSuccess>(
-      `/segments/${id}`,
+      path`/segments/${id}`,
       payload,
       requestOptions,
     );
@@ -83,7 +84,7 @@ export class Segments {
     requestOptions: RequestOptions = {},
   ): Promise<RemoveSegmentResponse> {
     const data = await this.resend.delete<RemoveSegmentResponseSuccess>(
-      `/segments/${id}`,
+      path`/segments/${id}`,
       undefined,
       requestOptions,
     );

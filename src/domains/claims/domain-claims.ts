@@ -1,4 +1,5 @@
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
+import { path } from '../../common/utils/path';
 import type { Resend } from '../../resend';
 import type {
   ClaimDomainOptions,
@@ -42,7 +43,7 @@ export class DomainClaims {
     requestOptions: RequestOptions = {},
   ): Promise<GetDomainClaimResponse> {
     const data = await this.resend.get<GetDomainClaimResponseSuccess>(
-      `/domains/${domainId}/claim`,
+      path`/domains/${domainId}/claim`,
       requestOptions,
     );
     return data;
@@ -53,7 +54,7 @@ export class DomainClaims {
     requestOptions: RequestOptions = {},
   ): Promise<VerifyDomainClaimResponse> {
     const data = await this.resend.post<VerifyDomainClaimResponseSuccess>(
-      `/domains/${domainId}/claim/verify`,
+      path`/domains/${domainId}/claim/verify`,
       undefined,
       requestOptions,
     );

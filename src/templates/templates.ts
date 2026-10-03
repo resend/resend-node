@@ -2,6 +2,7 @@ import type { PaginationOptions } from '../common/interfaces';
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { getPaginationQueryProperties } from '../common/utils/get-pagination-query-properties';
 import { parseTemplateToApiOptions } from '../common/utils/parse-template-to-api-options';
+import { path } from '../common/utils/path';
 import { render } from '../render';
 import type { Resend } from '../resend';
 import { ChainableTemplateResult } from './chainable-template-result';
@@ -73,7 +74,7 @@ export class Templates {
     requestOptions: RequestOptions = {},
   ): Promise<RemoveTemplateResponse> {
     const data = await this.resend.delete<RemoveTemplateResponseSuccess>(
-      `/templates/${identifier}`,
+      path`/templates/${identifier}`,
       undefined,
       requestOptions,
     );
@@ -85,7 +86,7 @@ export class Templates {
     requestOptions: RequestOptions = {},
   ): Promise<GetTemplateResponse> {
     const data = await this.resend.get<GetTemplateResponseSuccess>(
-      `/templates/${identifier}`,
+      path`/templates/${identifier}`,
       requestOptions,
     );
     return data;
@@ -106,7 +107,7 @@ export class Templates {
     requestOptions: RequestOptions = {},
   ): ChainableTemplateResult<DuplicateTemplateResponse> {
     const promiseDuplicate = this.resend.post<DuplicateTemplateResponseSuccess>(
-      `/templates/${identifier}/duplicate`,
+      path`/templates/${identifier}/duplicate`,
       undefined,
       requestOptions,
     );
@@ -121,7 +122,7 @@ export class Templates {
     requestOptions: RequestOptions = {},
   ): Promise<PublishTemplateResponse> {
     const data = await this.resend.post<PublishTemplateResponseSuccess>(
-      `/templates/${identifier}/publish`,
+      path`/templates/${identifier}/publish`,
       undefined,
       requestOptions,
     );
@@ -134,7 +135,7 @@ export class Templates {
     requestOptions: RequestOptions = {},
   ): Promise<UpdateTemplateResponse> {
     const data = await this.resend.patch<UpdateTemplateResponseSuccess>(
-      `/templates/${identifier}`,
+      path`/templates/${identifier}`,
       parseTemplateToApiOptions(payload),
       requestOptions,
     );

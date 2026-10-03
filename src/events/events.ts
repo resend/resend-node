@@ -1,6 +1,7 @@
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseEventToApiOptions } from '../common/utils/parse-automation-to-api-options';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   CreateEventOptions,
@@ -65,7 +66,7 @@ export class Events {
     requestOptions: RequestOptions = {},
   ): Promise<GetEventResponse> {
     const data = await this.resend.get<GetEventResponseSuccess>(
-      `/events/${encodeURIComponent(identifier)}`,
+      path`/events/${identifier}`,
       requestOptions,
     );
     return data;
@@ -89,7 +90,7 @@ export class Events {
     requestOptions: RequestOptions = {},
   ): Promise<UpdateEventResponse> {
     const data = await this.resend.patch<UpdateEventResponseSuccess>(
-      `/events/${encodeURIComponent(identifier)}`,
+      path`/events/${identifier}`,
       payload,
       requestOptions,
     );
@@ -101,7 +102,7 @@ export class Events {
     requestOptions: RequestOptions = {},
   ): Promise<RemoveEventResponse> {
     const data = await this.resend.delete<RemoveEventResponseSuccess>(
-      `/events/${encodeURIComponent(identifier)}`,
+      path`/events/${identifier}`,
       undefined,
       requestOptions,
     );

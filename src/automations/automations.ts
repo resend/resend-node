@@ -6,6 +6,7 @@ import {
   parseConnection,
   parseStepConfig,
 } from '../common/utils/parse-automation-to-api-options';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   CreateAutomationOptions,
@@ -85,7 +86,7 @@ export class Automations {
     requestOptions: RequestOptions = {},
   ): Promise<GetAutomationResponse> {
     const data = await this.resend.get<GetAutomationResponseSuccess>(
-      `/automations/${id}`,
+      path`/automations/${id}`,
       requestOptions,
     );
     return data;
@@ -96,7 +97,7 @@ export class Automations {
     requestOptions: RequestOptions = {},
   ): Promise<RemoveAutomationResponse> {
     const data = await this.resend.delete<RemoveAutomationResponseSuccess>(
-      `/automations/${id}`,
+      path`/automations/${id}`,
       undefined,
       requestOptions,
     );
@@ -124,7 +125,7 @@ export class Automations {
     }
 
     const data = await this.resend.patch<UpdateAutomationResponseSuccess>(
-      `/automations/${id}`,
+      path`/automations/${id}`,
       apiPayload,
       requestOptions,
     );
@@ -136,7 +137,7 @@ export class Automations {
     requestOptions: RequestOptions = {},
   ): Promise<DuplicateAutomationResponse> {
     const data = await this.resend.post<DuplicateAutomationResponseSuccess>(
-      `/automations/${id}/duplicate`,
+      path`/automations/${id}/duplicate`,
       undefined,
       requestOptions,
     );
@@ -148,7 +149,7 @@ export class Automations {
     requestOptions: RequestOptions = {},
   ): Promise<StopAutomationResponse> {
     const data = await this.resend.post<StopAutomationResponseSuccess>(
-      `/automations/${id}/stop`,
+      path`/automations/${id}/stop`,
       undefined,
       requestOptions,
     );

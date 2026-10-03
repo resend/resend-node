@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../../../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../../../common/utils/build-pagination-query';
+import { path } from '../../../common/utils/path';
 import type { Resend } from '../../../resend';
 import type {
   GetAttachmentOptions,
@@ -20,7 +21,7 @@ export class Attachments {
     const { emailId, id } = options;
 
     const data = await this.resend.get<GetAttachmentResponseSuccess>(
-      `/emails/receiving/${emailId}/attachments/${id}`,
+      path`/emails/receiving/${emailId}/attachments/${id}`,
       requestOptions,
     );
 
@@ -34,7 +35,7 @@ export class Attachments {
     const { emailId } = options;
 
     const url = buildPaginationUrl(
-      `/emails/receiving/${emailId}/attachments`,
+      path`/emails/receiving/${emailId}/attachments`,
       options,
     );
 

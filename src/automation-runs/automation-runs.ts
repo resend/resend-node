@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
   GetAutomationRunOptions,
@@ -20,7 +21,7 @@ export class AutomationRuns {
     requestOptions: RequestOptions = {},
   ): Promise<GetAutomationRunResponse> {
     const data = await this.resend.get<GetAutomationRunResponseSuccess>(
-      `/automations/${options.automationId}/runs/${options.runId}`,
+      path`/automations/${options.automationId}/runs/${options.runId}`,
       requestOptions,
     );
     return data;
@@ -41,9 +42,8 @@ export class AutomationRuns {
     }
 
     const qs = searchParams.toString();
-    const url = qs
-      ? `/automations/${options.automationId}/runs?${qs}`
-      : `/automations/${options.automationId}/runs`;
+    const basePath = path`/automations/${options.automationId}/runs`;
+    const url = qs ? `${basePath}?${qs}` : basePath;
 
     const data = await this.resend.get<ListAutomationRunsResponseSuccess>(
       url,

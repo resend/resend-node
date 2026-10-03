@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
+import { path } from '../../common/utils/path';
 import type { Resend } from '../../resend';
 import type {
   ContactImportColumnMap,
@@ -62,7 +63,7 @@ export class ContactImports {
     requestOptions: RequestOptions = {},
   ): Promise<GetContactImportResponse> {
     return this.resend.get<GetContactImportResponseSuccess>(
-      `/contacts/imports/${id}`,
+      path`/contacts/imports/${id}`,
       requestOptions,
     );
   }

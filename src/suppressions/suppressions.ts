@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import { Batch } from './batch/batch';
 import type {
@@ -71,7 +72,7 @@ export class Suppressions {
     }
 
     return this.resend.get<GetSuppressionResponseSuccess>(
-      `/suppressions/${encodeURIComponent(idOrEmail)}`,
+      path`/suppressions/${idOrEmail}`,
       requestOptions,
     );
   }
@@ -85,7 +86,7 @@ export class Suppressions {
     }
 
     return this.resend.delete<RemoveSuppressionResponseSuccess>(
-      `/suppressions/${encodeURIComponent(idOrEmail)}`,
+      path`/suppressions/${idOrEmail}`,
       undefined,
       requestOptions,
     );

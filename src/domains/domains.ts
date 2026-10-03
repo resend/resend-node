@@ -1,6 +1,7 @@
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseDomainToApiOptions } from '../common/utils/parse-domain-to-api-options';
+import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import { DomainClaims } from './claims/domain-claims';
 import type {
@@ -69,7 +70,7 @@ export class Domains {
     requestOptions: RequestOptions = {},
   ): Promise<GetDomainResponse> {
     const data = await this.resend.get<GetDomainResponseSuccess>(
-      `/domains/${id}`,
+      path`/domains/${id}`,
       requestOptions,
     );
 
@@ -81,7 +82,7 @@ export class Domains {
     requestOptions: RequestOptions = {},
   ): Promise<UpdateDomainsResponse> {
     const data = await this.resend.patch<UpdateDomainsResponseSuccess>(
-      `/domains/${payload.id}`,
+      path`/domains/${payload.id}`,
       {
         click_tracking: payload.clickTracking,
         open_tracking: payload.openTracking,
@@ -99,7 +100,7 @@ export class Domains {
     requestOptions: RequestOptions = {},
   ): Promise<RemoveDomainsResponse> {
     const data = await this.resend.delete<RemoveDomainsResponseSuccess>(
-      `/domains/${id}`,
+      path`/domains/${id}`,
       undefined,
       requestOptions,
     );
@@ -111,7 +112,7 @@ export class Domains {
     requestOptions: RequestOptions = {},
   ): Promise<VerifyDomainsResponse> {
     const data = await this.resend.post<VerifyDomainsResponseSuccess>(
-      `/domains/${id}/verify`,
+      path`/domains/${id}/verify`,
       undefined,
       requestOptions,
     );

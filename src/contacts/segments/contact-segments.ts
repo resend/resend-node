@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
+import { path } from '../../common/utils/path';
 import type { Resend } from '../../resend';
 import type {
   AddContactSegmentOptions,
@@ -37,7 +38,10 @@ export class ContactSegments {
     }
 
     const identifier = options.email ? options.email : options.contactId;
-    const url = buildPaginationUrl(`/contacts/${identifier}/segments`, options);
+    const url = buildPaginationUrl(
+      path`/contacts/${identifier}/segments`,
+      options,
+    );
 
     const data = await this.resend.get<ListContactSegmentsResponseSuccess>(
       url,
@@ -64,7 +68,7 @@ export class ContactSegments {
 
     const identifier = options.email ? options.email : options.contactId;
     return this.resend.post<AddContactSegmentResponseSuccess>(
-      `/contacts/${identifier}/segments/${options.segmentId}`,
+      path`/contacts/${identifier}/segments/${options.segmentId}`,
       undefined,
       requestOptions,
     );
@@ -88,7 +92,7 @@ export class ContactSegments {
 
     const identifier = options.email ? options.email : options.contactId;
     return this.resend.delete<RemoveContactSegmentResponseSuccess>(
-      `/contacts/${identifier}/segments/${options.segmentId}`,
+      path`/contacts/${identifier}/segments/${options.segmentId}`,
       undefined,
       requestOptions,
     );
