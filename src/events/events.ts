@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseEventToApiOptions } from '../common/utils/parse-automation-to-api-options';
 import { path } from '../common/utils/path';
@@ -34,51 +35,76 @@ import type {
 export class Events {
   constructor(private readonly resend: Resend) {}
 
-  async send(payload: SendEventOptions): Promise<SendEventResponse> {
+  async send(
+    payload: SendEventOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<SendEventResponse> {
     const data = await this.resend.post<SendEventResponseSuccess>(
       '/events/send',
       parseEventToApiOptions(payload),
+      requestOptions,
     );
 
     return data;
   }
 
-  async create(payload: CreateEventOptions): Promise<CreateEventResponse> {
+  async create(
+    payload: CreateEventOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<CreateEventResponse> {
     const data = await this.resend.post<CreateEventResponseSuccess>(
       '/events',
       payload,
+      requestOptions,
     );
 
     return data;
   }
 
-  async get(identifier: string): Promise<GetEventResponse> {
+  async get(
+    identifier: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetEventResponse> {
     const data = await this.resend.get<GetEventResponseSuccess>(
       path`/events/${identifier}`,
+      requestOptions,
     );
     return data;
   }
 
-  async list(options: ListEventsOptions = {}): Promise<ListEventsResponse> {
+  async list(
+    options: ListEventsOptions = {},
+    requestOptions: RequestOptions = {},
+  ): Promise<ListEventsResponse> {
     const url = buildPaginationUrl('/events', options);
-    const data = await this.resend.get<ListEventsResponseSuccess>(url);
+    const data = await this.resend.get<ListEventsResponseSuccess>(
+      url,
+      requestOptions,
+    );
     return data;
   }
 
   async update(
     identifier: string,
     payload: UpdateEventOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateEventResponse> {
     const data = await this.resend.patch<UpdateEventResponseSuccess>(
       path`/events/${identifier}`,
       payload,
+      requestOptions,
     );
     return data;
   }
 
-  async remove(identifier: string): Promise<RemoveEventResponse> {
+  async remove(
+    identifier: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveEventResponse> {
     const data = await this.resend.delete<RemoveEventResponseSuccess>(
       path`/events/${identifier}`,
+      undefined,
+      requestOptions,
     );
     return data;
   }

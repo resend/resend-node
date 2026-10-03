@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
 import { path } from '../../common/utils/path';
 import type { Resend } from '../../resend';
@@ -22,6 +23,7 @@ export class ContactSegments {
 
   async list(
     options: ListContactSegmentsOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<ListContactSegmentsResponse> {
     if (!options.contactId && !options.email) {
       return {
@@ -41,12 +43,16 @@ export class ContactSegments {
       options,
     );
 
-    const data = await this.resend.get<ListContactSegmentsResponseSuccess>(url);
+    const data = await this.resend.get<ListContactSegmentsResponseSuccess>(
+      url,
+      requestOptions,
+    );
     return data;
   }
 
   async add(
     options: AddContactSegmentOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<AddContactSegmentResponse> {
     if (!options.contactId && !options.email) {
       return {
@@ -63,11 +69,14 @@ export class ContactSegments {
     const identifier = options.email ? options.email : options.contactId;
     return this.resend.post<AddContactSegmentResponseSuccess>(
       path`/contacts/${identifier}/segments/${options.segmentId}`,
+      undefined,
+      requestOptions,
     );
   }
 
   async remove(
     options: RemoveContactSegmentOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<RemoveContactSegmentResponse> {
     if (!options.contactId && !options.email) {
       return {
@@ -84,6 +93,8 @@ export class ContactSegments {
     const identifier = options.email ? options.email : options.contactId;
     return this.resend.delete<RemoveContactSegmentResponseSuccess>(
       path`/contacts/${identifier}/segments/${options.segmentId}`,
+      undefined,
+      requestOptions,
     );
   }
 }

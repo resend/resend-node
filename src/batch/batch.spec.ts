@@ -15,6 +15,85 @@ describe('Batch', () => {
   afterEach(() => fetchMock.resetMocks());
   afterAll(() => fetchMocker.disableMocks());
 
+  describe('request headers', () => {
+    const payload: CreateBatchOptions = [
+      {
+        from: 'admin@resend.com',
+        to: 'user@resend.com',
+        subject: 'Hello',
+        text: 'Hello',
+      },
+    ];
+
+    function sentHeaders() {
+      return new Headers(fetchMock.mock.calls[0][1]?.headers);
+    }
+
+    it.each([
+      ['a plain object', { 'X-Trace-Id': 'trace-123' }],
+      ['a Headers instance', new Headers({ 'X-Trace-Id': 'trace-123' })],
+      [
+        'an array of pairs',
+        [['X-Trace-Id', 'trace-123']] as [string, string][],
+      ],
+    ])('sends custom headers passed as %s', async (_, headers) => {
+      mockSuccessResponse({ data: [] });
+
+      await resend.batch.send(payload, { headers });
+
+      expect(sentHeaders().get('X-Trace-Id')).toBe('trace-123');
+      expect(sentHeaders().get('x-batch-validation')).toBe('strict');
+    });
+
+    it('lets a custom x-batch-validation header win in any casing', async () => {
+      mockSuccessResponse({ data: [] });
+
+      await resend.batch.send(payload, {
+        headers: { 'X-Batch-Validation': 'permissive' },
+      });
+
+      expect(sentHeaders().get('x-batch-validation')).toBe('permissive');
+    });
+
+    it('lets a custom x-batch-validation header win over the batchValidation option', async () => {
+      mockSuccessResponse({ data: [] });
+
+      await resend.batch.send(payload, {
+        batchValidation: 'strict',
+        headers: { 'X-Batch-Validation': 'permissive' },
+      });
+
+      expect(sentHeaders().get('x-batch-validation')).toBe('permissive');
+    });
+
+    it('sends the idempotency key together with custom headers', async () => {
+      mockSuccessResponse({ data: [] });
+
+      await resend.batch.send(payload, {
+        idempotencyKey: 'key-123',
+        headers: new Headers({ 'X-Trace-Id': 'trace-123' }),
+      });
+
+      expect(sentHeaders().get('Idempotency-Key')).toBe('key-123');
+      expect(sentHeaders().get('X-Trace-Id')).toBe('trace-123');
+    });
+
+    it.each([
+      null,
+      false,
+      0,
+      '',
+    ])('treats %o headers as no custom headers', async (headers) => {
+      mockSuccessResponse({ data: [] });
+
+      await resend.batch.send(payload, {
+        headers: headers as unknown as HeadersInit,
+      });
+
+      expect(sentHeaders().get('x-batch-validation')).toBe('strict');
+    });
+  });
+
   describe('create', () => {
     it('sends multiple emails', async () => {
       const payload: CreateBatchOptions = [

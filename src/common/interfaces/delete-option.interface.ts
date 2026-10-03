@@ -1,3 +1,3 @@
-export interface DeleteOptions {
-  headers?: HeadersInit;
-}
+import type { RequestOptions } from './request-options.interface';
+
+export interface DeleteOptions extends RequestOptions {}

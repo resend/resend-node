@@ -1,4 +1,5 @@
 import { Webhook } from 'standardwebhooks';
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
@@ -54,55 +55,75 @@ export class Webhooks {
 
   async create(
     payload: CreateWebhookOptions,
-    options: CreateWebhookRequestOptions = {},
+    requestOptions: CreateWebhookRequestOptions = {},
   ): Promise<CreateWebhookResponse> {
     const data = await this.resend.post<CreateWebhookResponseSuccess>(
       '/webhooks',
       payload,
-      options,
+      requestOptions,
     );
     return data;
   }
 
-  async get(id: string): Promise<GetWebhookResponse> {
+  async get(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetWebhookResponse> {
     const data = await this.resend.get<GetWebhookResponseSuccess>(
       path`/webhooks/${id}`,
+      requestOptions,
     );
 
     return data;
   }
 
-  async list(options: ListWebhooksOptions = {}): Promise<ListWebhooksResponse> {
+  async list(
+    options: ListWebhooksOptions = {},
+    requestOptions: RequestOptions = {},
+  ): Promise<ListWebhooksResponse> {
     const url = buildPaginationUrl('/webhooks', options);
 
-    const data = await this.resend.get<ListWebhooksResponseSuccess>(url);
+    const data = await this.resend.get<ListWebhooksResponseSuccess>(
+      url,
+      requestOptions,
+    );
     return data;
   }
 
   async update(
     id: string,
     payload: UpdateWebhookOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateWebhookResponse> {
     const data = await this.resend.patch<UpdateWebhookResponseSuccess>(
       path`/webhooks/${id}`,
       payload,
+      requestOptions,
     );
     return data;
   }
 
-  async remove(id: string): Promise<RemoveWebhookResponse> {
+  async remove(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveWebhookResponse> {
     const data = await this.resend.delete<RemoveWebhookResponseSuccess>(
       path`/webhooks/${id}`,
+      undefined,
+      requestOptions,
     );
     return data;
   }
 
   async rotateSigningSecret(
     id: string,
+    requestOptions: RequestOptions = {},
   ): Promise<RotateWebhookSigningSecretResponse> {
     const data =
       await this.resend.post<RotateWebhookSigningSecretResponseSuccess>(
         path`/webhooks/${id}/signing-secret/rotate`,
+        undefined,
+        requestOptions,
       );
     return data;
   }

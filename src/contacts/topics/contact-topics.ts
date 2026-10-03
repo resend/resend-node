@@ -3,11 +3,13 @@ import { path } from '../../common/utils/path';
 import type { Resend } from '../../resend';
 import type {
   ListContactTopicsOptions,
+  ListContactTopicsRequestOptions,
   ListContactTopicsResponse,
   ListContactTopicsResponseSuccess,
 } from './interfaces/list-contact-topics.interface';
 import type {
   UpdateContactTopicsOptions,
+  UpdateContactTopicsRequestOptions,
   UpdateContactTopicsResponse,
   UpdateContactTopicsResponseSuccess,
 } from './interfaces/update-contact-topics.interface';
@@ -17,6 +19,7 @@ export class ContactTopics {
 
   async update(
     payload: UpdateContactTopicsOptions,
+    requestOptions: UpdateContactTopicsRequestOptions = {},
   ): Promise<UpdateContactTopicsResponse> {
     if (!payload.id && !payload.email) {
       return {
@@ -34,11 +37,13 @@ export class ContactTopics {
     return this.resend.patch<UpdateContactTopicsResponseSuccess>(
       path`/contacts/${identifier}/topics`,
       payload.topics,
+      requestOptions,
     );
   }
 
   async list(
     options: ListContactTopicsOptions,
+    requestOptions: ListContactTopicsRequestOptions = {},
   ): Promise<ListContactTopicsResponse> {
     if (!options.id && !options.email) {
       return {
@@ -58,6 +63,9 @@ export class ContactTopics {
       options,
     );
 
-    return this.resend.get<ListContactTopicsResponseSuccess>(url);
+    return this.resend.get<ListContactTopicsResponseSuccess>(
+      url,
+      requestOptions,
+    );
   }
 }

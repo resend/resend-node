@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import { buildPaginationQuery } from '../../common/utils/build-pagination-query';
 import { path } from '../../common/utils/path';
 import type { Resend } from '../../resend';
@@ -25,19 +26,20 @@ export class ContactImports {
 
   async create(
     payload: CreateContactImportOptions,
-    options: CreateContactImportRequestOptions = {},
+    requestOptions: CreateContactImportRequestOptions = {},
   ): Promise<CreateContactImportResponse> {
     const formData = this.buildCreateFormData(payload);
 
     return this.resend.post<CreateContactImportResponseSuccess>(
       '/contacts/imports',
       formData,
-      options,
+      requestOptions,
     );
   }
 
   async list(
     options: ListContactImportsOptions = {},
+    requestOptions: RequestOptions = {},
   ): Promise<ListContactImportsResponse> {
     const searchParams = new URLSearchParams(buildPaginationQuery(options));
 
@@ -50,12 +52,19 @@ export class ContactImports {
       ? `/contacts/imports?${queryString}`
       : '/contacts/imports';
 
-    return this.resend.get<ListContactImportsResponseSuccess>(url);
+    return this.resend.get<ListContactImportsResponseSuccess>(
+      url,
+      requestOptions,
+    );
   }
 
-  async get(id: string): Promise<GetContactImportResponse> {
+  async get(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetContactImportResponse> {
     return this.resend.get<GetContactImportResponseSuccess>(
       path`/contacts/imports/${id}`,
+      requestOptions,
     );
   }
 

@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import {
   parseContactPropertyFromApi,
@@ -34,22 +35,28 @@ export class ContactProperties {
 
   async create(
     options: CreateContactPropertyOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<CreateContactPropertyResponse> {
     const apiOptions = parseContactPropertyToApiOptions(options);
     const data = await this.resend.post<CreateContactPropertyResponseSuccess>(
       '/contact-properties',
       apiOptions,
+      requestOptions,
     );
     return data;
   }
 
   async list(
     options: ListContactPropertiesOptions = {},
+    requestOptions: RequestOptions = {},
   ): Promise<ListContactPropertiesResponse> {
     const url = buildPaginationUrl('/contact-properties', options);
 
     const response =
-      await this.resend.get<ListContactPropertiesResponseSuccess>(url);
+      await this.resend.get<ListContactPropertiesResponseSuccess>(
+        url,
+        requestOptions,
+      );
 
     if (response.data) {
       return {
@@ -67,7 +74,10 @@ export class ContactProperties {
     return response;
   }
 
-  async get(id: string): Promise<GetContactPropertyResponse> {
+  async get(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetContactPropertyResponse> {
     if (!id) {
       return {
         data: null,
@@ -81,6 +91,7 @@ export class ContactProperties {
     }
     const response = await this.resend.get<GetContactPropertyResponseSuccess>(
       path`/contact-properties/${id}`,
+      requestOptions,
     );
 
     if (response.data) {
@@ -99,6 +110,7 @@ export class ContactProperties {
 
   async update(
     payload: UpdateContactPropertyOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateContactPropertyResponse> {
     if (!payload.id) {
       return {
@@ -116,11 +128,15 @@ export class ContactProperties {
     const data = await this.resend.patch<UpdateContactPropertyResponseSuccess>(
       path`/contact-properties/${payload.id}`,
       apiOptions,
+      requestOptions,
     );
     return data;
   }
 
-  async remove(id: string): Promise<RemoveContactPropertyResponse> {
+  async remove(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveContactPropertyResponse> {
     if (!id) {
       return {
         data: null,
@@ -134,6 +150,8 @@ export class ContactProperties {
     }
     const data = await this.resend.delete<RemoveContactPropertyResponseSuccess>(
       path`/contact-properties/${id}`,
+      undefined,
+      requestOptions,
     );
     return data;
   }

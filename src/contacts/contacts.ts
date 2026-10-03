@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
@@ -45,16 +46,16 @@ export class Contacts {
 
   async create(
     payload: CreateContactOptions,
-    options?: CreateContactRequestOptions,
+    requestOptions?: CreateContactRequestOptions,
   ): Promise<CreateContactResponse>;
   async create(
     payload: LegacyCreateContactOptions,
-    options?: CreateContactRequestOptions,
+    requestOptions?: CreateContactRequestOptions,
   ): Promise<CreateContactResponse>;
 
   async create(
     payload: CreateContactOptions | LegacyCreateContactOptions,
-    options: CreateContactRequestOptions = {},
+    requestOptions: CreateContactRequestOptions = {},
   ): Promise<CreateContactResponse> {
     // Legacy create contact endpoint
     if ('audienceId' in payload) {
@@ -80,7 +81,7 @@ export class Contacts {
           last_name: payload.lastName,
           properties: payload.properties,
         },
-        options,
+        requestOptions,
       );
       return data;
     }
@@ -97,16 +98,22 @@ export class Contacts {
         segments: payload.segments,
         topics: payload.topics,
       },
-      options,
+      requestOptions,
     );
     return data;
   }
 
-  async list(options: ListContactsOptions = {}): Promise<ListContactsResponse> {
+  async list(
+    options: ListContactsOptions = {},
+    requestOptions: RequestOptions = {},
+  ): Promise<ListContactsResponse> {
     const segmentId = options.segmentId ?? options.audienceId;
     if (!segmentId) {
       const url = buildPaginationUrl('/contacts', options);
-      const data = await this.resend.get<ListContactsResponseSuccess>(url);
+      const data = await this.resend.get<ListContactsResponseSuccess>(
+        url,
+        requestOptions,
+      );
       return data;
     }
 
@@ -114,14 +121,21 @@ export class Contacts {
       path`/segments/${segmentId}/contacts`,
       options,
     );
-    const data = await this.resend.get<ListContactsResponseSuccess>(url);
+    const data = await this.resend.get<ListContactsResponseSuccess>(
+      url,
+      requestOptions,
+    );
     return data;
   }
 
-  async get(options: GetContactOptions): Promise<GetContactResponse> {
+  async get(
+    options: GetContactOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetContactResponse> {
     if (typeof options === 'string') {
       return this.resend.get<GetContactResponseSuccess>(
         path`/contacts/${options}`,
+        requestOptions,
       );
     }
 
@@ -140,15 +154,20 @@ export class Contacts {
     if (!options.audienceId) {
       return this.resend.get<GetContactResponseSuccess>(
         path`/contacts/${options?.email ? options?.email : options?.id}`,
+        requestOptions,
       );
     }
 
     return this.resend.get<GetContactResponseSuccess>(
       path`/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
+      requestOptions,
     );
   }
 
-  async update(options: UpdateContactOptions): Promise<UpdateContactResponse> {
+  async update(
+    options: UpdateContactOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<UpdateContactResponse> {
     if (!options.id && !options.email) {
       return {
         data: null,
@@ -170,6 +189,7 @@ export class Contacts {
           last_name: options.lastName,
           properties: options.properties,
         },
+        requestOptions,
       );
       return data;
     }
@@ -182,14 +202,20 @@ export class Contacts {
         last_name: options.lastName,
         properties: options.properties,
       },
+      requestOptions,
     );
     return data;
   }
 
-  async remove(payload: RemoveContactOptions): Promise<RemoveContactsResponse> {
+  async remove(
+    payload: RemoveContactOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveContactsResponse> {
     if (typeof payload === 'string') {
       return this.resend.delete<RemoveContactsResponseSuccess>(
         path`/contacts/${payload}`,
+        undefined,
+        requestOptions,
       );
     }
 
@@ -208,6 +234,8 @@ export class Contacts {
     if (!payload.audienceId) {
       return this.resend.delete<RemoveContactsResponseSuccess>(
         path`/contacts/${payload?.email ? payload?.email : payload?.id}`,
+        undefined,
+        requestOptions,
       );
     }
 
@@ -215,6 +243,8 @@ export class Contacts {
       path`/audiences/${payload.audienceId}/contacts/${
         payload?.email ? payload?.email : payload?.id
       }`,
+      undefined,
+      requestOptions,
     );
   }
 }

@@ -127,6 +127,8 @@ export class Resend {
       };
     }
 
+    const { signal } = options as RequestInit;
+
     try {
       const response = await fetch(`${this.baseUrl}${path}`, options);
 
@@ -143,6 +145,10 @@ export class Resend {
             headers: Object.fromEntries(response.headers.entries()),
           };
         } catch (err) {
+          if (signal?.aborted && err === signal.reason) {
+            throw err;
+          }
+
           if (err instanceof SyntaxError) {
             const error: ErrorResponse = {
               name: 'application_error',

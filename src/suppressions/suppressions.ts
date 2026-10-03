@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
@@ -38,39 +39,56 @@ export class Suppressions {
     this.batch = new Batch(resend);
   }
 
-  async add(options: AddSuppressionOptions): Promise<AddSuppressionResponse> {
+  async add(
+    options: AddSuppressionOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<AddSuppressionResponse> {
     return this.resend.post<AddSuppressionResponseSuccess>(
       '/suppressions',
       options,
+      requestOptions,
     );
   }
 
   async list(
     options: ListSuppressionsOptions = {},
+    requestOptions: RequestOptions = {},
   ): Promise<ListSuppressionsResponse> {
     const queryString = buildSuppressionsQuery(options);
     const url = queryString ? `/suppressions?${queryString}` : '/suppressions';
 
-    return this.resend.get<ListSuppressionsResponseSuccess>(url);
+    return this.resend.get<ListSuppressionsResponseSuccess>(
+      url,
+      requestOptions,
+    );
   }
 
-  async get(idOrEmail: string): Promise<GetSuppressionResponse> {
+  async get(
+    idOrEmail: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetSuppressionResponse> {
     if (!idOrEmail) {
       return missingIdentifierError();
     }
 
     return this.resend.get<GetSuppressionResponseSuccess>(
       path`/suppressions/${idOrEmail}`,
+      requestOptions,
     );
   }
 
-  async remove(idOrEmail: string): Promise<RemoveSuppressionResponse> {
+  async remove(
+    idOrEmail: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveSuppressionResponse> {
     if (!idOrEmail) {
       return missingIdentifierError();
     }
 
     return this.resend.delete<RemoveSuppressionResponseSuccess>(
       path`/suppressions/${idOrEmail}`,
+      undefined,
+      requestOptions,
     );
   }
 }

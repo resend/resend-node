@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
 import type {
@@ -26,24 +27,37 @@ import type {
 export class Topics {
   constructor(private readonly resend: Resend) {}
 
-  async create(payload: CreateTopicOptions): Promise<CreateTopicResponse> {
+  async create(
+    payload: CreateTopicOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<CreateTopicResponse> {
     const { defaultSubscription, ...body } = payload;
 
-    const data = await this.resend.post<CreateTopicResponseSuccess>('/topics', {
-      ...body,
-      default_subscription: defaultSubscription,
-    });
+    const data = await this.resend.post<CreateTopicResponseSuccess>(
+      '/topics',
+      {
+        ...body,
+        default_subscription: defaultSubscription,
+      },
+      requestOptions,
+    );
 
     return data;
   }
 
-  async list(): Promise<ListTopicsResponse> {
-    const data = await this.resend.get<ListTopicsResponseSuccess>('/topics');
+  async list(requestOptions: RequestOptions = {}): Promise<ListTopicsResponse> {
+    const data = await this.resend.get<ListTopicsResponseSuccess>(
+      '/topics',
+      requestOptions,
+    );
 
     return data;
   }
 
-  async get(id: string): Promise<GetTopicResponse> {
+  async get(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetTopicResponse> {
     if (!id) {
       return {
         data: null,
@@ -57,12 +71,16 @@ export class Topics {
     }
     const data = await this.resend.get<GetTopicResponseSuccess>(
       path`/topics/${id}`,
+      requestOptions,
     );
 
     return data;
   }
 
-  async update(payload: UpdateTopicOptions): Promise<UpdateTopicResponse> {
+  async update(
+    payload: UpdateTopicOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<UpdateTopicResponse> {
     if (!payload.id) {
       return {
         data: null,
@@ -78,12 +96,16 @@ export class Topics {
     const data = await this.resend.patch<UpdateTopicResponseSuccess>(
       path`/topics/${payload.id}`,
       payload,
+      requestOptions,
     );
 
     return data;
   }
 
-  async remove(id: string): Promise<RemoveTopicResponse> {
+  async remove(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveTopicResponse> {
     if (!id) {
       return {
         data: null,
@@ -98,6 +120,8 @@ export class Topics {
 
     const data = await this.resend.delete<RemoveTopicResponseSuccess>(
       path`/topics/${id}`,
+      undefined,
+      requestOptions,
     );
 
     return data;

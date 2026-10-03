@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { path } from '../common/utils/path';
 import type { Resend } from '../resend';
@@ -27,38 +28,51 @@ export class ApiKeys {
 
   async create(
     payload: CreateApiKeyOptions,
-    options: CreateApiKeyRequestOptions = {},
+    requestOptions: CreateApiKeyRequestOptions = {},
   ): Promise<CreateApiKeyResponse> {
     const data = await this.resend.post<CreateApiKeyResponseSuccess>(
       '/api-keys',
       payload,
-      options,
+      requestOptions,
     );
 
     return data;
   }
 
-  async list(options: ListApiKeysOptions = {}): Promise<ListApiKeysResponse> {
+  async list(
+    options: ListApiKeysOptions = {},
+    requestOptions: RequestOptions = {},
+  ): Promise<ListApiKeysResponse> {
     const url = buildPaginationUrl('/api-keys', options);
 
-    const data = await this.resend.get<ListApiKeysResponseSuccess>(url);
+    const data = await this.resend.get<ListApiKeysResponseSuccess>(
+      url,
+      requestOptions,
+    );
     return data;
   }
 
   async update(
     id: string,
     payload: UpdateApiKeyOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<UpdateApiKeyResponse> {
     const data = await this.resend.patch<UpdateApiKeyResponseSuccess>(
       path`/api-keys/${id}`,
       payload,
+      requestOptions,
     );
     return data;
   }
 
-  async remove(id: string): Promise<RemoveApiKeyResponse> {
+  async remove(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<RemoveApiKeyResponse> {
     const data = await this.resend.delete<RemoveApiKeyResponseSuccess>(
       path`/api-keys/${id}`,
+      undefined,
+      requestOptions,
     );
     return data;
   }

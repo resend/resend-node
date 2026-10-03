@@ -1,3 +1,4 @@
+import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseEmailToApiOptions } from '../common/utils/parse-email-to-api-options';
 import { path } from '../common/utils/path';
@@ -51,14 +52,14 @@ export class Emails {
 
   async send(
     payload: CreateEmailOptions,
-    options: CreateEmailRequestOptions = {},
+    requestOptions: CreateEmailRequestOptions = {},
   ) {
-    return this.create(payload, options);
+    return this.create(payload, requestOptions);
   }
 
   async create(
     payload: CreateEmailOptions,
-    options: CreateEmailRequestOptions = {},
+    requestOptions: CreateEmailRequestOptions = {},
   ): Promise<CreateEmailResponse> {
     const body: CreateEmailOptions = { ...payload };
 
@@ -69,41 +70,60 @@ export class Emails {
     const data = await this.resend.post<CreateEmailResponseSuccess>(
       '/emails',
       parseEmailToApiOptions(body),
-      options,
+      requestOptions,
     );
 
     return data;
   }
 
-  async get(id: string): Promise<GetEmailResponse> {
+  async get(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<GetEmailResponse> {
     const data = await this.resend.get<GetEmailResponseSuccess>(
       path`/emails/${id}`,
+      requestOptions,
     );
 
     return data;
   }
 
-  async list(options: ListEmailsOptions = {}): Promise<ListEmailsResponse> {
+  async list(
+    options: ListEmailsOptions = {},
+    requestOptions: RequestOptions = {},
+  ): Promise<ListEmailsResponse> {
     const url = buildPaginationUrl('/emails', options);
 
-    const data = await this.resend.get<ListEmailsResponseSuccess>(url);
+    const data = await this.resend.get<ListEmailsResponseSuccess>(
+      url,
+      requestOptions,
+    );
 
     return data;
   }
 
-  async update(payload: UpdateEmailOptions): Promise<UpdateEmailResponse> {
+  async update(
+    payload: UpdateEmailOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<UpdateEmailResponse> {
     const data = await this.resend.patch<UpdateEmailResponseSuccess>(
       path`/emails/${payload.id}`,
       {
         scheduled_at: payload.scheduledAt,
       },
+      requestOptions,
     );
     return data;
   }
 
-  async cancel(id: string): Promise<CancelEmailResponse> {
+  async cancel(
+    id: string,
+    requestOptions: RequestOptions = {},
+  ): Promise<CancelEmailResponse> {
     const data = await this.resend.post<CancelEmailResponseSuccess>(
       path`/emails/${id}/cancel`,
+      undefined,
+      requestOptions,
     );
     return data;
   }
@@ -111,23 +131,29 @@ export class Emails {
   async share(
     id: string,
     payload?: ShareEmailOptions,
+    requestOptions: RequestOptions = {},
   ): Promise<ShareEmailResponse> {
     const data = await this.resend.post<ShareEmailResponseSuccess>(
       path`/emails/${id}/share`,
       { expires_in: payload?.expiresIn },
+      requestOptions,
     );
     return data;
   }
 
   async metrics(
     options: GetEmailsMetricsOptions = {},
+    requestOptions: RequestOptions = {},
   ): Promise<GetEmailsMetricsResponse> {
     const queryString = buildMetricsQuery(options);
     const url = queryString
       ? `/emails/metrics?${queryString}`
       : '/emails/metrics';
 
-    const data = await this.resend.get<GetEmailsMetricsResponseSuccess>(url);
+    const data = await this.resend.get<GetEmailsMetricsResponseSuccess>(
+      url,
+      requestOptions,
+    );
     return data;
   }
 }
