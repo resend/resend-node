@@ -29,12 +29,12 @@ export class ChainableTemplateResult<
   async publish(
     requestOptions: RequestOptions = {},
   ): Promise<PublishTemplateResponse> {
-    const { data, error } = await this.promise;
+    const { data, error, headers } = await this.promise;
 
     if (error) {
       return {
         data: null,
-        headers: null,
+        headers,
         error,
       };
     }
