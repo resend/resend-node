@@ -1,3 +1,4 @@
+export * from '../agent/interfaces';
 export type * from '../drafts/interfaces';
 export type * from '../labels/interfaces';
 export type * from '../threads/interfaces';
