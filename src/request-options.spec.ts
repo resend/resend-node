@@ -147,6 +147,9 @@ const calls: Record<string, Call> = {
   'inboxes.get': (o) => resend.inboxes.get('id', o),
   'inboxes.update': (o) => resend.inboxes.update('id', { name: 'inbox' }, o),
   'inboxes.remove': (o) => resend.inboxes.remove('id', o),
+  'inboxes.agent.get': (o) => resend.inboxes.agent.get({ inboxId: 'id' }, o),
+  'inboxes.agent.update': (o) =>
+    resend.inboxes.agent.update({ inboxId: 'id', tone: 'calm' }, o),
   'inboxes.drafts.create': (o) =>
     resend.inboxes.drafts.create({ inboxId: 'id', subject: 's' }, o),
   'inboxes.drafts.list': (o) =>
