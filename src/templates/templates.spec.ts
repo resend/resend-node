@@ -697,6 +697,57 @@ describe('Templates', () => {
       `);
     });
 
+    describe.each([
+      'create',
+      'duplicate',
+    ] as const)('chaining after a failed %s', (operation) => {
+      it('preserves the failed request response headers without publishing', async () => {
+        const error: ErrorResponse = {
+          name: 'rate_limit_exceeded',
+          message: 'Too many requests',
+          statusCode: 429,
+        };
+        const headers = {
+          'content-type': 'application/json',
+          'retry-after': '60',
+          'x-request-id': 'initial-request',
+        };
+        mockErrorResponse(error, { status: 429, headers });
+
+        const resend = new Resend(TEST_API_KEY);
+        const request =
+          operation === 'create'
+            ? resend.templates.create({ name: 'Welcome', html: '<p>Hi</p>' })
+            : resend.templates.duplicate('original-template-id');
+        const initialResponse = await request;
+
+        expect(initialResponse).toEqual({ data: null, error, headers });
+        await expect(request.publish()).resolves.toEqual(initialResponse);
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+      });
+
+      it('keeps null headers for transport failures without publishing', async () => {
+        fetchMock.mockRejectOnce(new Error('Network failure'));
+
+        const resend = new Resend(TEST_API_KEY);
+        const request =
+          operation === 'create'
+            ? resend.templates.create({ name: 'Welcome', html: '<p>Hi</p>' })
+            : resend.templates.duplicate('original-template-id');
+
+        await expect(request.publish()).resolves.toEqual({
+          data: null,
+          error: {
+            name: 'application_error',
+            statusCode: null,
+            message: 'Unable to fetch data. The request could not be resolved.',
+          },
+          headers: null,
+        });
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+      });
+    });
+
     describe('chaining with create', () => {
       it('chains create().publish() successfully', async () => {
         const createResponse = {
@@ -718,6 +769,7 @@ describe('Templates', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
+              'x-request-id': 'create-request',
             },
           },
         );
@@ -731,6 +783,7 @@ describe('Templates', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
+              'x-request-id': 'publish-request',
             },
           },
         );
@@ -753,6 +806,7 @@ describe('Templates', () => {
             "error": null,
             "headers": {
               "content-type": "application/json",
+              "x-request-id": "publish-request",
             },
           }
         `);
@@ -779,6 +833,7 @@ describe('Templates', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
+              'x-request-id': 'duplicate-request',
             },
           },
         );
@@ -791,6 +846,7 @@ describe('Templates', () => {
             status: 200,
             headers: {
               'content-type': 'application/json',
+              'x-request-id': 'publish-request',
             },
           },
         );
@@ -808,6 +864,7 @@ describe('Templates', () => {
             "error": null,
             "headers": {
               "content-type": "application/json",
+              "x-request-id": "publish-request",
             },
           }
         `);
