@@ -1117,6 +1117,86 @@ hello world`;
       });
     });
 
+    describe('raw email bytes', () => {
+      const getEmailResponse: GetReceivingEmailResponseSuccess = {
+        object: 'email' as const,
+        id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+        to: ['received@example.com'],
+        from: 'original-sender@example.com',
+        created_at: '2023-04-07 23:13:52.669661+00',
+        subject: 'Caf\u00e9',
+        html: null,
+        text: 'caf\u00e9',
+        bcc: null,
+        cc: null,
+        reply_to: null,
+        received_for: [],
+        headers: {},
+        raw: {
+          download_url: 'https://example.com/raw-email-download',
+          expires_at: '2023-04-08 00:13:52.669661+00',
+        },
+        attachments: [],
+        message_id: 'msg_123',
+      };
+
+      // A message with an 8-bit ISO-8859-1 body: the byte 0xE9 is not valid UTF-8.
+      const latin1Message = Buffer.concat([
+        Buffer.from(
+          'From: original-sender@example.com\r\nTo: received@example.com\r\nSubject: Cafe\r\nContent-Type: text/plain; charset="ISO-8859-1"\r\nContent-Transfer-Encoding: 8bit\r\n\r\ncaf',
+          'latin1',
+        ),
+        Buffer.from([0xe9]),
+      ]);
+
+      beforeEach(() => {
+        fetchMock.mockOnce(JSON.stringify(getEmailResponse), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+        fetchMock.mockOnce(
+          new Response(latin1Message, {
+            status: 200,
+            headers: { 'content-type': 'message/rfc822' },
+          }),
+        );
+        fetchMock.mockOnce(JSON.stringify({ id: 'new-email-id' }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+      });
+
+      it('decodes the charset of the original message in passthrough mode', async () => {
+        await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+        });
+
+        const sendEmailBody = JSON.parse(
+          fetchMock.mock.calls[2][1]?.body as string,
+        );
+        expect(sendEmailBody.text.trim()).toBe('caf\u00e9');
+      });
+
+      it('attaches the original bytes unchanged in wrapped mode', async () => {
+        await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+          passthrough: false,
+          text: 'Forwarded message attached.',
+        });
+
+        const sendEmailBody = JSON.parse(
+          fetchMock.mock.calls[2][1]?.body as string,
+        );
+        expect(sendEmailBody.attachments[0].content).toBe(
+          latin1Message.toString('base64'),
+        );
+      });
+    });
+
     describe('request options', () => {
       const getEmailResponse: GetReceivingEmailResponseSuccess = {
         object: 'email' as const,
