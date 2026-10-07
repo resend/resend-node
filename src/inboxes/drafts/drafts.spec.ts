@@ -257,5 +257,28 @@ describe('Inbox drafts', () => {
         }),
       );
     });
+
+    it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
+      fetchMock.mockOnce(JSON.stringify({}), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const idempotencyKey = 'unique-key-123';
+
+      await resend.inboxes.drafts.send(
+        { inboxId, draftId },
+        { idempotencyKey },
+      );
+
+      const lastCall = fetchMock.mock.calls[0];
+      expect(lastCall).toBeDefined();
+
+      const headers = new Headers(lastCall[1]?.headers);
+      expect(headers.has('Idempotency-Key')).toBe(true);
+      expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
+    });
   });
 });

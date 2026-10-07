@@ -1,4 +1,5 @@
 import type { PostOptions } from '../../../common/interfaces';
+import type { IdempotentRequest } from '../../../common/interfaces/idempotent-request.interface';
 import type { Response } from '../../../interfaces';
 import type { ReplyInboxThreadEmailResponseSuccess } from './reply-inbox-thread-email.interface';
 
@@ -14,7 +15,9 @@ export interface ForwardInboxThreadEmailOptions {
   subject?: string;
 }
 
-export interface ForwardInboxThreadEmailRequestOptions extends PostOptions {}
+export interface ForwardInboxThreadEmailRequestOptions
+  extends PostOptions,
+    IdempotentRequest {}
 
 export type ForwardInboxThreadEmailResponseSuccess =
   ReplyInboxThreadEmailResponseSuccess;
