@@ -57,11 +57,20 @@ export class InboxThreadEmails {
     payload: ReplyInboxThreadEmailOptions,
     options: ReplyInboxThreadEmailRequestOptions = {},
   ): Promise<ReplyInboxThreadEmailResponse> {
-    const { inboxId, threadId, emailId, cc, bcc, html, text, subject } =
-      payload;
+    const {
+      inboxId,
+      threadId,
+      emailId,
+      cc,
+      bcc,
+      html,
+      text,
+      subject,
+      replyAll,
+    } = payload;
     return this.resend.post<ReplyInboxThreadEmailResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
-      { cc, bcc, html, text, subject },
+      { cc, bcc, html, text, subject, reply_all: replyAll },
       options,
     );
   }

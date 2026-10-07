@@ -17,6 +17,7 @@ export type ReplyInboxThreadEmailOptions = {
     cc?: string | string[];
     bcc?: string | string[];
     subject?: string;
+    replyAll?: boolean;
   };
 
 export interface ReplyInboxThreadEmailRequestOptions

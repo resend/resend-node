@@ -179,6 +179,34 @@ describe('Inbox thread emails', () => {
       );
     });
 
+    it('sends reply_all', async () => {
+      fetchMock.mockOnce(JSON.stringify({}), {
+        status: 201,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.threads.emails.reply({
+        inboxId,
+        threadId,
+        emailId,
+        text: 'Thanks, sent.',
+        replyAll: true,
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            text: 'Thanks, sent.',
+            reply_all: true,
+          }),
+        }),
+      );
+    });
+
     it('returns a validation error', async () => {
       const error: ErrorResponse = {
         name: 'missing_required_field',
