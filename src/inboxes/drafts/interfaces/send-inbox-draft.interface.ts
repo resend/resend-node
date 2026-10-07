@@ -1,4 +1,5 @@
 import type { PostOptions } from '../../../common/interfaces';
+import type { IdempotentRequest } from '../../../common/interfaces/idempotent-request.interface';
 import type { Response } from '../../../interfaces';
 
 export interface SendInboxDraftOptions {
@@ -6,7 +7,9 @@ export interface SendInboxDraftOptions {
   draftId: string;
 }
 
-export interface SendInboxDraftRequestOptions extends PostOptions {}
+export interface SendInboxDraftRequestOptions
+  extends PostOptions,
+    IdempotentRequest {}
 
 export interface SendInboxDraftResponseSuccess {
   object: 'inbox_draft';

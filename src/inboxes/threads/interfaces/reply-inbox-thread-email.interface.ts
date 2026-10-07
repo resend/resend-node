@@ -2,6 +2,7 @@ import type {
   PostOptions,
   RequireAtLeastOne,
 } from '../../../common/interfaces';
+import type { IdempotentRequest } from '../../../common/interfaces/idempotent-request.interface';
 import type { Response } from '../../../interfaces';
 import type { InboxMessage } from './thread';
 
@@ -18,7 +19,9 @@ export type ReplyInboxThreadEmailOptions = {
     subject?: string;
   };
 
-export interface ReplyInboxThreadEmailRequestOptions extends PostOptions {}
+export interface ReplyInboxThreadEmailRequestOptions
+  extends PostOptions,
+    IdempotentRequest {}
 
 export type ReplyInboxThreadEmailResponseSuccess = InboxMessage & {
   direction: 'outbound';
