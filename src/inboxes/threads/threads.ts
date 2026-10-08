@@ -39,8 +39,15 @@ export class InboxThreads {
     options: ListInboxThreadsOptions,
     requestOptions: RequestOptions = {},
   ): Promise<ListInboxThreadsResponse> {
-    const { inboxId, ...query } = options;
-    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads`, query);
+    const { inboxId, folders, labels, read, limit, after, before } = options;
+    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads`, {
+      folders,
+      labels,
+      read,
+      limit,
+      after,
+      before,
+    });
     return this.resend.get<ListInboxThreadsResponseSuccess>(
       url,
       requestOptions,
@@ -51,12 +58,38 @@ export class InboxThreads {
     options: SearchInboxThreadsOptions,
     requestOptions: RequestOptions = {},
   ): Promise<SearchInboxThreadsResponse> {
-    const { inboxId, hasAttachment, startDate, endDate, ...query } = options;
+    const {
+      inboxId,
+      folders,
+      labels,
+      read,
+      query,
+      from,
+      to,
+      cc,
+      bcc,
+      hasAttachment,
+      startDate,
+      endDate,
+      limit,
+      after,
+      before,
+    } = options;
     const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads/search`, {
-      ...query,
+      folders,
+      labels,
+      read,
+      query,
+      from,
+      to,
+      cc,
+      bcc,
       has_attachment: hasAttachment,
       start_date: startDate,
       end_date: endDate,
+      limit,
+      after,
+      before,
     });
     return this.resend.get<SearchInboxThreadsResponseSuccess>(
       url,

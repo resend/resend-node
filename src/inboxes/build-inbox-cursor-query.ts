@@ -1,7 +1,19 @@
-export type InboxCursorQueryOptions = Record<
-  string,
-  string | number | boolean | readonly string[] | undefined
->;
+export interface InboxCursorQueryOptions {
+  folders?: readonly string[];
+  labels?: readonly string[];
+  read?: boolean;
+  query?: string;
+  from?: readonly string[];
+  to?: readonly string[];
+  cc?: readonly string[];
+  bcc?: readonly string[];
+  has_attachment?: boolean;
+  start_date?: string;
+  end_date?: string;
+  limit?: number;
+  after?: string;
+  before?: string;
+}
 
 export function buildInboxCursorUrl(
   base: string,
