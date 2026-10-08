@@ -36,6 +36,13 @@ export type {
   ReplyInboxThreadEmailResponseSuccess,
 } from './reply-inbox-thread-email.interface';
 export type {
+  InboxThreadSearchHighlightKey,
+  InboxThreadSearchResult,
+  SearchInboxThreadsOptions,
+  SearchInboxThreadsResponse,
+  SearchInboxThreadsResponseSuccess,
+} from './search-inbox-threads.interface';
+export type {
   InboxMessage,
   InboxMessageAttachment,
   InboxThread,

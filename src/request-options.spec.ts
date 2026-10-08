@@ -178,6 +178,8 @@ const calls: Record<string, Call> = {
     resend.inboxes.labels.remove({ inboxId: 'id', labelId: 'id' }, o),
   'inboxes.threads.list': (o) =>
     resend.inboxes.threads.list({ inboxId: 'id' }, o),
+  'inboxes.threads.search': (o) =>
+    resend.inboxes.threads.search({ inboxId: 'id' }, o),
   'inboxes.threads.get': (o) =>
     resend.inboxes.threads.get({ inboxId: 'id', threadId: 'id' }, o),
   'inboxes.threads.update': (o) =>

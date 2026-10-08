@@ -186,7 +186,7 @@ const { data: inbox } = await resend.inboxes.create({
 
 const { data: threads } = await resend.inboxes.threads.list({
   inboxId: inbox.id,
-  folder: 'inbox',
+  folders: ['inbox'],
 });
 ```
 

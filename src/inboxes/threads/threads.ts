@@ -18,6 +18,11 @@ import type {
   RemoveInboxThreadResponseSuccess,
 } from './interfaces/remove-inbox-thread.interface';
 import type {
+  SearchInboxThreadsOptions,
+  SearchInboxThreadsResponse,
+  SearchInboxThreadsResponseSuccess,
+} from './interfaces/search-inbox-threads.interface';
+import type {
   UpdateInboxThreadOptions,
   UpdateInboxThreadResponse,
   UpdateInboxThreadResponseSuccess,
@@ -34,9 +39,59 @@ export class InboxThreads {
     options: ListInboxThreadsOptions,
     requestOptions: RequestOptions = {},
   ): Promise<ListInboxThreadsResponse> {
-    const { inboxId, ...query } = options;
-    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads`, query);
+    const { inboxId, folders, labels, read, limit, after, before } = options;
+    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads`, {
+      folders,
+      labels,
+      read,
+      limit,
+      after,
+      before,
+    });
     return this.resend.get<ListInboxThreadsResponseSuccess>(
+      url,
+      requestOptions,
+    );
+  }
+
+  async search(
+    options: SearchInboxThreadsOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<SearchInboxThreadsResponse> {
+    const {
+      inboxId,
+      folders,
+      labels,
+      read,
+      query,
+      from,
+      to,
+      cc,
+      bcc,
+      hasAttachment,
+      startDate,
+      endDate,
+      limit,
+      after,
+      before,
+    } = options;
+    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads/search`, {
+      folders,
+      labels,
+      read,
+      query,
+      from,
+      to,
+      cc,
+      bcc,
+      has_attachment: hasAttachment,
+      start_date: startDate,
+      end_date: endDate,
+      limit,
+      after,
+      before,
+    });
+    return this.resend.get<SearchInboxThreadsResponseSuccess>(
       url,
       requestOptions,
     );

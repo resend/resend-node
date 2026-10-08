@@ -1,8 +1,15 @@
 export interface InboxCursorQueryOptions {
-  folder?: string;
+  folders?: readonly string[];
+  labels?: readonly string[];
+  read?: boolean;
   query?: string;
-  from?: string;
-  label?: string | string[];
+  from?: readonly string[];
+  to?: readonly string[];
+  cc?: readonly string[];
+  bcc?: readonly string[];
+  has_attachment?: boolean;
+  start_date?: string;
+  end_date?: string;
   limit?: number;
   after?: string;
   before?: string;
@@ -14,39 +21,15 @@ export function buildInboxCursorUrl(
 ): string {
   const searchParams = new URLSearchParams();
 
-  if (options.folder !== undefined) {
-    searchParams.set('folder', options.folder);
-  }
+  for (const [key, value] of Object.entries(options)) {
+    if (value === undefined) {
+      continue;
+    }
 
-  if (options.query !== undefined) {
-    searchParams.set('query', options.query);
-  }
-
-  if (options.from !== undefined) {
-    searchParams.set('from', options.from);
-  }
-
-  if (options.limit !== undefined) {
-    searchParams.set('limit', String(options.limit));
-  }
-
-  if (options.after !== undefined) {
-    searchParams.set('after', options.after);
-  }
-
-  if (options.before !== undefined) {
-    searchParams.set('before', options.before);
-  }
-
-  const labels =
-    options.label === undefined
-      ? []
-      : Array.isArray(options.label)
-        ? options.label
-        : [options.label];
-
-  for (const label of labels) {
-    searchParams.append('label', label);
+    searchParams.set(
+      key,
+      Array.isArray(value) ? value.join(',') : String(value),
+    );
   }
 
   const queryString = searchParams.toString();
