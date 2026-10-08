@@ -5,9 +5,9 @@ import type { InboxThread } from './thread';
 
 export type ListInboxThreadsOptions = {
   inboxId: string;
-  folder?: InboxMessageFolder;
-  query?: string;
-  label?: string | string[];
+  folders?: InboxMessageFolder[];
+  labels?: string[];
+  read?: boolean;
 } & PaginationOptions;
 
 export interface ListInboxThreadsResponseSuccess {

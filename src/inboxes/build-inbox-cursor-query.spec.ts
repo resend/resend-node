@@ -7,17 +7,20 @@ describe('buildInboxCursorUrl', () => {
     );
   });
 
-  it('encodes a single label as a repeated query param', () => {
-    expect(buildInboxCursorUrl('/inboxes/1/threads', { label: 'urgent' })).toBe(
-      '/inboxes/1/threads?label=urgent',
-    );
-  });
-
-  it('encodes multiple labels as repeated query params', () => {
+  it('encodes arrays as one comma-separated param', () => {
     expect(
       buildInboxCursorUrl('/inboxes/1/threads', {
-        label: ['urgent', 'billing'],
+        folders: ['inbox', 'archive'],
       }),
-    ).toBe('/inboxes/1/threads?label=urgent&label=billing');
+    ).toBe('/inboxes/1/threads?folders=inbox%2Carchive');
+  });
+
+  it('skips undefined values and keeps false', () => {
+    expect(
+      buildInboxCursorUrl('/inboxes/1/threads', {
+        folders: undefined,
+        read: false,
+      }),
+    ).toBe('/inboxes/1/threads?read=false');
   });
 });

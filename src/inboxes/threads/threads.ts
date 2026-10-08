@@ -18,6 +18,11 @@ import type {
   RemoveInboxThreadResponseSuccess,
 } from './interfaces/remove-inbox-thread.interface';
 import type {
+  SearchInboxThreadsOptions,
+  SearchInboxThreadsResponse,
+  SearchInboxThreadsResponseSuccess,
+} from './interfaces/search-inbox-threads.interface';
+import type {
   UpdateInboxThreadOptions,
   UpdateInboxThreadResponse,
   UpdateInboxThreadResponseSuccess,
@@ -37,6 +42,23 @@ export class InboxThreads {
     const { inboxId, ...query } = options;
     const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads`, query);
     return this.resend.get<ListInboxThreadsResponseSuccess>(
+      url,
+      requestOptions,
+    );
+  }
+
+  async search(
+    options: SearchInboxThreadsOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<SearchInboxThreadsResponse> {
+    const { inboxId, hasAttachment, startDate, endDate, ...query } = options;
+    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads/search`, {
+      ...query,
+      has_attachment: hasAttachment,
+      start_date: startDate,
+      end_date: endDate,
+    });
+    return this.resend.get<SearchInboxThreadsResponseSuccess>(
       url,
       requestOptions,
     );

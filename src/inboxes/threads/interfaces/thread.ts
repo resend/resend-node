@@ -22,6 +22,7 @@ export interface InboxThread {
   has_draft: boolean;
   read: boolean;
   received_at: string;
+  folder: InboxMessageFolder;
 }
 
 export interface InboxThreadSummary {
