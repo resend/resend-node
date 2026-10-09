@@ -19,7 +19,6 @@ export type {
   MoveThreadFolder,
 } from './inbox';
 export {
-  INBOX_LABEL_COLORS,
   INBOX_MESSAGE_FOLDERS,
   MOVE_THREAD_FOLDERS,
 } from './inbox';

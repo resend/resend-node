@@ -32,7 +32,7 @@ describe('Inbox threads', () => {
           to: ['support@example.com'],
           cc: [],
           bcc: [],
-          labels: [{ id: 'label-1', name: 'Urgent', color: 'grass' }],
+          labels: [{ id: 'label-1', name: 'Urgent', color: '#46A758' }],
           message_count: 2,
           has_attachment: false,
           has_draft: false,
