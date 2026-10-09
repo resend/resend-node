@@ -2,6 +2,7 @@ import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
 import { mockSuccessResponse } from '../../test-utils/mock-fetch';
+import type { CreateInboxDraftResponseSuccess } from './interfaces/create-inbox-draft.interface';
 import type { InboxDraft } from './interfaces/draft';
 import type { ListInboxDraftsResponseSuccess } from './interfaces/list-inbox-drafts.interface';
 import type { RemoveInboxDraftResponseSuccess } from './interfaces/remove-inbox-draft.interface';
@@ -90,7 +91,12 @@ describe('Inbox drafts', () => {
 
   describe('create', () => {
     it('creates a draft', async () => {
-      fetchMock.mockOnce(JSON.stringify(draft), {
+      const response: CreateInboxDraftResponseSuccess = {
+        object: 'inbox_draft',
+        id: draftId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
         status: 201,
         headers: {
           'content-type': 'application/json',
@@ -104,7 +110,7 @@ describe('Inbox drafts', () => {
         text: 'Hi',
       });
 
-      expect(data.data).toEqual(draft);
+      expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(
         `https://api.resend.com/inboxes/${inboxId}/drafts`,
         expect.objectContaining({
@@ -119,12 +125,15 @@ describe('Inbox drafts', () => {
     });
 
     it('maps threadId and replyToEmailId to the API body', async () => {
-      fetchMock.mockOnce(JSON.stringify(draft), {
-        status: 201,
-        headers: {
-          'content-type': 'application/json',
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 201,
+          headers: {
+            'content-type': 'application/json',
+          },
         },
-      });
+      );
 
       await resend.inboxes.drafts.create({
         inboxId,
