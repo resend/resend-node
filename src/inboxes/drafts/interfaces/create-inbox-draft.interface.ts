@@ -3,7 +3,6 @@ import type {
   RequireAtLeastOne,
 } from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
-import type { InboxDraft } from './draft';
 
 type CreateInboxDraftContent = RequireAtLeastOne<{
   to?: string | string[];
@@ -30,7 +29,10 @@ export type CreateInboxDraftOptions = {
 
 export interface CreateInboxDraftRequestOptions extends PostOptions {}
 
-export type CreateInboxDraftResponseSuccess = InboxDraft;
+export interface CreateInboxDraftResponseSuccess {
+  object: 'inbox_draft';
+  id: string;
+}
 
 export type CreateInboxDraftResponse =
   Response<CreateInboxDraftResponseSuccess>;

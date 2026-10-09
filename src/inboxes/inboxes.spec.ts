@@ -22,15 +22,6 @@ describe('Inboxes', () => {
       const response: CreateInboxResponseSuccess = {
         object: 'inbox',
         id: '430eed87-632a-4ea6-90db-0aace67ec228',
-        name: 'support',
-        email_address: 'support@example.com',
-        domain_id: 'd91cd9bd-1176-453e-8fc1-8880d0486fdc',
-        receiving_address: null,
-        from_name: 'Support',
-        unread: 0,
-        drafts: 0,
-        last_received: null,
-        created_at: '2026-09-01T00:00:00.000Z',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -49,17 +40,8 @@ describe('Inboxes', () => {
       expect(data).toMatchInlineSnapshot(`
         {
           "data": {
-            "created_at": "2026-09-01T00:00:00.000Z",
-            "domain_id": "d91cd9bd-1176-453e-8fc1-8880d0486fdc",
-            "drafts": 0,
-            "email_address": "support@example.com",
-            "from_name": "Support",
             "id": "430eed87-632a-4ea6-90db-0aace67ec228",
-            "last_received": null,
-            "name": "support",
             "object": "inbox",
-            "receiving_address": null,
-            "unread": 0,
           },
           "error": null,
           "headers": {

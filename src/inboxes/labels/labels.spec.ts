@@ -52,9 +52,6 @@ describe('Inbox labels', () => {
       const response: CreateInboxLabelResponseSuccess = {
         object: 'inbox_label',
         id: labelId,
-        name: 'Urgent',
-        color: 'grass',
-        created_at: '2026-09-01T00:00:00.000Z',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
