@@ -26,12 +26,14 @@ export class Batch {
     const emails: EmailApiOptions[] = [];
 
     for (const email of payload) {
-      if (email.react) {
-        email.html = await render(email.react);
-        email.react = undefined;
+      const body = { ...email };
+
+      if (body.react) {
+        body.html = await render(body.react);
+        body.react = undefined;
       }
 
-      emails.push(parseEmailToApiOptions(email));
+      emails.push(parseEmailToApiOptions(body));
     }
 
     const headers = new Headers({

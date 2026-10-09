@@ -304,6 +304,47 @@ describe('Batch', () => {
         },
       ]);
     });
+
+    it('does not mutate payload when using React component', async () => {
+      const mockReact = { type: 'div', props: { children: 'Hi' } };
+      const payload: CreateBatchOptions = [
+        {
+          from: 'admin@resend.com',
+          to: 'user@resend.com',
+          subject: 'React Email',
+          react: mockReact as React.ReactElement,
+        },
+      ];
+      const originalEmail = { ...payload[0] };
+
+      mockSuccessResponse({
+        data: [{ id: 'aabeeefc-bd13-474a-a440-0ee139b3a4cc' }],
+      });
+
+      await resend.batch.create(payload);
+
+      expect(payload[0]).toEqual(originalEmail);
+    });
+
+    it('works with a frozen payload when using React component', async () => {
+      const mockReact = { type: 'div', props: { children: 'Hi' } };
+      const payload: CreateBatchOptions = [
+        Object.freeze({
+          from: 'admin@resend.com',
+          to: 'user@resend.com',
+          subject: 'React Email',
+          react: mockReact as React.ReactElement,
+        }),
+      ];
+
+      mockSuccessResponse({
+        data: [{ id: 'aabeeefc-bd13-474a-a440-0ee139b3a4cc' }],
+      });
+
+      const result = await resend.batch.create(payload);
+
+      expect(result.error).toBeNull();
+    });
   });
 
   describe('send', () => {
