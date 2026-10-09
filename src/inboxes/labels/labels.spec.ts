@@ -27,7 +27,7 @@ describe('Inbox labels', () => {
           {
             id: labelId,
             name: 'Urgent',
-            color: 'grass',
+            color: '#46A758',
             created_at: '2026-09-01T00:00:00.000Z',
           },
         ],
@@ -64,7 +64,7 @@ describe('Inbox labels', () => {
       const data = await resend.inboxes.labels.create({
         inboxId,
         name: 'Urgent',
-        color: 'grass',
+        color: '#46A758',
       });
 
       expect(data.data).toEqual(response);
@@ -72,7 +72,7 @@ describe('Inbox labels', () => {
         `https://api.resend.com/inboxes/${inboxId}/labels`,
         expect.objectContaining({
           method: 'POST',
-          body: JSON.stringify({ name: 'Urgent', color: 'grass' }),
+          body: JSON.stringify({ name: 'Urgent', color: '#46A758' }),
         }),
       );
     });
