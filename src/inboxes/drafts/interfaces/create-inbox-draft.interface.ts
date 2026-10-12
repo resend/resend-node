@@ -5,9 +5,9 @@ import type {
 import type { Response } from '../../../interfaces';
 
 type CreateInboxDraftContent = RequireAtLeastOne<{
-  to?: string | string[];
-  cc?: string | string[];
-  bcc?: string | string[];
+  to?: string | string[] | null;
+  cc?: string | string[] | null;
+  bcc?: string | string[] | null;
   subject?: string | null;
   text?: string | null;
   html?: string | null;
