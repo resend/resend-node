@@ -120,13 +120,11 @@ describe('Inbox thread emails', () => {
   describe('reply', () => {
     it('replies to a thread email', async () => {
       const response: ReplyInboxThreadEmailResponseSuccess = {
-        ...message,
-        direction: 'outbound',
-        email_id: 'd4e5f6a7-0000-4000-8000-000000000000',
+        id: 'd4e5f6a7-0000-4000-8000-000000000000',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
-        status: 201,
+        status: 200,
         headers: {
           'content-type': 'application/json',
         },
@@ -260,24 +258,10 @@ describe('Inbox thread emails', () => {
     it('forwards a thread email', async () => {
       const response: ForwardInboxThreadEmailResponseSuccess = {
         id: 'd4e5f6a7-0000-4000-8000-000000000000',
-        email_id: 'd4e5f6a7-0000-4000-8000-000000000000',
-        direction: 'outbound',
-        from: 'support@example.com',
-        to: ['colleague@example.com'],
-        cc: [],
-        bcc: [],
-        reply_to: [],
-        subject: 'Fwd: Billing question',
-        message_id: null,
-        html: null,
-        text: 'See below.',
-        attachments: [],
-        read: true,
-        received_at: '2026-09-01T00:00:00.000Z',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
-        status: 201,
+        status: 200,
         headers: {
           'content-type': 'application/json',
         },

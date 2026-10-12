@@ -12,10 +12,7 @@ export interface SendInboxDraftRequestOptions
     IdempotentRequest {}
 
 export interface SendInboxDraftResponseSuccess {
-  object: 'inbox_draft';
   id: string;
-  thread_id: string;
-  email_id: string;
 }
 
 export type SendInboxDraftResponse = Response<SendInboxDraftResponseSuccess>;

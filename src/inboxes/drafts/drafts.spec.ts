@@ -243,10 +243,7 @@ describe('Inbox drafts', () => {
   describe('send', () => {
     it('sends a draft', async () => {
       const response: SendInboxDraftResponseSuccess = {
-        object: 'inbox_draft',
-        id: draftId,
-        thread_id: 'b2c3d4e5-0000-4000-8000-000000000000',
-        email_id: 'c3d4e5f6-0000-4000-8000-000000000000',
+        id: 'c3d4e5f6-0000-4000-8000-000000000000',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
