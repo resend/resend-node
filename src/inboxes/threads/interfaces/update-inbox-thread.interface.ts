@@ -9,8 +9,14 @@ export type UpdateInboxThreadOptions = {
 } & RequireAtLeastOne<{
   read?: boolean;
   folder?: MoveThreadFolder;
-  /** Applies the label to the thread. Labels cannot be removed through this endpoint. */
+  /**
+   * @deprecated Use `addLabelIds` instead. Applies this label to the thread, the same as one entry in `addLabelIds`.
+   */
   labelId?: string;
+  /** Label IDs to apply to the thread. Between 1 and 10 IDs. */
+  addLabelIds?: string[];
+  /** Label IDs to remove from the thread. Between 1 and 10 IDs. */
+  removeLabelIds?: string[];
 }>;
 
 export type UpdateInboxThreadResponseSuccess = InboxThreadSummary;

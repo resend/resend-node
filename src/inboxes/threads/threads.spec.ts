@@ -267,6 +267,37 @@ describe('Inbox threads', () => {
         }),
       );
     });
+    it('maps addLabelIds and removeLabelIds to add_label_ids and remove_label_ids', async () => {
+      mockSuccessResponse(
+        {
+          object: 'inbox_thread',
+          id: threadId,
+          subject: 'Billing question',
+          folder: 'inbox',
+          labels: [],
+          read: true,
+        },
+        { headers: {} },
+      );
+
+      await resend.inboxes.threads.update({
+        inboxId,
+        threadId,
+        addLabelIds: ['a1b2c3d4-0000-4000-8000-000000000000'],
+        removeLabelIds: ['b2c3d4e5-0000-4000-8000-000000000001'],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({
+            add_label_ids: ['a1b2c3d4-0000-4000-8000-000000000000'],
+            remove_label_ids: ['b2c3d4e5-0000-4000-8000-000000000001'],
+          }),
+        }),
+      );
+    });
   });
 
   describe('remove', () => {
