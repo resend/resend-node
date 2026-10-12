@@ -164,16 +164,16 @@ type InboxEventEmail = Omit<InboxMessage, 'html' | 'text'>;
 
 type InboxEventDraft = Omit<InboxDraft, 'html' | 'text'>;
 
-interface InboxDeletedEventData {
+interface InboxBaseEventData {
   source: InboxEventSource;
   inbox_id: string;
 }
 
-interface InboxEventData extends InboxDeletedEventData {
+interface InboxEventData extends InboxBaseEventData {
   inbox?: GetInboxResponseSuccess;
 }
 
-interface InboxThreadEventData extends InboxDeletedEventData {
+interface InboxThreadEventData extends InboxBaseEventData {
   thread_id: string;
   thread?: InboxThreadSummary;
 }
@@ -203,7 +203,7 @@ interface InboxThreadLabelsUpdatedEventData extends InboxThreadEventData {
   removed: InboxThreadLabel[];
 }
 
-interface InboxDraftEventData extends InboxDeletedEventData {
+interface InboxDraftEventData extends InboxBaseEventData {
   thread_id?: string;
   draft_id: string;
   thread?: InboxThreadSummary;
@@ -376,7 +376,7 @@ export interface InboxUpdatedEvent {
 export interface InboxDeletedEvent {
   type: 'inbox.deleted';
   created_at: string;
-  data: InboxDeletedEventData;
+  data: InboxBaseEventData;
 }
 
 export interface InboxThreadCreatedEvent {
