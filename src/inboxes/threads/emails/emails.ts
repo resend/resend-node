@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../../../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../../../common/utils/build-pagination-query';
+import { parseAttachments } from '../../../common/utils/parse-email-to-api-options';
 import type { Resend } from '../../../resend';
 import type {
   ForwardInboxThreadEmailOptions,
@@ -67,10 +68,19 @@ export class InboxThreadEmails {
       text,
       subject,
       replyAll,
+      attachments,
     } = payload;
     return this.resend.post<ReplyInboxThreadEmailResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
-      { cc, bcc, html, text, subject, reply_all: replyAll },
+      {
+        cc,
+        bcc,
+        html,
+        text,
+        subject,
+        reply_all: replyAll,
+        attachments: parseAttachments(attachments),
+      },
       options,
     );
   }
@@ -79,11 +89,29 @@ export class InboxThreadEmails {
     payload: ForwardInboxThreadEmailOptions,
     options: ForwardInboxThreadEmailRequestOptions = {},
   ): Promise<ForwardInboxThreadEmailResponse> {
-    const { inboxId, threadId, emailId, to, cc, bcc, html, text, subject } =
-      payload;
+    const {
+      inboxId,
+      threadId,
+      emailId,
+      to,
+      cc,
+      bcc,
+      html,
+      text,
+      subject,
+      attachments,
+    } = payload;
     return this.resend.post<ForwardInboxThreadEmailResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
-      { to, cc, bcc, html, text, subject },
+      {
+        to,
+        cc,
+        bcc,
+        html,
+        text,
+        subject,
+        attachments: parseAttachments(attachments),
+      },
       options,
     );
   }

@@ -4,7 +4,7 @@ import type {
   EmailApiOptions,
 } from '../interfaces/email-api-options.interface';
 
-function parseAttachments(
+export function parseAttachments(
   attachments: CreateEmailOptions['attachments'],
 ): EmailApiAttachment[] | undefined {
   return attachments?.map((attachment) => ({

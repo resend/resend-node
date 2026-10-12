@@ -205,6 +205,50 @@ describe('Inbox thread emails', () => {
       );
     });
 
+    it('maps attachments to the API shape', async () => {
+      fetchMock.mockOnce(JSON.stringify({ id: emailId }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.threads.emails.reply({
+        inboxId,
+        threadId,
+        emailId,
+        text: 'Invoice attached.',
+        attachments: [
+          {
+            filename: 'invoice.txt',
+            content: 'aGVsbG8=',
+            contentType: 'text/plain',
+            contentId: 'invoice',
+          },
+          { path: 'https://example.com/invoice.pdf' },
+        ],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            text: 'Invoice attached.',
+            attachments: [
+              {
+                content: 'aGVsbG8=',
+                filename: 'invoice.txt',
+                content_type: 'text/plain',
+                content_id: 'invoice',
+              },
+              { path: 'https://example.com/invoice.pdf' },
+            ],
+          }),
+        }),
+      );
+    });
+
     it('returns a validation error', async () => {
       const error: ErrorResponse = {
         name: 'missing_required_field',
@@ -315,6 +359,34 @@ describe('Inbox thread emails', () => {
             cc: ['manager@example.com'],
             bcc: 'audit@example.com',
             text: 'See below.',
+          }),
+        }),
+      );
+    });
+
+    it('maps attachments to the API shape', async () => {
+      fetchMock.mockOnce(JSON.stringify({ id: emailId }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.threads.emails.forward({
+        inboxId,
+        threadId,
+        emailId,
+        to: 'colleague@example.com',
+        attachments: [{ filename: 'notes.txt', content: 'aGVsbG8=' }],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            to: 'colleague@example.com',
+            attachments: [{ content: 'aGVsbG8=', filename: 'notes.txt' }],
           }),
         }),
       );
