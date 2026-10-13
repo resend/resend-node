@@ -1,7 +1,7 @@
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import type { Resend } from '../../resend';
 import { buildInboxCursorUrl } from '../build-inbox-cursor-query';
-import { InboxThreadEmails } from './emails/emails';
+import { InboxEmails } from '../emails/emails';
 import type {
   GetInboxThreadOptions,
   GetInboxThreadResponse,
@@ -29,10 +29,10 @@ import type {
 } from './interfaces/update-inbox-thread.interface';
 
 export class InboxThreads {
-  readonly emails: InboxThreadEmails;
+  readonly emails: InboxEmails;
 
   constructor(private readonly resend: Resend) {
-    this.emails = new InboxThreadEmails(resend);
+    this.emails = new InboxEmails(resend);
   }
 
   async list(

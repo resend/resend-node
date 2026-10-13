@@ -1,10 +1,10 @@
 import createFetchMock from 'vitest-fetch-mock';
-import type { ErrorResponse } from '../../../interfaces';
-import { Resend } from '../../../resend';
-import type { ForwardInboxThreadEmailResponseSuccess } from '../interfaces/forward-inbox-thread-email.interface';
-import type { ListInboxThreadEmailsResponseSuccess } from '../interfaces/list-inbox-thread-emails.interface';
-import type { ReplyInboxThreadEmailResponseSuccess } from '../interfaces/reply-inbox-thread-email.interface';
-import type { InboxMessage } from '../interfaces/thread';
+import type { ErrorResponse } from '../../interfaces';
+import { Resend } from '../../resend';
+import type { ForwardInboxEmailResponseSuccess } from './interfaces/forward-inbox-email.interface';
+import type { ListInboxEmailsResponseSuccess } from './interfaces/list-inbox-emails.interface';
+import type { ReplyInboxEmailResponseSuccess } from './interfaces/reply-inbox-email.interface';
+import type { InboxMessage } from '../threads/interfaces/thread';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -38,7 +38,7 @@ describe('Inbox thread emails', () => {
 
   describe('list', () => {
     it('lists thread emails', async () => {
-      const response: ListInboxThreadEmailsResponseSuccess = {
+      const response: ListInboxEmailsResponseSuccess = {
         object: 'list',
         has_more: false,
         data: [message],
@@ -119,7 +119,7 @@ describe('Inbox thread emails', () => {
 
   describe('reply', () => {
     it('replies to a thread email', async () => {
-      const response: ReplyInboxThreadEmailResponseSuccess = {
+      const response: ReplyInboxEmailResponseSuccess = {
         id: 'd4e5f6a7-0000-4000-8000-000000000000',
       };
 
@@ -328,7 +328,7 @@ describe('Inbox thread emails', () => {
 
   describe('forward', () => {
     it('forwards a thread email', async () => {
-      const response: ForwardInboxThreadEmailResponseSuccess = {
+      const response: ForwardInboxEmailResponseSuccess = {
         id: 'd4e5f6a7-0000-4000-8000-000000000000',
       };
 
