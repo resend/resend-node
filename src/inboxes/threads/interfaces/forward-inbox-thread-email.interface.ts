@@ -21,6 +21,12 @@ export interface ForwardInboxThreadEmailOptions {
    * An original attachment that was sent from a URL (`path`) cannot be forwarded, and the request returns a 422.
    */
   attachments?: Attachment[];
+  /**
+   * Custom headers to add to the email.
+   * The `In-Reply-To`, `References` and `Reply-To` headers are set by Resend and cannot be set here.
+   * Sending one of them, in any letter case, returns a 422.
+   */
+  headers?: Record<string, string>;
 }
 
 export interface ForwardInboxThreadEmailRequestOptions

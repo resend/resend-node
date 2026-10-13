@@ -69,6 +69,7 @@ export class InboxThreadEmails {
       subject,
       replyAll,
       attachments,
+      headers,
     } = payload;
     return this.resend.post<ReplyInboxThreadEmailResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
@@ -80,6 +81,7 @@ export class InboxThreadEmails {
         subject,
         reply_all: replyAll,
         attachments: parseAttachments(attachments),
+        headers,
       },
       options,
     );
@@ -100,6 +102,7 @@ export class InboxThreadEmails {
       text,
       subject,
       attachments,
+      headers,
     } = payload;
     return this.resend.post<ForwardInboxThreadEmailResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
@@ -111,6 +114,7 @@ export class InboxThreadEmails {
         text,
         subject,
         attachments: parseAttachments(attachments),
+        headers,
       },
       options,
     );

@@ -24,6 +24,12 @@ export type ReplyInboxThreadEmailOptions = {
      * A `path` file counts toward the 10 files only, because it is fetched when the email is sent.
      */
     attachments?: Attachment[];
+    /**
+     * Custom headers to add to the email.
+     * The `In-Reply-To`, `References` and `Reply-To` headers are set by Resend and cannot be set here.
+     * Sending one of them, in any letter case, returns a 422.
+     */
+    headers?: Record<string, string>;
   };
 
 export interface ReplyInboxThreadEmailRequestOptions

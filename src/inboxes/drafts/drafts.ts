@@ -108,10 +108,10 @@ export class InboxDrafts {
     payload: SendInboxDraftOptions,
     options: SendInboxDraftRequestOptions = {},
   ): Promise<SendInboxDraftResponse> {
-    const { inboxId, draftId } = payload;
+    const { inboxId, draftId, headers } = payload;
     return this.resend.post<SendInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}/send`,
-      undefined,
+      headers ? { headers } : undefined,
       options,
     );
   }

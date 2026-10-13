@@ -249,6 +249,34 @@ describe('Inbox thread emails', () => {
       );
     });
 
+    it('sends custom headers', async () => {
+      fetchMock.mockOnce(JSON.stringify({ id: emailId }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.threads.emails.reply({
+        inboxId,
+        threadId,
+        emailId,
+        text: 'Thanks, sent.',
+        headers: { 'X-Ticket-Id': '4821' },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            text: 'Thanks, sent.',
+            headers: { 'X-Ticket-Id': '4821' },
+          }),
+        }),
+      );
+    });
+
     it('returns a validation error', async () => {
       const error: ErrorResponse = {
         name: 'missing_required_field',
@@ -387,6 +415,34 @@ describe('Inbox thread emails', () => {
           body: JSON.stringify({
             to: 'colleague@example.com',
             attachments: [{ content: 'aGVsbG8=', filename: 'notes.txt' }],
+          }),
+        }),
+      );
+    });
+
+    it('sends custom headers', async () => {
+      fetchMock.mockOnce(JSON.stringify({ id: emailId }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.threads.emails.forward({
+        inboxId,
+        threadId,
+        emailId,
+        to: 'colleague@example.com',
+        headers: { 'X-Ticket-Id': '4821' },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            to: 'colleague@example.com',
+            headers: { 'X-Ticket-Id': '4821' },
           }),
         }),
       );

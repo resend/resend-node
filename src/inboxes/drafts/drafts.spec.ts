@@ -393,6 +393,29 @@ describe('Inbox drafts', () => {
       );
     });
 
+    it('sends custom headers in the body', async () => {
+      fetchMock.mockOnce(JSON.stringify({ id: draftId }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.send({
+        inboxId,
+        draftId,
+        headers: { 'X-Ticket-Id': '4821' },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}/send`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({ headers: { 'X-Ticket-Id': '4821' } }),
+        }),
+      );
+    });
+
     it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
       fetchMock.mockOnce(JSON.stringify({}), {
         status: 200,
