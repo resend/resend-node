@@ -14,7 +14,7 @@ export type UpdateInboxDraftOptions = {
   html?: string | null;
   /**
    * Files to store on the draft. Each one needs `content`, `filename` and `contentType`.
-   * A draft can carry up to 10 files and 25 MB in total.
+   * The files on a draft can total at most 25 MB. An empty file or a blocked file type returns a 422.
    * Sending the field replaces every attachment on the draft. Send `[]` to remove them all.
    */
   attachments?: InboxDraftAttachmentOptions[];
