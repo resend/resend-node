@@ -87,7 +87,11 @@ export class InboxDrafts {
     const { inboxId, draftId, attachments, ...content } = options;
     return this.resend.patch<UpdateInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}`,
-      { ...content, attachments: parseAttachments(attachments) },
+      {
+        ...content,
+        attachments:
+          attachments === null ? null : parseAttachments(attachments),
+      },
       requestOptions,
     );
   }

@@ -328,6 +328,29 @@ describe('Inbox drafts', () => {
       );
     });
 
+    it('sends null attachments to remove every attachment', async () => {
+      fetchMock.mockOnce(JSON.stringify({ ...draft, attachments: [] }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.update({
+        inboxId,
+        draftId,
+        attachments: null,
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ attachments: null }),
+        }),
+      );
+    });
+
     it('sends an empty attachments array to remove every attachment', async () => {
       fetchMock.mockOnce(JSON.stringify({ ...draft, attachments: [] }), {
         status: 200,

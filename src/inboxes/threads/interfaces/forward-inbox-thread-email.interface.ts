@@ -18,6 +18,7 @@ export interface ForwardInboxThreadEmailOptions {
    * They share one limit with the attachments of the original message, which the forward also sends.
    * Together they can have up to 10 files and at most 25 MB of `content`.
    * A `path` file counts toward the 10 files only, because it is fetched when the email is sent.
+   * An empty file, a blocked file type, or a `path` that is not an `http` or `https` URL or that points to `localhost` returns a 422.
    * An original attachment that was sent from a URL (`path`) cannot be forwarded, and the request returns a 422.
    */
   attachments?: Attachment[];
@@ -25,6 +26,7 @@ export interface ForwardInboxThreadEmailOptions {
    * Custom headers to add to the email.
    * The `In-Reply-To`, `References` and `Reply-To` headers are set by Resend and cannot be set here.
    * Sending one of them, in any letter case, returns a 422.
+   * Header names cannot be empty, and names and values cannot contain line breaks or null characters, or the request returns a 422.
    */
   headers?: Record<string, string>;
 }

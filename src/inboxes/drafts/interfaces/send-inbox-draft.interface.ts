@@ -9,6 +9,7 @@ export interface SendInboxDraftOptions {
    * Custom headers to add to the email.
    * The `In-Reply-To`, `References` and `Reply-To` headers are set by Resend and cannot be set here.
    * Sending one of them, in any letter case, returns a 422.
+   * Header names cannot be empty, and names and values cannot contain line breaks or null characters, or the request returns a 422.
    */
   headers?: Record<string, string>;
 }
