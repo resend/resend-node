@@ -1,4 +1,5 @@
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
+import { parseAttachments } from '../../common/utils/parse-email-to-api-options';
 import type { Resend } from '../../resend';
 import { buildInboxCursorUrl } from '../build-inbox-cursor-query';
 import type {
@@ -54,11 +55,13 @@ export class InboxDrafts {
     payload: CreateInboxDraftOptions,
     options: CreateInboxDraftRequestOptions = {},
   ): Promise<CreateInboxDraftResponse> {
-    const { inboxId, threadId, replyToEmailId, ...content } = payload;
+    const { inboxId, threadId, replyToEmailId, attachments, ...content } =
+      payload;
     return this.resend.post<CreateInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts`,
       {
         ...content,
+        attachments: parseAttachments(attachments),
         thread_id: threadId,
         reply_to_email_id: replyToEmailId,
       },
@@ -81,10 +84,10 @@ export class InboxDrafts {
     options: UpdateInboxDraftOptions,
     requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxDraftResponse> {
-    const { inboxId, draftId, ...content } = options;
+    const { inboxId, draftId, attachments, ...content } = options;
     return this.resend.patch<UpdateInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}`,
-      content,
+      { ...content, attachments: parseAttachments(attachments) },
       requestOptions,
     );
   }

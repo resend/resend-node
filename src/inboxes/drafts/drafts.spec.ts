@@ -31,6 +31,14 @@ const draft: InboxDraft = {
   email_id: null,
   created_at: '2026-09-01T00:00:00.000Z',
   updated_at: '2026-09-01T00:00:00.000Z',
+  attachments: [
+    {
+      id: 'f6a7b8c9-0000-4000-8000-000000000000',
+      filename: 'notes.txt',
+      content_type: 'text/plain',
+      size: 5,
+    },
+  ],
 };
 
 describe('Inbox drafts', () => {
@@ -53,6 +61,7 @@ describe('Inbox drafts', () => {
           thread_id: null,
           reply_to_email_id: null,
           updated_at: '2026-09-01T00:00:00.000Z',
+          attachments: [],
         },
       ],
     };
@@ -155,6 +164,45 @@ describe('Inbox drafts', () => {
       );
     });
 
+    it('maps attachments to the API shape', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 201,
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+
+      await resend.inboxes.drafts.create({
+        inboxId,
+        attachments: [
+          {
+            content: 'aGVsbG8=',
+            filename: 'notes.txt',
+            contentType: 'text/plain',
+          },
+        ],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            attachments: [
+              {
+                content: 'aGVsbG8=',
+                filename: 'notes.txt',
+                content_type: 'text/plain',
+              },
+            ],
+          }),
+        }),
+      );
+    });
+
     it('returns a validation error', async () => {
       const error: ErrorResponse = {
         name: 'validation_error',
@@ -214,6 +262,62 @@ describe('Inbox drafts', () => {
         expect.objectContaining({
           method: 'PATCH',
           body: JSON.stringify({ subject: 'Updated' }),
+        }),
+      );
+    });
+
+    it('maps attachments to the API shape', async () => {
+      fetchMock.mockOnce(JSON.stringify(draft), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.update({
+        inboxId,
+        draftId,
+        attachments: [
+          {
+            content: 'aGVsbG8=',
+            filename: 'notes.txt',
+            contentType: 'text/plain',
+          },
+        ],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({
+            attachments: [
+              {
+                content: 'aGVsbG8=',
+                filename: 'notes.txt',
+                content_type: 'text/plain',
+              },
+            ],
+          }),
+        }),
+      );
+    });
+
+    it('sends an empty attachments array to remove every attachment', async () => {
+      fetchMock.mockOnce(JSON.stringify({ ...draft, attachments: [] }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.update({ inboxId, draftId, attachments: [] });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ attachments: [] }),
         }),
       );
     });

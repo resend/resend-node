@@ -1,5 +1,19 @@
 export type InboxDraftType = 'standalone' | 'reply';
 
+export interface InboxDraftAttachment {
+  id: string;
+  filename: string;
+  content_type: string;
+  size: number;
+}
+
+export interface InboxDraftAttachmentOptions {
+  /** Content of the file, as a base64 string or a Buffer. */
+  content: string | Buffer;
+  filename: string;
+  contentType: string;
+}
+
 export interface InboxDraft {
   object: 'inbox_draft';
   id: string;
@@ -15,6 +29,7 @@ export interface InboxDraft {
   email_id: string | null;
   created_at: string;
   updated_at: string;
+  attachments: InboxDraftAttachment[];
 }
 
 export interface InboxDraftListItem {
@@ -28,4 +43,5 @@ export interface InboxDraftListItem {
   thread_id: string | null;
   reply_to_email_id: string | null;
   updated_at: string;
+  attachments: InboxDraftAttachment[];
 }
