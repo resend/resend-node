@@ -2,6 +2,7 @@ import type {
   PostOptions,
   RequireAtLeastOne,
 } from '../../../common/interfaces';
+import type { IdempotentRequest } from '../../../common/interfaces/idempotent-request.interface';
 import type { Response } from '../../../interfaces';
 import type { InboxDraftAttachmentOptions } from './draft';
 
@@ -33,7 +34,9 @@ export type CreateInboxDraftOptions = {
       }
   );
 
-export interface CreateInboxDraftRequestOptions extends PostOptions {}
+export interface CreateInboxDraftRequestOptions
+  extends PostOptions,
+    IdempotentRequest {}
 
 export interface CreateInboxDraftResponseSuccess {
   object: 'inbox_draft';

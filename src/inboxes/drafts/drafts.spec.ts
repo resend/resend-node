@@ -203,6 +203,31 @@ describe('Inbox drafts', () => {
       );
     });
 
+    it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 201,
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+
+      const idempotencyKey = 'unique-key-123';
+
+      await resend.inboxes.drafts.create(
+        { inboxId, to: 'ada@example.com', text: 'Hi' },
+        { idempotencyKey },
+      );
+
+      const lastCall = fetchMock.mock.calls[0];
+      expect(lastCall).toBeDefined();
+
+      const headers = new Headers(lastCall[1]?.headers);
+      expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
+    });
+
     it('returns a validation error', async () => {
       const error: ErrorResponse = {
         name: 'validation_error',
