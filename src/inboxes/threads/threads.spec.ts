@@ -238,7 +238,7 @@ describe('Inbox threads', () => {
       );
     });
 
-    it('maps labelId to label_id', async () => {
+    it('maps addLabelIds and removeLabelIds to add_label_ids and remove_label_ids', async () => {
       mockSuccessResponse(
         {
           object: 'inbox_thread',
@@ -254,7 +254,8 @@ describe('Inbox threads', () => {
       await resend.inboxes.threads.update({
         inboxId,
         threadId,
-        labelId: 'a1b2c3d4-0000-4000-8000-000000000000',
+        addLabelIds: ['a1b2c3d4-0000-4000-8000-000000000000'],
+        removeLabelIds: ['b2c3d4e5-0000-4000-8000-000000000001'],
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
@@ -262,7 +263,8 @@ describe('Inbox threads', () => {
         expect.objectContaining({
           method: 'PATCH',
           body: JSON.stringify({
-            label_id: 'a1b2c3d4-0000-4000-8000-000000000000',
+            add_label_ids: ['a1b2c3d4-0000-4000-8000-000000000000'],
+            remove_label_ids: ['b2c3d4e5-0000-4000-8000-000000000001'],
           }),
         }),
       );

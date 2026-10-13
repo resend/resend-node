@@ -241,7 +241,8 @@ export class Receiving {
     url: string,
     signal: AbortSignal | undefined,
   ): Promise<
-    { content: string; error: null } | { content: null; error: ErrorResponse }
+    | { content: ArrayBuffer; error: null }
+    | { content: null; error: ErrorResponse }
   > {
     try {
       const response = await fetch(url, { signal });
@@ -257,7 +258,7 @@ export class Receiving {
         };
       }
 
-      return { content: await response.text(), error: null };
+      return { content: await response.arrayBuffer(), error: null };
     } catch {
       return {
         content: null,

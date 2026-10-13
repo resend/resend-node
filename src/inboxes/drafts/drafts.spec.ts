@@ -31,6 +31,14 @@ const draft: InboxDraft = {
   email_id: null,
   created_at: '2026-09-01T00:00:00.000Z',
   updated_at: '2026-09-01T00:00:00.000Z',
+  attachments: [
+    {
+      id: 'f6a7b8c9-0000-4000-8000-000000000000',
+      filename: 'notes.txt',
+      content_type: 'text/plain',
+      size: 5,
+    },
+  ],
 };
 
 describe('Inbox drafts', () => {
@@ -53,6 +61,7 @@ describe('Inbox drafts', () => {
           thread_id: null,
           reply_to_email_id: null,
           updated_at: '2026-09-01T00:00:00.000Z',
+          attachments: [],
         },
       ],
     };
@@ -155,6 +164,70 @@ describe('Inbox drafts', () => {
       );
     });
 
+    it('maps attachments to the API shape', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 201,
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+
+      await resend.inboxes.drafts.create({
+        inboxId,
+        attachments: [
+          {
+            content: 'aGVsbG8=',
+            filename: 'notes.txt',
+            contentType: 'text/plain',
+          },
+        ],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            attachments: [
+              {
+                content: 'aGVsbG8=',
+                filename: 'notes.txt',
+                content_type: 'text/plain',
+              },
+            ],
+          }),
+        }),
+      );
+    });
+
+    it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 201,
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+
+      const idempotencyKey = 'unique-key-123';
+
+      await resend.inboxes.drafts.create(
+        { inboxId, to: 'ada@example.com', text: 'Hi' },
+        { idempotencyKey },
+      );
+
+      const lastCall = fetchMock.mock.calls[0];
+      expect(lastCall).toBeDefined();
+
+      const headers = new Headers(lastCall[1]?.headers);
+      expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
+    });
+
     it('returns a validation error', async () => {
       const error: ErrorResponse = {
         name: 'validation_error',
@@ -217,6 +290,85 @@ describe('Inbox drafts', () => {
         }),
       );
     });
+
+    it('maps attachments to the API shape', async () => {
+      fetchMock.mockOnce(JSON.stringify(draft), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.update({
+        inboxId,
+        draftId,
+        attachments: [
+          {
+            content: 'aGVsbG8=',
+            filename: 'notes.txt',
+            contentType: 'text/plain',
+          },
+        ],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({
+            attachments: [
+              {
+                content: 'aGVsbG8=',
+                filename: 'notes.txt',
+                content_type: 'text/plain',
+              },
+            ],
+          }),
+        }),
+      );
+    });
+
+    it('sends null attachments to remove every attachment', async () => {
+      fetchMock.mockOnce(JSON.stringify({ ...draft, attachments: [] }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.update({
+        inboxId,
+        draftId,
+        attachments: null,
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ attachments: null }),
+        }),
+      );
+    });
+
+    it('sends an empty attachments array to remove every attachment', async () => {
+      fetchMock.mockOnce(JSON.stringify({ ...draft, attachments: [] }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.update({ inboxId, draftId, attachments: [] });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ attachments: [] }),
+        }),
+      );
+    });
   });
 
   describe('remove', () => {
@@ -243,10 +395,7 @@ describe('Inbox drafts', () => {
   describe('send', () => {
     it('sends a draft', async () => {
       const response: SendInboxDraftResponseSuccess = {
-        object: 'inbox_draft',
-        id: draftId,
-        thread_id: 'b2c3d4e5-0000-4000-8000-000000000000',
-        email_id: 'c3d4e5f6-0000-4000-8000-000000000000',
+        id: 'c3d4e5f6-0000-4000-8000-000000000000',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -263,6 +412,29 @@ describe('Inbox drafts', () => {
         `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}/send`,
         expect.objectContaining({
           method: 'POST',
+        }),
+      );
+    });
+
+    it('sends custom headers in the body', async () => {
+      fetchMock.mockOnce(JSON.stringify({ id: draftId }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.send({
+        inboxId,
+        draftId,
+        headers: { 'X-Ticket-Id': '4821' },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}/send`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({ headers: { 'X-Ticket-Id': '4821' } }),
         }),
       );
     });

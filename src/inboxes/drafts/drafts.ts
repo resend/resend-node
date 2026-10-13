@@ -1,4 +1,5 @@
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
+import { parseAttachments } from '../../common/utils/parse-email-to-api-options';
 import type { Resend } from '../../resend';
 import { buildInboxCursorUrl } from '../build-inbox-cursor-query';
 import type {
@@ -54,11 +55,13 @@ export class InboxDrafts {
     payload: CreateInboxDraftOptions,
     options: CreateInboxDraftRequestOptions = {},
   ): Promise<CreateInboxDraftResponse> {
-    const { inboxId, threadId, replyToEmailId, ...content } = payload;
+    const { inboxId, threadId, replyToEmailId, attachments, ...content } =
+      payload;
     return this.resend.post<CreateInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts`,
       {
         ...content,
+        attachments: parseAttachments(attachments),
         thread_id: threadId,
         reply_to_email_id: replyToEmailId,
       },
@@ -81,10 +84,14 @@ export class InboxDrafts {
     options: UpdateInboxDraftOptions,
     requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxDraftResponse> {
-    const { inboxId, draftId, ...content } = options;
+    const { inboxId, draftId, attachments, ...content } = options;
     return this.resend.patch<UpdateInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}`,
-      content,
+      {
+        ...content,
+        attachments:
+          attachments === null ? null : parseAttachments(attachments),
+      },
       requestOptions,
     );
   }
@@ -105,10 +112,10 @@ export class InboxDrafts {
     payload: SendInboxDraftOptions,
     options: SendInboxDraftRequestOptions = {},
   ): Promise<SendInboxDraftResponse> {
-    const { inboxId, draftId } = payload;
+    const { inboxId, draftId, headers } = payload;
     return this.resend.post<SendInboxDraftResponseSuccess>(
       `/inboxes/${inboxId}/drafts/${draftId}/send`,
-      undefined,
+      headers ? { headers } : undefined,
       options,
     );
   }

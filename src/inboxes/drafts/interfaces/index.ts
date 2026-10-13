@@ -4,7 +4,13 @@ export type {
   CreateInboxDraftResponse,
   CreateInboxDraftResponseSuccess,
 } from './create-inbox-draft.interface';
-export type { InboxDraft, InboxDraftListItem, InboxDraftType } from './draft';
+export type {
+  InboxDraft,
+  InboxDraftAttachment,
+  InboxDraftAttachmentOptions,
+  InboxDraftListItem,
+  InboxDraftType,
+} from './draft';
 export type {
   GetInboxDraftOptions,
   GetInboxDraftResponse,

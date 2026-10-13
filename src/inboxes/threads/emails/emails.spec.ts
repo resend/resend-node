@@ -120,13 +120,11 @@ describe('Inbox thread emails', () => {
   describe('reply', () => {
     it('replies to a thread email', async () => {
       const response: ReplyInboxThreadEmailResponseSuccess = {
-        ...message,
-        direction: 'outbound',
-        email_id: 'd4e5f6a7-0000-4000-8000-000000000000',
+        id: 'd4e5f6a7-0000-4000-8000-000000000000',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
-        status: 201,
+        status: 200,
         headers: {
           'content-type': 'application/json',
         },
@@ -207,6 +205,78 @@ describe('Inbox thread emails', () => {
       );
     });
 
+    it('maps attachments to the API shape', async () => {
+      fetchMock.mockOnce(JSON.stringify({ id: emailId }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.threads.emails.reply({
+        inboxId,
+        threadId,
+        emailId,
+        text: 'Invoice attached.',
+        attachments: [
+          {
+            filename: 'invoice.txt',
+            content: 'aGVsbG8=',
+            contentType: 'text/plain',
+            contentId: 'invoice',
+          },
+          { path: 'https://example.com/invoice.pdf' },
+        ],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            text: 'Invoice attached.',
+            attachments: [
+              {
+                content: 'aGVsbG8=',
+                filename: 'invoice.txt',
+                content_type: 'text/plain',
+                content_id: 'invoice',
+              },
+              { path: 'https://example.com/invoice.pdf' },
+            ],
+          }),
+        }),
+      );
+    });
+
+    it('sends custom headers', async () => {
+      fetchMock.mockOnce(JSON.stringify({ id: emailId }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.threads.emails.reply({
+        inboxId,
+        threadId,
+        emailId,
+        text: 'Thanks, sent.',
+        headers: { 'X-Ticket-Id': '4821' },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            text: 'Thanks, sent.',
+            headers: { 'X-Ticket-Id': '4821' },
+          }),
+        }),
+      );
+    });
+
     it('returns a validation error', async () => {
       const error: ErrorResponse = {
         name: 'missing_required_field',
@@ -260,24 +330,10 @@ describe('Inbox thread emails', () => {
     it('forwards a thread email', async () => {
       const response: ForwardInboxThreadEmailResponseSuccess = {
         id: 'd4e5f6a7-0000-4000-8000-000000000000',
-        email_id: 'd4e5f6a7-0000-4000-8000-000000000000',
-        direction: 'outbound',
-        from: 'support@example.com',
-        to: ['colleague@example.com'],
-        cc: [],
-        bcc: [],
-        reply_to: [],
-        subject: 'Fwd: Billing question',
-        message_id: null,
-        html: null,
-        text: 'See below.',
-        attachments: [],
-        read: true,
-        received_at: '2026-09-01T00:00:00.000Z',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
-        status: 201,
+        status: 200,
         headers: {
           'content-type': 'application/json',
         },
@@ -331,6 +387,62 @@ describe('Inbox thread emails', () => {
             cc: ['manager@example.com'],
             bcc: 'audit@example.com',
             text: 'See below.',
+          }),
+        }),
+      );
+    });
+
+    it('maps attachments to the API shape', async () => {
+      fetchMock.mockOnce(JSON.stringify({ id: emailId }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.threads.emails.forward({
+        inboxId,
+        threadId,
+        emailId,
+        to: 'colleague@example.com',
+        attachments: [{ filename: 'notes.txt', content: 'aGVsbG8=' }],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            to: 'colleague@example.com',
+            attachments: [{ content: 'aGVsbG8=', filename: 'notes.txt' }],
+          }),
+        }),
+      );
+    });
+
+    it('sends custom headers', async () => {
+      fetchMock.mockOnce(JSON.stringify({ id: emailId }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.threads.emails.forward({
+        inboxId,
+        threadId,
+        emailId,
+        to: 'colleague@example.com',
+        headers: { 'X-Ticket-Id': '4821' },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            to: 'colleague@example.com',
+            headers: { 'X-Ticket-Id': '4821' },
           }),
         }),
       );
