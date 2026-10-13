@@ -238,35 +238,6 @@ describe('Inbox threads', () => {
       );
     });
 
-    it('maps labelId to label_id', async () => {
-      mockSuccessResponse(
-        {
-          object: 'inbox_thread',
-          id: threadId,
-          subject: 'Billing question',
-          folder: 'inbox',
-          labels: [],
-          read: true,
-        },
-        { headers: {} },
-      );
-
-      await resend.inboxes.threads.update({
-        inboxId,
-        threadId,
-        labelId: 'a1b2c3d4-0000-4000-8000-000000000000',
-      });
-
-      expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}`,
-        expect.objectContaining({
-          method: 'PATCH',
-          body: JSON.stringify({
-            label_id: 'a1b2c3d4-0000-4000-8000-000000000000',
-          }),
-        }),
-      );
-    });
     it('maps addLabelIds and removeLabelIds to add_label_ids and remove_label_ids', async () => {
       mockSuccessResponse(
         {

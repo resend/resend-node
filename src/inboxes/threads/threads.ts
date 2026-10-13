@@ -112,21 +112,13 @@ export class InboxThreads {
     options: UpdateInboxThreadOptions,
     requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxThreadResponse> {
-    const {
-      inboxId,
-      threadId,
-      read,
-      folder,
-      labelId,
-      addLabelIds,
-      removeLabelIds,
-    } = options;
+    const { inboxId, threadId, read, folder, addLabelIds, removeLabelIds } =
+      options;
     return this.resend.patch<UpdateInboxThreadResponseSuccess>(
       `/inboxes/${inboxId}/threads/${threadId}`,
       {
         read,
         folder,
-        label_id: labelId,
         add_label_ids: addLabelIds,
         remove_label_ids: removeLabelIds,
       },
