@@ -17,7 +17,7 @@ export interface InboxThread {
   cc: string[];
   bcc: string[];
   labels: InboxThreadLabel[];
-  message_count: number;
+  emails_count: number;
   has_attachment: boolean;
   has_draft: boolean;
   read: boolean;
