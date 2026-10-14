@@ -73,6 +73,30 @@ describe('Inbox agent', () => {
       );
     });
 
+    it('sends a preset tone as it is', async () => {
+      const response: UpdateInboxAgentResponseSuccess = {
+        object: 'inbox_agent',
+        id: agentId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.agent.update({ inboxId, tone: 'concise_casual' });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/agent`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ tone: 'concise_casual' }),
+        }),
+      );
+    });
+
     it('sends null to clear the tone', async () => {
       const response: UpdateInboxAgentResponseSuccess = {
         object: 'inbox_agent',

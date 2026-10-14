@@ -1,5 +1,10 @@
-export type { InboxAgentAction, InboxAgentSettings } from './agent';
-export { INBOX_AGENT_ACTIONS } from './agent';
+export type {
+  InboxAgentAction,
+  InboxAgentSettings,
+  InboxAgentTone,
+  InboxAgentTonePreset,
+} from './agent';
+export { INBOX_AGENT_ACTIONS, INBOX_AGENT_TONE_PRESETS } from './agent';
 export type {
   GetInboxAgentOptions,
   GetInboxAgentResponse,
