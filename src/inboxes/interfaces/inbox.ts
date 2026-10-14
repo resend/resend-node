@@ -18,9 +18,11 @@ export const MOVE_THREAD_FOLDERS = [
 export type MoveThreadFolder = (typeof MOVE_THREAD_FOLDERS)[number];
 
 /**
- * Hex color like #E93D82
+ * Hex color in the #RRGGBB format
  *
- * The API validates the format and rejects anything else with a 422
+ * The API rejects any other value with a 422
+ *
+ * @example '#E93D82'
  */
 export type InboxLabelColor = string;
 
