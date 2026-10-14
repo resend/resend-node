@@ -127,6 +127,37 @@ describe('Inbox labels', () => {
         }),
       );
     });
+
+    it('updates a label color from a payload with an inferred string type', async () => {
+      const response: UpdateInboxLabelResponseSuccess = {
+        object: 'inbox_label',
+        id: labelId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const payload = {
+        inboxId,
+        labelId,
+        color: '#E93D82',
+      };
+
+      const data = await resend.inboxes.labels.update(payload);
+
+      expect(data.data).toEqual(response);
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/labels/${labelId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ color: '#E93D82' }),
+        }),
+      );
+    });
   });
 
   describe('remove', () => {
