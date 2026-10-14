@@ -22,6 +22,6 @@ export type InboxAgentTone = (typeof INBOX_AGENT_TONES)[number];
 export interface InboxAgentSettings {
   object: 'inbox_agent';
   instructions: string | null;
-  tone: string | null;
+  tone: InboxAgentTone | null;
   enabled_actions: InboxAgentAction[];
 }

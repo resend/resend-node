@@ -22,7 +22,7 @@ describe('Inbox agent', () => {
       const response: GetInboxAgentResponseSuccess = {
         object: 'inbox_agent',
         instructions: 'Answer refund questions yourself.',
-        tone: 'friendly and concise',
+        tone: 'concise_professional',
         enabled_actions: ['draft_reply', 'add_labels'],
       };
 
