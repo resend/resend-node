@@ -20,8 +20,6 @@ export type MoveThreadFolder = (typeof MOVE_THREAD_FOLDERS)[number];
 /**
  * Hex color in the #RRGGBB format
  *
- * The API rejects any other value with a 422
- *
  * @example '#E93D82'
  */
 export type InboxLabelColor = string;
