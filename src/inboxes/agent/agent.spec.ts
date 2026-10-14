@@ -22,7 +22,7 @@ describe('Inbox agent', () => {
       const response: GetInboxAgentResponseSuccess = {
         object: 'inbox_agent',
         instructions: 'Answer refund questions yourself.',
-        tone: 'friendly and concise',
+        tone: 'concise_professional',
         enabled_actions: ['draft_reply', 'add_labels'],
       };
 
@@ -73,6 +73,30 @@ describe('Inbox agent', () => {
       );
     });
 
+    it('sends a preset tone as it is', async () => {
+      const response: UpdateInboxAgentResponseSuccess = {
+        object: 'inbox_agent',
+        id: agentId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.agent.update({ inboxId, tone: 'concise_casual' });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/agent`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ tone: 'concise_casual' }),
+        }),
+      );
+    });
+
     it('sends null to clear the tone', async () => {
       const response: UpdateInboxAgentResponseSuccess = {
         object: 'inbox_agent',
@@ -101,7 +125,7 @@ describe('Inbox agent', () => {
       const error: ErrorResponse = {
         name: 'validation_error',
         statusCode: 422,
-        message: 'The tone must be 64 characters or less.',
+        message: 'The instructions must be 4000 characters or less.',
       };
 
       fetchMock.mockOnce(JSON.stringify(error), {
@@ -113,7 +137,7 @@ describe('Inbox agent', () => {
 
       const data = await resend.inboxes.agent.update({
         inboxId,
-        tone: 'x'.repeat(65),
+        instructions: 'x'.repeat(4001),
       });
 
       expect(data.error).toEqual(error);

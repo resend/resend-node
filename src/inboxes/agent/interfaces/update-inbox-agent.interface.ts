@@ -1,12 +1,12 @@
 import type { RequireAtLeastOne } from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
-import type { InboxAgentAction } from './agent';
+import type { InboxAgentAction, InboxAgentTone } from './agent';
 
 export type UpdateInboxAgentOptions = {
   inboxId: string;
 } & RequireAtLeastOne<{
   instructions?: string | null;
-  tone?: string | null;
+  tone?: InboxAgentTone | null;
   enabledActions?: InboxAgentAction[];
 }>;
 
