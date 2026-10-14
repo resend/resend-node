@@ -174,6 +174,22 @@ await resend.templates
   .publish({ signal });
 ```
 
+## Inboxes
+
+Create an inbox and list its threads:
+
+```js
+const { data: inbox } = await resend.inboxes.create({
+  emailAddress: 'support@example.com',
+  name: 'support',
+});
+
+const { data: threads } = await resend.inboxes.threads.list({
+  inboxId: inbox.id,
+  folders: ['inbox'],
+});
+```
+
 ## License
 
 MIT License

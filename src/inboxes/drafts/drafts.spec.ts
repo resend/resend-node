@@ -1,0 +1,465 @@
+import createFetchMock from 'vitest-fetch-mock';
+import type { ErrorResponse } from '../../interfaces';
+import { Resend } from '../../resend';
+import { mockSuccessResponse } from '../../test-utils/mock-fetch';
+import type { CreateInboxDraftResponseSuccess } from './interfaces/create-inbox-draft.interface';
+import type { InboxDraft } from './interfaces/draft';
+import type { ListInboxDraftsResponseSuccess } from './interfaces/list-inbox-drafts.interface';
+import type { RemoveInboxDraftResponseSuccess } from './interfaces/remove-inbox-draft.interface';
+import type { SendInboxDraftResponseSuccess } from './interfaces/send-inbox-draft.interface';
+
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+
+const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+const inboxId = '430eed87-632a-4ea6-90db-0aace67ec228';
+const draftId = 'e5f6a7b8-0000-4000-8000-000000000000';
+
+const draft: InboxDraft = {
+  object: 'inbox_draft',
+  id: draftId,
+  type: 'standalone',
+  to: ['ada@example.com'],
+  cc: [],
+  bcc: [],
+  subject: 'Hello',
+  html: null,
+  text: 'Hi',
+  thread_id: null,
+  reply_to_email_id: null,
+  email_id: null,
+  created_at: '2026-09-01T00:00:00.000Z',
+  updated_at: '2026-09-01T00:00:00.000Z',
+  attachments: [
+    {
+      id: 'f6a7b8c9-0000-4000-8000-000000000000',
+      filename: 'notes.txt',
+      content_type: 'text/plain',
+      size: 5,
+    },
+  ],
+};
+
+describe('Inbox drafts', () => {
+  afterEach(() => fetchMock.resetMocks());
+  afterAll(() => fetchMocker.disableMocks());
+
+  describe('list', () => {
+    const response: ListInboxDraftsResponseSuccess = {
+      object: 'list',
+      has_more: true,
+      data: [
+        {
+          id: draftId,
+          type: 'standalone',
+          to: ['ada@example.com'],
+          cc: [],
+          bcc: [],
+          subject: 'Hello',
+          snippet: 'Hi',
+          thread_id: null,
+          reply_to_email_id: null,
+          updated_at: '2026-09-01T00:00:00.000Z',
+          attachments: [],
+        },
+      ],
+    };
+
+    it('lists drafts', async () => {
+      mockSuccessResponse(response, { headers: {} });
+
+      const data = await resend.inboxes.drafts.list({ inboxId });
+
+      expect(data.data).toEqual(response);
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts`,
+        expect.objectContaining({
+          method: 'GET',
+        }),
+      );
+    });
+
+    it('propagates the id cursor', async () => {
+      mockSuccessResponse(response, { headers: {} });
+
+      await resend.inboxes.drafts.list({
+        inboxId,
+        after: draftId,
+        limit: 20,
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts?limit=20&after=${draftId}`,
+        expect.objectContaining({
+          method: 'GET',
+        }),
+      );
+    });
+  });
+
+  describe('create', () => {
+    it('creates a draft', async () => {
+      const response: CreateInboxDraftResponseSuccess = {
+        object: 'inbox_draft',
+        id: draftId,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 201,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const data = await resend.inboxes.drafts.create({
+        inboxId,
+        to: ['ada@example.com'],
+        subject: 'Hello',
+        text: 'Hi',
+      });
+
+      expect(data.data).toEqual(response);
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            to: ['ada@example.com'],
+            subject: 'Hello',
+            text: 'Hi',
+          }),
+        }),
+      );
+    });
+
+    it('maps threadId and replyToEmailId to the API body', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 201,
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+
+      await resend.inboxes.drafts.create({
+        inboxId,
+        text: 'Thanks',
+        threadId: 'b2c3d4e5-0000-4000-8000-000000000000',
+        replyToEmailId: 'c3d4e5f6-0000-4000-8000-000000000000',
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            text: 'Thanks',
+            thread_id: 'b2c3d4e5-0000-4000-8000-000000000000',
+            reply_to_email_id: 'c3d4e5f6-0000-4000-8000-000000000000',
+          }),
+        }),
+      );
+    });
+
+    it('maps attachments to the API shape', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 201,
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+
+      await resend.inboxes.drafts.create({
+        inboxId,
+        attachments: [
+          {
+            content: 'aGVsbG8=',
+            filename: 'notes.txt',
+            contentType: 'text/plain',
+          },
+        ],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            attachments: [
+              {
+                content: 'aGVsbG8=',
+                filename: 'notes.txt',
+                content_type: 'text/plain',
+              },
+            ],
+          }),
+        }),
+      );
+    });
+
+    it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 201,
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+
+      const idempotencyKey = 'unique-key-123';
+
+      await resend.inboxes.drafts.create(
+        { inboxId, to: 'ada@example.com', text: 'Hi' },
+        { idempotencyKey },
+      );
+
+      const lastCall = fetchMock.mock.calls[0];
+      expect(lastCall).toBeDefined();
+
+      const headers = new Headers(lastCall[1]?.headers);
+      expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
+    });
+
+    it('returns a validation error', async () => {
+      const error: ErrorResponse = {
+        name: 'validation_error',
+        statusCode: 422,
+        message: 'A draft must contain at least one non-empty field.',
+      };
+
+      fetchMock.mockOnce(JSON.stringify(error), {
+        status: 422,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const data = await resend.inboxes.drafts.create({ inboxId, text: '' });
+
+      expect(data.error).toEqual(error);
+      expect(data.data).toBeNull();
+    });
+  });
+
+  describe('get', () => {
+    it('gets a draft', async () => {
+      fetchMock.mockOnce(JSON.stringify(draft), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const data = await resend.inboxes.drafts.get({ inboxId, draftId });
+
+      expect(data.data).toEqual(draft);
+    });
+  });
+
+  describe('update', () => {
+    it('updates a draft', async () => {
+      const updated = { ...draft, subject: 'Updated' };
+
+      fetchMock.mockOnce(JSON.stringify(updated), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const data = await resend.inboxes.drafts.update({
+        inboxId,
+        draftId,
+        subject: 'Updated',
+      });
+
+      expect(data.data).toEqual(updated);
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ subject: 'Updated' }),
+        }),
+      );
+    });
+
+    it('maps attachments to the API shape', async () => {
+      fetchMock.mockOnce(JSON.stringify(draft), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.update({
+        inboxId,
+        draftId,
+        attachments: [
+          {
+            content: 'aGVsbG8=',
+            filename: 'notes.txt',
+            contentType: 'text/plain',
+          },
+        ],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({
+            attachments: [
+              {
+                content: 'aGVsbG8=',
+                filename: 'notes.txt',
+                content_type: 'text/plain',
+              },
+            ],
+          }),
+        }),
+      );
+    });
+
+    it('sends null attachments to remove every attachment', async () => {
+      fetchMock.mockOnce(JSON.stringify({ ...draft, attachments: [] }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.update({
+        inboxId,
+        draftId,
+        attachments: null,
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ attachments: null }),
+        }),
+      );
+    });
+
+    it('sends an empty attachments array to remove every attachment', async () => {
+      fetchMock.mockOnce(JSON.stringify({ ...draft, attachments: [] }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.update({ inboxId, draftId, attachments: [] });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ attachments: [] }),
+        }),
+      );
+    });
+  });
+
+  describe('remove', () => {
+    it('removes a draft', async () => {
+      const response: RemoveInboxDraftResponseSuccess = {
+        object: 'inbox_draft',
+        id: draftId,
+        deleted: true,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const data = await resend.inboxes.drafts.remove({ inboxId, draftId });
+
+      expect(data.data).toEqual(response);
+    });
+  });
+
+  describe('send', () => {
+    it('sends a draft', async () => {
+      const response: SendInboxDraftResponseSuccess = {
+        id: 'c3d4e5f6-0000-4000-8000-000000000000',
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const data = await resend.inboxes.drafts.send({ inboxId, draftId });
+
+      expect(data.data).toEqual(response);
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}/send`,
+        expect.objectContaining({
+          method: 'POST',
+        }),
+      );
+    });
+
+    it('sends custom headers in the body', async () => {
+      fetchMock.mockOnce(JSON.stringify({ id: draftId }), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      await resend.inboxes.drafts.send({
+        inboxId,
+        draftId,
+        headers: { 'X-Ticket-Id': '4821' },
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}/send`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({ headers: { 'X-Ticket-Id': '4821' } }),
+        }),
+      );
+    });
+
+    it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
+      fetchMock.mockOnce(JSON.stringify({}), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const idempotencyKey = 'unique-key-123';
+
+      await resend.inboxes.drafts.send(
+        { inboxId, draftId },
+        { idempotencyKey },
+      );
+
+      const lastCall = fetchMock.mock.calls[0];
+      expect(lastCall).toBeDefined();
+
+      const headers = new Headers(lastCall[1]?.headers);
+      expect(headers.has('Idempotency-Key')).toBe(true);
+      expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
+    });
+  });
+});
