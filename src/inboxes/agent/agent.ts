@@ -28,10 +28,10 @@ export class InboxAgent {
     options: UpdateInboxAgentOptions,
     requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxAgentResponse> {
-    const { inboxId, instructions, tone, enabledActions } = options;
+    const { inboxId, instructions, tone, actions } = options;
     return this.resend.patch<UpdateInboxAgentResponseSuccess>(
       `/inboxes/${inboxId}/agent`,
-      { instructions, tone, enabled_actions: enabledActions },
+      { instructions, tone, actions },
       requestOptions,
     );
   }

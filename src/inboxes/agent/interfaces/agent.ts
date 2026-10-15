@@ -23,5 +23,5 @@ export interface InboxAgentSettings {
   object: 'inbox_agent';
   instructions: string | null;
   tone: InboxAgentTone | null;
-  enabled_actions: InboxAgentAction[];
+  actions: InboxAgentAction[];
 }
