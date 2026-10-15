@@ -43,5 +43,4 @@ export interface ReplyInboxEmailResponseSuccess {
   id: string;
 }
 
-export type ReplyInboxEmailResponse =
-  Response<ReplyInboxEmailResponseSuccess>;
+export type ReplyInboxEmailResponse = Response<ReplyInboxEmailResponseSuccess>;

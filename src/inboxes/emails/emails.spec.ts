@@ -1,10 +1,10 @@
 import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
+import type { InboxMessage } from '../threads/interfaces/thread';
 import type { ForwardInboxEmailResponseSuccess } from './interfaces/forward-inbox-email.interface';
 import type { ListInboxEmailsResponseSuccess } from './interfaces/list-inbox-emails.interface';
 import type { ReplyInboxEmailResponseSuccess } from './interfaces/reply-inbox-email.interface';
-import type { InboxMessage } from '../threads/interfaces/thread';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -12,7 +12,6 @@ fetchMocker.enableMocks();
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
 const inboxId = '430eed87-632a-4ea6-90db-0aace67ec228';
-const threadId = 'b2c3d4e5-0000-4000-8000-000000000000';
 const emailId = 'c3d4e5f6-0000-4000-8000-000000000000';
 
 const message: InboxMessage = {
@@ -32,12 +31,12 @@ const message: InboxMessage = {
   received_at: '2026-09-01T00:00:00.000Z',
 };
 
-describe('Inbox thread emails', () => {
+describe('Inbox emails', () => {
   afterEach(() => fetchMock.resetMocks());
   afterAll(() => fetchMocker.disableMocks());
 
   describe('list', () => {
-    it('lists thread emails', async () => {
+    it('lists inbox emails', async () => {
       const response: ListInboxEmailsResponseSuccess = {
         object: 'list',
         has_more: false,
@@ -53,19 +52,18 @@ describe('Inbox thread emails', () => {
 
       const data = await resend.inboxes.threads.emails.list({
         inboxId,
-        threadId,
       });
 
       expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails`,
+        `https://api.resend.com/inboxes/${inboxId}/emails`,
         expect.objectContaining({
           method: 'GET',
         }),
       );
     });
 
-    it('lists thread emails with pagination', async () => {
+    it('lists inbox emails with pagination', async () => {
       fetchMock.mockOnce(
         JSON.stringify({ object: 'list', has_more: false, data: [] }),
         {
@@ -78,13 +76,12 @@ describe('Inbox thread emails', () => {
 
       await resend.inboxes.threads.emails.list({
         inboxId,
-        threadId,
         limit: 10,
         after: emailId,
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails?limit=10&after=${emailId}`,
+        `https://api.resend.com/inboxes/${inboxId}/emails?limit=10&after=${emailId}`,
         expect.objectContaining({
           method: 'GET',
         }),
@@ -93,7 +90,7 @@ describe('Inbox thread emails', () => {
   });
 
   describe('get', () => {
-    it('gets a thread email', async () => {
+    it('gets an inbox email', async () => {
       fetchMock.mockOnce(JSON.stringify(message), {
         status: 200,
         headers: {
@@ -103,13 +100,12 @@ describe('Inbox thread emails', () => {
 
       const data = await resend.inboxes.threads.emails.get({
         inboxId,
-        threadId,
         emailId,
       });
 
       expect(data.data).toEqual(message);
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}`,
+        `https://api.resend.com/inboxes/${inboxId}/emails/${emailId}`,
         expect.objectContaining({
           method: 'GET',
         }),
@@ -118,7 +114,7 @@ describe('Inbox thread emails', () => {
   });
 
   describe('reply', () => {
-    it('replies to a thread email', async () => {
+    it('replies to an inbox email', async () => {
       const response: ReplyInboxEmailResponseSuccess = {
         id: 'd4e5f6a7-0000-4000-8000-000000000000',
       };
@@ -132,14 +128,13 @@ describe('Inbox thread emails', () => {
 
       const data = await resend.inboxes.threads.emails.reply({
         inboxId,
-        threadId,
         emailId,
         text: 'Thanks, sent.',
       });
 
       expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+        `https://api.resend.com/inboxes/${inboxId}/emails/${emailId}/reply`,
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({ text: 'Thanks, sent.' }),
@@ -157,7 +152,6 @@ describe('Inbox thread emails', () => {
 
       await resend.inboxes.threads.emails.reply({
         inboxId,
-        threadId,
         emailId,
         text: 'Thanks, sent.',
         cc: 'manager@example.com',
@@ -165,7 +159,7 @@ describe('Inbox thread emails', () => {
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+        `https://api.resend.com/inboxes/${inboxId}/emails/${emailId}/reply`,
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({
@@ -187,14 +181,13 @@ describe('Inbox thread emails', () => {
 
       await resend.inboxes.threads.emails.reply({
         inboxId,
-        threadId,
         emailId,
         text: 'Thanks, sent.',
         replyAll: true,
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+        `https://api.resend.com/inboxes/${inboxId}/emails/${emailId}/reply`,
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({
@@ -215,7 +208,6 @@ describe('Inbox thread emails', () => {
 
       await resend.inboxes.threads.emails.reply({
         inboxId,
-        threadId,
         emailId,
         text: 'Invoice attached.',
         attachments: [
@@ -230,7 +222,7 @@ describe('Inbox thread emails', () => {
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+        `https://api.resend.com/inboxes/${inboxId}/emails/${emailId}/reply`,
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({
@@ -259,14 +251,13 @@ describe('Inbox thread emails', () => {
 
       await resend.inboxes.threads.emails.reply({
         inboxId,
-        threadId,
         emailId,
         text: 'Thanks, sent.',
         headers: { 'X-Ticket-Id': '4821' },
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+        `https://api.resend.com/inboxes/${inboxId}/emails/${emailId}/reply`,
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({
@@ -293,7 +284,6 @@ describe('Inbox thread emails', () => {
 
       const data = await resend.inboxes.threads.emails.reply({
         inboxId,
-        threadId,
         emailId,
         text: '',
       });
@@ -313,7 +303,7 @@ describe('Inbox thread emails', () => {
       const idempotencyKey = 'unique-key-123';
 
       await resend.inboxes.threads.emails.reply(
-        { inboxId, threadId, emailId, text: 'Thanks, sent.' },
+        { inboxId, emailId, text: 'Thanks, sent.' },
         { idempotencyKey },
       );
 
@@ -327,7 +317,7 @@ describe('Inbox thread emails', () => {
   });
 
   describe('forward', () => {
-    it('forwards a thread email', async () => {
+    it('forwards an inbox email', async () => {
       const response: ForwardInboxEmailResponseSuccess = {
         id: 'd4e5f6a7-0000-4000-8000-000000000000',
       };
@@ -341,7 +331,6 @@ describe('Inbox thread emails', () => {
 
       const data = await resend.inboxes.threads.emails.forward({
         inboxId,
-        threadId,
         emailId,
         to: 'colleague@example.com',
         text: 'See below.',
@@ -349,7 +338,7 @@ describe('Inbox thread emails', () => {
 
       expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
+        `https://api.resend.com/inboxes/${inboxId}/emails/${emailId}/forward`,
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({
@@ -370,7 +359,6 @@ describe('Inbox thread emails', () => {
 
       await resend.inboxes.threads.emails.forward({
         inboxId,
-        threadId,
         emailId,
         to: ['colleague@example.com'],
         cc: ['manager@example.com'],
@@ -379,7 +367,7 @@ describe('Inbox thread emails', () => {
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
+        `https://api.resend.com/inboxes/${inboxId}/emails/${emailId}/forward`,
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({
@@ -402,14 +390,13 @@ describe('Inbox thread emails', () => {
 
       await resend.inboxes.threads.emails.forward({
         inboxId,
-        threadId,
         emailId,
         to: 'colleague@example.com',
         attachments: [{ filename: 'notes.txt', content: 'aGVsbG8=' }],
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
+        `https://api.resend.com/inboxes/${inboxId}/emails/${emailId}/forward`,
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({
@@ -430,14 +417,13 @@ describe('Inbox thread emails', () => {
 
       await resend.inboxes.threads.emails.forward({
         inboxId,
-        threadId,
         emailId,
         to: 'colleague@example.com',
         headers: { 'X-Ticket-Id': '4821' },
       });
 
       expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
+        `https://api.resend.com/inboxes/${inboxId}/emails/${emailId}/forward`,
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({
@@ -461,7 +447,6 @@ describe('Inbox thread emails', () => {
       await resend.inboxes.threads.emails.forward(
         {
           inboxId,
-          threadId,
           emailId,
           to: 'colleague@example.com',
           text: 'See below.',

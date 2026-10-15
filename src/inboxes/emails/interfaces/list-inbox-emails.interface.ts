@@ -12,5 +12,4 @@ export interface ListInboxEmailsResponseSuccess {
   data: InboxMessage[];
 }
 
-export type ListInboxEmailsResponse =
-  Response<ListInboxEmailsResponseSuccess>;
+export type ListInboxEmailsResponse = Response<ListInboxEmailsResponseSuccess>;

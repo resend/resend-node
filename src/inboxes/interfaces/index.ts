@@ -1,5 +1,6 @@
 export * from '../agent/interfaces';
 export type * from '../drafts/interfaces';
+export type * from '../emails/interfaces';
 export type * from '../labels/interfaces';
 export type * from '../threads/interfaces';
 export type {

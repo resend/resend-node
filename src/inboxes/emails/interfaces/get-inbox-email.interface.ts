@@ -8,5 +8,4 @@ export interface GetInboxEmailOptions {
 
 export type GetInboxEmailResponseSuccess = InboxMessage;
 
-export type GetInboxEmailResponse =
-  Response<GetInboxEmailResponseSuccess>;
+export type GetInboxEmailResponse = Response<GetInboxEmailResponseSuccess>;

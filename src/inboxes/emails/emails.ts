@@ -32,22 +32,16 @@ export class InboxEmails {
     options: ListInboxEmailsOptions,
     requestOptions: RequestOptions = {},
   ): Promise<ListInboxEmailsResponse> {
-    const { inboxId,  ...pagination } = options;
-    const url = buildPaginationUrl(
-      `/inboxes/${inboxId}/emails`,
-      pagination,
-    );
-    return this.resend.get<ListInboxEmailsResponseSuccess>(
-      url,
-      requestOptions,
-    );
+    const { inboxId, ...pagination } = options;
+    const url = buildPaginationUrl(`/inboxes/${inboxId}/emails`, pagination);
+    return this.resend.get<ListInboxEmailsResponseSuccess>(url, requestOptions);
   }
 
   async get(
     options: GetInboxEmailOptions,
     requestOptions: RequestOptions = {},
   ): Promise<GetInboxEmailResponse> {
-    const { inboxId,  emailId } = options;
+    const { inboxId, emailId } = options;
     return this.resend.get<GetInboxEmailResponseSuccess>(
       `/inboxes/${inboxId}/emails/${emailId}`,
       requestOptions,
