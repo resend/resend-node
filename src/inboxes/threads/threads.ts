@@ -28,12 +28,15 @@ import type {
   UpdateInboxThreadResponse,
   UpdateInboxThreadResponseSuccess,
 } from './interfaces/update-inbox-thread.interface';
+import { InboxThreadLabels } from './labels/labels';
 
 export class InboxThreads {
   readonly emails: InboxThreadEmails;
+  readonly labels: InboxThreadLabels;
 
   constructor(private readonly resend: Resend) {
     this.emails = new InboxThreadEmails(resend);
+    this.labels = new InboxThreadLabels(resend);
   }
 
   async list(
@@ -131,15 +134,10 @@ export class InboxThreads {
       return missingInboxError();
     }
 
-    const { threadId, read, folder, addLabelIds, removeLabelIds } = options;
+    const { threadId, read, folder } = options;
     return this.resend.patch<UpdateInboxThreadResponseSuccess>(
       `${inboxPath}/threads/${threadId}`,
-      {
-        read,
-        folder,
-        add_label_ids: addLabelIds,
-        remove_label_ids: removeLabelIds,
-      },
+      { read, folder },
       requestOptions,
     );
   }
