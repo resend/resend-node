@@ -110,6 +110,8 @@ describe('Inboxes', () => {
           from_name: 'Support',
           unread: 2,
           last_received: '2026-09-01T00:00:00.000Z',
+          created_at: '2026-09-01T00:00:00.000Z',
+          updated_at: '2026-09-02T00:00:00.000Z',
         },
       ],
     };
@@ -172,6 +174,7 @@ describe('Inboxes', () => {
         drafts: 1,
         last_received: '2026-09-01T00:00:00.000Z',
         created_at: '2026-09-01T00:00:00.000Z',
+        updated_at: '2026-09-02T00:00:00.000Z',
       };
 
       fetchMock.mockOnce(JSON.stringify(response), {
@@ -199,6 +202,7 @@ describe('Inboxes', () => {
             "object": "inbox",
             "receiving_address": null,
             "unread": 2,
+            "updated_at": "2026-09-02T00:00:00.000Z",
           },
           "error": null,
           "headers": {
