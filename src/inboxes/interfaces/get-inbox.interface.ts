@@ -12,6 +12,7 @@ export interface GetInboxResponseSuccess {
   drafts: number;
   last_received: string | null;
   created_at: string;
+  updated_at: string;
 }
 
 export type GetInboxResponse = Response<GetInboxResponseSuccess>;

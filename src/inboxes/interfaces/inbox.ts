@@ -31,4 +31,6 @@ export interface Inbox {
   from_name: string | null;
   unread: number;
   last_received: string | null;
+  created_at: string;
+  updated_at: string;
 }
