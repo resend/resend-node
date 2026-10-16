@@ -319,6 +319,28 @@ describe('Inboxes', () => {
         }),
       );
     });
+
+    it('updates an inbox by email address', async () => {
+      mockSuccessResponse(
+        {
+          object: 'inbox',
+          id: '430eed87-632a-4ea6-90db-0aace67ec228',
+        },
+        { headers: {} },
+      );
+
+      await resend.inboxes.update('support+billing@example.com', {
+        name: 'billing',
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/inboxes/support%2Bbilling%40example.com',
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({ name: 'billing' }),
+        }),
+      );
+    });
   });
 
   describe('remove', () => {
@@ -353,6 +375,26 @@ describe('Inboxes', () => {
           },
         }
       `);
+    });
+
+    it('removes an inbox by email address', async () => {
+      mockSuccessResponse(
+        {
+          object: 'inbox',
+          id: '430eed87-632a-4ea6-90db-0aace67ec228',
+          deleted: true,
+        },
+        { headers: {} },
+      );
+
+      await resend.inboxes.remove('support+billing@example.com');
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        'https://api.resend.com/inboxes/support%2Bbilling%40example.com',
+        expect.objectContaining({
+          method: 'DELETE',
+        }),
+      );
     });
   });
 });
