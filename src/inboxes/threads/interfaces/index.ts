@@ -46,7 +46,6 @@ export type {
   ReplyInboxThreadEmailResponseSuccess,
 } from './reply-inbox-thread-email.interface';
 export type {
-  InboxThreadSearchHighlightKey,
   InboxThreadSearchResult,
   SearchInboxThreadsOptions,
   SearchInboxThreadsResponse,
