@@ -28,12 +28,12 @@ export type InboxSelector =
   | {
       /** The inbox ID. */
       inboxId: string;
-      email?: never;
+      emailAddress?: never;
     }
   | {
       inboxId?: never;
       /** The inbox email address, such as `support@example.com`. */
-      email: string;
+      emailAddress: string;
     };
 
 export interface Inbox {

@@ -194,7 +194,7 @@ Every inbox method also accepts the inbox email address instead of its ID:
 
 ```js
 const { data: threads } = await resend.inboxes.threads.list({
-  email: 'support@example.com',
+  emailAddress: 'support@example.com',
   folders: ['inbox'],
 });
 

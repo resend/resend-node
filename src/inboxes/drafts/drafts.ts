@@ -68,7 +68,7 @@ export class InboxDrafts {
 
     const {
       inboxId,
-      email,
+      emailAddress,
       threadId,
       replyToEmailId,
       attachments,
@@ -110,7 +110,7 @@ export class InboxDrafts {
       return missingInboxError();
     }
 
-    const { inboxId, email, draftId, attachments, ...content } = options;
+    const { inboxId, emailAddress, draftId, attachments, ...content } = options;
     return this.resend.patch<UpdateInboxDraftResponseSuccess>(
       `${inboxPath}/drafts/${draftId}`,
       {

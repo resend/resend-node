@@ -38,7 +38,7 @@ export class InboxThreadEmails {
       return missingInboxError();
     }
 
-    const { inboxId, email, threadId, ...pagination } = options;
+    const { inboxId, emailAddress, threadId, ...pagination } = options;
     const url = buildPaginationUrl(
       `${inboxPath}/threads/${threadId}/emails`,
       pagination,

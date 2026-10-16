@@ -9,15 +9,15 @@ describe('buildInboxPath', () => {
   });
 
   it('builds the path from the encoded inbox email address', () => {
-    expect(buildInboxPath({ email: 'support+billing@example.com' })).toBe(
-      '/inboxes/support%2Bbilling%40example.com',
-    );
+    expect(
+      buildInboxPath({ emailAddress: 'support+billing@example.com' }),
+    ).toBe('/inboxes/support%2Bbilling%40example.com');
   });
 
   it('prefers the inbox ID when both are passed', () => {
     const selector = {
       inboxId: '430eed87-632a-4ea6-90db-0aace67ec228',
-      email: 'support@example.com',
+      emailAddress: 'support@example.com',
     } as unknown as InboxSelector;
 
     expect(buildInboxPath(selector)).toBe(
@@ -28,7 +28,10 @@ describe('buildInboxPath', () => {
   it('returns undefined without an inbox ID or email address', () => {
     expect(buildInboxPath({} as InboxSelector)).toBeUndefined();
     expect(
-      buildInboxPath({ inboxId: '', email: '' } as unknown as InboxSelector),
+      buildInboxPath({
+        inboxId: '',
+        emailAddress: '',
+      } as unknown as InboxSelector),
     ).toBeUndefined();
   });
 });

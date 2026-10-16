@@ -190,7 +190,7 @@ describe('Inbox selector', () => {
   }) => {
     mockSuccessResponse({}, { headers: {} });
 
-    await call({ email: 'support+billing@example.com' });
+    await call({ emailAddress: 'support+billing@example.com' });
 
     expect(fetchMock).toHaveBeenCalledWith(
       `https://api.resend.com/inboxes/support%2Bbilling%40example.com${path}`,
@@ -211,7 +211,7 @@ describe('Inbox selector', () => {
       data: null,
       headers: null,
       error: {
-        message: 'Missing `inboxId` or `email` field.',
+        message: 'Missing `inboxId` or `emailAddress` field.',
         statusCode: null,
         name: 'missing_required_field',
       },
