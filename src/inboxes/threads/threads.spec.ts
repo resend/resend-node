@@ -129,7 +129,6 @@ describe('Inbox threads', () => {
             received_at: '2026-09-01T00:00:00.000Z',
             folder: 'archive',
             matched_email_id: 'c3d4e5f6-0000-4000-8000-000000000000',
-            highlights: { subject: ['**Invoice** for September'] },
           },
         ],
       };

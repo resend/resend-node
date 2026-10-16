@@ -7,6 +7,7 @@ import type { InboxDraft } from './interfaces/draft';
 import type { ListInboxDraftsResponseSuccess } from './interfaces/list-inbox-drafts.interface';
 import type { RemoveInboxDraftResponseSuccess } from './interfaces/remove-inbox-draft.interface';
 import type { SendInboxDraftResponseSuccess } from './interfaces/send-inbox-draft.interface';
+import type { UpdateInboxDraftResponseSuccess } from './interfaces/update-inbox-draft.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -266,9 +267,12 @@ describe('Inbox drafts', () => {
 
   describe('update', () => {
     it('updates a draft', async () => {
-      const updated = { ...draft, subject: 'Updated' };
+      const response: UpdateInboxDraftResponseSuccess = {
+        object: 'inbox_draft',
+        id: draftId,
+      };
 
-      fetchMock.mockOnce(JSON.stringify(updated), {
+      fetchMock.mockOnce(JSON.stringify(response), {
         status: 200,
         headers: {
           'content-type': 'application/json',
@@ -281,7 +285,7 @@ describe('Inbox drafts', () => {
         subject: 'Updated',
       });
 
-      expect(data.data).toEqual(updated);
+      expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(
         `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
         expect.objectContaining({
@@ -292,12 +296,15 @@ describe('Inbox drafts', () => {
     });
 
     it('maps attachments to the API shape', async () => {
-      fetchMock.mockOnce(JSON.stringify(draft), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
         },
-      });
+      );
 
       await resend.inboxes.drafts.update({
         inboxId,
@@ -329,12 +336,15 @@ describe('Inbox drafts', () => {
     });
 
     it('sends null attachments to remove every attachment', async () => {
-      fetchMock.mockOnce(JSON.stringify({ ...draft, attachments: [] }), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
         },
-      });
+      );
 
       await resend.inboxes.drafts.update({
         inboxId,
@@ -352,12 +362,15 @@ describe('Inbox drafts', () => {
     });
 
     it('sends an empty attachments array to remove every attachment', async () => {
-      fetchMock.mockOnce(JSON.stringify({ ...draft, attachments: [] }), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json',
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
         },
-      });
+      );
 
       await resend.inboxes.drafts.update({ inboxId, draftId, attachments: [] });
 

@@ -1,7 +1,7 @@
 import type { RequireAtLeastOne } from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
 import type { InboxSelector } from '../../interfaces/inbox';
-import type { InboxDraft, InboxDraftAttachmentOptions } from './draft';
+import type { InboxDraftAttachmentOptions } from './draft';
 
 export type UpdateInboxDraftOptions = InboxSelector & {
   draftId: string;
@@ -20,7 +20,10 @@ export type UpdateInboxDraftOptions = InboxSelector & {
     attachments?: InboxDraftAttachmentOptions[] | null;
   }>;
 
-export type UpdateInboxDraftResponseSuccess = InboxDraft;
+export interface UpdateInboxDraftResponseSuccess {
+  object: 'inbox_draft';
+  id: string;
+}
 
 export type UpdateInboxDraftResponse =
   Response<UpdateInboxDraftResponseSuccess>;

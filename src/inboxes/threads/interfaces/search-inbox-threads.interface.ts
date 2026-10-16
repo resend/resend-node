@@ -13,18 +13,8 @@ export type SearchInboxThreadsOptions = ListInboxThreadsOptions & {
   endDate?: string;
 };
 
-export type InboxThreadSearchHighlightKey =
-  | 'subject'
-  | 'body'
-  | 'from'
-  | 'to'
-  | 'cc'
-  | 'bcc'
-  | 'attachments';
-
 export interface InboxThreadSearchResult extends InboxThread {
   matched_email_id: string | null;
-  highlights: Partial<Record<InboxThreadSearchHighlightKey, string[]>>;
 }
 
 export interface SearchInboxThreadsResponseSuccess {
