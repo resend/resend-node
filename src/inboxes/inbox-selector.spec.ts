@@ -96,6 +96,37 @@ const methods: InboxMethod[] = [
       }),
   },
   {
+    name: 'threads.labels.add',
+    method: 'POST',
+    path: `/threads/${threadId}/labels`,
+    body: { labels: [labelId] },
+    call: (inbox) =>
+      resend.inboxes.threads.labels.add({
+        ...inbox,
+        threadId,
+        labels: [labelId],
+      }),
+  },
+  {
+    name: 'threads.labels.set',
+    method: 'PUT',
+    path: `/threads/${threadId}/labels`,
+    body: { labels: [labelId] },
+    call: (inbox) =>
+      resend.inboxes.threads.labels.set({
+        ...inbox,
+        threadId,
+        labels: [labelId],
+      }),
+  },
+  {
+    name: 'threads.labels.remove',
+    method: 'DELETE',
+    path: `/threads/${threadId}/labels/${labelId}`,
+    call: (inbox) =>
+      resend.inboxes.threads.labels.remove({ ...inbox, threadId, labelId }),
+  },
+  {
     name: 'labels.list',
     method: 'GET',
     path: '/labels',
