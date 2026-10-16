@@ -16,8 +16,19 @@ const response: InboxThreadLabelList = {
   data: [{ id: labelId, name: 'Billing', color: '#3b82f6' }],
 };
 
-const mockResponse = () =>
-  fetchMock.mockOnce(JSON.stringify(response), {
+const remainingAfterRemove: InboxThreadLabelList = {
+  object: 'list',
+  data: [
+    {
+      id: 'c3d4e5f6-0000-4000-8000-000000000000',
+      name: 'Urgent',
+      color: '#e93d82',
+    },
+  ],
+};
+
+const mockResponse = (body: InboxThreadLabelList = response) =>
+  fetchMock.mockOnce(JSON.stringify(body), {
     status: 200,
     headers: {
       'content-type': 'application/json',
@@ -129,7 +140,7 @@ describe('Inbox thread labels', () => {
 
   describe('remove', () => {
     it('removes a label from a thread', async () => {
-      mockResponse();
+      mockResponse(remainingAfterRemove);
 
       const data = await resend.inboxes.threads.labels.remove({
         inboxId,
@@ -137,7 +148,7 @@ describe('Inbox thread labels', () => {
         labelId,
       });
 
-      expect(data.data).toEqual(response);
+      expect(data.data).toEqual(remainingAfterRemove);
       expect(fetchMock).toHaveBeenCalledWith(
         `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/labels/${labelId}`,
         expect.objectContaining({
@@ -147,7 +158,7 @@ describe('Inbox thread labels', () => {
     });
 
     it('removes a label from a thread in an inbox addressed by email', async () => {
-      mockResponse();
+      mockResponse(remainingAfterRemove);
 
       await resend.inboxes.threads.labels.remove({
         emailAddress: 'support+billing@example.com',
