@@ -8,10 +8,6 @@ export type UpdateInboxThreadOptions = InboxSelector & {
 } & RequireAtLeastOne<{
     read?: boolean;
     folder?: MoveThreadFolder;
-    /** Label IDs to apply to the thread. Between 1 and 10 IDs. */
-    addLabelIds?: string[];
-    /** Label IDs to remove from the thread. Between 1 and 10 IDs. The labels themselves are kept. */
-    removeLabelIds?: string[];
   }>;
 
 export type UpdateInboxThreadResponseSuccess = InboxThreadSummary;

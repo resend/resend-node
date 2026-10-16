@@ -206,6 +206,21 @@ const calls: Record<string, Call> = {
       { inboxId: 'id', threadId: 'id', emailId: 'id', to: 'b@resend.com' },
       o,
     ),
+  'inboxes.threads.labels.add': (o) =>
+    resend.inboxes.threads.labels.add(
+      { inboxId: 'id', threadId: 'id', labels: ['id'] },
+      o,
+    ),
+  'inboxes.threads.labels.set': (o) =>
+    resend.inboxes.threads.labels.set(
+      { inboxId: 'id', threadId: 'id', labels: [] },
+      o,
+    ),
+  'inboxes.threads.labels.remove': (o) =>
+    resend.inboxes.threads.labels.remove(
+      { inboxId: 'id', threadId: 'id', labelId: 'id' },
+      o,
+    ),
 
   'logs.list': (o) => resend.logs.list({}, o),
   'logs.get': (o) => resend.logs.get('id', o),

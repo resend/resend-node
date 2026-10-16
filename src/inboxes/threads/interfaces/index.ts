@@ -1,4 +1,9 @@
 export type {
+  AddInboxThreadLabelsOptions,
+  AddInboxThreadLabelsResponse,
+  AddInboxThreadLabelsResponseSuccess,
+} from './add-inbox-thread-labels.interface';
+export type {
   ForwardInboxThreadEmailOptions,
   ForwardInboxThreadEmailRequestOptions,
   ForwardInboxThreadEmailResponse,
@@ -30,6 +35,11 @@ export type {
   RemoveInboxThreadResponseSuccess,
 } from './remove-inbox-thread.interface';
 export type {
+  RemoveInboxThreadLabelOptions,
+  RemoveInboxThreadLabelResponse,
+  RemoveInboxThreadLabelResponseSuccess,
+} from './remove-inbox-thread-label.interface';
+export type {
   ReplyInboxThreadEmailOptions,
   ReplyInboxThreadEmailRequestOptions,
   ReplyInboxThreadEmailResponse,
@@ -43,10 +53,16 @@ export type {
   SearchInboxThreadsResponseSuccess,
 } from './search-inbox-threads.interface';
 export type {
+  SetInboxThreadLabelsOptions,
+  SetInboxThreadLabelsResponse,
+  SetInboxThreadLabelsResponseSuccess,
+} from './set-inbox-thread-labels.interface';
+export type {
   InboxMessage,
   InboxMessageAttachment,
   InboxThread,
   InboxThreadLabel,
+  InboxThreadLabelList,
   InboxThreadSummary,
 } from './thread';
 export type {
