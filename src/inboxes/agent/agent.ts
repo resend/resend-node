@@ -39,10 +39,10 @@ export class InboxAgent {
       return missingInboxError();
     }
 
-    const { instructions, tone, enabledActions } = options;
+    const { instructions, tone, actions } = options;
     return this.resend.patch<UpdateInboxAgentResponseSuccess>(
       `${inboxPath}/agent`,
-      { instructions, tone, enabled_actions: enabledActions },
+      { instructions, tone, actions },
       requestOptions,
     );
   }

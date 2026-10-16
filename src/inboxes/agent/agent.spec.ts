@@ -23,7 +23,7 @@ describe('Inbox agent', () => {
         object: 'inbox_agent',
         instructions: 'Answer refund questions yourself.',
         tone: 'concise_professional',
-        enabled_actions: ['draft_reply', 'add_labels'],
+        actions: ['draft_reply', 'add_labels'],
       };
 
       mockSuccessResponse(response, { headers: {} });
@@ -57,7 +57,7 @@ describe('Inbox agent', () => {
       const data = await resend.inboxes.agent.update({
         inboxId,
         instructions: 'Answer refund questions yourself.',
-        enabledActions: ['draft_reply'],
+        actions: ['draft_reply'],
       });
 
       expect(data.data).toEqual(response);
@@ -67,7 +67,7 @@ describe('Inbox agent', () => {
           method: 'PATCH',
           body: JSON.stringify({
             instructions: 'Answer refund questions yourself.',
-            enabled_actions: ['draft_reply'],
+            actions: ['draft_reply'],
           }),
         }),
       );

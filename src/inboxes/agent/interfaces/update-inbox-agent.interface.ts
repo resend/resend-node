@@ -7,7 +7,7 @@ export type UpdateInboxAgentOptions = InboxSelector &
   RequireAtLeastOne<{
     instructions?: string | null;
     tone?: InboxAgentTone | null;
-    enabledActions?: InboxAgentAction[];
+    actions?: InboxAgentAction[];
   }>;
 
 export interface UpdateInboxAgentResponseSuccess {
