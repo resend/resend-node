@@ -189,17 +189,14 @@ const calls: Record<string, Call> = {
     ),
   'inboxes.threads.remove': (o) =>
     resend.inboxes.threads.remove({ inboxId: 'id', threadId: 'id' }, o),
-  'inboxes.threads.emails.list': (o) =>
-    resend.inboxes.threads.emails.list({ inboxId: 'id' }, o),
-  'inboxes.threads.emails.get': (o) =>
-    resend.inboxes.threads.emails.get({ inboxId: 'id', emailId: 'id' }, o),
-  'inboxes.threads.emails.reply': (o) =>
-    resend.inboxes.threads.emails.reply(
-      { inboxId: 'id', emailId: 'id', text: 't' },
-      o,
-    ),
-  'inboxes.threads.emails.forward': (o) =>
-    resend.inboxes.threads.emails.forward(
+  'inboxes.emails.list': (o) =>
+    resend.inboxes.emails.list({ inboxId: 'id' }, o),
+  'inboxes.emails.get': (o) =>
+    resend.inboxes.emails.get({ inboxId: 'id', emailId: 'id' }, o),
+  'inboxes.emails.reply': (o) =>
+    resend.inboxes.emails.reply({ inboxId: 'id', emailId: 'id', text: 't' }, o),
+  'inboxes.emails.forward': (o) =>
+    resend.inboxes.emails.forward(
       { inboxId: 'id', emailId: 'id', to: 'b@resend.com' },
       o,
     ),

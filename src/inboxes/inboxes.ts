@@ -3,6 +3,7 @@ import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import { InboxAgent } from './agent/agent';
 import { InboxDrafts } from './drafts/drafts';
+import { InboxEmails } from './emails/emails';
 import type {
   CreateInboxOptions,
   CreateInboxRequestOptions,
@@ -32,12 +33,14 @@ import { InboxThreads } from './threads/threads';
 
 export class Inboxes {
   readonly threads: InboxThreads;
+  readonly emails: InboxEmails;
   readonly labels: InboxLabels;
   readonly drafts: InboxDrafts;
   readonly agent: InboxAgent;
 
   constructor(private readonly resend: Resend) {
     this.threads = new InboxThreads(resend);
+    this.emails = new InboxEmails(resend);
     this.labels = new InboxLabels(resend);
     this.drafts = new InboxDrafts(resend);
     this.agent = new InboxAgent(resend);

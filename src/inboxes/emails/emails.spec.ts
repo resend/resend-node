@@ -50,7 +50,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.emails.list({
+      const data = await resend.inboxes.emails.list({
         inboxId,
       });
 
@@ -74,7 +74,7 @@ describe('Inbox emails', () => {
         },
       );
 
-      await resend.inboxes.threads.emails.list({
+      await resend.inboxes.emails.list({
         inboxId,
         limit: 10,
         after: emailId,
@@ -98,7 +98,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.emails.get({
+      const data = await resend.inboxes.emails.get({
         inboxId,
         emailId,
       });
@@ -126,7 +126,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.emails.reply({
+      const data = await resend.inboxes.emails.reply({
         inboxId,
         emailId,
         text: 'Thanks, sent.',
@@ -150,7 +150,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      await resend.inboxes.threads.emails.reply({
+      await resend.inboxes.emails.reply({
         inboxId,
         emailId,
         text: 'Thanks, sent.',
@@ -179,7 +179,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      await resend.inboxes.threads.emails.reply({
+      await resend.inboxes.emails.reply({
         inboxId,
         emailId,
         text: 'Thanks, sent.',
@@ -206,7 +206,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      await resend.inboxes.threads.emails.reply({
+      await resend.inboxes.emails.reply({
         inboxId,
         emailId,
         text: 'Invoice attached.',
@@ -249,7 +249,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      await resend.inboxes.threads.emails.reply({
+      await resend.inboxes.emails.reply({
         inboxId,
         emailId,
         text: 'Thanks, sent.',
@@ -282,7 +282,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.emails.reply({
+      const data = await resend.inboxes.emails.reply({
         inboxId,
         emailId,
         text: '',
@@ -302,7 +302,7 @@ describe('Inbox emails', () => {
 
       const idempotencyKey = 'unique-key-123';
 
-      await resend.inboxes.threads.emails.reply(
+      await resend.inboxes.emails.reply(
         { inboxId, emailId, text: 'Thanks, sent.' },
         { idempotencyKey },
       );
@@ -329,7 +329,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      const data = await resend.inboxes.threads.emails.forward({
+      const data = await resend.inboxes.emails.forward({
         inboxId,
         emailId,
         to: 'colleague@example.com',
@@ -357,7 +357,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      await resend.inboxes.threads.emails.forward({
+      await resend.inboxes.emails.forward({
         inboxId,
         emailId,
         to: ['colleague@example.com'],
@@ -388,7 +388,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      await resend.inboxes.threads.emails.forward({
+      await resend.inboxes.emails.forward({
         inboxId,
         emailId,
         to: 'colleague@example.com',
@@ -415,7 +415,7 @@ describe('Inbox emails', () => {
         },
       });
 
-      await resend.inboxes.threads.emails.forward({
+      await resend.inboxes.emails.forward({
         inboxId,
         emailId,
         to: 'colleague@example.com',
@@ -444,7 +444,7 @@ describe('Inbox emails', () => {
 
       const idempotencyKey = 'unique-key-123';
 
-      await resend.inboxes.threads.emails.forward(
+      await resend.inboxes.emails.forward(
         {
           inboxId,
           emailId,
