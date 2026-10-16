@@ -190,6 +190,17 @@ const { data: threads } = await resend.inboxes.threads.list({
 });
 ```
 
+Every inbox method also accepts the inbox email address instead of its ID:
+
+```js
+const { data: threads } = await resend.inboxes.threads.list({
+  email: 'support@example.com',
+  folders: ['inbox'],
+});
+
+await resend.inboxes.update('support@example.com', { fromName: 'Support' });
+```
+
 ## License
 
 MIT License
