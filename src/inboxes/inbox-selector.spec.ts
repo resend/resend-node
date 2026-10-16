@@ -178,6 +178,16 @@ const methods: InboxMethod[] = [
   },
 ];
 
+const missingInboxResponse = {
+  data: null,
+  headers: null,
+  error: {
+    message: 'Missing `inboxId` or `emailAddress` field.',
+    statusCode: null,
+    name: 'missing_required_field',
+  },
+};
+
 describe('Inbox selector', () => {
   afterEach(() => fetchMock.resetMocks());
   afterAll(() => fetchMocker.disableMocks());
@@ -207,15 +217,16 @@ describe('Inbox selector', () => {
   }) => {
     const data = await call({} as InboxSelector);
 
-    expect(data).toEqual({
-      data: null,
-      headers: null,
-      error: {
-        message: 'Missing `inboxId` or `emailAddress` field.',
-        statusCode: null,
-        name: 'missing_required_field',
-      },
-    });
+    expect(data).toEqual(missingInboxResponse);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it.each(
+    methods,
+  )('$name returns an error when the selector is omitted', async ({ call }) => {
+    const data = await call(undefined as unknown as InboxSelector);
+
+    expect(data).toEqual(missingInboxResponse);
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });

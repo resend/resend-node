@@ -25,6 +25,12 @@ describe('buildInboxPath', () => {
     );
   });
 
+  it('returns undefined without a selector', () => {
+    expect(
+      buildInboxPath(undefined as unknown as InboxSelector),
+    ).toBeUndefined();
+  });
+
   it('returns undefined without an inbox ID or email address', () => {
     expect(buildInboxPath({} as InboxSelector)).toBeUndefined();
     expect(
