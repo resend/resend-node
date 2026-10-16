@@ -78,12 +78,12 @@ export class Inboxes {
   }
 
   async update(
-    id: string,
+    idOrEmail: string,
     payload: UpdateInboxOptions,
     requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxResponse> {
     return this.resend.patch<UpdateInboxResponseSuccess>(
-      `/inboxes/${id}`,
+      `/inboxes/${encodeURIComponent(idOrEmail)}`,
       {
         name: payload.name,
         from_name: payload.fromName,
@@ -93,11 +93,11 @@ export class Inboxes {
   }
 
   async remove(
-    id: string,
+    idOrEmail: string,
     requestOptions: RequestOptions = {},
   ): Promise<RemoveInboxResponse> {
     return this.resend.delete<RemoveInboxResponseSuccess>(
-      `/inboxes/${id}`,
+      `/inboxes/${encodeURIComponent(idOrEmail)}`,
       undefined,
       requestOptions,
     );

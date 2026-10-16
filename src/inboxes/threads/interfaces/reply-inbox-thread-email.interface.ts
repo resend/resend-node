@@ -5,15 +5,15 @@ import type {
 import type { IdempotentRequest } from '../../../common/interfaces/idempotent-request.interface';
 import type { Attachment } from '../../../emails/interfaces/create-email-options.interface';
 import type { Response } from '../../../interfaces';
+import type { InboxSelector } from '../../interfaces/inbox';
 
-export type ReplyInboxThreadEmailOptions = {
-  inboxId: string;
+export type ReplyInboxThreadEmailOptions = InboxSelector & {
   threadId: string;
   emailId: string;
 } & RequireAtLeastOne<{
-  html?: string;
-  text?: string;
-}> & {
+    html?: string;
+    text?: string;
+  }> & {
     cc?: string | string[];
     bcc?: string | string[];
     subject?: string;

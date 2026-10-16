@@ -1,9 +1,9 @@
 import type { Response } from '../../../interfaces';
+import type { InboxSelector } from '../../interfaces/inbox';
 
-export interface RemoveInboxThreadOptions {
-  inboxId: string;
+export type RemoveInboxThreadOptions = InboxSelector & {
   threadId: string;
-}
+};
 
 export interface RemoveInboxThreadResponseSuccess {
   object: 'inbox_thread';

@@ -4,6 +4,7 @@ import type {
 } from '../../../common/interfaces';
 import type { IdempotentRequest } from '../../../common/interfaces/idempotent-request.interface';
 import type { Response } from '../../../interfaces';
+import type { InboxSelector } from '../../interfaces/inbox';
 import type { InboxDraftAttachmentOptions } from './draft';
 
 type CreateInboxDraftContent = RequireAtLeastOne<{
@@ -20,9 +21,8 @@ type CreateInboxDraftContent = RequireAtLeastOne<{
   attachments?: InboxDraftAttachmentOptions[];
 }>;
 
-export type CreateInboxDraftOptions = {
-  inboxId: string;
-} & CreateInboxDraftContent &
+export type CreateInboxDraftOptions = InboxSelector &
+  CreateInboxDraftContent &
   (
     | {
         threadId: string;

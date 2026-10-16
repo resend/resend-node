@@ -1,9 +1,8 @@
 import type { Response } from '../../../interfaces';
+import type { InboxSelector } from '../../interfaces/inbox';
 import type { InboxLabel } from './label';
 
-export interface ListInboxLabelsOptions {
-  inboxId: string;
-}
+export type ListInboxLabelsOptions = InboxSelector;
 
 export interface ListInboxLabelsResponseSuccess {
   object: 'list';

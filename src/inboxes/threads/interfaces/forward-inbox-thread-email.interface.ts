@@ -2,9 +2,9 @@ import type { PostOptions } from '../../../common/interfaces';
 import type { IdempotentRequest } from '../../../common/interfaces/idempotent-request.interface';
 import type { Attachment } from '../../../emails/interfaces/create-email-options.interface';
 import type { Response } from '../../../interfaces';
+import type { InboxSelector } from '../../interfaces/inbox';
 
-export interface ForwardInboxThreadEmailOptions {
-  inboxId: string;
+export type ForwardInboxThreadEmailOptions = InboxSelector & {
   threadId: string;
   emailId: string;
   to: string | string[];
@@ -31,7 +31,7 @@ export interface ForwardInboxThreadEmailOptions {
    * `null` means no custom headers.
    */
   headers?: Record<string, string> | null;
-}
+};
 
 export interface ForwardInboxThreadEmailRequestOptions
   extends PostOptions,

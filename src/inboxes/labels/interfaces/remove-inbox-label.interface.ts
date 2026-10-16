@@ -1,9 +1,9 @@
 import type { Response } from '../../../interfaces';
+import type { InboxSelector } from '../../interfaces/inbox';
 
-export interface RemoveInboxLabelOptions {
-  inboxId: string;
+export type RemoveInboxLabelOptions = InboxSelector & {
   labelId: string;
-}
+};
 
 export interface RemoveInboxLabelResponseSuccess {
   object: 'inbox_label';
