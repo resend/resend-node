@@ -1,7 +1,7 @@
 import type { InboxSelector } from './interfaces/inbox';
 
 export function buildInboxPath(selector: InboxSelector): string | undefined {
-  const idOrEmail = selector?.inboxId || selector?.emailAddress;
+  const idOrEmail = selector?.inboxId ?? selector?.emailAddress;
   return idOrEmail ? `/inboxes/${encodeURIComponent(idOrEmail)}` : undefined;
 }
 

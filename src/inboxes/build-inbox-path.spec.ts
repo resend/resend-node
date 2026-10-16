@@ -25,6 +25,24 @@ describe('buildInboxPath', () => {
     );
   });
 
+  it('does not fall back to the email address when the inbox ID is empty', () => {
+    const selector = {
+      inboxId: '',
+      emailAddress: 'support@example.com',
+    } as unknown as InboxSelector;
+
+    expect(buildInboxPath(selector)).toBeUndefined();
+  });
+
+  it('uses the email address when the inbox ID is undefined', () => {
+    expect(
+      buildInboxPath({
+        inboxId: undefined,
+        emailAddress: 'support@example.com',
+      }),
+    ).toBe('/inboxes/support%40example.com');
+  });
+
   it('returns undefined without a selector', () => {
     expect(
       buildInboxPath(undefined as unknown as InboxSelector),
