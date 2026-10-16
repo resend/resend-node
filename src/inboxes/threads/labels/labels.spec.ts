@@ -47,6 +47,23 @@ describe('Inbox thread labels', () => {
         }),
       );
     });
+
+    it('adds labels to a thread in an inbox addressed by email', async () => {
+      mockResponse();
+
+      await resend.inboxes.threads.labels.add({
+        emailAddress: 'support+billing@example.com',
+        threadId,
+        labels: [labelId],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/support%2Bbilling%40example.com/threads/${threadId}/labels`,
+        expect.objectContaining({
+          method: 'POST',
+        }),
+      );
+    });
   });
 
   describe('set', () => {
@@ -91,6 +108,23 @@ describe('Inbox thread labels', () => {
         }),
       );
     });
+
+    it('replaces the labels on a thread in an inbox addressed by email', async () => {
+      mockResponse();
+
+      await resend.inboxes.threads.labels.set({
+        emailAddress: 'support+billing@example.com',
+        threadId,
+        labels: [labelId],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/support%2Bbilling%40example.com/threads/${threadId}/labels`,
+        expect.objectContaining({
+          method: 'PUT',
+        }),
+      );
+    });
   });
 
   describe('remove', () => {
@@ -106,6 +140,23 @@ describe('Inbox thread labels', () => {
       expect(data.data).toEqual(response);
       expect(fetchMock).toHaveBeenCalledWith(
         `https://api.resend.com/inboxes/${inboxId}/threads/${threadId}/labels/${labelId}`,
+        expect.objectContaining({
+          method: 'DELETE',
+        }),
+      );
+    });
+
+    it('removes a label from a thread in an inbox addressed by email', async () => {
+      mockResponse();
+
+      await resend.inboxes.threads.labels.remove({
+        emailAddress: 'support+billing@example.com',
+        threadId,
+        labelId,
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/support%2Bbilling%40example.com/threads/${threadId}/labels/${labelId}`,
         expect.objectContaining({
           method: 'DELETE',
         }),
