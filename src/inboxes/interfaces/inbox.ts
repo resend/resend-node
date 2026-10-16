@@ -24,6 +24,18 @@ export type MoveThreadFolder = (typeof MOVE_THREAD_FOLDERS)[number];
  */
 export type InboxLabelColor = string;
 
+export type InboxSelector =
+  | {
+      /** The inbox ID. */
+      inboxId: string;
+      email?: never;
+    }
+  | {
+      inboxId?: never;
+      /** The inbox email address, such as `support@example.com`. */
+      email: string;
+    };
+
 export interface Inbox {
   id: string;
   name: string | null;

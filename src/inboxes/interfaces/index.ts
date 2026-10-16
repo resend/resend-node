@@ -16,6 +16,7 @@ export type {
   Inbox,
   InboxLabelColor,
   InboxMessageFolder,
+  InboxSelector,
   MoveThreadFolder,
 } from './inbox';
 export {

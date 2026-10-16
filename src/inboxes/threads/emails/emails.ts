@@ -2,6 +2,7 @@ import type { RequestOptions } from '../../../common/interfaces/request-options.
 import { buildPaginationUrl } from '../../../common/utils/build-pagination-query';
 import { parseAttachments } from '../../../common/utils/parse-email-to-api-options';
 import type { Resend } from '../../../resend';
+import { buildInboxPath, missingInboxError } from '../../build-inbox-path';
 import type {
   ForwardInboxThreadEmailOptions,
   ForwardInboxThreadEmailRequestOptions,
@@ -32,9 +33,14 @@ export class InboxThreadEmails {
     options: ListInboxThreadEmailsOptions,
     requestOptions: RequestOptions = {},
   ): Promise<ListInboxThreadEmailsResponse> {
-    const { inboxId, threadId, ...pagination } = options;
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
+    const { inboxId, email, threadId, ...pagination } = options;
     const url = buildPaginationUrl(
-      `/inboxes/${inboxId}/threads/${threadId}/emails`,
+      `${inboxPath}/threads/${threadId}/emails`,
       pagination,
     );
     return this.resend.get<ListInboxThreadEmailsResponseSuccess>(
@@ -47,9 +53,14 @@ export class InboxThreadEmails {
     options: GetInboxThreadEmailOptions,
     requestOptions: RequestOptions = {},
   ): Promise<GetInboxThreadEmailResponse> {
-    const { inboxId, threadId, emailId } = options;
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
+    const { threadId, emailId } = options;
     return this.resend.get<GetInboxThreadEmailResponseSuccess>(
-      `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}`,
+      `${inboxPath}/threads/${threadId}/emails/${emailId}`,
       requestOptions,
     );
   }
@@ -58,8 +69,12 @@ export class InboxThreadEmails {
     payload: ReplyInboxThreadEmailOptions,
     options: ReplyInboxThreadEmailRequestOptions = {},
   ): Promise<ReplyInboxThreadEmailResponse> {
+    const inboxPath = buildInboxPath(payload);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
     const {
-      inboxId,
       threadId,
       emailId,
       cc,
@@ -72,7 +87,7 @@ export class InboxThreadEmails {
       headers,
     } = payload;
     return this.resend.post<ReplyInboxThreadEmailResponseSuccess>(
-      `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/reply`,
+      `${inboxPath}/threads/${threadId}/emails/${emailId}/reply`,
       {
         cc,
         bcc,
@@ -91,8 +106,12 @@ export class InboxThreadEmails {
     payload: ForwardInboxThreadEmailOptions,
     options: ForwardInboxThreadEmailRequestOptions = {},
   ): Promise<ForwardInboxThreadEmailResponse> {
+    const inboxPath = buildInboxPath(payload);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
     const {
-      inboxId,
       threadId,
       emailId,
       to,
@@ -105,7 +124,7 @@ export class InboxThreadEmails {
       headers,
     } = payload;
     return this.resend.post<ForwardInboxThreadEmailResponseSuccess>(
-      `/inboxes/${inboxId}/threads/${threadId}/emails/${emailId}/forward`,
+      `${inboxPath}/threads/${threadId}/emails/${emailId}/forward`,
       {
         to,
         cc,

@@ -1,9 +1,9 @@
 import type { Response } from '../../../interfaces';
+import type { InboxSelector } from '../../interfaces/inbox';
 
-export interface RemoveInboxDraftOptions {
-  inboxId: string;
+export type RemoveInboxDraftOptions = InboxSelector & {
   draftId: string;
-}
+};
 
 export interface RemoveInboxDraftResponseSuccess {
   object: 'inbox_draft';

@@ -1,9 +1,9 @@
 import type { PostOptions } from '../../../common/interfaces';
 import type { IdempotentRequest } from '../../../common/interfaces/idempotent-request.interface';
 import type { Response } from '../../../interfaces';
+import type { InboxSelector } from '../../interfaces/inbox';
 
-export interface SendInboxDraftOptions {
-  inboxId: string;
+export type SendInboxDraftOptions = InboxSelector & {
   draftId: string;
   /**
    * Custom headers to add to the email.
@@ -13,7 +13,7 @@ export interface SendInboxDraftOptions {
    * `null` means no custom headers.
    */
   headers?: Record<string, string> | null;
-}
+};
 
 export interface SendInboxDraftRequestOptions
   extends PostOptions,

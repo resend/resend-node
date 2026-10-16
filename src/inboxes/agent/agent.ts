@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import type { Resend } from '../../resend';
+import { buildInboxPath, missingInboxError } from '../build-inbox-path';
 import type {
   GetInboxAgentOptions,
   GetInboxAgentResponse,
@@ -18,8 +19,13 @@ export class InboxAgent {
     options: GetInboxAgentOptions,
     requestOptions: RequestOptions = {},
   ): Promise<GetInboxAgentResponse> {
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
     return this.resend.get<GetInboxAgentResponseSuccess>(
-      `/inboxes/${options.inboxId}/agent`,
+      `${inboxPath}/agent`,
       requestOptions,
     );
   }
@@ -28,9 +34,14 @@ export class InboxAgent {
     options: UpdateInboxAgentOptions,
     requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxAgentResponse> {
-    const { inboxId, instructions, tone, enabledActions } = options;
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
+    const { instructions, tone, enabledActions } = options;
     return this.resend.patch<UpdateInboxAgentResponseSuccess>(
-      `/inboxes/${inboxId}/agent`,
+      `${inboxPath}/agent`,
       { instructions, tone, enabled_actions: enabledActions },
       requestOptions,
     );

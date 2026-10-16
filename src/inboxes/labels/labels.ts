@@ -1,5 +1,6 @@
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import type { Resend } from '../../resend';
+import { buildInboxPath, missingInboxError } from '../build-inbox-path';
 import type {
   CreateInboxLabelOptions,
   CreateInboxLabelRequestOptions,
@@ -29,8 +30,13 @@ export class InboxLabels {
     options: ListInboxLabelsOptions,
     requestOptions: RequestOptions = {},
   ): Promise<ListInboxLabelsResponse> {
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
     return this.resend.get<ListInboxLabelsResponseSuccess>(
-      `/inboxes/${options.inboxId}/labels`,
+      `${inboxPath}/labels`,
       requestOptions,
     );
   }
@@ -39,9 +45,14 @@ export class InboxLabels {
     payload: CreateInboxLabelOptions,
     options: CreateInboxLabelRequestOptions = {},
   ): Promise<CreateInboxLabelResponse> {
-    const { inboxId, name, color } = payload;
+    const inboxPath = buildInboxPath(payload);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
+    const { name, color } = payload;
     return this.resend.post<CreateInboxLabelResponseSuccess>(
-      `/inboxes/${inboxId}/labels`,
+      `${inboxPath}/labels`,
       { name, color },
       options,
     );
@@ -51,9 +62,14 @@ export class InboxLabels {
     options: UpdateInboxLabelOptions,
     requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxLabelResponse> {
-    const { inboxId, labelId, name, color } = options;
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
+    const { labelId, name, color } = options;
     return this.resend.patch<UpdateInboxLabelResponseSuccess>(
-      `/inboxes/${inboxId}/labels/${labelId}`,
+      `${inboxPath}/labels/${labelId}`,
       { name, color },
       requestOptions,
     );
@@ -63,9 +79,13 @@ export class InboxLabels {
     options: RemoveInboxLabelOptions,
     requestOptions: RequestOptions = {},
   ): Promise<RemoveInboxLabelResponse> {
-    const { inboxId, labelId } = options;
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
     return this.resend.delete<RemoveInboxLabelResponseSuccess>(
-      `/inboxes/${inboxId}/labels/${labelId}`,
+      `${inboxPath}/labels/${options.labelId}`,
       undefined,
       requestOptions,
     );

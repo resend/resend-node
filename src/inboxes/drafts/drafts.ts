@@ -2,6 +2,7 @@ import type { RequestOptions } from '../../common/interfaces/request-options.int
 import { parseAttachments } from '../../common/utils/parse-email-to-api-options';
 import type { Resend } from '../../resend';
 import { buildInboxCursorUrl } from '../build-inbox-cursor-query';
+import { buildInboxPath, missingInboxError } from '../build-inbox-path';
 import type {
   CreateInboxDraftOptions,
   CreateInboxDraftRequestOptions,
@@ -42,8 +43,13 @@ export class InboxDrafts {
     options: ListInboxDraftsOptions,
     requestOptions: RequestOptions = {},
   ): Promise<ListInboxDraftsResponse> {
-    const { inboxId, limit, after, before } = options;
-    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/drafts`, {
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
+    const { limit, after, before } = options;
+    const url = buildInboxCursorUrl(`${inboxPath}/drafts`, {
       limit,
       after,
       before,
@@ -55,10 +61,21 @@ export class InboxDrafts {
     payload: CreateInboxDraftOptions,
     options: CreateInboxDraftRequestOptions = {},
   ): Promise<CreateInboxDraftResponse> {
-    const { inboxId, threadId, replyToEmailId, attachments, ...content } =
-      payload;
+    const inboxPath = buildInboxPath(payload);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
+    const {
+      inboxId,
+      email,
+      threadId,
+      replyToEmailId,
+      attachments,
+      ...content
+    } = payload;
     return this.resend.post<CreateInboxDraftResponseSuccess>(
-      `/inboxes/${inboxId}/drafts`,
+      `${inboxPath}/drafts`,
       {
         ...content,
         attachments: parseAttachments(attachments),
@@ -73,9 +90,13 @@ export class InboxDrafts {
     options: GetInboxDraftOptions,
     requestOptions: RequestOptions = {},
   ): Promise<GetInboxDraftResponse> {
-    const { inboxId, draftId } = options;
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
     return this.resend.get<GetInboxDraftResponseSuccess>(
-      `/inboxes/${inboxId}/drafts/${draftId}`,
+      `${inboxPath}/drafts/${options.draftId}`,
       requestOptions,
     );
   }
@@ -84,9 +105,14 @@ export class InboxDrafts {
     options: UpdateInboxDraftOptions,
     requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxDraftResponse> {
-    const { inboxId, draftId, attachments, ...content } = options;
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
+    const { inboxId, email, draftId, attachments, ...content } = options;
     return this.resend.patch<UpdateInboxDraftResponseSuccess>(
-      `/inboxes/${inboxId}/drafts/${draftId}`,
+      `${inboxPath}/drafts/${draftId}`,
       {
         ...content,
         attachments:
@@ -100,9 +126,13 @@ export class InboxDrafts {
     options: RemoveInboxDraftOptions,
     requestOptions: RequestOptions = {},
   ): Promise<RemoveInboxDraftResponse> {
-    const { inboxId, draftId } = options;
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
     return this.resend.delete<RemoveInboxDraftResponseSuccess>(
-      `/inboxes/${inboxId}/drafts/${draftId}`,
+      `${inboxPath}/drafts/${options.draftId}`,
       undefined,
       requestOptions,
     );
@@ -112,9 +142,14 @@ export class InboxDrafts {
     payload: SendInboxDraftOptions,
     options: SendInboxDraftRequestOptions = {},
   ): Promise<SendInboxDraftResponse> {
-    const { inboxId, draftId, headers } = payload;
+    const inboxPath = buildInboxPath(payload);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
+    const { draftId, headers } = payload;
     return this.resend.post<SendInboxDraftResponseSuccess>(
-      `/inboxes/${inboxId}/drafts/${draftId}/send`,
+      `${inboxPath}/drafts/${draftId}/send`,
       headers ? { headers } : undefined,
       options,
     );

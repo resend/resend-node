@@ -1,10 +1,9 @@
 import type { PaginationOptions } from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
-import type { InboxMessageFolder } from '../../interfaces/inbox';
+import type { InboxMessageFolder, InboxSelector } from '../../interfaces/inbox';
 import type { InboxThread } from './thread';
 
-export type ListInboxThreadsOptions = {
-  inboxId: string;
+export type ListInboxThreadsOptions = InboxSelector & {
   folders?: InboxMessageFolder[];
   labels?: string[];
   read?: boolean;
