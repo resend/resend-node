@@ -1,12 +1,11 @@
 import type { PostOptions } from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
-import type { InboxLabelColor } from '../../interfaces/inbox';
+import type { InboxLabelColor, InboxSelector } from '../../interfaces/inbox';
 
-export interface CreateInboxLabelOptions {
-  inboxId: string;
+export type CreateInboxLabelOptions = InboxSelector & {
   name: string;
   color?: InboxLabelColor;
-}
+};
 
 export interface CreateInboxLabelRequestOptions extends PostOptions {}
 

@@ -4,8 +4,8 @@ export const INBOX_AGENT_ACTIONS = [
   'add_labels',
   'assign_thread',
   'mark_as_spam',
-  'archive_thread',
-  'delete_thread',
+  'archive',
+  'move_to_trash',
 ] as const;
 
 export type InboxAgentAction = (typeof INBOX_AGENT_ACTIONS)[number];
@@ -23,5 +23,5 @@ export interface InboxAgentSettings {
   object: 'inbox_agent';
   instructions: string | null;
   tone: InboxAgentTone | null;
-  enabled_actions: InboxAgentAction[];
+  actions: InboxAgentAction[];
 }

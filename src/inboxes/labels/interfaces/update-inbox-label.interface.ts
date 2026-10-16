@@ -1,12 +1,11 @@
 import type { Response } from '../../../interfaces';
-import type { InboxLabelColor } from '../../interfaces/inbox';
+import type { InboxLabelColor, InboxSelector } from '../../interfaces/inbox';
 
-export interface UpdateInboxLabelOptions {
-  inboxId: string;
+export type UpdateInboxLabelOptions = InboxSelector & {
   labelId: string;
   name?: string;
   color?: InboxLabelColor;
-}
+};
 
 export interface UpdateInboxLabelResponseSuccess {
   object: 'inbox_label';

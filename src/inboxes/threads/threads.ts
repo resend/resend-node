@@ -1,6 +1,7 @@
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import type { Resend } from '../../resend';
 import { buildInboxCursorUrl } from '../build-inbox-cursor-query';
+import { buildInboxPath, missingInboxError } from '../build-inbox-path';
 import { InboxThreadEmails } from './emails/emails';
 import type {
   GetInboxThreadOptions,
@@ -27,20 +28,28 @@ import type {
   UpdateInboxThreadResponse,
   UpdateInboxThreadResponseSuccess,
 } from './interfaces/update-inbox-thread.interface';
+import { InboxThreadLabels } from './labels/labels';
 
 export class InboxThreads {
   readonly emails: InboxThreadEmails;
+  readonly labels: InboxThreadLabels;
 
   constructor(private readonly resend: Resend) {
     this.emails = new InboxThreadEmails(resend);
+    this.labels = new InboxThreadLabels(resend);
   }
 
   async list(
     options: ListInboxThreadsOptions,
     requestOptions: RequestOptions = {},
   ): Promise<ListInboxThreadsResponse> {
-    const { inboxId, folders, labels, read, limit, after, before } = options;
-    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads`, {
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
+    const { folders, labels, read, limit, after, before } = options;
+    const url = buildInboxCursorUrl(`${inboxPath}/threads`, {
       folders,
       labels,
       read,
@@ -58,8 +67,12 @@ export class InboxThreads {
     options: SearchInboxThreadsOptions,
     requestOptions: RequestOptions = {},
   ): Promise<SearchInboxThreadsResponse> {
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
     const {
-      inboxId,
       folders,
       labels,
       read,
@@ -75,7 +88,7 @@ export class InboxThreads {
       after,
       before,
     } = options;
-    const url = buildInboxCursorUrl(`/inboxes/${inboxId}/threads/search`, {
+    const url = buildInboxCursorUrl(`${inboxPath}/threads/search`, {
       folders,
       labels,
       read,
@@ -101,9 +114,13 @@ export class InboxThreads {
     options: GetInboxThreadOptions,
     requestOptions: RequestOptions = {},
   ): Promise<GetInboxThreadResponse> {
-    const { inboxId, threadId } = options;
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
     return this.resend.get<GetInboxThreadResponseSuccess>(
-      `/inboxes/${inboxId}/threads/${threadId}`,
+      `${inboxPath}/threads/${options.threadId}`,
       requestOptions,
     );
   }
@@ -112,16 +129,15 @@ export class InboxThreads {
     options: UpdateInboxThreadOptions,
     requestOptions: RequestOptions = {},
   ): Promise<UpdateInboxThreadResponse> {
-    const { inboxId, threadId, read, folder, addLabelIds, removeLabelIds } =
-      options;
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
+    const { threadId, read, folder } = options;
     return this.resend.patch<UpdateInboxThreadResponseSuccess>(
-      `/inboxes/${inboxId}/threads/${threadId}`,
-      {
-        read,
-        folder,
-        add_label_ids: addLabelIds,
-        remove_label_ids: removeLabelIds,
-      },
+      `${inboxPath}/threads/${threadId}`,
+      { read, folder },
       requestOptions,
     );
   }
@@ -130,9 +146,13 @@ export class InboxThreads {
     options: RemoveInboxThreadOptions,
     requestOptions: RequestOptions = {},
   ): Promise<RemoveInboxThreadResponse> {
-    const { inboxId, threadId } = options;
+    const inboxPath = buildInboxPath(options);
+    if (!inboxPath) {
+      return missingInboxError();
+    }
+
     return this.resend.delete<RemoveInboxThreadResponseSuccess>(
-      `/inboxes/${inboxId}/threads/${threadId}`,
+      `${inboxPath}/threads/${options.threadId}`,
       undefined,
       requestOptions,
     );

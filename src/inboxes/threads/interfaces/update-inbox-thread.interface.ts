@@ -1,19 +1,14 @@
 import type { RequireAtLeastOne } from '../../../common/interfaces';
 import type { Response } from '../../../interfaces';
-import type { MoveThreadFolder } from '../../interfaces/inbox';
+import type { InboxSelector, MoveThreadFolder } from '../../interfaces/inbox';
 import type { InboxThreadSummary } from './thread';
 
-export type UpdateInboxThreadOptions = {
-  inboxId: string;
+export type UpdateInboxThreadOptions = InboxSelector & {
   threadId: string;
 } & RequireAtLeastOne<{
-  read?: boolean;
-  folder?: MoveThreadFolder;
-  /** Label IDs to apply to the thread. Between 1 and 10 IDs. */
-  addLabelIds?: string[];
-  /** Label IDs to remove from the thread. Between 1 and 10 IDs. The labels themselves are kept. */
-  removeLabelIds?: string[];
-}>;
+    read?: boolean;
+    folder?: MoveThreadFolder;
+  }>;
 
 export type UpdateInboxThreadResponseSuccess = InboxThreadSummary;
 

@@ -9,6 +9,11 @@ export interface InboxThreadLabel {
   color: InboxLabelColor;
 }
 
+export interface InboxThreadLabelList {
+  object: 'list';
+  data: InboxThreadLabel[];
+}
+
 export interface InboxThread {
   id: string;
   subject: string | null;
