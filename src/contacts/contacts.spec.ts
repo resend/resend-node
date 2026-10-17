@@ -1013,4 +1013,79 @@ describe('Contacts', () => {
       `);
     });
   });
+
+  describe('when the email has characters reserved in URLs', () => {
+    const email = 'a#b/c?d@example.com';
+    const encoded = 'a%23b%2Fc%3Fd@example.com';
+    const segmentId = '78261eea-8f8b-4381-83c6-79fa7120f1cf';
+
+    it.each([
+      [
+        'contacts.get with a string',
+        (resend: Resend) => resend.contacts.get(email),
+        `/contacts/${encoded}`,
+      ],
+      [
+        'contacts.get',
+        (resend: Resend) => resend.contacts.get({ email }),
+        `/contacts/${encoded}`,
+      ],
+      [
+        'contacts.get with audienceId',
+        (resend: Resend) =>
+          resend.contacts.get({ email, audienceId: segmentId }),
+        `/audiences/${segmentId}/contacts/${encoded}`,
+      ],
+      [
+        'contacts.update',
+        (resend: Resend) =>
+          resend.contacts.update({ email, unsubscribed: true }),
+        `/contacts/${encoded}`,
+      ],
+      [
+        'contacts.remove with a string',
+        (resend: Resend) => resend.contacts.remove(email),
+        `/contacts/${encoded}`,
+      ],
+      [
+        'contacts.remove',
+        (resend: Resend) => resend.contacts.remove({ email }),
+        `/contacts/${encoded}`,
+      ],
+      [
+        'contacts.topics.list',
+        (resend: Resend) => resend.contacts.topics.list({ email }),
+        `/contacts/${encoded}/topics`,
+      ],
+      [
+        'contacts.topics.update',
+        (resend: Resend) =>
+          resend.contacts.topics.update({ email, topics: [] }),
+        `/contacts/${encoded}/topics`,
+      ],
+      [
+        'contacts.segments.list',
+        (resend: Resend) => resend.contacts.segments.list({ email }),
+        `/contacts/${encoded}/segments`,
+      ],
+      [
+        'contacts.segments.add',
+        (resend: Resend) => resend.contacts.segments.add({ email, segmentId }),
+        `/contacts/${encoded}/segments/${segmentId}`,
+      ],
+      [
+        'contacts.segments.remove',
+        (resend: Resend) =>
+          resend.contacts.segments.remove({ email, segmentId }),
+        `/contacts/${encoded}/segments/${segmentId}`,
+      ],
+    ])('%s keeps the email in one path segment', async (_, call, path) => {
+      mockSuccessResponse({}, {});
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      await call(resend);
+
+      expect(fetchMock.mock.calls[0][0]).toBe(`https://api.resend.com${path}`);
+    });
+  });
 });

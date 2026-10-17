@@ -1,4 +1,5 @@
 import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
+import { encodePathSegment } from '../../common/utils/encode-path-segment';
 import type { Resend } from '../../resend';
 import type {
   ListContactTopicsOptions,
@@ -32,9 +33,9 @@ export class ContactTopics {
       };
     }
 
-    const identifier = payload.email ? payload.email : payload.id;
+    const identifier = (payload.email ? payload.email : payload.id) ?? '';
     return this.resend.patch<UpdateContactTopicsResponseSuccess>(
-      `/contacts/${identifier}/topics`,
+      `/contacts/${encodePathSegment(identifier)}/topics`,
       payload.topics,
       requestOptions,
     );
@@ -56,8 +57,11 @@ export class ContactTopics {
       };
     }
 
-    const identifier = options.email ? options.email : options.id;
-    const url = buildPaginationUrl(`/contacts/${identifier}/topics`, options);
+    const identifier = (options.email ? options.email : options.id) ?? '';
+    const url = buildPaginationUrl(
+      `/contacts/${encodePathSegment(identifier)}/topics`,
+      options,
+    );
 
     return this.resend.get<ListContactTopicsResponseSuccess>(
       url,
