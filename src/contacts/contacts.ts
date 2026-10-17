@@ -1,7 +1,9 @@
 import type { RequestOptions } from '../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../common/utils/build-pagination-query';
+import { encodePathSegment } from '../common/utils/encode-path-segment';
 import type { Resend } from '../resend';
 import { ContactImports } from './imports/contact-imports';
+import type { SelectingField } from './interfaces/contact';
 import type {
   CreateContactOptions,
   CreateContactRequestOptions,
@@ -130,7 +132,7 @@ export class Contacts {
   ): Promise<GetContactResponse> {
     if (typeof options === 'string') {
       return this.resend.get<GetContactResponseSuccess>(
-        `/contacts/${options}`,
+        `/contacts/${encodePathSegment(options)}`,
         requestOptions,
       );
     }
@@ -149,13 +151,13 @@ export class Contacts {
 
     if (!options.audienceId) {
       return this.resend.get<GetContactResponseSuccess>(
-        `/contacts/${options?.email ? options?.email : options?.id}`,
+        `/contacts/${contactPathSegment(options)}`,
         requestOptions,
       );
     }
 
     return this.resend.get<GetContactResponseSuccess>(
-      `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
+      `/audiences/${options.audienceId}/contacts/${contactPathSegment(options)}`,
       requestOptions,
     );
   }
@@ -178,7 +180,7 @@ export class Contacts {
 
     if (!options.audienceId) {
       const data = await this.resend.patch<UpdateContactResponseSuccess>(
-        `/contacts/${options?.email ? options?.email : options?.id}`,
+        `/contacts/${contactPathSegment(options)}`,
         {
           unsubscribed: options.unsubscribed,
           first_name: options.firstName,
@@ -191,7 +193,7 @@ export class Contacts {
     }
 
     const data = await this.resend.patch<UpdateContactResponseSuccess>(
-      `/audiences/${options.audienceId}/contacts/${options?.email ? options?.email : options?.id}`,
+      `/audiences/${options.audienceId}/contacts/${contactPathSegment(options)}`,
       {
         unsubscribed: options.unsubscribed,
         first_name: options.firstName,
@@ -209,7 +211,7 @@ export class Contacts {
   ): Promise<RemoveContactsResponse> {
     if (typeof payload === 'string') {
       return this.resend.delete<RemoveContactsResponseSuccess>(
-        `/contacts/${payload}`,
+        `/contacts/${encodePathSegment(payload)}`,
         undefined,
         requestOptions,
       );
@@ -229,18 +231,20 @@ export class Contacts {
 
     if (!payload.audienceId) {
       return this.resend.delete<RemoveContactsResponseSuccess>(
-        `/contacts/${payload?.email ? payload?.email : payload?.id}`,
+        `/contacts/${contactPathSegment(payload)}`,
         undefined,
         requestOptions,
       );
     }
 
     return this.resend.delete<RemoveContactsResponseSuccess>(
-      `/audiences/${payload.audienceId}/contacts/${
-        payload?.email ? payload?.email : payload?.id
-      }`,
+      `/audiences/${payload.audienceId}/contacts/${contactPathSegment(payload)}`,
       undefined,
       requestOptions,
     );
   }
+}
+
+function contactPathSegment(field: SelectingField): string {
+  return encodePathSegment((field.email ? field.email : field.id) ?? '');
 }
