@@ -8,8 +8,8 @@ export interface InboxDraftAttachment {
 }
 
 export interface InboxDraftAttachmentOptions {
-  /** Content of the file, as a base64 string or a Buffer. */
-  content: string | Buffer;
+  /** Content of the file, as a base64 string or binary data, which is sent as base64. */
+  content: string | Buffer | Uint8Array | ArrayBuffer;
   filename: string;
   contentType: string;
 }
