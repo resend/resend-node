@@ -267,6 +267,44 @@ describe('Inbox drafts', () => {
       expect(invalid).toHaveLength(3);
     });
 
+    it('sends binary attachment content as base64', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 201,
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+
+      await resend.inboxes.drafts.create({
+        inboxId,
+        attachments: [
+          {
+            content: new TextEncoder().encode('hello').buffer,
+            filename: 'notes.txt',
+            contentType: 'text/plain',
+          },
+        ],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts`,
+        expect.objectContaining({
+          body: JSON.stringify({
+            attachments: [
+              {
+                content: 'aGVsbG8=',
+                filename: 'notes.txt',
+                content_type: 'text/plain',
+              },
+            ],
+          }),
+        }),
+      );
+    });
+
     it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
       fetchMock.mockOnce(
         JSON.stringify({ object: 'inbox_draft', id: draftId }),
