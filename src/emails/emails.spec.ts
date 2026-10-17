@@ -144,6 +144,50 @@ describe('Emails', () => {
 
       expect(payload).toEqual(originalPayload);
     });
+
+    it('sends binary attachment content as base64', async () => {
+      const recipients = ['ada@example.com', 'grace@example.com'];
+      const pdfs = recipients.map((to) =>
+        new TextEncoder().encode(`%PDF-1.4 invoice for ${to}`),
+      );
+
+      for (const [index, to] of recipients.entries()) {
+        fetchMock.mockOnce(JSON.stringify({ id: `id-${index}` }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+
+        await resend.emails.create({
+          from: 'admin@resend.com',
+          to,
+          subject: 'Your invoice',
+          html: '<p>Invoice attached</p>',
+          attachments: [
+            {
+              filename: 'invoice.pdf',
+              content: pdfs[index],
+              contentType: 'application/pdf',
+            },
+          ],
+        });
+      }
+
+      const sentAttachments = fetchMock.mock.calls.map(
+        ([, init]) => JSON.parse(String(init?.body)).attachments,
+      );
+      expect(sentAttachments).toEqual(
+        pdfs.map((pdf) => [
+          {
+            filename: 'invoice.pdf',
+            content: Buffer.from(pdf).toString('base64'),
+            content_type: 'application/pdf',
+          },
+        ]),
+      );
+      expect(sentAttachments[0][0].content).not.toBe(
+        sentAttachments[1][0].content,
+      );
+    });
   });
 
   describe('send', () => {
