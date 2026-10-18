@@ -301,6 +301,14 @@ describe('Resend', () => {
         (r: Resend) => r.domains.remove('../api-keys/key-id'),
       ],
       ['contacts.get', (r: Resend) => r.contacts.get({ email: '..' })],
+      [
+        'domains.remove with a backslash',
+        (r: Resend) => r.domains.remove('..\\api-keys\\key-id'),
+      ],
+      [
+        'emails.cancel with a tab inside the dots',
+        (r: Resend) => r.emails.cancel('.\t.'),
+      ],
     ])('%s returns an error without sending the request', async (_, call) => {
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
