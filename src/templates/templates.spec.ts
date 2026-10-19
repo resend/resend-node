@@ -30,6 +30,42 @@ describe('Templates', () => {
   afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
+    it.each([
+      [0, '<p>Fallback</p>', '0'],
+      [0, undefined, '0'],
+      [BigInt(0), '<p>Fallback</p>', '0'],
+      [null, '<p>Fallback</p>', '<p>Fallback</p>'],
+      [false, '<p>Fallback</p>', '<p>Fallback</p>'],
+      ['', '<p>Fallback</p>', '<p>Fallback</p>'],
+      [undefined, '<p>Fallback</p>', '<p>Fallback</p>'],
+    ] as const)('preserves React content %o with fallback %o', async (react, html, expected) => {
+      mockRender.mockResolvedValueOnce('0');
+      mockSuccessResponse({ object: 'template', id: 'template-id' });
+      const payload: CreateTemplateOptions = {
+        name: 'React template',
+        react,
+        html,
+        text: 'Plain text',
+      };
+      const originalPayload = { ...payload };
+      const resend = new Resend(TEST_API_KEY);
+
+      const result = await resend.templates.create(payload);
+
+      expect(result.error).toBeNull();
+      const requestBody = JSON.parse(
+        fetchMock.mock.calls[0][1]?.body as string,
+      );
+      expect(requestBody.html).toBe(expected);
+      expect(requestBody.text).toBe('Plain text');
+      if (expected === '0') {
+        expect(mockRender).toHaveBeenCalledWith(react);
+      } else {
+        expect(mockRender).not.toHaveBeenCalled();
+      }
+      expect(payload).toEqual(originalPayload);
+    });
+
     it('creates a template with minimal required fields', async () => {
       const payload: CreateTemplateOptions = {
         name: 'Welcome Email',

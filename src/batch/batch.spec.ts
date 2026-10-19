@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from '../resend';
 import {
@@ -95,6 +96,41 @@ describe('Batch', () => {
   });
 
   describe('create', () => {
+    it.each([
+      [0, '<p>Fallback</p>', '0'],
+      [0, undefined, '0'],
+      [BigInt(0), '<p>Fallback</p>', '0'],
+      [null, '<p>Fallback</p>', '<p>Fallback</p>'],
+      [false, '<p>Fallback</p>', '<p>Fallback</p>'],
+      ['', '<p>Fallback</p>', '<p>Fallback</p>'],
+      [undefined, '<p>Fallback</p>', '<p>Fallback</p>'],
+    ] as const)('preserves React content %o with fallback %o', async (react, html, expected) => {
+      mockSuccessResponse({ data: [{ id: 'email-id' }] });
+      const payload = {
+        from: 'sender@example.com',
+        to: 'recipient@example.com',
+        subject: 'React content',
+        react,
+        html,
+        text: 'Plain text',
+      };
+      const originalPayload = { ...payload };
+
+      const result = await resend.batch.create([payload]);
+
+      expect(result.error).toBeNull();
+      const requestBody = JSON.parse(
+        fetchMock.mock.calls[0][1]?.body as string,
+      )[0];
+      if (expected === '0') {
+        expect(requestBody.html?.replace(/<[^>]*>/g, '')).toBe('0');
+      } else {
+        expect(requestBody.html).toBe(expected);
+      }
+      expect(requestBody.text).toBe('Plain text');
+      expect(payload).toEqual(originalPayload);
+    });
+
     it('sends multiple emails', async () => {
       const payload: CreateBatchOptions = [
         {
@@ -306,13 +342,13 @@ describe('Batch', () => {
     });
 
     it('does not mutate payload when using React component', async () => {
-      const mockReact = { type: 'div', props: { children: 'Hi' } };
+      const react = createElement('div', null, 'Hi');
       const payload: CreateBatchOptions = [
         {
           from: 'admin@resend.com',
           to: 'user@resend.com',
           subject: 'React Email',
-          react: mockReact as React.ReactElement,
+          react,
         },
       ];
       const originalEmail = { ...payload[0] };
@@ -324,16 +360,17 @@ describe('Batch', () => {
       await resend.batch.create(payload);
 
       expect(payload[0]).toEqual(originalEmail);
+      expect(fetchMock.mock.calls[0][1]?.body).toContain('<div>Hi</div>');
     });
 
     it('works with a frozen payload when using React component', async () => {
-      const mockReact = { type: 'div', props: { children: 'Hi' } };
+      const react = createElement('div', null, 'Hi');
       const payload: CreateBatchOptions = [
         Object.freeze({
           from: 'admin@resend.com',
           to: 'user@resend.com',
           subject: 'React Email',
-          react: mockReact as React.ReactElement,
+          react,
         }),
       ];
 

@@ -22,6 +22,41 @@ describe('Emails', () => {
   afterAll(() => fetchMocker.disableMocks());
 
   describe('create', () => {
+    it.each([
+      [0, '<p>Fallback</p>', '0'],
+      [0, undefined, '0'],
+      [BigInt(0), '<p>Fallback</p>', '0'],
+      [null, '<p>Fallback</p>', '<p>Fallback</p>'],
+      [false, '<p>Fallback</p>', '<p>Fallback</p>'],
+      ['', '<p>Fallback</p>', '<p>Fallback</p>'],
+      [undefined, '<p>Fallback</p>', '<p>Fallback</p>'],
+    ] as const)('preserves React content %o with fallback %o', async (react, html, expected) => {
+      mockSuccessResponse({ id: 'email-id' });
+      const payload = {
+        from: 'sender@example.com',
+        to: 'recipient@example.com',
+        subject: 'React content',
+        react,
+        html,
+        text: 'Plain text',
+      };
+      const originalPayload = { ...payload };
+
+      const result = await resend.emails.create(payload);
+
+      expect(result.error).toBeNull();
+      const requestBody = JSON.parse(
+        fetchMock.mock.calls[0][1]?.body as string,
+      );
+      if (expected === '0') {
+        expect(requestBody.html?.replace(/<[^>]*>/g, '')).toBe('0');
+      } else {
+        expect(requestBody.html).toBe(expected);
+      }
+      expect(requestBody.text).toBe('Plain text');
+      expect(payload).toEqual(originalPayload);
+    });
+
     it('sends email', async () => {
       const response: ErrorResponse = {
         name: 'missing_required_field',
