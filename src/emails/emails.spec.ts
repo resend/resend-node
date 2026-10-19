@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
@@ -126,12 +127,12 @@ describe('Emails', () => {
     });
 
     it('does not mutate payload when using React component', async () => {
-      const mockReact = { type: 'div', props: { children: 'Hi' } };
+      const react = createElement('div', null, 'Hi');
       const payload: CreateEmailOptions = {
         from: 'admin@resend.com',
         to: 'user@resend.com',
         subject: 'React Email',
-        react: mockReact as React.ReactElement,
+        react,
       };
       const originalPayload = { ...payload };
 
@@ -143,6 +144,7 @@ describe('Emails', () => {
       await resend.emails.create(payload);
 
       expect(payload).toEqual(originalPayload);
+      expect(fetchMock.mock.calls[0][1]?.body).toContain('<div>Hi</div>');
     });
   });
 
