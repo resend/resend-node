@@ -1,6 +1,9 @@
 import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from './resend';
-import { mockSuccessResponse } from './test-utils/mock-fetch';
+import {
+  mockErrorResponse,
+  mockSuccessResponse,
+} from './test-utils/mock-fetch';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -130,6 +133,61 @@ describe('Resend', () => {
       const requestOptions = fetchMock.mock.calls[0][1];
       const headers = requestOptions?.headers as Headers;
       expect(headers.get('User-Agent')).toBe(customUserAgent);
+    });
+  });
+
+  describe('error logging', () => {
+    const error = { name: 'validation_error', message: 'Invalid `to` field' };
+
+    afterEach(() => vi.restoreAllMocks());
+
+    it('does not log API errors by default', async () => {
+      const consoleError = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      mockErrorResponse(error);
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const result = await resend.apiKeys.list();
+
+      expect(result.error).toEqual(error);
+      expect(consoleError).not.toHaveBeenCalled();
+    });
+
+    it('does not log API errors when NODE_ENV is not production', async () => {
+      const originalEnv = process.env;
+      process.env = { ...originalEnv, NODE_ENV: 'development' };
+      const consoleError = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      mockErrorResponse(error);
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      await resend.apiKeys.list();
+
+      expect(consoleError).not.toHaveBeenCalled();
+
+      process.env = originalEnv;
+    });
+
+    it('logs API errors when RESEND_DEBUG is true', async () => {
+      const originalEnv = process.env;
+      process.env = { ...originalEnv, RESEND_DEBUG: 'true' };
+      const consoleError = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      mockErrorResponse(error);
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      await resend.apiKeys.list();
+
+      expect(consoleError).toHaveBeenCalledWith('[Resend API Error]:', {
+        status: 422,
+        error,
+        path: '/api-keys',
+      });
+
+      process.env = originalEnv;
     });
   });
 
@@ -267,7 +325,10 @@ describe('Resend', () => {
     });
 
     it('still logs a network failure', async () => {
+      const originalEnv = process.env;
+      process.env = { ...originalEnv, RESEND_DEBUG: 'true' };
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      process.env = originalEnv;
       const consoleError = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
