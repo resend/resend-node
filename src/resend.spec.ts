@@ -1,3 +1,4 @@
+import type { MockInstance } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from './resend';
 import {
@@ -138,15 +139,20 @@ describe('Resend', () => {
 
   describe('error logging', () => {
     const error = { name: 'validation_error', message: 'Invalid `to` field' };
+    let consoleError: MockInstance<typeof console.error>;
 
-    afterEach(() => vi.restoreAllMocks());
+    beforeEach(() => {
+      vi.stubEnv('RESEND_DEBUG', undefined);
+      consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockErrorResponse(error);
+    });
+
+    afterEach(() => {
+      vi.unstubAllEnvs();
+      vi.restoreAllMocks();
+    });
 
     it('does not log API errors by default', async () => {
-      const consoleError = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-      mockErrorResponse(error);
-
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       const result = await resend.apiKeys.list();
 
@@ -155,28 +161,16 @@ describe('Resend', () => {
     });
 
     it('does not log API errors when NODE_ENV is not production', async () => {
-      const originalEnv = process.env;
-      process.env = { ...originalEnv, NODE_ENV: 'development' };
-      const consoleError = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-      mockErrorResponse(error);
+      vi.stubEnv('NODE_ENV', 'development');
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await resend.apiKeys.list();
 
       expect(consoleError).not.toHaveBeenCalled();
-
-      process.env = originalEnv;
     });
 
     it('logs API errors when RESEND_DEBUG is true', async () => {
-      const originalEnv = process.env;
-      process.env = { ...originalEnv, RESEND_DEBUG: 'true' };
-      const consoleError = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-      mockErrorResponse(error);
+      vi.stubEnv('RESEND_DEBUG', 'true');
 
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       await resend.apiKeys.list();
@@ -186,8 +180,6 @@ describe('Resend', () => {
         error,
         path: '/api-keys',
       });
-
-      process.env = originalEnv;
     });
   });
 
@@ -325,10 +317,8 @@ describe('Resend', () => {
     });
 
     it('still logs a network failure', async () => {
-      const originalEnv = process.env;
-      process.env = { ...originalEnv, RESEND_DEBUG: 'true' };
+      vi.stubEnv('RESEND_DEBUG', 'true');
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
-      process.env = originalEnv;
       const consoleError = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
@@ -347,6 +337,7 @@ describe('Resend', () => {
         expect(consoleError).toHaveBeenCalledTimes(1);
       } finally {
         vi.unstubAllGlobals();
+        vi.unstubAllEnvs();
         consoleError.mockRestore();
       }
     });
