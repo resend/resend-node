@@ -222,7 +222,7 @@ describe('Inbox drafts', () => {
         inboxId,
         attachments: [
           {
-            path: 'https://resend.com/static/sample/invoice.pdf',
+            path: 'https://example.com/invoice.pdf',
             filename: 'invoice.pdf',
           },
         ],
@@ -236,7 +236,7 @@ describe('Inbox drafts', () => {
             attachments: [
               {
                 filename: 'invoice.pdf',
-                path: 'https://resend.com/static/sample/invoice.pdf',
+                path: 'https://example.com/invoice.pdf',
               },
             ],
           }),
@@ -254,7 +254,7 @@ describe('Inbox drafts', () => {
             // @ts-expect-error - content and path are mutually exclusive
             {
               content: 'aGVsbG8=',
-              path: 'https://resend.com/static/sample/invoice.pdf',
+              path: 'https://example.com/invoice.pdf',
               filename: 'notes.txt',
               contentType: 'text/plain',
             },
@@ -414,7 +414,7 @@ describe('Inbox drafts', () => {
         draftId,
         attachments: [
           {
-            path: 'https://resend.com/static/sample/invoice.pdf',
+            path: 'https://example.com/invoice.pdf',
             filename: 'invoice.pdf',
             contentType: 'application/pdf',
           },
@@ -429,7 +429,7 @@ describe('Inbox drafts', () => {
             attachments: [
               {
                 filename: 'invoice.pdf',
-                path: 'https://resend.com/static/sample/invoice.pdf',
+                path: 'https://example.com/invoice.pdf',
                 content_type: 'application/pdf',
               },
             ],
