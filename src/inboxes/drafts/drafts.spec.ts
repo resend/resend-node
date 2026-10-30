@@ -2,7 +2,10 @@ import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../../interfaces';
 import { Resend } from '../../resend';
 import { mockSuccessResponse } from '../../test-utils/mock-fetch';
-import type { CreateInboxDraftResponseSuccess } from './interfaces/create-inbox-draft.interface';
+import type {
+  CreateInboxDraftOptions,
+  CreateInboxDraftResponseSuccess,
+} from './interfaces/create-inbox-draft.interface';
 import type { InboxDraft } from './interfaces/draft';
 import type { ListInboxDraftsResponseSuccess } from './interfaces/list-inbox-drafts.interface';
 import type { RemoveInboxDraftResponseSuccess } from './interfaces/remove-inbox-draft.interface';
@@ -204,6 +207,66 @@ describe('Inbox drafts', () => {
       );
     });
 
+    it('sends a path attachment without content', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 201,
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+
+      await resend.inboxes.drafts.create({
+        inboxId,
+        attachments: [
+          {
+            path: 'https://resend.com/static/sample/invoice.pdf',
+            filename: 'invoice.pdf',
+          },
+        ],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            attachments: [
+              {
+                filename: 'invoice.pdf',
+                path: 'https://resend.com/static/sample/invoice.pdf',
+              },
+            ],
+          }),
+        }),
+      );
+    });
+
+    it('rejects attachments without a source or with both sources at compile time', () => {
+      const invalid: CreateInboxDraftOptions[] = [
+        // @ts-expect-error - an attachment needs content or path
+        { inboxId, attachments: [{ filename: 'notes.txt' }] },
+        {
+          inboxId,
+          attachments: [
+            // @ts-expect-error - content and path are mutually exclusive
+            {
+              content: 'aGVsbG8=',
+              path: 'https://resend.com/static/sample/invoice.pdf',
+              filename: 'notes.txt',
+              contentType: 'text/plain',
+            },
+          ],
+        },
+        // @ts-expect-error - content needs a contentType
+        { inboxId, attachments: [{ content: 'aGVsbG8=', filename: 'a.txt' }] },
+      ];
+
+      expect(invalid).toHaveLength(3);
+    });
+
     it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
       fetchMock.mockOnce(
         JSON.stringify({ object: 'inbox_draft', id: draftId }),
@@ -328,6 +391,46 @@ describe('Inbox drafts', () => {
                 content: 'aGVsbG8=',
                 filename: 'notes.txt',
                 content_type: 'text/plain',
+              },
+            ],
+          }),
+        }),
+      );
+    });
+
+    it('sends a path attachment without content', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({ object: 'inbox_draft', id: draftId }),
+        {
+          status: 200,
+          headers: {
+            'content-type': 'application/json',
+          },
+        },
+      );
+
+      await resend.inboxes.drafts.update({
+        inboxId,
+        draftId,
+        attachments: [
+          {
+            path: 'https://resend.com/static/sample/invoice.pdf',
+            filename: 'invoice.pdf',
+            contentType: 'application/pdf',
+          },
+        ],
+      });
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/inboxes/${inboxId}/drafts/${draftId}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({
+            attachments: [
+              {
+                filename: 'invoice.pdf',
+                path: 'https://resend.com/static/sample/invoice.pdf',
+                content_type: 'application/pdf',
               },
             ],
           }),
