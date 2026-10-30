@@ -1,6 +1,10 @@
+import type { MockInstance } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from './resend';
-import { mockSuccessResponse } from './test-utils/mock-fetch';
+import {
+  mockErrorResponse,
+  mockSuccessResponse,
+} from './test-utils/mock-fetch';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -130,6 +134,52 @@ describe('Resend', () => {
       const requestOptions = fetchMock.mock.calls[0][1];
       const headers = requestOptions?.headers as Headers;
       expect(headers.get('User-Agent')).toBe(customUserAgent);
+    });
+  });
+
+  describe('error logging', () => {
+    const error = { name: 'validation_error', message: 'Invalid `to` field' };
+    let consoleError: MockInstance<typeof console.error>;
+
+    beforeEach(() => {
+      vi.stubEnv('RESEND_DEBUG', undefined);
+      consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockErrorResponse(error);
+    });
+
+    afterEach(() => {
+      vi.unstubAllEnvs();
+      vi.restoreAllMocks();
+    });
+
+    it('does not log API errors by default', async () => {
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      const result = await resend.apiKeys.list();
+
+      expect(result.error).toEqual(error);
+      expect(consoleError).not.toHaveBeenCalled();
+    });
+
+    it('does not log API errors when NODE_ENV is not production', async () => {
+      vi.stubEnv('NODE_ENV', 'development');
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      await resend.apiKeys.list();
+
+      expect(consoleError).not.toHaveBeenCalled();
+    });
+
+    it('logs API errors when RESEND_DEBUG is true', async () => {
+      vi.stubEnv('RESEND_DEBUG', 'true');
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+      await resend.apiKeys.list();
+
+      expect(consoleError).toHaveBeenCalledWith('[Resend API Error]:', {
+        status: 422,
+        error,
+        path: '/api-keys',
+      });
     });
   });
 
@@ -267,6 +317,7 @@ describe('Resend', () => {
     });
 
     it('still logs a network failure', async () => {
+      vi.stubEnv('RESEND_DEBUG', 'true');
       const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
       const consoleError = vi
         .spyOn(console, 'error')
@@ -286,6 +337,7 @@ describe('Resend', () => {
         expect(consoleError).toHaveBeenCalledTimes(1);
       } finally {
         vi.unstubAllGlobals();
+        vi.unstubAllEnvs();
         consoleError.mockRestore();
       }
     });
