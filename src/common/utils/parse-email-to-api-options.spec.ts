@@ -1,5 +1,8 @@
 import type { CreateEmailOptions } from '../../emails/interfaces/create-email-options.interface';
-import { parseEmailToApiOptions } from './parse-email-to-api-options';
+import {
+  parseAttachments,
+  parseEmailToApiOptions,
+} from './parse-email-to-api-options';
 
 describe('parseEmailToApiOptions', () => {
   it('handles minimal email with only required fields', () => {
@@ -153,5 +156,77 @@ describe('parseEmailToApiOptions', () => {
 
     // Verify template fields are undefined
     expect(apiOptions.template).toBeUndefined();
+  });
+});
+
+describe('parseAttachments', () => {
+  // '%PDF-1.4'
+  const pdfBytes = [0x25, 0x50, 0x44, 0x46, 0x2d, 0x31, 0x2e, 0x34];
+  const pdfBase64 = 'JVBERi0xLjQ=';
+
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('keeps base64 string content as is', () => {
+    expect(
+      parseAttachments([{ filename: 'invoice.pdf', content: pdfBase64 }]),
+    ).toEqual([{ filename: 'invoice.pdf', content: pdfBase64 }]);
+  });
+
+  it.each([
+    ['a Buffer', () => Buffer.from(pdfBytes)],
+    ['a Uint8Array', () => new Uint8Array(pdfBytes)],
+    ['an ArrayBuffer', () => new Uint8Array(pdfBytes).buffer],
+  ])('encodes %s as base64', (_, content) => {
+    expect(
+      parseAttachments([{ filename: 'invoice.pdf', content: content() }]),
+    ).toEqual([{ filename: 'invoice.pdf', content: pdfBase64 }]);
+  });
+
+  it('encodes only the bytes of a Uint8Array view', () => {
+    const buffer = new Uint8Array([0xff, ...pdfBytes, 0xff]).buffer;
+    const content = new Uint8Array(buffer, 1, pdfBytes.length);
+
+    expect(parseAttachments([{ content }])?.[0].content).toBe(pdfBase64);
+  });
+
+  it('encodes empty binary content as an empty string', () => {
+    expect(parseAttachments([{ content: new Uint8Array() }])?.[0].content).toBe(
+      '',
+    );
+  });
+
+  it('encodes binary content when Buffer is not available', () => {
+    // Every byte value, longer than one chunk of the btoa fallback
+    const bytes = new Uint8Array(100_000).map((_, i) => i % 256);
+    const expected = Buffer.from(bytes).toString('base64');
+    vi.stubGlobal('Buffer', undefined);
+
+    expect(parseAttachments([{ content: bytes }])?.[0].content).toBe(expected);
+  });
+
+  it('maps every attachment and keeps its other fields', () => {
+    expect(
+      parseAttachments([
+        {
+          filename: 'invoice.pdf',
+          content: new Uint8Array(pdfBytes),
+          contentType: 'application/pdf',
+        },
+        {
+          filename: 'logo.png',
+          content: 'iVBORw0KGgo=',
+          contentId: 'logo',
+        },
+        { filename: 'terms.pdf', path: 'https://example.com/terms.pdf' },
+      ]),
+    ).toEqual([
+      {
+        filename: 'invoice.pdf',
+        content: pdfBase64,
+        content_type: 'application/pdf',
+      },
+      { filename: 'logo.png', content: 'iVBORw0KGgo=', content_id: 'logo' },
+      { filename: 'terms.pdf', path: 'https://example.com/terms.pdf' },
+    ]);
   });
 });
