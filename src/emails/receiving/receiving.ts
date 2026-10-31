@@ -1,6 +1,7 @@
 import PostalMime from 'postal-mime';
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
 import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
+import { encodeBase64 } from '../../common/utils/encode-base64';
 import type { ErrorResponse } from '../../interfaces';
 import type { Resend } from '../../resend';
 import { Attachments } from './attachments/attachments';
@@ -226,7 +227,7 @@ export class Receiving {
         attachments: [
           {
             filename: 'forwarded_message.eml',
-            content: Buffer.from(raw.content).toString('base64'),
+            content: encodeBase64(new Uint8Array(raw.content)),
             content_type: 'message/rfc822',
           },
         ],
