@@ -43,6 +43,12 @@ function getDefaultUserAgent(): string {
     : defaultUserAgent;
 }
 
+function isDebugEnabled(): boolean {
+  return typeof process !== 'undefined' && process.env
+    ? process.env.RESEND_DEBUG === 'true'
+    : false;
+}
+
 export interface ResendOptions {
   baseUrl?: string;
   userAgent?: string;
@@ -51,6 +57,7 @@ export interface ResendOptions {
 export class Resend {
   readonly baseUrl: string;
   readonly userAgent: string;
+  private readonly debug: boolean;
   private readonly headers: Headers;
 
   readonly segments = new Segments(this);
@@ -94,6 +101,7 @@ export class Resend {
 
     this.baseUrl = options?.baseUrl ?? getDefaultBaseUrl();
     this.userAgent = options?.userAgent ?? getDefaultUserAgent();
+    this.debug = isDebugEnabled();
 
     this.headers = new Headers({
       Authorization: `Bearer ${this.key}`,
@@ -103,17 +111,15 @@ export class Resend {
   }
 
   private logError(error: ErrorResponse, path: string, status?: number): void {
-    if (
-      typeof process !== 'undefined' &&
-      process.env &&
-      process.env.NODE_ENV !== 'production'
-    ) {
-      console.error('[Resend API Error]:', {
-        ...(status !== undefined && { status }),
-        error,
-        path,
-      });
+    if (!this.debug) {
+      return;
     }
+
+    console.error('[Resend API Error]:', {
+      ...(status !== undefined && { status }),
+      error,
+      path,
+    });
   }
 
   async fetchRequest<T>(path: string, options = {}): Promise<Response<T>> {

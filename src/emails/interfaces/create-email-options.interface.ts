@@ -130,8 +130,8 @@ export interface CreateEmailResponseSuccess {
 export type CreateEmailResponse = Response<CreateEmailResponseSuccess>;
 
 export interface Attachment {
-  /** Content of an attached file. */
-  content?: string | Buffer;
+  /** Content of an attached file, as a base64 string or binary data, which is sent as base64. */
+  content?: string | Buffer | Uint8Array | ArrayBuffer;
   /** Name of attached file. */
   filename?: string | false | undefined;
   /** Path where the attachment file is hosted */

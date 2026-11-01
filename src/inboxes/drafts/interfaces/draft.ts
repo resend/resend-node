@@ -7,12 +7,26 @@ export interface InboxDraftAttachment {
   size: number;
 }
 
-export interface InboxDraftAttachmentOptions {
-  /** Content of the file, as a base64 string or a Buffer. */
-  content: string | Buffer;
+interface InboxDraftContentAttachmentOptions {
+  /** Content of the file, as a base64 string or binary data, which is sent as base64. */
+  content: string | Buffer | Uint8Array | ArrayBuffer;
+  path?: never;
   filename: string;
   contentType: string;
 }
+
+interface InboxDraftPathAttachmentOptions {
+  content?: never;
+  /** URL of the file, downloaded when the request is made and stored on the draft. */
+  path: string;
+  filename: string;
+  /** Defaults to the content type of the downloaded file. */
+  contentType?: string;
+}
+
+export type InboxDraftAttachmentOptions =
+  | InboxDraftContentAttachmentOptions
+  | InboxDraftPathAttachmentOptions;
 
 export interface InboxDraft {
   object: 'inbox_draft';

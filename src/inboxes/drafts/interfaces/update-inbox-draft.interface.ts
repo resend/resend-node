@@ -13,8 +13,10 @@ export type UpdateInboxDraftOptions = InboxSelector & {
     text?: string | null;
     html?: string | null;
     /**
-     * Files to store on the draft. Each one needs `content`, `filename` and `contentType`.
-     * The files on a draft can total at most 25 MB. An empty file or a blocked file type returns a 422.
+     * Files to store on the draft. Each one needs a `filename` and either `content` with a `contentType`,
+     * or a `path` URL that is downloaded when the request is made.
+     * The files on a draft, downloaded ones included, can total at most 25 MB. An empty file, a blocked file type,
+     * or a `path` that cannot be downloaded returns a 422.
      * Sending the field replaces every attachment on the draft. Send `[]` or `null` to remove them all.
      */
     attachments?: InboxDraftAttachmentOptions[] | null;
