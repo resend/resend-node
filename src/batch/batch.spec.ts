@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from '../resend';
 import {
@@ -306,13 +307,13 @@ describe('Batch', () => {
     });
 
     it('does not mutate payload when using React component', async () => {
-      const mockReact = { type: 'div', props: { children: 'Hi' } };
+      const mockReact = createElement('div', null, 'Hi');
       const payload: CreateBatchOptions = [
         {
           from: 'admin@resend.com',
           to: 'user@resend.com',
           subject: 'React Email',
-          react: mockReact as React.ReactElement,
+          react: mockReact,
         },
       ];
       const originalEmail = { ...payload[0] };
@@ -327,13 +328,13 @@ describe('Batch', () => {
     });
 
     it('works with a frozen payload when using React component', async () => {
-      const mockReact = { type: 'div', props: { children: 'Hi' } };
+      const mockReact = createElement('div', null, 'Hi');
       const payload: CreateBatchOptions = [
         Object.freeze({
           from: 'admin@resend.com',
           to: 'user@resend.com',
           subject: 'React Email',
-          react: mockReact as React.ReactElement,
+          react: mockReact,
         }),
       ];
 
