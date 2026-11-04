@@ -1201,8 +1201,8 @@ packages:
   leac@0.6.0:
     resolution: {integrity: sha512-y+SqErxb8h7nE/fiEX07jsbuhrpO9lL8eca7/Y1nuWV2moNlXhyd59iDGcRf6moVyDMbmTNzL40SUyrFU/yDpg==}
 
-  lodash-es@4.17.22:
-    resolution: {integrity: sha512-XEawp1t0gxSi9x01glktRZ5HDy0HXqrM0x5pXQM98EaI0NxO6jVM7omDOxsuEo5UIASAnm2bRp1Jt/e0a2XU8Q==}
+  lodash-es@4.18.1:
+    resolution: {integrity: sha512-J8xewKD/Gk22OZbhpOVSwcs60zhd95ESDwezOFuA3/099925PdHJ7OFHNTGtajL3AlZkykD32HykiMo+BIBI8A==}
 
   loglevel@1.9.2:
     resolution: {integrity: sha512-HgMmCqIJSAKqo68l0rS2AanEWfkxaZ5wNiEFb5ggm08lDs9Xl2KxBlX3PTcaD2chBM1gXAYf491/M2Rv8Jwayg==}
@@ -1900,7 +1900,7 @@ snapshots:
       blueimp-md5: 2.19.0
       fast-json-stable-stringify: 2.1.0
       is-absolute-url: 3.0.3
-      lodash-es: 4.17.22
+      lodash-es: 4.18.1
       loglevel: 1.9.2
       route-recognizer: 0.3.4
       slugify: 1.6.6
@@ -1931,7 +1931,7 @@ snapshots:
       '@types/set-cookie-parser': 2.4.10
       bowser: 2.13.1
       fast-json-stable-stringify: 2.1.0
-      lodash-es: 4.17.22
+      lodash-es: 4.18.1
       set-cookie-parser: 2.7.2
       utf8-byte-length: 1.0.5
 
@@ -2639,7 +2639,7 @@ snapshots:
 
   leac@0.6.0: {}
 
-  lodash-es@4.17.22: {}
+  lodash-es@4.18.1: {}
 
   loglevel@1.9.2: {}
 
