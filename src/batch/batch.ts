@@ -28,7 +28,7 @@ export class Batch {
     for (const email of payload) {
       const body = { ...email };
 
-      if (body.react) {
+      if (body.react || body.react === 0 || body.react === BigInt(0)) {
         body.html = await render(body.react);
         body.react = undefined;
       }

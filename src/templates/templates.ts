@@ -57,7 +57,7 @@ export class Templates {
   ): Promise<CreateTemplateResponse> {
     const body: CreateTemplateOptions = { ...payload };
 
-    if (payload.react) {
+    if (payload.react || payload.react === 0 || payload.react === BigInt(0)) {
       body.html = await render(payload.react);
     }
 
