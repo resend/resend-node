@@ -162,12 +162,12 @@ describe('Emails', () => {
     });
 
     it('does not mutate payload when using React component', async () => {
-      const react = createElement('div', null, 'Hi');
+      const mockReact = createElement('div', null, 'Hi');
       const payload: CreateEmailOptions = {
         from: 'admin@resend.com',
         to: 'user@resend.com',
         subject: 'React Email',
-        react,
+        react: mockReact,
       };
       const originalPayload = { ...payload };
 

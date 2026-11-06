@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import createFetchMock from 'vitest-fetch-mock';
 import type { ErrorResponse } from '../interfaces';
 import { Resend } from '../resend';
@@ -88,12 +89,12 @@ describe('Broadcasts', () => {
     });
 
     it('does not mutate payload when using React component', async () => {
-      const mockReact = { type: 'div', props: { children: 'Hi' } };
+      const mockReact = createElement('div', null, 'Hi');
       const payload: CreateBroadcastOptions = {
         from: 'bu@resend.com',
         segmentId: '0192f4ed-c2e9-7112-9c13-b04a043e23ee',
         subject: 'React Broadcast',
-        react: mockReact as React.ReactElement,
+        react: mockReact,
       };
       const originalPayload = { ...payload };
 

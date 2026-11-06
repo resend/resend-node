@@ -342,13 +342,13 @@ describe('Batch', () => {
     });
 
     it('does not mutate payload when using React component', async () => {
-      const react = createElement('div', null, 'Hi');
+      const mockReact = createElement('div', null, 'Hi');
       const payload: CreateBatchOptions = [
         {
           from: 'admin@resend.com',
           to: 'user@resend.com',
           subject: 'React Email',
-          react,
+          react: mockReact,
         },
       ];
       const originalEmail = { ...payload[0] };
@@ -364,13 +364,13 @@ describe('Batch', () => {
     });
 
     it('works with a frozen payload when using React component', async () => {
-      const react = createElement('div', null, 'Hi');
+      const mockReact = createElement('div', null, 'Hi');
       const payload: CreateBatchOptions = [
         Object.freeze({
           from: 'admin@resend.com',
           to: 'user@resend.com',
           subject: 'React Email',
-          react,
+          react: mockReact,
         }),
       ];
 
