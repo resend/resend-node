@@ -9,15 +9,14 @@
   Framework guides
 </p>
 <p align="center">
-  <a 
-  - <a href="https://resend.com/docs/send-with-nextjs">Next.js</a> 
-  - <a href="https://resend.com/docs/send-with-remix">Remix</a> 
-  - <a href="https://resend.com/docs/send-with-nuxt">Nuxt</a> 
-  - <a href="https://resend.com/docs/send-with-express">Express</a> 
-  - <a href="https://resend.com/docs/send-with-redwoodjs">RedwoodJS</a> 
-  - <a href="https://resend.com/docs/send-with-hono">Hono</a> 
-  - <a href="https://resend.com/docs/send-with-bun">Bun</a> 
-  - <a href="https://resend.com/docs/send-with-astro">Astro</a> 
+  <a href="https://resend.com/docs/send-with-nextjs">Next.js</a> ·
+  <a href="https://resend.com/docs/send-with-remix">Remix</a> ·
+  <a href="https://resend.com/docs/send-with-nuxt">Nuxt</a> ·
+  <a href="https://resend.com/docs/send-with-express">Express</a> ·
+  <a href="https://resend.com/docs/send-with-redwoodjs">RedwoodJS</a> ·
+  <a href="https://resend.com/docs/send-with-hono">Hono</a> ·
+  <a href="https://resend.com/docs/send-with-bun">Bun</a> ·
+  <a href="https://resend.com/docs/send-with-astro">Astro</a>
 </p>
 
 # Resend Node.js SDK
