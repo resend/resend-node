@@ -285,6 +285,31 @@ describe('Receiving', () => {
   });
 
   describe('list', () => {
+    it('exposes retry headers on a rate limit error', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({
+          name: 'rate_limit_exceeded',
+          message: 'Too many requests',
+          statusCode: 429,
+        }),
+        { status: 429, headers: { 'retry-after': '1' } },
+      );
+
+      const result = await resend.emails.receiving.list();
+
+      expect(result.error?.statusCode).toBe(429);
+      expect(result.headers?.['retry-after']).toBe('1');
+    });
+
+    it('returns null headers on a network failure', async () => {
+      fetchMock.mockRejectOnce(new TypeError('Network failure'));
+
+      const result = await resend.emails.receiving.list();
+
+      expect(result.error?.name).toBe('application_error');
+      expect(result.headers).toBeNull();
+    });
+
     describe('when no inbound emails found', () => {
       it('returns empty list', async () => {
         const response = {
@@ -302,6 +327,7 @@ describe('Receiving', () => {
 
         const result = await resend.emails.receiving.list();
 
+        expect(result.headers?.['content-type']).toBe('application/json');
         expect(result).toMatchInlineSnapshot(`
           {
             "data": {
