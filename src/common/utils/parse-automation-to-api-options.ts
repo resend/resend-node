@@ -53,6 +53,7 @@ export function parseStepConfig(
           subject: step.config.subject,
           from: step.config.from,
           reply_to: step.config.replyTo,
+          topic_id: step.config.topicId,
         },
       };
     case 'wait_for_event':

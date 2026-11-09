@@ -196,6 +196,36 @@ describe('parseAutomationToApiOptions', () => {
     ]);
   });
 
+  it('converts send_email topicId to topic_id', () => {
+    const automation: CreateAutomationOptions = {
+      name: 'Topic Automation',
+      steps: [
+        {
+          key: 'send_1',
+          type: 'send_email',
+          config: {
+            template: { id: 'tmpl_123' },
+            topicId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+          },
+        },
+      ],
+      connections: [],
+    };
+
+    const apiOptions = parseAutomationToApiOptions(automation);
+
+    expect(apiOptions.steps).toEqual([
+      {
+        key: 'send_1',
+        type: 'send_email',
+        config: {
+          template: { id: 'tmpl_123' },
+          topic_id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+        },
+      },
+    ]);
+  });
+
   it('handles minimal payload with only required fields', () => {
     const automation: CreateAutomationOptions = {
       name: 'Minimal Automation',
