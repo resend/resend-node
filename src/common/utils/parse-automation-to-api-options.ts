@@ -1,7 +1,12 @@
 import type {
+  AddToSegmentStepConfig,
   AutomationConnection,
   AutomationConnectionType,
   AutomationStep,
+  ContactUpdateStepConfig,
+  SendEmailStepConfig,
+  TriggerStepConfig,
+  WaitForEventStepConfig,
 } from '../../automations/interfaces/automation-step.interface';
 import type { CreateAutomationOptions } from '../../automations/interfaces/create-automation-options.interface';
 import type { SendEventOptions } from '../../events/interfaces/send-event.interface';
@@ -32,6 +37,46 @@ interface EventApiOptions {
   payload?: Record<string, unknown>;
 }
 
+const TRIGGER_FIELDS = {
+  eventName: 'event_name',
+} as const satisfies Record<keyof TriggerStepConfig, string>;
+
+const SEND_EMAIL_FIELDS = {
+  template: 'template',
+  subject: 'subject',
+  from: 'from',
+  replyTo: 'reply_to',
+  topicId: 'topic_id',
+} as const satisfies Record<keyof SendEmailStepConfig, string>;
+
+const WAIT_FOR_EVENT_FIELDS = {
+  eventName: 'event_name',
+  timeout: 'timeout',
+  filterRule: 'filter_rule',
+} as const satisfies Record<keyof WaitForEventStepConfig, string>;
+
+const CONTACT_UPDATE_FIELDS = {
+  firstName: 'first_name',
+  lastName: 'last_name',
+  unsubscribed: 'unsubscribed',
+  properties: 'properties',
+} as const satisfies Record<keyof ContactUpdateStepConfig, string>;
+
+const ADD_TO_SEGMENT_FIELDS = {
+  segmentId: 'segment_id',
+} as const satisfies Record<keyof AddToSegmentStepConfig, string>;
+
+function renameFields<T extends object>(
+  config: T,
+  fields: Record<keyof T, string>,
+): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  for (const sdkField of Object.keys(fields) as (keyof T)[]) {
+    result[fields[sdkField]] = config[sdkField];
+  }
+  return result;
+}
+
 export function parseStepConfig(
   step: AutomationStep,
 ): AutomationStepApiOptions {
@@ -40,7 +85,7 @@ export function parseStepConfig(
       return {
         key: step.key,
         type: step.type,
-        config: { event_name: step.config.eventName },
+        config: renameFields(step.config, TRIGGER_FIELDS),
       };
     case 'delay':
       return { key: step.key, type: step.type, config: step.config };
@@ -48,23 +93,13 @@ export function parseStepConfig(
       return {
         key: step.key,
         type: step.type,
-        config: {
-          template: step.config.template,
-          subject: step.config.subject,
-          from: step.config.from,
-          reply_to: step.config.replyTo,
-          topic_id: step.config.topicId,
-        },
+        config: renameFields(step.config, SEND_EMAIL_FIELDS),
       };
     case 'wait_for_event':
       return {
         key: step.key,
         type: step.type,
-        config: {
-          event_name: step.config.eventName,
-          timeout: step.config.timeout,
-          filter_rule: step.config.filterRule,
-        },
+        config: renameFields(step.config, WAIT_FOR_EVENT_FIELDS),
       };
     case 'condition':
       return { key: step.key, type: step.type, config: step.config };
@@ -72,12 +107,7 @@ export function parseStepConfig(
       return {
         key: step.key,
         type: step.type,
-        config: {
-          first_name: step.config.firstName,
-          last_name: step.config.lastName,
-          unsubscribed: step.config.unsubscribed,
-          properties: step.config.properties,
-        },
+        config: renameFields(step.config, CONTACT_UPDATE_FIELDS),
       };
     case 'contact_delete':
       return { key: step.key, type: step.type, config: step.config };
@@ -85,7 +115,7 @@ export function parseStepConfig(
       return {
         key: step.key,
         type: step.type,
-        config: { segment_id: step.config.segmentId },
+        config: renameFields(step.config, ADD_TO_SEGMENT_FIELDS),
       };
   }
 }
