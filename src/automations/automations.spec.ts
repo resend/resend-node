@@ -469,6 +469,54 @@ describe('update', () => {
     );
   });
 
+  it('sends topic_id on send_email steps', async () => {
+    const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
+    const response: UpdateAutomationResponseSuccess = {
+      object: 'automation',
+      id,
+    };
+
+    fetchMock.mockOnce(JSON.stringify(response), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+
+    await resend.automations.update(id, {
+      steps: [
+        {
+          key: 'send',
+          type: 'send_email',
+          config: {
+            template: { id: 'tmpl_123' },
+            topicId: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+          },
+        },
+      ],
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://api.resend.com/automations/${id}`,
+      expect.objectContaining({
+        method: 'PATCH',
+        headers: expect.any(Headers),
+        body: JSON.stringify({
+          steps: [
+            {
+              key: 'send',
+              type: 'send_email',
+              config: {
+                template: { id: 'tmpl_123' },
+                topic_id: 'b6d24b8e-af0b-4c3c-be0c-359bbd97381e',
+              },
+            },
+          ],
+        }),
+      }),
+    );
+  });
+
   it('updates automation connections only', async () => {
     const id = '71cdfe68-cf79-473a-a9d7-21f91db6a526';
     const response: UpdateAutomationResponseSuccess = {

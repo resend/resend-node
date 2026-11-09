@@ -51,6 +51,7 @@ export interface SendEmailStepConfig {
   subject?: string;
   from?: string;
   replyTo?: string;
+  topicId?: string;
 }
 
 export interface WaitForEventStepConfig {
