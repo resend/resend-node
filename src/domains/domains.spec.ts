@@ -1436,6 +1436,26 @@ describe('Domains', () => {
       );
     });
 
+    it('routes scope and request options out of one options bag', async () => {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      fetchMock.mockOnce(JSON.stringify({ object: 'domain', id }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.domains.verify(id, {
+        scope: ['forge'],
+        headers: { 'x-test-header': 'mixed' },
+      });
+      expect(result.error).toBeNull();
+
+      const [, init] = fetchMock.mock.calls[fetchMock.mock.calls.length - 1];
+      expect(init?.body).toBe(JSON.stringify({ scope: ['forge'] }));
+      expect(new Headers(init?.headers).get('x-test-header')).toBe('mixed');
+    });
+
     it('keeps request options working as the second argument', async () => {
       const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
       fetchMock.mockOnce(JSON.stringify({ object: 'domain', id }), {

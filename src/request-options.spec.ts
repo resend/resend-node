@@ -99,7 +99,7 @@ const calls: Record<string, Call> = {
   'domains.update': (o) =>
     resend.domains.update({ id: 'id', openTracking: true }, o),
   'domains.remove': (o) => resend.domains.remove('id', o),
-  'domains.verify': (o) => resend.domains.verify('id', {}, o),
+  'domains.verify': (o) => resend.domains.verify('id', o),
   'domains.claims.create': (o) =>
     resend.domains.claims.create({ name: 'resend.com' }, o),
   'domains.claims.get': (o) => resend.domains.claims.get('id', o),

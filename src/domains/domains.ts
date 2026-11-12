@@ -113,37 +113,12 @@ export class Domains {
 
   async verify(
     id: string,
-    options?: VerifyDomainsOptions,
-    requestOptions?: RequestOptions,
-  ): Promise<VerifyDomainsResponse>;
-  /**
-   * @deprecated Pass request options as the third argument instead:
-   * `verify(id, {}, requestOptions)`.
-   */
-  async verify(
-    id: string,
-    requestOptions?: RequestOptions,
-  ): Promise<VerifyDomainsResponse>;
-  async verify(
-    id: string,
-    optionsOrRequestOptions: VerifyDomainsOptions | RequestOptions = {},
-    maybeRequestOptions: RequestOptions = {},
+    options: VerifyDomainsOptions = {},
   ): Promise<VerifyDomainsResponse> {
-    const isVerifyOptions =
-      'scope' in optionsOrRequestOptions ||
-      !(
-        'headers' in optionsOrRequestOptions ||
-        'signal' in optionsOrRequestOptions
-      );
-    const options = isVerifyOptions
-      ? (optionsOrRequestOptions as VerifyDomainsOptions)
-      : {};
-    const requestOptions = isVerifyOptions
-      ? maybeRequestOptions
-      : (optionsOrRequestOptions as RequestOptions);
+    const { scope, ...requestOptions } = options;
     const data = await this.resend.post<VerifyDomainsResponseSuccess>(
       `/domains/${id}/verify`,
-      options.scope ? { scope: options.scope } : undefined,
+      scope ? { scope } : undefined,
       requestOptions,
     );
     return data;
