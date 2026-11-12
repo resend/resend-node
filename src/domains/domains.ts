@@ -29,6 +29,7 @@ import type {
   UpdateDomainsResponseSuccess,
 } from './interfaces/update-domain.interface';
 import type {
+  VerifyDomainsOptions,
   VerifyDomainsResponse,
   VerifyDomainsResponseSuccess,
 } from './interfaces/verify-domain.interface';
@@ -91,6 +92,7 @@ export class Domains {
         tls: payload.tls,
         capabilities: payload.capabilities,
         tracking_subdomain: payload.trackingSubdomain,
+        forge_return_path: payload.forgeReturnPath,
       },
       requestOptions,
     );
@@ -111,11 +113,12 @@ export class Domains {
 
   async verify(
     id: string,
+    options: VerifyDomainsOptions = {},
     requestOptions: RequestOptions = {},
   ): Promise<VerifyDomainsResponse> {
     const data = await this.resend.post<VerifyDomainsResponseSuccess>(
       `/domains/${id}/verify`,
-      undefined,
+      options.scope ? { scope: options.scope } : undefined,
       requestOptions,
     );
     return data;

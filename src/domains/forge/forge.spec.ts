@@ -2,7 +2,6 @@ import createFetchMock from 'vitest-fetch-mock';
 import { Resend } from '../../resend';
 import { mockSuccessResponse } from '../../test-utils/mock-fetch';
 import type { EnableForgeResponseSuccess } from './interfaces/enable-forge.interface';
-import type { VerifyForgeResponseSuccess } from './interfaces/verify-forge.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -92,66 +91,6 @@ describe('Forge', () => {
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({}),
-          headers: expect.any(Headers),
-        }),
-      );
-    });
-  });
-
-  describe('update', () => {
-    it('moves the return path', async () => {
-      mockSuccessResponse(forgeDomain, { headers: {} });
-
-      const resend = new Resend(API_KEY);
-      const result = await resend.domains.forge.update({
-        id: DOMAIN_ID,
-        returnPath: 'outbound',
-      });
-
-      expect(result).toEqual({
-        data: forgeDomain,
-        error: null,
-        headers: {
-          'content-type': 'application/json',
-        },
-      });
-
-      expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/domains/${DOMAIN_ID}/forge`,
-        expect.objectContaining({
-          method: 'PATCH',
-          body: JSON.stringify({
-            return_path: 'outbound',
-          }),
-          headers: expect.any(Headers),
-        }),
-      );
-    });
-  });
-
-  describe('verify', () => {
-    it('triggers an asynchronous Forge verification', async () => {
-      const response: VerifyForgeResponseSuccess = {
-        object: 'domain',
-        id: DOMAIN_ID,
-      };
-      mockSuccessResponse(response, { headers: {} });
-
-      const resend = new Resend(API_KEY);
-      const result = await resend.domains.forge.verify(DOMAIN_ID);
-
-      expect(result).toEqual({
-        data: response,
-        error: null,
-        headers: {
-          'content-type': 'application/json',
-        },
-      });
-
-      expect(fetchMock).toHaveBeenCalledWith(
-        `https://api.resend.com/domains/${DOMAIN_ID}/forge/verify`,
-        expect.objectContaining({
-          method: 'POST',
           headers: expect.any(Headers),
         }),
       );

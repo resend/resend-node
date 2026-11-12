@@ -1302,6 +1302,41 @@ describe('Domains', () => {
       `);
     });
 
+    it('update domain forge return path', async () => {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      const response: UpdateDomainsResponseSuccess = {
+        object: 'domain',
+        id,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.domains.update({
+        id,
+        forgeReturnPath: 'outbound',
+      });
+      expect(result.data).toEqual(response);
+      expect(result.error).toBeNull();
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/domains/${id}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({
+            forge_return_path: 'outbound',
+          }),
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
     it('update domain with partial capabilities', async () => {
       const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
       const response: UpdateDomainsResponseSuccess = {
@@ -1368,6 +1403,37 @@ describe('Domains', () => {
           },
         }
       `);
+    });
+
+    it('verifies only the Forge record when scoped', async () => {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      const response: VerifyDomainsResponseSuccess = {
+        object: 'domain',
+        id,
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.domains.verify(id, { scope: ['forge'] });
+      expect(result.data).toEqual(response);
+      expect(result.error).toBeNull();
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/domains/${id}/verify`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            scope: ['forge'],
+          }),
+          headers: expect.any(Headers),
+        }),
+      );
     });
   });
 
