@@ -16,12 +16,12 @@ jobs:
     runs-on: depot-ubuntu-22.04-8
     timeout-minutes: 15
     container:
-      image: node:24-slim
+      image: node:24-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: pnpm setup
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
       - name: Install packages
         run: pnpm install
       - name: Run build
