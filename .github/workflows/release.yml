@@ -79,6 +79,17 @@ jobs:
           SKIP_ENV_VALIDATION: true
       - name: Build
         run: pnpm build
+      - name: Pack
+        run: |
+          mkdir -p npm-tarball
+          npm pack --ignore-scripts --pack-destination npm-tarball
+      - name: Upload tarball
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: npm-tarball
+          path: npm-tarball
+          if-no-files-found: error
+          retention-days: 1
   publish-npm:
     needs: ci
     runs-on: ubuntu-latest
@@ -87,19 +98,45 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Download tarball
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: npm-tarball
+          path: npm-tarball
+      - name: Verify tarball
+        env:
+          VERSION: ${{ needs.ci.outputs.version }}
+        run: |
+          TARBALL="npm-tarball/resend-$VERSION.tgz"
+          if [ "$(ls -A npm-tarball)" != "resend-$VERSION.tgz" ] || [ ! -f "$TARBALL" ] || [ -L "$TARBALL" ]; then
+            echo "::error::The artifact must hold only resend-$VERSION.tgz"
+            exit 1
+          fi
+          tar -xOzf "$TARBALL" package/package.json | node -e '
+            let input = "";
+            process.stdin.on("data", (chunk) => { input += chunk; });
+            process.stdin.on("end", () => {
+              const { name, version } = JSON.parse(input);
+              if (name !== "resend" || version !== process.argv[1]) {
+                console.log(`::error::The tarball holds ${name}@${version}, expected resend@${process.argv[1]}`);
+                process.exit(1);
+              }
+            });
+          ' "$VERSION"
       - name: Publish to npm
         env:
+          VERSION: ${{ needs.ci.outputs.version }}
           NPM_TAG: ${{ needs.ci.outputs.npm_tag }}
-        run: npm publish --provenance --tag "$NPM_TAG"
+        run: |
+          if [ "$(npm view "resend@$VERSION" version 2>/dev/null)" = "$VERSION" ]; then
+            echo "resend@$VERSION is already published"
+            exit 0
+          fi
+          npm publish "$PWD/npm-tarball/resend-$VERSION.tgz" --ignore-scripts --provenance --tag "$NPM_TAG"
   release:
     needs: [ci, publish-npm]
     runs-on: depot-ubuntu-22.04-2
