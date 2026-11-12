@@ -104,6 +104,10 @@ const calls: Record<string, Call> = {
     resend.domains.claims.create({ name: 'resend.com' }, o),
   'domains.claims.get': (o) => resend.domains.claims.get('id', o),
   'domains.claims.verify': (o) => resend.domains.claims.verify('id', o),
+  'domains.forge.enable': (o) => resend.domains.forge.enable({ id: 'id' }, o),
+  'domains.forge.update': (o) =>
+    resend.domains.forge.update({ id: 'id', returnPath: 'send' }, o),
+  'domains.forge.verify': (o) => resend.domains.forge.verify('id', o),
 
   'emails.send': (o) =>
     resend.emails.send(

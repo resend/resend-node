@@ -3,6 +3,7 @@ import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseDomainToApiOptions } from '../common/utils/parse-domain-to-api-options';
 import type { Resend } from '../resend';
 import { DomainClaims } from './claims/domain-claims';
+import { Forge } from './forge/forge';
 import type {
   CreateDomainOptions,
   CreateDomainRequestOptions,
@@ -34,9 +35,11 @@ import type {
 
 export class Domains {
   readonly claims: DomainClaims;
+  readonly forge: Forge;
 
   constructor(private readonly resend: Resend) {
     this.claims = new DomainClaims(this.resend);
+    this.forge = new Forge(this.resend);
   }
 
   async create(
