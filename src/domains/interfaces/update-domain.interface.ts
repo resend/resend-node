@@ -8,6 +8,7 @@ export interface UpdateDomainsOptions {
   tls?: 'enforced' | 'opportunistic';
   capabilities?: Partial<DomainCapabilities>;
   trackingSubdomain?: string;
+  forgeReturnPath?: string;
 }
 
 export type UpdateDomainsResponseSuccess = Pick<Domain, 'id'> & {

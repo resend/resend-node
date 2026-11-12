@@ -1302,6 +1302,41 @@ describe('Domains', () => {
       `);
     });
 
+    it('update domain forge return path', async () => {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      const response: UpdateDomainsResponseSuccess = {
+        object: 'domain',
+        id,
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.domains.update({
+        id,
+        forgeReturnPath: 'outbound',
+      });
+      expect(result.data).toEqual(response);
+      expect(result.error).toBeNull();
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/domains/${id}`,
+        expect.objectContaining({
+          method: 'PATCH',
+          body: JSON.stringify({
+            forge_return_path: 'outbound',
+          }),
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
     it('update domain with partial capabilities', async () => {
       const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
       const response: UpdateDomainsResponseSuccess = {
@@ -1368,6 +1403,76 @@ describe('Domains', () => {
           },
         }
       `);
+    });
+
+    it('verifies only the Forge record when scoped', async () => {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      const response: VerifyDomainsResponseSuccess = {
+        object: 'domain',
+        id,
+      };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.domains.verify(id, { scope: ['forge'] });
+      expect(result.data).toEqual(response);
+      expect(result.error).toBeNull();
+
+      expect(fetchMock).toHaveBeenCalledWith(
+        `https://api.resend.com/domains/${id}/verify`,
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({
+            scope: ['forge'],
+          }),
+          headers: expect.any(Headers),
+        }),
+      );
+    });
+
+    it('routes scope and request options out of one options bag', async () => {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      fetchMock.mockOnce(JSON.stringify({ object: 'domain', id }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.domains.verify(id, {
+        scope: ['forge'],
+        headers: { 'x-test-header': 'mixed' },
+      });
+      expect(result.error).toBeNull();
+
+      const [, init] = fetchMock.mock.calls[fetchMock.mock.calls.length - 1];
+      expect(init?.body).toBe(JSON.stringify({ scope: ['forge'] }));
+      expect(new Headers(init?.headers).get('x-test-header')).toBe('mixed');
+    });
+
+    it('keeps request options working as the second argument', async () => {
+      const id = '5262504e-8ed7-4fac-bd16-0d4be94bc9f2';
+      fetchMock.mockOnce(JSON.stringify({ object: 'domain', id }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+
+      const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+
+      const result = await resend.domains.verify(id, {
+        headers: { 'x-test-header': 'legacy' },
+      });
+      expect(result.error).toBeNull();
+
+      const [, init] = fetchMock.mock.calls[fetchMock.mock.calls.length - 1];
+      expect(init?.body).toBeUndefined();
+      expect(new Headers(init?.headers).get('x-test-header')).toBe('legacy');
     });
   });
 
