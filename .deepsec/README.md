@@ -9,13 +9,26 @@ Currently configured project: `resend-node` (target: `..`).
 
 ## Setup
 
-`npx deepsec init` created this workspace and normally completes its
-install, exact Vercel project link, Sandbox/model probes, threat model,
-coverage-guided scans, custom matchers, and first AI processing run.
+This workspace was scaffolded with `deepsec init --scaffold-only`. To set
+it up on your machine, run from this directory:
 
-If setup was interrupted, run `pnpm deepsec setup` here or re-run the
-original init command. Checkpoints in `data/resend-node/setup/setup-state.json`
-skip completed work. The linked Vercel project is always in Sandbox scope.
+```bash
+pnpm install
+pnpm deepsec setup
+```
+
+`setup` links a Vercel project, probes Sandbox and model access,
+inventories the codebase's surfaces, runs coverage-guided scans, generates
+matchers where coverage has gaps, and starts the first AI processing run.
+Setup calls the AI model, and the processing run is where most of the cost
+is; pass `--max-cost-usd <n>` to cap that run. Setup is resumable:
+checkpoints in `data/resend-node/setup/setup-state.json` skip completed
+work, so run it again if it is interrupted. The linked Vercel project is
+always in Sandbox scope.
+
+Run deepsec as `pnpm deepsec` from this directory. That uses the version
+pinned in `package.json` and `pnpm-lock.yaml`. From the repository root,
+`npx deepsec` downloads and runs the latest release instead.
 
 Use `--model-auth direct --ai-provider <provider>
 --ai-api-key-env <ENV_NAME>` to use a user-owned model credential; secret
@@ -39,6 +52,15 @@ pnpm deepsec export      --format md-dir --out ./findings
 `scan` is free (regex only). `process` is the AI stage (≈$0.30/file
 on Opus by default). Run state goes to `data/resend-node/`.
 
+## Credentials in the Git remote
+
+When deepsec creates `data/resend-node/project.json`, it copies the
+`origin` remote URL into the `githubUrl` field, and `deepsec export` uses
+that URL in every finding's link. If the remote URL embeds a token, as in
+some CI and agent environments, the token ends up in both. Before you
+export or share findings from such an environment, set `githubUrl` in
+`project.json` to `https://github.com/resend/resend-node/blob/canary`.
+
 ## Adding another project
 
 To scan another codebase from this same `.deepsec/`:
@@ -57,7 +79,6 @@ in your agent to fill in INFO.md.
 deepsec.config.ts        Project list (one entry per scanned repo)
 data/resend-node/
   INFO.md                Repo context — checked into git, hand-curated
-  SETUP.md               Agent setup prompt — checked in, deletable
   project.json           Generated (gitignored)
   files/                 One JSON per scanned source file (gitignored)
   runs/                  Run metadata (gitignored)

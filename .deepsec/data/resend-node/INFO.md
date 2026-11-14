@@ -6,8 +6,8 @@
 API, built to ESM and CJS from `src/index.ts`. It is a client library with
 no server, routes, database or CLI, and no notion of end users or sessions.
 One `Resend` class owns a resource class per API area (`emails`, `batch`,
-`contacts`, `domains`, `webhooks`, `inboxes`, …). Each method builds a
-request path and calls `Resend.get/post/put/patch/delete`, which all go
+`contacts`, `domains`, `webhooks`, `inboxes`, …). Resource methods build a
+request path and call `Resend.get/post/put/patch/delete`, which all go
 through `Resend.fetchRequest` and return `{ data, error, headers }` instead
 of throwing. It runs on Node 20+ and edge runtimes (global `fetch`, guarded
 `process` access). Runtime dependencies are `postal-mime` and
@@ -18,8 +18,10 @@ of throwing. It runs on Node 20+ and edge runtimes (global `fetch`, guarded
 ## Auth shape
 
 - `new Resend(key)` or `RESEND_API_KEY`: the key is kept on `resend.key`
-  and sent as `Authorization: Bearer` on every `fetchRequest` call. The SDK
-  holds this secret; it does not authenticate its own callers.
+  and in the client's default headers. `Resend.get/post/put/patch/delete`
+  copy those headers, `Authorization: Bearer` included, onto each request.
+  `fetchRequest` is public and adds no headers of its own. The SDK holds
+  this secret; it does not authenticate its own callers.
 - `baseUrl` (constructor option or `RESEND_BASE_URL`) picks the host that
   receives the key. The default is `https://api.resend.com`.
 - `RequestOptions.headers` are merged over the default headers per request,
