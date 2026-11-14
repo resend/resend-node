@@ -10,12 +10,7 @@ data/*/runs/
 data/*/reports/
 data/*/project.json
 data/*/setup/
-
-# Rewritten by every `deepsec scan` with a timestamp and the absolute path
-# of the local checkout.
 data/*/tech.json
 
-# `deepsec export` targets used in the deepsec docs. This repository is
-# public, so unpatched findings must never be committed.
 /findings/
 /findings.json

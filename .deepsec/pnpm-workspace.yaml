@@ -1,7 +1,4 @@
 packages: []
 strictDepBuilds: false
-
-# This directory is its own pnpm workspace, so the root pnpm-workspace.yaml
-# does not apply here. Keep the same supply-chain policy as the root.
 minimumReleaseAge: 1440
 trustPolicy: no-downgrade
