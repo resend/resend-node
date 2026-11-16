@@ -507,6 +507,40 @@ describe('Receiving', () => {
         );
       });
     });
+
+    describe('filters', () => {
+      it('sends to, start_date and end_date with pagination', async () => {
+        fetchMock.mockOnce(
+          JSON.stringify({ object: 'list', has_more: false, data: [] }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        );
+
+        await resend.emails.receiving.list({
+          to: ['support@acme.com', 'billing@acme.com'],
+          startDate: '2026-11-01',
+          endDate: '2026-11-15T12:00:00Z',
+          limit: 25,
+          after: 'cursor123',
+        });
+
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails/receiving?to=support%40acme.com%2Cbilling%40acme.com&start_date=2026-11-01&end_date=2026-11-15T12%3A00%3A00Z&limit=25&after=cursor123',
+        );
+      });
+
+      it('omits filters that are not set', async () => {
+        fetchMock.mockOnce(
+          JSON.stringify({ object: 'list', has_more: false, data: [] }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        );
+
+        await resend.emails.receiving.list({ to: ['support@acme.com'] });
+
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails/receiving?to=support%40acme.com',
+        );
+      });
+    });
   });
 
   describe('forward', () => {
