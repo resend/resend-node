@@ -1,7 +1,7 @@
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
+import { buildQueryUrl } from '../../common/utils/build-query-url';
 import { parseAttachments } from '../../common/utils/parse-email-to-api-options';
 import type { Resend } from '../../resend';
-import { buildInboxCursorUrl } from '../build-inbox-cursor-query';
 import { buildInboxPath, missingInboxError } from '../build-inbox-path';
 import type {
   CreateInboxDraftOptions,
@@ -49,7 +49,7 @@ export class InboxDrafts {
     }
 
     const { limit, after, before } = options;
-    const url = buildInboxCursorUrl(`${inboxPath}/drafts`, {
+    const url = buildQueryUrl(`${inboxPath}/drafts`, {
       limit,
       after,
       before,
