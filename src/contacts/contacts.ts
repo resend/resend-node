@@ -32,6 +32,12 @@ import type {
 import { ContactSegments } from './segments/contact-segments';
 import { ContactTopics } from './topics/contact-topics';
 
+function isLegacyCreateContactOptions(
+  payload: CreateContactOptions | LegacyCreateContactOptions,
+): payload is LegacyCreateContactOptions {
+  return 'audienceId' in payload && Boolean(payload.audienceId);
+}
+
 export class Contacts {
   readonly imports: ContactImports;
   readonly topics: ContactTopics;
@@ -57,7 +63,7 @@ export class Contacts {
     requestOptions: CreateContactRequestOptions = {},
   ): Promise<CreateContactResponse> {
     // Legacy create contact endpoint
-    if ('audienceId' in payload) {
+    if (isLegacyCreateContactOptions(payload)) {
       if ('segments' in payload || 'topics' in payload) {
         return {
           data: null,

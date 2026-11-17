@@ -18,13 +18,13 @@ jobs:
       contents: write
       pull-requests: write
     container:
-      image: node:24
+      image: node:24@sha256:9d266751ca3d7fdbe651c878ffd5ad0a42fed49a18c283509267c97f025b7496
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - run: git config --global --add safe.directory $GITHUB_WORKSPACE
       - name: pnpm setup
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
       - name: Install packages
         run: pnpm install --frozen-lockfile
       - name: Run Build
@@ -38,5 +38,5 @@ jobs:
           dir_names: true
           dir_names_max_depth: 2
       - name: Publish changed packages to pkg.pr.new
-        if: github.event_name == 'push' || steps.changed_files.outputs.all_changed_and_modified_files != ''
-        run: pnpm dlx pkg-pr-new publish
+        if: github.event_name == 'push' || (github.event.pull_request.head.repo.full_name == github.repository && steps.changed_files.outputs.all_changed_and_modified_files != '')
+        run: pnpm pkg-pr-new publish

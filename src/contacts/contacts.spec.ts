@@ -110,6 +110,38 @@ describe('Contacts', () => {
           }
         `);
       });
+
+      it.each([
+        ['without segments', {}],
+        [
+          'with segments',
+          { segments: [{ id: '3d4a472d-bc6d-4dd2-aa9d-d3d50ce87223' }] },
+        ],
+      ])('uses the current endpoint when `audienceId` is undefined, %s', async (_, extra) => {
+        const payload = {
+          email: 'team@resend.com',
+          audienceId: undefined as string | undefined,
+          ...extra,
+        };
+        const response: CreateContactResponseSuccess = {
+          object: 'contact',
+          id: '3deaccfb-f47f-440a-8875-ea14b1716b43',
+        };
+
+        mockSuccessResponse(response, {});
+
+        const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+        const result = await resend.contacts.create(payload);
+
+        expect(result.error).toBeNull();
+        expect(fetchMock).toHaveBeenCalledWith(
+          'https://api.resend.com/contacts',
+          expect.objectContaining({
+            method: 'POST',
+            body: JSON.stringify({ email: 'team@resend.com', ...extra }),
+          }),
+        );
+      });
     });
 
     describe('legacy create contact endpoint', () => {

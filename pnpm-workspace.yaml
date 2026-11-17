@@ -1,5 +1,9 @@
 allowBuilds:
   esbuild: true
 
+minimumReleaseAge: 1440
+
+trustPolicy: no-downgrade
+
 overrides:
   'qs@<6.16.1': 6.16.2
