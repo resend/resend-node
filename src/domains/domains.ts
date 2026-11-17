@@ -92,7 +92,6 @@ export class Domains {
         tls: payload.tls,
         capabilities: payload.capabilities,
         tracking_subdomain: payload.trackingSubdomain,
-        forge_return_path: payload.forgeReturnPath,
       },
       requestOptions,
     );

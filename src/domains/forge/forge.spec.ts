@@ -54,7 +54,7 @@ describe('Forge', () => {
       const resend = new Resend(API_KEY);
       const result = await resend.domains.forge.enable({
         id: DOMAIN_ID,
-        returnPath: 'send',
+        customReturnPath: 'send',
       });
 
       expect(result).toEqual({
@@ -70,7 +70,7 @@ describe('Forge', () => {
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({
-            return_path: 'send',
+            custom_return_path: 'send',
           }),
           headers: expect.any(Headers),
         }),

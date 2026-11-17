@@ -4,7 +4,7 @@ import type { GetDomainResponseSuccess } from '../../interfaces/get-domain.inter
 
 export interface EnableForgeOptions {
   id: string;
-  returnPath?: string;
+  customReturnPath?: string;
 }
 
 export interface EnableForgeRequestOptions extends PostOptions {}

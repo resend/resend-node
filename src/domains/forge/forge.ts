@@ -16,7 +16,7 @@ export class Forge {
     const data = await this.resend.post<EnableForgeResponseSuccess>(
       `/domains/${payload.id}/forge`,
       {
-        return_path: payload.returnPath,
+        custom_return_path: payload.customReturnPath,
       },
       requestOptions,
     );
