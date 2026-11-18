@@ -3,6 +3,7 @@ import { buildPaginationUrl } from '../common/utils/build-pagination-query';
 import { parseDomainToApiOptions } from '../common/utils/parse-domain-to-api-options';
 import type { Resend } from '../resend';
 import { DomainClaims } from './claims/domain-claims';
+import { Forge } from './forge/forge';
 import type {
   CreateDomainOptions,
   CreateDomainRequestOptions,
@@ -28,15 +29,18 @@ import type {
   UpdateDomainsResponseSuccess,
 } from './interfaces/update-domain.interface';
 import type {
+  VerifyDomainsOptions,
   VerifyDomainsResponse,
   VerifyDomainsResponseSuccess,
 } from './interfaces/verify-domain.interface';
 
 export class Domains {
   readonly claims: DomainClaims;
+  readonly forge: Forge;
 
   constructor(private readonly resend: Resend) {
     this.claims = new DomainClaims(this.resend);
+    this.forge = new Forge(this.resend);
   }
 
   async create(
@@ -108,11 +112,12 @@ export class Domains {
 
   async verify(
     id: string,
-    requestOptions: RequestOptions = {},
+    options: VerifyDomainsOptions = {},
   ): Promise<VerifyDomainsResponse> {
+    const { scope, ...requestOptions } = options;
     const data = await this.resend.post<VerifyDomainsResponseSuccess>(
       `/domains/${id}/verify`,
-      undefined,
+      scope ? { scope } : undefined,
       requestOptions,
     );
     return data;
