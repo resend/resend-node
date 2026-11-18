@@ -5,6 +5,10 @@ import {
   mockSuccessResponse,
 } from '../test-utils/mock-fetch';
 import type {
+  CancelAutomationRunOptions,
+  CancelAutomationRunResponseSuccess,
+} from './interfaces/cancel-automation-run.interface';
+import type {
   GetAutomationRunOptions,
   GetAutomationRunResponseSuccess,
 } from './interfaces/get-automation-run.interface';
@@ -231,5 +235,46 @@ describe('list', () => {
     const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
     const result = await resend.automations.runs.list(options);
     expect(result.error).not.toBeNull();
+  });
+});
+
+describe('cancel', () => {
+  it('cancels an automation run', async () => {
+    const options: CancelAutomationRunOptions = {
+      automationId: 'wf_123',
+      runId: 'wr_456',
+    };
+    const response: CancelAutomationRunResponseSuccess = {
+      object: 'automation_run',
+      id: 'wr_456',
+      status: 'cancelled',
+    };
+
+    mockSuccessResponse(response, {});
+
+    const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+    const result = await resend.automations.runs.cancel(options);
+
+    expect(result.data).toEqual(response);
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://api.resend.com/automations/wf_123/runs/wr_456/cancel',
+      expect.objectContaining({ method: 'POST' }),
+    );
+  });
+
+  it('returns error when the run already finished', async () => {
+    const options: CancelAutomationRunOptions = {
+      automationId: 'wf_123',
+      runId: 'wr_456',
+    };
+
+    mockErrorResponse(
+      { name: 'validation_error', message: 'This run has already finished.' },
+      {},
+    );
+
+    const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
+    const result = await resend.automations.runs.cancel(options);
+    expect(result.error).toMatchObject({ name: 'validation_error' });
   });
 });

@@ -2,6 +2,11 @@ import type { RequestOptions } from '../common/interfaces/request-options.interf
 import { buildPaginationQuery } from '../common/utils/build-pagination-query';
 import type { Resend } from '../resend';
 import type {
+  CancelAutomationRunOptions,
+  CancelAutomationRunResponse,
+  CancelAutomationRunResponseSuccess,
+} from './interfaces/cancel-automation-run.interface';
+import type {
   GetAutomationRunOptions,
   GetAutomationRunResponse,
   GetAutomationRunResponseSuccess,
@@ -47,6 +52,18 @@ export class AutomationRuns {
 
     const data = await this.resend.get<ListAutomationRunsResponseSuccess>(
       url,
+      requestOptions,
+    );
+    return data;
+  }
+
+  async cancel(
+    options: CancelAutomationRunOptions,
+    requestOptions: RequestOptions = {},
+  ): Promise<CancelAutomationRunResponse> {
+    const data = await this.resend.post<CancelAutomationRunResponseSuccess>(
+      `/automations/${options.automationId}/runs/${options.runId}/cancel`,
+      undefined,
       requestOptions,
     );
     return data;

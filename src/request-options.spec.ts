@@ -28,6 +28,8 @@ const calls: Record<string, Call> = {
     resend.automations.update('id', { name: 'automation' }, o),
   'automations.duplicate': (o) => resend.automations.duplicate('id', o),
   'automations.stop': (o) => resend.automations.stop('id', o),
+  'automations.runs.cancel': (o) =>
+    resend.automations.runs.cancel({ automationId: 'id', runId: 'id' }, o),
   'automations.runs.get': (o) =>
     resend.automations.runs.get({ automationId: 'id', runId: 'id' }, o),
   'automations.runs.list': (o) =>
