@@ -13,7 +13,10 @@ fetchMocker.enableMocks();
 const resend = new Resend('re_zKa4RCko_Lhm9ost2YjNCctnPjbLw8Nop');
 
 describe('Receiving', () => {
-  afterEach(() => fetchMock.resetMocks());
+  afterEach(() => {
+    fetchMock.resetMocks();
+    vi.unstubAllGlobals();
+  });
 
   describe('get', () => {
     describe('when inbound email not found', () => {
@@ -1049,6 +1052,74 @@ hello world`;
         );
         expect(sendEmailBody.attachments[0].content).toBe(
           Buffer.from(rawEmailContent).toString('base64'),
+        );
+      });
+
+      it('encodes the .eml attachment when Buffer is not available', async () => {
+        const getEmailResponse: GetReceivingEmailResponseSuccess = {
+          object: 'email' as const,
+          id: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: ['received@example.com'],
+          from: 'original-sender@example.com',
+          created_at: '2023-04-07 23:13:52.669661+00',
+          subject: 'Original Subject',
+          html: '<p>hello world</p>',
+          text: 'hello world',
+          bcc: null,
+          cc: null,
+          reply_to: null,
+          received_for: [],
+          headers: {},
+          raw: {
+            download_url: 'https://example.com/raw-email-download',
+            expires_at: '2023-04-08 00:13:52.669661+00',
+          },
+          attachments: [],
+          message_id: 'msg_123',
+        };
+
+        const rawEmailContent =
+          'From: original-sender@example.com\r\nTo: received@example.com\r\nSubject: Original Subject\r\n\r\nhello world';
+
+        const forwardResponse: ForwardReceivingEmailResponseSuccess = {
+          id: 'new-email-id-123',
+        };
+
+        // Node's fetch reads the global Buffer, so bypass fetchMock while it's stubbed
+        const jsonResponse = (body: unknown) =>
+          ({
+            ok: true,
+            headers: new Headers({ 'content-type': 'application/json' }),
+            json: async () => body,
+          }) as unknown as Response;
+
+        const rawResponse = {
+          ok: true,
+          arrayBuffer: async () =>
+            new TextEncoder().encode(rawEmailContent).buffer,
+        } as unknown as Response;
+
+        fetchMock
+          .mockImplementationOnce(async () => jsonResponse(getEmailResponse))
+          .mockImplementationOnce(async () => rawResponse)
+          .mockImplementationOnce(async () => jsonResponse(forwardResponse));
+
+        vi.stubGlobal('Buffer', undefined);
+        const result = await resend.emails.receiving.forward({
+          emailId: '67d9bcdb-5a02-42d7-8da9-0d6feea18cff',
+          to: 'forward@example.com',
+          from: 'sender@verified-domain.com',
+          passthrough: false,
+          text: 'Forwarded email.',
+        });
+
+        expect(result.error).toBeNull();
+
+        const sendEmailBody = JSON.parse(
+          fetchMock.mock.calls[2][1]?.body as string,
+        );
+        expect(sendEmailBody.attachments[0].content).toBe(
+          btoa(rawEmailContent),
         );
       });
 
