@@ -1,6 +1,6 @@
 import PostalMime from 'postal-mime';
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
-import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
+import { buildInboxCursorUrl } from '../../inboxes/build-inbox-cursor-query';
 import type { ErrorResponse } from '../../interfaces';
 import type { Resend } from '../../resend';
 import { Attachments } from './attachments/attachments';
@@ -56,7 +56,15 @@ export class Receiving {
     options: ListReceivingEmailsOptions = {},
     requestOptions: RequestOptions = {},
   ): Promise<ListReceivingEmailsResponse> {
-    const url = buildPaginationUrl('/emails/receiving', options);
+    const { to, startDate, endDate, limit } = options;
+    const url = buildInboxCursorUrl('/emails/receiving', {
+      to,
+      start_date: startDate,
+      end_date: endDate,
+      limit,
+      after: 'after' in options ? options.after : undefined,
+      before: 'before' in options ? options.before : undefined,
+    });
 
     const data = await this.resend.get<ListReceivingEmailsResponseSuccess>(
       url,
