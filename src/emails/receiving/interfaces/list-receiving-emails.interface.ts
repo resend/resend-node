@@ -1,5 +1,5 @@
 import type { PaginationOptions } from '../../../common/interfaces';
-import type { ErrorResponse } from '../../../interfaces';
+import type { Response } from '../../../interfaces';
 import type { GetReceivingEmailResponseSuccess } from './get-receiving-email.interface';
 
 export type ListReceivingEmailsOptions = PaginationOptions;
@@ -16,11 +16,4 @@ export interface ListReceivingEmailsResponseSuccess {
 }
 
 export type ListReceivingEmailsResponse =
-  | {
-      data: ListReceivingEmailsResponseSuccess;
-      error: null;
-    }
-  | {
-      data: null;
-      error: ErrorResponse;
-    };
+  Response<ListReceivingEmailsResponseSuccess>;
