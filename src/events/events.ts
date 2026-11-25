@@ -22,6 +22,7 @@ import type {
 } from './interfaces/remove-event.interface';
 import type {
   SendEventOptions,
+  SendEventRequestOptions,
   SendEventResponse,
   SendEventResponseSuccess,
 } from './interfaces/send-event.interface';
@@ -36,7 +37,7 @@ export class Events {
 
   async send(
     payload: SendEventOptions,
-    requestOptions: RequestOptions = {},
+    requestOptions: SendEventRequestOptions = {},
   ): Promise<SendEventResponse> {
     const data = await this.resend.post<SendEventResponseSuccess>(
       '/events/send',
