@@ -1,6 +1,6 @@
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
+import { buildQueryUrl } from '../../common/utils/build-query-url';
 import type { Resend } from '../../resend';
-import { buildInboxCursorUrl } from '../build-inbox-cursor-query';
 import { buildInboxPath, missingInboxError } from '../build-inbox-path';
 import { InboxThreadEmails } from './emails/emails';
 import type {
@@ -49,7 +49,7 @@ export class InboxThreads {
     }
 
     const { folders, labels, read, limit, after, before } = options;
-    const url = buildInboxCursorUrl(`${inboxPath}/threads`, {
+    const url = buildQueryUrl(`${inboxPath}/threads`, {
       folders,
       labels,
       read,
@@ -88,7 +88,7 @@ export class InboxThreads {
       after,
       before,
     } = options;
-    const url = buildInboxCursorUrl(`${inboxPath}/threads/search`, {
+    const url = buildQueryUrl(`${inboxPath}/threads/search`, {
       folders,
       labels,
       read,

@@ -1,15 +1,13 @@
-import { buildInboxCursorUrl } from './build-inbox-cursor-query';
+import { buildQueryUrl } from './build-query-url';
 
-describe('buildInboxCursorUrl', () => {
+describe('buildQueryUrl', () => {
   it('returns the base path when there are no options', () => {
-    expect(buildInboxCursorUrl('/inboxes/1/threads')).toBe(
-      '/inboxes/1/threads',
-    );
+    expect(buildQueryUrl('/inboxes/1/threads')).toBe('/inboxes/1/threads');
   });
 
   it('encodes arrays as one comma-separated param', () => {
     expect(
-      buildInboxCursorUrl('/inboxes/1/threads', {
+      buildQueryUrl('/inboxes/1/threads', {
         folders: ['inbox', 'archive'],
       }),
     ).toBe('/inboxes/1/threads?folders=inbox%2Carchive');
@@ -17,7 +15,7 @@ describe('buildInboxCursorUrl', () => {
 
   it('skips undefined values and keeps false', () => {
     expect(
-      buildInboxCursorUrl('/inboxes/1/threads', {
+      buildQueryUrl('/inboxes/1/threads', {
         folders: undefined,
         read: false,
       }),
