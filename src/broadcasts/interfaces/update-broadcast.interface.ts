@@ -16,7 +16,7 @@ export type UpdateBroadcastOptions = {
   react?: React.ReactNode;
   text?: string;
   subject?: string;
-  replyTo?: string[];
+  replyTo?: string | string[];
   previewText?: string;
   topicId?: string | null;
 };

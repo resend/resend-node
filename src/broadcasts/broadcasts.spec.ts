@@ -14,7 +14,10 @@ import type { ListBroadcastClickedLinksResponseSuccess } from './interfaces/list
 import type { ListBroadcastRecipientsResponseSuccess } from './interfaces/list-broadcast-recipients.interface';
 import type { ListBroadcastsResponseSuccess } from './interfaces/list-broadcasts.interface';
 import type { RemoveBroadcastResponseSuccess } from './interfaces/remove-broadcast.interface';
-import type { UpdateBroadcastResponseSuccess } from './interfaces/update-broadcast.interface';
+import type {
+  UpdateBroadcastOptions,
+  UpdateBroadcastResponseSuccess,
+} from './interfaces/update-broadcast.interface';
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -1103,6 +1106,24 @@ describe('Broadcasts', () => {
           },
         }
       `);
+    });
+
+    it('updates a broadcast with a single replyTo email', async () => {
+      const id = 'b01e0de9-7c27-4a53-bf38-2e3f98389a65';
+      const response: UpdateBroadcastResponseSuccess = { id };
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 200,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const payload: UpdateBroadcastOptions = { replyTo: 'foo@resend.com' };
+      await resend.broadcasts.update(id, payload);
+
+      expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string)).toEqual({
+        reply_to: 'foo@resend.com',
+      });
     });
   });
 });
