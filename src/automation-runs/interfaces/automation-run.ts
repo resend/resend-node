@@ -4,7 +4,9 @@ export type AutomationRunStatus =
   | 'running'
   | 'completed'
   | 'failed'
-  | 'cancelled';
+  | 'cancelled'
+  | 'quota_exceeded'
+  | 'skipped';
 
 export type AutomationRunStepStatus =
   | 'pending'
