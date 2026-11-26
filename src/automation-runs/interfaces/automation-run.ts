@@ -31,6 +31,7 @@ export interface AutomationRun {
   object: 'automation_run';
   id: string;
   status: AutomationRunStatus;
+  status_reason?: string;
   started_at: string | null;
   completed_at: string | null;
   created_at: string;
@@ -39,5 +40,10 @@ export interface AutomationRun {
 
 export type AutomationRunItem = Pick<
   AutomationRun,
-  'id' | 'status' | 'started_at' | 'completed_at' | 'created_at'
+  | 'id'
+  | 'status'
+  | 'status_reason'
+  | 'started_at'
+  | 'completed_at'
+  | 'created_at'
 >;
