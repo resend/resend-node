@@ -108,6 +108,30 @@ describe('Events', () => {
         }),
       );
     });
+
+    it('sends the Idempotency-Key header when idempotencyKey is provided', async () => {
+      const response: SendEventResponseSuccess = {
+        object: 'event',
+        event: 'order.created',
+      };
+
+      fetchMock.mockOnce(JSON.stringify(response), {
+        status: 202,
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      const idempotencyKey = 'order_created:123';
+
+      await resend.events.send(
+        { event: 'order.created', email: 'ana@example.com' },
+        { idempotencyKey },
+      );
+
+      const headers = new Headers(fetchMock.mock.calls[0][1]?.headers);
+      expect(headers.get('Idempotency-Key')).toBe(idempotencyKey);
+    });
   });
 
   describe('create', () => {
