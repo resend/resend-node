@@ -288,6 +288,31 @@ describe('Receiving', () => {
   });
 
   describe('list', () => {
+    it('exposes retry headers on a rate limit error', async () => {
+      fetchMock.mockOnce(
+        JSON.stringify({
+          name: 'rate_limit_exceeded',
+          message: 'Too many requests',
+          statusCode: 429,
+        }),
+        { status: 429, headers: { 'retry-after': '1' } },
+      );
+
+      const result = await resend.emails.receiving.list();
+
+      expect(result.error?.statusCode).toBe(429);
+      expect(result.headers?.['retry-after']).toBe('1');
+    });
+
+    it('returns null headers on a network failure', async () => {
+      fetchMock.mockRejectOnce(new TypeError('Network failure'));
+
+      const result = await resend.emails.receiving.list();
+
+      expect(result.error?.name).toBe('application_error');
+      expect(result.headers).toBeNull();
+    });
+
     describe('when no inbound emails found', () => {
       it('returns empty list', async () => {
         const response = {
@@ -305,6 +330,7 @@ describe('Receiving', () => {
 
         const result = await resend.emails.receiving.list();
 
+        expect(result.headers?.['content-type']).toBe('application/json');
         expect(result).toMatchInlineSnapshot(`
           {
             "data": {
@@ -507,6 +533,40 @@ describe('Receiving', () => {
 
         expect(fetchMock.mock.calls[0][0]).toBe(
           'https://api.resend.com/emails/receiving?before=cursor456',
+        );
+      });
+    });
+
+    describe('filters', () => {
+      it('sends to, start_date and end_date with pagination', async () => {
+        fetchMock.mockOnce(
+          JSON.stringify({ object: 'list', has_more: false, data: [] }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        );
+
+        await resend.emails.receiving.list({
+          to: ['support@acme.com', 'billing@acme.com'],
+          startDate: '2026-11-01',
+          endDate: '2026-11-15T12:00:00Z',
+          limit: 25,
+          after: 'cursor123',
+        });
+
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails/receiving?to=support%40acme.com%2Cbilling%40acme.com&start_date=2026-11-01&end_date=2026-11-15T12%3A00%3A00Z&limit=25&after=cursor123',
+        );
+      });
+
+      it('omits filters that are not set', async () => {
+        fetchMock.mockOnce(
+          JSON.stringify({ object: 'list', has_more: false, data: [] }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        );
+
+        await resend.emails.receiving.list({ to: ['support@acme.com'] });
+
+        expect(fetchMock.mock.calls[0][0]).toBe(
+          'https://api.resend.com/emails/receiving?to=support%40acme.com',
         );
       });
     });

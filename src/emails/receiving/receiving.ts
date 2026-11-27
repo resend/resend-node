@@ -1,6 +1,6 @@
 import PostalMime from 'postal-mime';
 import type { RequestOptions } from '../../common/interfaces/request-options.interface';
-import { buildPaginationUrl } from '../../common/utils/build-pagination-query';
+import { buildQueryUrl } from '../../common/utils/build-query-url';
 import { encodeBase64 } from '../../common/utils/encode-base64';
 import type { ErrorResponse } from '../../interfaces';
 import type { Resend } from '../../resend';
@@ -57,7 +57,15 @@ export class Receiving {
     options: ListReceivingEmailsOptions = {},
     requestOptions: RequestOptions = {},
   ): Promise<ListReceivingEmailsResponse> {
-    const url = buildPaginationUrl('/emails/receiving', options);
+    const { to, startDate, endDate, limit } = options;
+    const url = buildQueryUrl('/emails/receiving', {
+      to,
+      start_date: startDate,
+      end_date: endDate,
+      limit,
+      after: 'after' in options ? options.after : undefined,
+      before: 'before' in options ? options.before : undefined,
+    });
 
     const data = await this.resend.get<ListReceivingEmailsResponseSuccess>(
       url,
